@@ -34,3 +34,26 @@ The frame has one row per drug per explicit cycle day. `decay_days=0` gives dosi
 ## Preserve source-shaped values
 
 `ScheduleEvent` keeps fields such as dose and cycle-length bounds in their source form. A value like `"1.5-2"` needs an application decision before it becomes numeric. Generated enum fields remain enum members. Convert these values at the boundary where your application can state its handling of null, uncertain, or non-numeric source values.
+
+## Roll out a complete variant timeline
+
+`roll_out_variant` composes explicit cycle numbers, block-specific cycle lengths, and phase boundaries into a deterministic treatment timeline:
+
+```python
+from datetime import date
+
+from hemonc_alchemy.toolkit.analytics.treatment.scheduling import roll_out_variant
+
+timeline = roll_out_variant(variant)
+timeline[["drug", "cycle_number", "day", "elapsed_day", "timing_status"]]
+```
+
+`elapsed_day` is an integer relative to variant start, where day 0 is the variant start. Pass `start_date` to also receive `calendar_date` values as timezone-free `datetime.date` objects:
+
+```python
+timeline = roll_out_variant(variant, start_date=date(2026, 1, 1))
+```
+
+Blocks with adjacent cycle-number ranges are anchored sequentially. Blocks with overlapping cycle numbers share the relevant anchor, while genuinely ambiguous source timing remains visible in `timing_status`. The status is `"resolved"`, `"resolved_via_fallback: ..."`, or `"unresolved: ..."`.
+
+`administration_frame` retains its cycle-local `day` column and adds `elapsed_day` and `timing_status`. Variants without resolvable cycle metadata still produce explicitly resolvable administration rows, with a null `elapsed_day` and an unresolved status rather than an invented calendar position. Indefinite (`(+n)`) timing is never sampled by this module; only its explicitly represented cycles are returned.

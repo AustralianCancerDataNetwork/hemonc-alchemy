@@ -1,0 +1,711 @@
+"""Roll sig schedules out onto a variant-relative treatment timeline.
+
+The source ``day`` value is local to one cycle.  This module adds the missing
+context: cycle numbers, cycle lengths, block anchors, and phase boundaries.
+It deliberately keeps the rollout deterministic.  An indefinite source
+marker is retained as metadata; it is never sampled here.
+
+Phases are ordered by the minimum ``phase_step`` present on their sigs.  The
+small fallback below is used only for missing or untested phase labels, and
+its use is reported in ``timing_status``.  Ties or internally inconsistent
+phase steps remain unresolved rather than being guessed.
+"""
+
+from __future__ import annotations
+
+import calendar
+from collections import defaultdict
+from collections.abc import Iterable
+from dataclasses import dataclass
+from datetime import date, datetime, timedelta
+from decimal import Decimal, InvalidOperation
+from typing import Any
+
+import pandas as pd  # type: ignore[import-untyped]
+
+from .....model.enums import Sigs_Cycle_length_unitEnum, Sigs_PhaseEnum
+from .handling import Indefinite, apply_sig_to_series, resolve_all_days
+from .properties import ScheduleEvent, schedule_events
+
+_FALLBACK_PHASE_RANKS = {
+    Sigs_PhaseEnum.PRE_TO_PHASE: -1.0,
+    Sigs_PhaseEnum.PERIOPERATIVE: 1.0,
+    Sigs_PhaseEnum.INTERIM_MAINTENANCE: 3.5,
+    Sigs_PhaseEnum.LATE_INTENSIFICATION: 4.5,
+    Sigs_PhaseEnum.CONTINUATION: 5.0,
+}
+
+
+@dataclass(frozen=True)
+class UnresolvedTiming:
+    """A source-timing problem that must remain visible to callers."""
+
+    reason: str
+
+    @property
+    def status(self) -> str:
+        return f"unresolved: {self.reason}"
+
+
+@dataclass(frozen=True)
+class CycleBlock:
+    """Events sharing a cycle length and a contiguous cycle-number set."""
+
+    events: tuple[ScheduleEvent, ...]
+    cycle_numbers: frozenset[int]
+    cycle_length_lb: str | None
+    cycle_length_ub: str | None
+    cycle_length_unit: Sigs_Cycle_length_unitEnum | None
+    timing_indefinite: Indefinite | None = None
+
+    @property
+    def first_cycle(self) -> int | None:
+        return min(self.cycle_numbers) if self.cycle_numbers else None
+
+    @property
+    def last_cycle(self) -> int | None:
+        return max(self.cycle_numbers) if self.cycle_numbers else None
+
+    @property
+    def is_contiguous(self) -> bool:
+        if not self.cycle_numbers:
+            return False
+        return len(self.cycle_numbers) == self.last_cycle - self.first_cycle + 1
+
+
+@dataclass(frozen=True)
+class AnchoredBlock:
+    """A block plus the relationship that determines its start point."""
+
+    block: CycleBlock
+    anchor_kind: str
+    anchor_block: CycleBlock | None = None
+    anchor_cycle: int | None = None
+    unresolved: UnresolvedTiming | None = None
+
+    @property
+    def timing_status(self) -> str:
+        if self.unresolved is not None:
+            return self.unresolved.status
+        return "resolved"
+
+
+@dataclass(frozen=True)
+class TimedEvent:
+    """One event/day result from a rolled-out block."""
+
+    schedule_event: ScheduleEvent
+    phase: Sigs_PhaseEnum | None
+    phase_step: int | None
+    cycle_number: int | None
+    day: int
+    elapsed_day: int | None
+    calendar_date: date | None
+    intensity: float
+    optional: bool
+    timing_status: str
+
+
+def _event_series(
+    event: ScheduleEvent,
+    *,
+    decay_days: int,
+    decay_factor: float,
+) -> dict[int, float]:
+    series: dict[int, float] = defaultdict(float)
+    apply_sig_to_series(
+        series,
+        list(event.days),
+        decay_days=decay_days,
+        decay_factor=decay_factor,
+    )
+    return series
+
+
+def _timing_numbers(value: str | None) -> tuple[frozenset[int], Indefinite | None]:
+    try:
+        resolved = resolve_all_days(value)
+    except (TypeError, ValueError):
+        return frozenset(), None
+    return frozenset(day.value for day in resolved.days), resolved.indefinite
+
+
+def group_into_blocks(events: Iterable[ScheduleEvent]) -> list[CycleBlock]:
+    """Group schedule events by cycle length and parsed cycle numbers."""
+
+    grouped: dict[tuple[Any, ...], list[ScheduleEvent]] = {}
+    metadata: dict[tuple[Any, ...], tuple[frozenset[int], Indefinite | None]] = {}
+
+    for event in events:
+        cycle_numbers, indefinite = _timing_numbers(event.timing_sequence)
+        key = (
+            event.cycle_length_lb,
+            event.cycle_length_ub,
+            event.cycle_length_unit,
+            cycle_numbers,
+            indefinite,
+        )
+        grouped.setdefault(key, []).append(event)
+        metadata[key] = (cycle_numbers, indefinite)
+
+    blocks = []
+    for key, block_events in grouped.items():
+        cycle_numbers, indefinite = metadata[key]
+        blocks.append(
+            CycleBlock(
+                events=tuple(block_events),
+                cycle_numbers=cycle_numbers,
+                cycle_length_lb=key[0],
+                cycle_length_ub=key[1],
+                cycle_length_unit=key[2],
+                timing_indefinite=indefinite,
+            )
+        )
+    return sorted(
+        blocks,
+        key=lambda block: (
+            block.first_cycle is None,
+            block.first_cycle if block.first_cycle is not None else 0,
+            block.last_cycle if block.last_cycle is not None else 0,
+        ),
+    )
+
+
+def anchor_blocks(blocks: Iterable[CycleBlock]) -> list[AnchoredBlock]:
+    """Assign sequential, overlapping, or unresolved block anchors."""
+
+    ordered = sorted(
+        blocks,
+        key=lambda block: (
+            block.first_cycle is None,
+            block.first_cycle if block.first_cycle is not None else 0,
+            block.last_cycle if block.last_cycle is not None else 0,
+        ),
+    )
+    anchored: list[AnchoredBlock] = []
+
+    for index, block in enumerate(ordered):
+        if not block.cycle_numbers:
+            anchored.append(
+                AnchoredBlock(
+                    block=block,
+                    anchor_kind="unresolved",
+                    unresolved=UnresolvedTiming("missing cycle numbers"),
+                )
+            )
+            continue
+        if not block.is_contiguous:
+            anchored.append(
+                AnchoredBlock(
+                    block=block,
+                    anchor_kind="unresolved",
+                    unresolved=UnresolvedTiming(
+                        f"non-contiguous cycle numbers {sorted(block.cycle_numbers)}"
+                    ),
+                )
+            )
+            continue
+        if index == 0:
+            anchored.append(
+                AnchoredBlock(
+                    block=block,
+                    anchor_kind="phase_start",
+                    anchor_cycle=block.first_cycle,
+                )
+            )
+            continue
+
+        overlaps = [
+            prior
+            for prior in anchored
+            if prior.block.cycle_numbers & block.cycle_numbers
+        ]
+        if overlaps:
+            prior = overlaps[-1]
+            intersection = prior.block.cycle_numbers & block.cycle_numbers
+            anchored.append(
+                AnchoredBlock(
+                    block=block,
+                    anchor_kind="overlap",
+                    anchor_block=prior.block,
+                    anchor_cycle=min(intersection),
+                )
+            )
+            continue
+
+        previous = ordered[index - 1]
+        if previous.last_cycle is not None and block.first_cycle == previous.last_cycle + 1:
+            anchored.append(
+                AnchoredBlock(
+                    block=block,
+                    anchor_kind="after",
+                    anchor_block=previous,
+                    anchor_cycle=block.first_cycle,
+                )
+            )
+            continue
+
+        anchored.append(
+            AnchoredBlock(
+                block=block,
+                anchor_kind="unresolved",
+                unresolved=UnresolvedTiming(
+                    f"cycle gap or contradiction before cycles {sorted(block.cycle_numbers)}"
+                ),
+            )
+        )
+
+    return anchored
+
+
+def _unit_value(unit: Sigs_Cycle_length_unitEnum | str | None) -> str | None:
+    if unit is None:
+        return None
+    return getattr(unit, "value", unit).lower()
+
+
+def _length_number(block: CycleBlock, selection: str) -> Decimal:
+    if selection not in {"lb", "ub", "mean"}:
+        raise ValueError("cycle_length_selection must be 'lb', 'ub', or 'mean'")
+    try:
+        lower = Decimal(str(block.cycle_length_lb))
+        upper = Decimal(str(block.cycle_length_ub or block.cycle_length_lb))
+    except (InvalidOperation, TypeError):
+        raise ValueError("cycle length is not numeric") from None
+    if selection == "lb":
+        return lower
+    if selection == "ub":
+        return upper
+    return (lower + upper) / 2
+
+
+def _calendar_add(value: date, number: int, unit: str) -> date:
+    if unit == "day":
+        return value + timedelta(days=number)
+    if unit == "week":
+        return value + timedelta(days=number * 7)
+    if unit == "month":
+        month_index = value.month - 1 + number
+        year, month_index = divmod(value.year * 12 + month_index, 12)
+        month = month_index + 1
+        day = min(value.day, calendar.monthrange(year, month)[1])
+        return date(year, month, day)
+    if unit == "year":
+        year = value.year + number
+        day = min(value.day, calendar.monthrange(year, value.month)[1])
+        return date(year, value.month, day)
+    raise ValueError(f"unsupported calendar cycle unit {unit!r}")
+
+
+def _advance(
+    start: int | date,
+    block: CycleBlock,
+    cycles: int,
+    *,
+    selection: str,
+) -> int | date:
+    unit = _unit_value(block.cycle_length_unit)
+    if unit not in {"day", "week", "month", "year"}:
+        raise ValueError("cycle length has no resolvable unit")
+    number = _length_number(block, selection)
+
+    if isinstance(start, date):
+        if number != number.to_integral_value():
+            raise ValueError("calendar cycle length is not a whole number")
+        if unit in {"month", "year"}:
+            units = int(number) * cycles
+            return _calendar_add(start, units, unit)
+        days = int(number) * (7 if unit == "week" else 1) * cycles
+        return start + timedelta(days=days)
+
+    if unit == "month":
+        number *= 30
+    elif unit == "week":
+        number *= 7
+    elif unit == "year":
+        number *= 365
+    if number != number.to_integral_value():
+        raise ValueError("elapsed cycle length is not a whole number of days")
+    return start + int(number) * cycles
+
+
+def _block_start(
+    anchored: AnchoredBlock,
+    starts: dict[int, int | date],
+    ends: dict[int, int | date],
+    phase_start: int | date,
+    *,
+    selection: str,
+) -> int | date | None:
+    if anchored.unresolved is not None:
+        return None
+    if anchored.anchor_kind == "phase_start":
+        return phase_start
+    if anchored.anchor_block is None:
+        return None
+    parent_start = starts.get(id(anchored.anchor_block))
+    if parent_start is None:
+        return None
+    if anchored.anchor_kind == "after":
+        return ends.get(id(anchored.anchor_block))
+    if anchored.anchor_kind == "overlap":
+        try:
+            cycle_delta = anchored.anchor_cycle - min(anchored.anchor_block.cycle_numbers)
+            return _advance(
+                parent_start,
+                anchored.anchor_block,
+                cycle_delta,
+                selection=selection,
+            )
+        except ValueError:
+            return None
+    return None
+
+
+def _phase_end(
+    anchored_blocks: list[AnchoredBlock],
+    phase_start: int | date,
+    *,
+    selection: str,
+) -> int | date | None:
+    starts: dict[int, int | date] = {}
+    ends: dict[int, int | date] = {}
+    for anchored in anchored_blocks:
+        start = _block_start(anchored, starts, ends, phase_start, selection=selection)
+        if start is None:
+            continue
+        starts[id(anchored.block)] = start
+        if anchored.block.timing_indefinite is not None:
+            continue
+        try:
+            end = _advance(
+                start,
+                anchored.block,
+                anchored.block.last_cycle - anchored.anchor_cycle + 1,
+                selection=selection,
+            )
+        except (TypeError, ValueError):
+            continue
+        ends[id(anchored.block)] = end
+    if not anchored_blocks or any(
+        block.unresolved is not None or block.block.timing_indefinite is not None
+        for block in anchored_blocks
+    ):
+        return None
+    return ends.get(id(anchored_blocks[-1].block))
+
+
+def _optional_for_day(event: ScheduleEvent, day: int) -> bool:
+    return any(source_day.value == day and source_day.optional for source_day in event.days)
+
+
+def _unresolved_block_events(
+    block: CycleBlock,
+    status: UnresolvedTiming,
+    *,
+    decay_days: int,
+    decay_factor: float,
+) -> list[TimedEvent]:
+    output = []
+    cycle_numbers = sorted(block.cycle_numbers) or [None]
+    for event in block.events:
+        series = _event_series(event, decay_days=decay_days, decay_factor=decay_factor)
+        for cycle_number in cycle_numbers:
+            for day, intensity in series.items():
+                output.append(
+                    TimedEvent(
+                        schedule_event=event,
+                        phase=event.phase,
+                        phase_step=event.phase_step,
+                        cycle_number=cycle_number,
+                        day=day,
+                        elapsed_day=None,
+                        calendar_date=None,
+                        intensity=intensity,
+                        optional=_optional_for_day(event, day),
+                        timing_status=status.status,
+                    )
+                )
+    return output
+
+
+def _resolved_block_events(
+    anchored: AnchoredBlock,
+    start: int | date,
+    *,
+    selection: str,
+    decay_days: int,
+    decay_factor: float,
+) -> list[TimedEvent]:
+    output = []
+    block = anchored.block
+    for event in block.events:
+        series = _event_series(event, decay_days=decay_days, decay_factor=decay_factor)
+        for cycle_number in sorted(block.cycle_numbers):
+            cycle_start = _advance(
+                start,
+                block,
+                cycle_number - anchored.anchor_cycle,
+                selection=selection,
+            )
+            for day, intensity in series.items():
+                if isinstance(cycle_start, date):
+                    calendar_date = cycle_start + timedelta(days=day - 1)
+                    elapsed_day = None
+                else:
+                    calendar_date = None
+                    elapsed_day = cycle_start + day - 1
+                output.append(
+                    TimedEvent(
+                        schedule_event=event,
+                        phase=event.phase,
+                        phase_step=event.phase_step,
+                        cycle_number=cycle_number,
+                        day=day,
+                        elapsed_day=elapsed_day,
+                        calendar_date=calendar_date,
+                        intensity=intensity,
+                        optional=_optional_for_day(event, day),
+                        timing_status=anchored.timing_status,
+                    )
+                )
+    return output
+
+
+def roll_out_phase(
+    blocks: Iterable[CycleBlock] | Iterable[AnchoredBlock],
+    phase_start: int | date,
+    *,
+    cycle_length_selection: str = "lb",
+    decay_days: int = 2,
+    decay_factor: float = 0.5,
+) -> list[TimedEvent]:
+    """Roll one phase out from its own start point.
+
+    ``phase_start`` is an integer elapsed-day offset or a ``date``.  Unresolved
+    blocks still produce rows with null timeline values and an explicit status.
+    """
+
+    block_list = list(blocks)
+    anchored = (
+        block_list
+        if all(isinstance(block, AnchoredBlock) for block in block_list)
+        else anchor_blocks(block_list)  # type: ignore[arg-type]
+    )
+    starts: dict[int, int | date] = {}
+    ends: dict[int, int | date] = {}
+    output: list[TimedEvent] = []
+
+    for anchored_block in anchored:
+        block = anchored_block.block
+        start = _block_start(
+            anchored_block,
+            starts,
+            ends,
+            phase_start,
+            selection=cycle_length_selection,
+        )
+        if start is not None:
+            starts[id(block)] = start
+            if block.timing_indefinite is None:
+                try:
+                    end = _advance(
+                        start,
+                        block,
+                        block.last_cycle - anchored_block.anchor_cycle + 1,
+                        selection=cycle_length_selection,
+                    )
+                except (TypeError, ValueError):
+                    start = None
+                else:
+                    ends[id(block)] = end
+
+        if start is None:
+            status = anchored_block.unresolved or UnresolvedTiming(
+                "anchor depends on unresolved timing"
+            )
+            output.extend(
+                _unresolved_block_events(
+                    block,
+                    status,
+                    decay_days=decay_days,
+                    decay_factor=decay_factor,
+                )
+            )
+            continue
+
+        output.extend(
+            _resolved_block_events(
+                anchored_block,
+                start,
+                selection=cycle_length_selection,
+                decay_days=decay_days,
+                decay_factor=decay_factor,
+            )
+        )
+    return output
+
+
+def _phase_groups(events: list[ScheduleEvent]) -> list[tuple[Any, list[ScheduleEvent]]]:
+    groups: dict[Any, list[ScheduleEvent]] = {}
+    for event in events:
+        groups.setdefault(event.phase, []).append(event)
+    return list(groups.items())
+
+
+def _phase_order(
+    groups: list[tuple[Any, list[ScheduleEvent]]],
+) -> tuple[list[tuple[Any, list[ScheduleEvent], str]], str | None]:
+    if len(groups) <= 1:
+        return [(phase, events, "resolved") for phase, events in groups], None
+
+    phase_steps: dict[Any, int | None] = {}
+    inconsistent: list[Any] = []
+    for phase, events in groups:
+        steps = {event.phase_step for event in events}
+        if len(steps) != 1:
+            inconsistent.append(phase)
+            phase_steps[phase] = None
+        else:
+            phase_steps[phase] = next(iter(steps))
+
+    known = {phase: step for phase, step in phase_steps.items() if step is not None}
+    if inconsistent:
+        reason = "phase_step inconsistent within " + ", ".join(map(str, inconsistent))
+        return [(phase, events, f"unresolved: {reason}") for phase, events in groups], reason
+    if len(set(known.values())) != len(known):
+        tied = [str(phase) for phase, step in phase_steps.items() if list(phase_steps.values()).count(step) > 1]
+        reason = "phase_step tie between " + ", ".join(tied)
+        return [(phase, events, f"unresolved: {reason}") for phase, events in groups], reason
+
+    fallback_used = any(phase in _FALLBACK_PHASE_RANKS for phase, _ in groups)
+    ranks: dict[Any, float] = {}
+    for phase, step in phase_steps.items():
+        if fallback_used and phase in _FALLBACK_PHASE_RANKS:
+            ranks[phase] = _FALLBACK_PHASE_RANKS[phase]
+        elif step is not None:
+            ranks[phase] = float(step)
+        else:
+            reason = f"no phase_step or fallback rule for {phase}"
+            return [(p, e, f"unresolved: {reason}") for p, e in groups], reason
+
+    if len(set(ranks.values())) != len(ranks):
+        reason = "fallback phase order tie between " + ", ".join(map(str, ranks))
+        return [(phase, events, f"unresolved: {reason}") for phase, events in groups], reason
+
+    status = None
+    if fallback_used:
+        fallback_labels = ", ".join(
+            str(phase) for phase, _ in groups if phase in _FALLBACK_PHASE_RANKS
+        )
+        status = (
+            f"resolved_via_fallback: {fallback_labels} ordered by documented "
+            "convention, not phase_step"
+        )
+    ordered = sorted(groups, key=lambda item: ranks[item[0]])
+    return [(phase, events, status or "resolved") for phase, events in ordered], status
+
+
+def _combine_status(*statuses: str) -> str:
+    if any(status.startswith("unresolved:") for status in statuses):
+        reasons = [status.removeprefix("unresolved: ") for status in statuses if status.startswith("unresolved:")]
+        return "unresolved: " + "; ".join(dict.fromkeys(reasons))
+    fallbacks = [status for status in statuses if status.startswith("resolved_via_fallback:")]
+    return fallbacks[0] if fallbacks else "resolved"
+
+
+def _as_date(value: date | datetime) -> date:
+    return value.date() if isinstance(value, datetime) else value
+
+
+def roll_out_variant(
+    variant,
+    *,
+    start_date: date | datetime | None = None,
+    cycle_length_selection: str = "lb",
+    decay_days: int = 2,
+    decay_factor: float = 0.5,
+) -> pd.DataFrame:
+    """Compose all phases of ``variant`` into one deterministic timeline."""
+
+    events = schedule_events(variant)
+    groups = _phase_groups(events)
+    ordered, order_reason = _phase_order(groups)
+    phase_start: int | date = _as_date(start_date) if start_date is not None else 0
+    all_timed: list[TimedEvent] = []
+    previous_phase_end_resolved = True
+
+    for phase_index, (phase, phase_events, phase_status) in enumerate(ordered):
+        blocks = group_into_blocks(phase_events)
+        phase_anchored = anchor_blocks(blocks)
+        timed = roll_out_phase(
+            phase_anchored,
+            phase_start,
+            cycle_length_selection=cycle_length_selection,
+            decay_days=decay_days,
+            decay_factor=decay_factor,
+        )
+        boundary_status = "resolved"
+        if phase_index > 0 and not previous_phase_end_resolved:
+            boundary_status = "unresolved: previous phase end is unresolved; anchored at offset 0"
+
+        for event in timed:
+            status = _combine_status(event.timing_status, phase_status, boundary_status)
+            calendar_date = event.calendar_date
+            elapsed_day = event.elapsed_day
+            if start_date is not None and calendar_date is not None:
+                elapsed_day = (calendar_date - _as_date(start_date)).days
+            all_timed.append(
+                TimedEvent(
+                    schedule_event=event.schedule_event,
+                    phase=phase,
+                    phase_step=event.phase_step,
+                    cycle_number=event.cycle_number,
+                    day=event.day,
+                    elapsed_day=elapsed_day,
+                    calendar_date=calendar_date,
+                    intensity=event.intensity,
+                    optional=event.optional,
+                    timing_status=status,
+                )
+            )
+
+        phase_end = _phase_end(phase_anchored, phase_start, selection=cycle_length_selection)
+        previous_phase_end_resolved = phase_end is not None
+        if phase_end is not None and order_reason is None:
+            phase_start = phase_end
+        # An unresolved or indefinite predecessor deliberately leaves the next
+        # phase at the same offset; its rows carry the boundary status.
+
+    records = []
+    for timed in all_timed:
+        event = timed.schedule_event
+        drug = event.drug_object
+        records.append(
+            {
+                "variant_cui": variant.variant_cui,
+                "variant": variant.variant,
+                "phase": timed.phase,
+                "phase_step": timed.phase_step,
+                "cycle_number": timed.cycle_number,
+                "route_group": event.route_group,
+                "drug_cui": drug.drug_cui if drug is not None else None,
+                "drug": drug.drug if drug is not None else None,
+                "day": timed.day,
+                "elapsed_day": timed.elapsed_day,
+                "calendar_date": timed.calendar_date,
+                "intensity": timed.intensity,
+                "optional": timed.optional,
+                "indefinite": event.indefinite,
+                "timing_status": timed.timing_status,
+            }
+        )
+    columns = [
+        "variant_cui", "variant", "phase", "phase_step", "cycle_number",
+        "route_group", "drug_cui", "drug", "day", "elapsed_day",
+        "calendar_date", "intensity", "optional", "indefinite", "timing_status",
+    ]
+    frame = pd.DataFrame.from_records(records, columns=columns)
+    if order_reason and frame.empty:
+        frame.attrs["timing_status"] = f"unresolved: {order_reason}"
+    return frame

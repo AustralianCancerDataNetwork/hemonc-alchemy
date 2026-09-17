@@ -60,3 +60,9 @@ services:
 volumes:
   postgres-data:
   pgadmin-data:
+
+networks:
+  # Keep the shared development network independent of the Compose project
+  # name so sibling devcontainers can join it reliably.
+  default:
+    name: hemonc-alchemy_default

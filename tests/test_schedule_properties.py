@@ -7,7 +7,7 @@ through real inserts and real relationship traversal rather than stubs.
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 
 import pytest
 import sqlalchemy as sa
@@ -16,12 +16,17 @@ import sqlalchemy.orm as so
 
 from hemonc_alchemy.model.base import Base
 from hemonc_alchemy.model.entities import Drugs, Sigs, Variants
+from hemonc_alchemy.model.enums import Sigs_Cycle_length_unitEnum, Sigs_PhaseEnum
 from hemonc_alchemy.toolkit.analytics.treatment.scheduling import (
+    UnresolvedTiming,
     administration_frame,
     administration_matrix,
+    anchor_blocks,
     cancer_services_drugs,
     cancer_services_sigs_by_drug,
+    group_into_blocks,
     home_administered_drugs,
+    roll_out_variant,
     schedule_events,
 )
 
@@ -66,12 +71,31 @@ def _drug(session, drug_cui: int, name: str) -> Drugs:
     return drug
 
 
-def _sig(session, *, sig_id: int, variant_cui: int, drug_cui: int, route: str, alldays: str) -> Sigs:
+def _sig(
+    session,
+    *,
+    sig_id: int,
+    variant_cui: int,
+    drug_cui: int,
+    route: str,
+    alldays: str,
+    **overrides,
+) -> Sigs:
+    timing_sequence = overrides.pop("timing_sequence", None)
+    cycle_length_lb = overrides.pop("cycle_length_lb", None)
+    cycle_length_ub = overrides.pop("cycle_length_ub", None)
+    cycle_length_unit = overrides.pop("cycle_length_unit", None)
+    phase = overrides.pop("phase", None)
+    phase_step = overrides.pop("phase_step", 1)
+    assert not overrides
     sig = Sigs(
         id=sig_id, variant_cui=variant_cui, component_cui=drug_cui, component=f"c{drug_cui}",
         class_field="iv intermittent canonical sig", component_role="primary systemic",
         portion="1", regimen="R", regimen_cui=1, step_number="1", divided=False,
-        phase_step=1, variant=f"v{variant_cui}", route=route, alldays=alldays, date_added=_D,
+        phase=phase, phase_step=phase_step, variant=f"v{variant_cui}", route=route,
+        alldays=alldays, timing_sequence=timing_sequence,
+        cycle_length_lb=cycle_length_lb, cycle_length_ub=cycle_length_ub,
+        cycle_length_unit=cycle_length_unit, date_added=_D,
     )
     session.add(sig)
     session.flush()
@@ -102,6 +126,174 @@ class TestScheduleEvents:
         assert [day.value for day in event.days] == [1]
 
 
+class TestRollout:
+    def _two_block_variant(self, session, variant_cui=90):
+        variant = _variant(session, variant_cui)
+        _drug(session, 1, "docetaxel")
+        _drug(session, 2, "trastuzumab")
+        _sig(
+            session, sig_id=1, variant_cui=variant_cui, drug_cui=1,
+            route="INTRAVENOUS", alldays="1",
+            timing_sequence="1,2,3,4,5,6,7,8",
+            cycle_length_lb="2", cycle_length_ub="2",
+            cycle_length_unit=Sigs_Cycle_length_unitEnum.WEEK,
+        )
+        _sig(
+            session, sig_id=2, variant_cui=variant_cui, drug_cui=2,
+            route="INTRAVENOUS", alldays="1",
+            timing_sequence="9,10,11,12,13,14,15,16,17,18,19,20",
+            cycle_length_lb="3", cycle_length_ub="3",
+            cycle_length_unit=Sigs_Cycle_length_unitEnum.WEEK,
+        )
+        session.expire_all()
+        return variant
+
+    def test_groups_by_cycle_length_and_cycle_numbers(self, session):
+        variant = self._two_block_variant(session)
+
+        blocks = group_into_blocks(schedule_events(variant))
+
+        assert len(blocks) == 2
+        assert [block.cycle_numbers for block in blocks] == [
+            frozenset(range(1, 9)), frozenset(range(9, 21)),
+        ]
+
+    def test_sequential_and_unresolved_anchors(self, session):
+        variant = self._two_block_variant(session, variant_cui=91)
+        blocks = group_into_blocks(schedule_events(variant))
+
+        anchored = anchor_blocks(blocks)
+        assert [item.anchor_kind for item in anchored] == ["phase_start", "after"]
+
+        variant_gap = _variant(session, 92)
+        _drug(session, 3, "cyclophosphamide")
+        _sig(
+            session, sig_id=3, variant_cui=92, drug_cui=3,
+            route="INTRAVENOUS", alldays="1", timing_sequence="1,2",
+            cycle_length_lb="14", cycle_length_ub="14",
+            cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+        )
+        _sig(
+            session, sig_id=4, variant_cui=92, drug_cui=3,
+            route="INTRAVENOUS", alldays="1", timing_sequence="4,5",
+            cycle_length_lb="14", cycle_length_ub="14",
+            cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+        )
+        session.expire_all()
+        gap = anchor_blocks(group_into_blocks(schedule_events(variant_gap)))
+        assert isinstance(gap[-1].unresolved, UnresolvedTiming)
+
+    def test_overlapping_blocks_share_an_anchor(self, session):
+        variant = _variant(session, 93)
+        _drug(session, 1, "carfilzomib")
+        _drug(session, 2, "lenalidomide")
+        _sig(
+            session, sig_id=1, variant_cui=93, drug_cui=1,
+            route="INTRAVENOUS", alldays="1", timing_sequence="1,2,3",
+            cycle_length_lb="28", cycle_length_ub="28",
+            cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+        )
+        _sig(
+            session, sig_id=2, variant_cui=93, drug_cui=2,
+            route="ORAL", alldays="1", timing_sequence="1,2",
+            cycle_length_lb="14", cycle_length_ub="14",
+            cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+        )
+        session.expire_all()
+
+        anchored = anchor_blocks(group_into_blocks(schedule_events(variant)))
+        assert [item.anchor_kind for item in anchored] == ["phase_start", "overlap"]
+
+    def test_same_cycle_length_pattern_change_forms_two_blocks(self, session):
+        variant = _variant(session, 99)
+        _drug(session, 1, "carfilzomib")
+        _drug(session, 2, "dexamethasone")
+        _sig(
+            session, sig_id=1, variant_cui=99, drug_cui=1,
+            route="INTRAVENOUS", alldays="1,2,8,9,15,16",
+            timing_sequence="2,3,4,5,6,7,8,9,10,11,12",
+            cycle_length_lb="4", cycle_length_ub="4",
+            cycle_length_unit=Sigs_Cycle_length_unitEnum.WEEK,
+        )
+        _sig(
+            session, sig_id=2, variant_cui=99, drug_cui=2,
+            route="ORAL", alldays="1,15",
+            timing_sequence="13,14,15,16,17,18",
+            cycle_length_lb="4", cycle_length_ub="4",
+            cycle_length_unit=Sigs_Cycle_length_unitEnum.WEEK,
+        )
+        session.expire_all()
+
+        blocks = group_into_blocks(schedule_events(variant))
+
+        assert len(blocks) == 2
+        assert {block.cycle_length_lb for block in blocks} == {"4"}
+
+    def test_rollout_uses_previous_block_duration(self, session):
+        variant = self._two_block_variant(session, variant_cui=94)
+
+        frame = roll_out_variant(variant)
+
+        first = frame[(frame["drug"] == "docetaxel") & (frame["cycle_number"] == 8)]
+        second = frame[(frame["drug"] == "trastuzumab") & (frame["cycle_number"] == 9)]
+        assert first["elapsed_day"].iloc[0] == 98
+        assert second["elapsed_day"].iloc[0] == 112
+        assert set(frame["timing_status"]) == {"resolved"}
+
+    def test_rollout_can_return_calendar_dates(self, session):
+        variant = self._two_block_variant(session, variant_cui=95)
+
+        frame = roll_out_variant(variant, start_date=date(2020, 1, 1))
+
+        second = frame[(frame["drug"] == "trastuzumab") & (frame["cycle_number"] == 9)]
+        assert second["calendar_date"].iloc[0] == date(2020, 4, 22)
+        assert second["elapsed_day"].iloc[0] == 112
+
+    def test_phase_rollout_chains_at_full_cycle_end(self, session):
+        variant = _variant(session, 96)
+        _drug(session, 1, "induction-drug")
+        _drug(session, 2, "maintenance-drug")
+        _sig(
+            session, sig_id=1, variant_cui=96, drug_cui=1,
+            route="INTRAVENOUS", alldays="1", timing_sequence="1,2",
+            cycle_length_lb="14", cycle_length_ub="14",
+            cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+            phase=Sigs_PhaseEnum.INDUCTION, phase_step=1,
+        )
+        _sig(
+            session, sig_id=2, variant_cui=96, drug_cui=2,
+            route="INTRAVENOUS", alldays="1", timing_sequence="1,2",
+            cycle_length_lb="21", cycle_length_ub="21",
+            cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+            phase=Sigs_PhaseEnum.MAINTENANCE, phase_step=2,
+        )
+        session.expire_all()
+
+        frame = roll_out_variant(variant)
+        maintenance = frame[frame["phase"] == Sigs_PhaseEnum.MAINTENANCE]
+        assert maintenance["elapsed_day"].min() == 28
+
+    def test_phase_step_tie_is_unresolved(self, session):
+        variant = _variant(session, 97)
+        _drug(session, 1, "induction-drug")
+        _drug(session, 2, "consolidation-drug")
+        for sig_id, drug_cui, phase in (
+            (1, 1, Sigs_PhaseEnum.INDUCTION),
+            (2, 2, Sigs_PhaseEnum.CONSOLIDATION),
+        ):
+            _sig(
+                session, sig_id=sig_id, variant_cui=97, drug_cui=drug_cui,
+                route="INTRAVENOUS", alldays="1", timing_sequence="1",
+                cycle_length_lb="14", cycle_length_ub="14",
+                cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+                phase=phase, phase_step=1,
+            )
+        session.expire_all()
+
+        frame = roll_out_variant(variant)
+        assert frame["timing_status"].str.startswith("unresolved:").all()
+
+
 class TestAdministrationFrame:
     def _nsclc_ish(self, session):
         variant = _variant(session, 10)
@@ -116,7 +308,7 @@ class TestAdministrationFrame:
         frame = administration_frame(self._nsclc_ish(session), decay_days=0)
         assert list(frame.columns) == [
             "variant_cui", "variant", "route_group", "drug_cui", "drug",
-            "day", "intensity", "optional", "indefinite",
+            "day", "intensity", "optional", "indefinite", "elapsed_day", "timing_status",
         ]
         assert len(frame) == 4  # carboplatin d1, etoposide d1-3
         assert set(frame["route_group"]) == {"IV", "PO"}
@@ -215,6 +407,18 @@ class TestAdministrationFrame:
             assert len(seen) == after_load
         finally:
             sa.event.remove(engine, "before_cursor_execute", record)
+
+    def test_elapsed_day_exposes_cross_block_timing(self, session):
+        variant = TestRollout()._two_block_variant(session, variant_cui=98)
+
+        frame = administration_frame(variant, decay_days=0)
+        first_block = frame[frame["drug"] == "docetaxel"]
+        second_block = frame[frame["drug"] == "trastuzumab"]
+
+        assert first_block["elapsed_day"].min() == 0
+        assert second_block["elapsed_day"].min() == 112
+        assert set(frame["day"]) == {1}
+        assert set(frame["timing_status"]) == {"resolved"}
 
 
 class TestAdministrationMatrix:
