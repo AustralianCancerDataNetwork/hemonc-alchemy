@@ -24,6 +24,7 @@ from typing import Any
 import pandas as pd  # type: ignore[import-untyped]
 
 from .....model.enums import Sigs_Cycle_length_unitEnum, Sigs_PhaseEnum
+from ..classification import RAD_SIG_CLASS_VALUE, _sig_class_value
 from .handling import Indefinite, apply_sig_to_series, resolve_all_days
 from .properties import ScheduleEvent, schedule_events
 
@@ -103,6 +104,7 @@ class TimedEvent:
     calendar_date: date | None
     intensity: float
     optional: bool
+    cycle_indefinite: Indefinite | None
     timing_status: str
 
 
@@ -392,7 +394,9 @@ def _phase_end(
         for block in anchored_blocks
     ):
         return None
-    return ends.get(id(anchored_blocks[-1].block))
+    if len(ends) != len(anchored_blocks):
+        return None
+    return max(ends.values())
 
 
 def _optional_for_day(event: ScheduleEvent, day: int) -> bool:
@@ -423,6 +427,7 @@ def _unresolved_block_events(
                         calendar_date=None,
                         intensity=intensity,
                         optional=_optional_for_day(event, day),
+                        cycle_indefinite=block.timing_indefinite,
                         timing_status=status.status,
                     )
                 )
@@ -466,6 +471,7 @@ def _resolved_block_events(
                         calendar_date=calendar_date,
                         intensity=intensity,
                         optional=_optional_for_day(event, day),
+                        cycle_indefinite=block.timing_indefinite,
                         timing_status=anchored.timing_status,
                     )
                 )
@@ -555,9 +561,9 @@ def _phase_groups(events: list[ScheduleEvent]) -> list[tuple[Any, list[ScheduleE
 
 def _phase_order(
     groups: list[tuple[Any, list[ScheduleEvent]]],
-) -> tuple[list[tuple[Any, list[ScheduleEvent], str]], str | None]:
+) -> tuple[list[tuple[Any, list[ScheduleEvent], str]], str]:
     if len(groups) <= 1:
-        return [(phase, events, "resolved") for phase, events in groups], None
+        return [(phase, events, "resolved") for phase, events in groups], "resolved"
 
     phase_steps: dict[Any, int | None] = {}
     inconsistent: list[Any] = []
@@ -572,11 +578,13 @@ def _phase_order(
     known = {phase: step for phase, step in phase_steps.items() if step is not None}
     if inconsistent:
         reason = "phase_step inconsistent within " + ", ".join(map(str, inconsistent))
-        return [(phase, events, f"unresolved: {reason}") for phase, events in groups], reason
+        status = f"unresolved: {reason}"
+        return [(phase, events, status) for phase, events in groups], status
     if len(set(known.values())) != len(known):
         tied = [str(phase) for phase, step in phase_steps.items() if list(phase_steps.values()).count(step) > 1]
         reason = "phase_step tie between " + ", ".join(tied)
-        return [(phase, events, f"unresolved: {reason}") for phase, events in groups], reason
+        status = f"unresolved: {reason}"
+        return [(phase, events, status) for phase, events in groups], status
 
     fallback_used = any(phase in _FALLBACK_PHASE_RANKS for phase, _ in groups)
     ranks: dict[Any, float] = {}
@@ -587,13 +595,15 @@ def _phase_order(
             ranks[phase] = float(step)
         else:
             reason = f"no phase_step or fallback rule for {phase}"
-            return [(p, e, f"unresolved: {reason}") for p, e in groups], reason
+            status = f"unresolved: {reason}"
+            return [(p, e, status) for p, e in groups], status
 
     if len(set(ranks.values())) != len(ranks):
         reason = "fallback phase order tie between " + ", ".join(map(str, ranks))
-        return [(phase, events, f"unresolved: {reason}") for phase, events in groups], reason
+        status = f"unresolved: {reason}"
+        return [(phase, events, status) for phase, events in groups], status
 
-    status = None
+    status = "resolved"
     if fallback_used:
         fallback_labels = ", ".join(
             str(phase) for phase, _ in groups if phase in _FALLBACK_PHASE_RANKS
@@ -603,7 +613,7 @@ def _phase_order(
             "convention, not phase_step"
         )
     ordered = sorted(groups, key=lambda item: ranks[item[0]])
-    return [(phase, events, status or "resolved") for phase, events in ordered], status
+    return [(phase, events, status) for phase, events in ordered], status
 
 
 def _combine_status(*statuses: str) -> str:
@@ -625,15 +635,16 @@ def roll_out_variant(
     cycle_length_selection: str = "lb",
     decay_days: int = 2,
     decay_factor: float = 0.5,
+    systemic_only: bool = False,
 ) -> pd.DataFrame:
     """Compose all phases of ``variant`` into one deterministic timeline."""
 
     events = schedule_events(variant)
     groups = _phase_groups(events)
-    ordered, order_reason = _phase_order(groups)
+    ordered, order_status = _phase_order(groups)
     phase_start: int | date = _as_date(start_date) if start_date is not None else 0
     all_timed: list[TimedEvent] = []
-    previous_phase_end_resolved = True
+    timeline_resolved = not order_status.startswith("unresolved:")
 
     for phase_index, (phase, phase_events, phase_status) in enumerate(ordered):
         blocks = group_into_blocks(phase_events)
@@ -646,13 +657,13 @@ def roll_out_variant(
             decay_factor=decay_factor,
         )
         boundary_status = "resolved"
-        if phase_index > 0 and not previous_phase_end_resolved:
-            boundary_status = "unresolved: previous phase end is unresolved; anchored at offset 0"
+        if phase_index > 0 and not timeline_resolved:
+            boundary_status = "unresolved: previous phase end is unresolved"
 
         for event in timed:
             status = _combine_status(event.timing_status, phase_status, boundary_status)
-            calendar_date = event.calendar_date
-            elapsed_day = event.elapsed_day
+            calendar_date = event.calendar_date if timeline_resolved else None
+            elapsed_day = event.elapsed_day if timeline_resolved else None
             if start_date is not None and calendar_date is not None:
                 elapsed_day = (calendar_date - _as_date(start_date)).days
             all_timed.append(
@@ -666,20 +677,28 @@ def roll_out_variant(
                     calendar_date=calendar_date,
                     intensity=event.intensity,
                     optional=event.optional,
+                    cycle_indefinite=event.cycle_indefinite,
                     timing_status=status,
                 )
             )
 
         phase_end = _phase_end(phase_anchored, phase_start, selection=cycle_length_selection)
-        previous_phase_end_resolved = phase_end is not None
-        if phase_end is not None and order_reason is None:
+        if phase_end is None:
+            timeline_resolved = False
+        if phase_end is not None and timeline_resolved:
             phase_start = phase_end
-        # An unresolved or indefinite predecessor deliberately leaves the next
-        # phase at the same offset; its rows carry the boundary status.
+        # An unresolved predecessor leaves later dates null.
 
     records = []
     for timed in all_timed:
         event = timed.schedule_event
+        sig_class = _sig_class_value(event.sig)
+        modality = (
+            "radiation" if sig_class == RAD_SIG_CLASS_VALUE
+            else "systemic" if sig_class is not None else None
+        )
+        if systemic_only and modality == "radiation":
+            continue
         drug = event.drug_object
         records.append(
             {
@@ -689,6 +708,9 @@ def roll_out_variant(
                 "phase_step": timed.phase_step,
                 "cycle_number": timed.cycle_number,
                 "route_group": event.route_group,
+                "modality": modality,
+                "component_cui": event.sig.component_cui,
+                "component": event.sig.component,
                 "drug_cui": drug.drug_cui if drug is not None else None,
                 "drug": drug.drug if drug is not None else None,
                 "day": timed.day,
@@ -696,16 +718,19 @@ def roll_out_variant(
                 "calendar_date": timed.calendar_date,
                 "intensity": timed.intensity,
                 "optional": timed.optional,
-                "indefinite": event.indefinite,
+                "day_indefinite": event.indefinite,
+                "cycle_indefinite": timed.cycle_indefinite,
                 "timing_status": timed.timing_status,
             }
         )
     columns = [
         "variant_cui", "variant", "phase", "phase_step", "cycle_number",
-        "route_group", "drug_cui", "drug", "day", "elapsed_day",
-        "calendar_date", "intensity", "optional", "indefinite", "timing_status",
+        "route_group", "modality", "component_cui", "component",
+        "drug_cui", "drug", "day", "elapsed_day",
+        "calendar_date", "intensity", "optional", "day_indefinite",
+        "cycle_indefinite", "timing_status",
     ]
     frame = pd.DataFrame.from_records(records, columns=columns)
-    if order_reason and frame.empty:
-        frame.attrs["timing_status"] = f"unresolved: {order_reason}"
+    if order_status != "resolved" and frame.empty:
+        frame.attrs["timing_status"] = order_status
     return frame

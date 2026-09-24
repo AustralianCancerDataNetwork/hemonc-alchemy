@@ -16,7 +16,11 @@ import sqlalchemy.orm as so
 
 from hemonc_alchemy.model.base import Base
 from hemonc_alchemy.model.entities import Drugs, Sigs, Variants
-from hemonc_alchemy.model.enums import Sigs_Cycle_length_unitEnum, Sigs_PhaseEnum
+from hemonc_alchemy.model.enums import (
+    Sigs_Class_fieldEnum,
+    Sigs_Cycle_length_unitEnum,
+    Sigs_PhaseEnum,
+)
 from hemonc_alchemy.toolkit.analytics.treatment.scheduling import (
     UnresolvedTiming,
     administration_frame,
@@ -36,6 +40,9 @@ pytestmark = pytest.mark.skipif(
 )
 
 _D = datetime(2020, 1, 1, tzinfo=UTC)
+_IV_SIG = "IV_INTERMITTENT_CANONICAL_SIG"
+_NONIV_SIG = "NON_TO_IV_CANONICAL_SIG"
+_IV_CONT_SIG = "IV_CONTINUOUS_CANONICAL_SIG"
 
 
 @pytest.fixture
@@ -87,10 +94,12 @@ def _sig(
     cycle_length_unit = overrides.pop("cycle_length_unit", None)
     phase = overrides.pop("phase", None)
     phase_step = overrides.pop("phase_step", 1)
+    class_field = overrides.pop("class_field", "iv intermittent canonical sig")
+    component = overrides.pop("component", f"c{drug_cui}")
     assert not overrides
     sig = Sigs(
-        id=sig_id, variant_cui=variant_cui, component_cui=drug_cui, component=f"c{drug_cui}",
-        class_field="iv intermittent canonical sig", component_role="primary systemic",
+        id=sig_id, variant_cui=variant_cui, component_cui=drug_cui, component=component,
+        class_field=class_field, component_role="primary systemic",
         portion="1", regimen="R", regimen_cui=1, step_number="1", divided=False,
         phase=phase, phase_step=phase_step, variant=f"v{variant_cui}", route=route,
         alldays=alldays, timing_sequence=timing_sequence,
@@ -100,6 +109,28 @@ def _sig(
     session.add(sig)
     session.flush()
     return sig
+
+
+def _source_variant(session, variant_cui, rows):
+    """Mirror selected development database sigs in sqlite."""
+    variant = _variant(session, variant_cui)
+    for component_cui, component in dict.fromkeys((row[1], row[0]) for row in rows):
+        _drug(session, component_cui, component)
+    for sig_id, (
+        component, component_cui, alldays, timing_sequence, length,
+        unit, route, sig_class, phase, phase_step,
+    ) in enumerate(rows, start=1):
+        _sig(
+            session, sig_id=sig_id, variant_cui=variant_cui, drug_cui=component_cui,
+            route=route, alldays=alldays, timing_sequence=timing_sequence,
+            cycle_length_lb=length, cycle_length_ub=length,
+            cycle_length_unit=Sigs_Cycle_length_unitEnum[unit],
+            class_field=Sigs_Class_fieldEnum[sig_class], component=component,
+            phase=Sigs_PhaseEnum[phase] if phase is not None else None,
+            phase_step=phase_step,
+        )
+    session.expire_all()
+    return variant
 
 
 class TestScheduleEvents:
@@ -273,6 +304,169 @@ class TestRollout:
         maintenance = frame[frame["phase"] == Sigs_PhaseEnum.MAINTENANCE]
         assert maintenance["elapsed_day"].min() == 28
 
+    def test_phase_end_uses_longest_overlapping_block(self, session):
+        variant = _variant(session, 101)
+        _drug(session, 1, "long-course")
+        _drug(session, 2, "cycle-three")
+        _drug(session, 3, "next-phase")
+        for sig_id, drug_cui, cycles, phase, step in (
+            (1, 1, "1,2,3,4,5,6", Sigs_PhaseEnum.INDUCTION, 1),
+            (2, 2, "3", Sigs_PhaseEnum.INDUCTION, 1),
+            (3, 3, "1", Sigs_PhaseEnum.MAINTENANCE, 2),
+        ):
+            _sig(
+                session, sig_id=sig_id, variant_cui=101, drug_cui=drug_cui,
+                route="INTRAVENOUS", alldays="1", timing_sequence=cycles,
+                cycle_length_lb="21", cycle_length_ub="21",
+                cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+                phase=phase, phase_step=step,
+            )
+        session.expire_all()
+
+        frame = roll_out_variant(variant, decay_days=0)
+        assert frame.loc[frame["drug"] == "next-phase", "elapsed_day"].iloc[0] == 126
+
+    def test_unresolved_block_end_prevents_phase_chaining(self, session):
+        variant = _variant(session, 107)
+        for cui in (1, 2, 3):
+            _drug(session, cui, f"drug-{cui}")
+        for sig_id, drug_cui, cycles, length, phase, step in (
+            (1, 1, "1,2,3", "21", Sigs_PhaseEnum.INDUCTION, 1),
+            (2, 2, "2", "not-a-number", Sigs_PhaseEnum.INDUCTION, 1),
+            (3, 3, "1", "21", Sigs_PhaseEnum.MAINTENANCE, 2),
+        ):
+            _sig(
+                session, sig_id=sig_id, variant_cui=107, drug_cui=drug_cui,
+                route="INTRAVENOUS", alldays="1", timing_sequence=cycles,
+                cycle_length_lb=length, cycle_length_ub=length,
+                cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+                phase=phase, phase_step=step,
+            )
+        session.expire_all()
+
+        frame = roll_out_variant(variant, decay_days=0)
+        next_phase = frame[frame["phase"] == Sigs_PhaseEnum.MAINTENANCE]
+        assert next_phase["timing_status"].str.startswith("unresolved:").all()
+        assert next_phase["elapsed_day"].isna().all()
+
+    def test_fallback_ordered_phases_chain(self, session):
+        variant = _variant(session, 102)
+        _drug(session, 1, "perioperative-drug")
+        _drug(session, 2, "adjuvant-drug")
+        for sig_id, drug_cui, phase, step in (
+            (1, 1, Sigs_PhaseEnum.PERIOPERATIVE, 1),
+            (2, 2, Sigs_PhaseEnum.ADJUVANT, 2),
+        ):
+            _sig(
+                session, sig_id=sig_id, variant_cui=102, drug_cui=drug_cui,
+                route="INTRAVENOUS", alldays="1", timing_sequence="1,2",
+                cycle_length_lb="14", cycle_length_ub="14",
+                cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+                phase=phase, phase_step=step,
+            )
+        session.expire_all()
+
+        frame = roll_out_variant(variant, decay_days=0)
+        adjuvant = frame[frame["phase"] == Sigs_PhaseEnum.ADJUVANT]
+        assert adjuvant["elapsed_day"].min() == 28
+        assert adjuvant["timing_status"].str.startswith("resolved_via_fallback:").all()
+
+    def test_empty_rollout_keeps_prefixed_order_status(self, session):
+        variant = _variant(session, 103)
+        _drug(session, 1, "perioperative-drug")
+        _drug(session, 2, "adjuvant-drug")
+        for sig_id, drug_cui, phase, step in (
+            (1, 1, Sigs_PhaseEnum.PERIOPERATIVE, 1),
+            (2, 2, Sigs_PhaseEnum.ADJUVANT, 2),
+        ):
+            _sig(
+                session, sig_id=sig_id, variant_cui=103, drug_cui=drug_cui,
+                route="INTRAVENOUS", alldays="[1,EOC,7]", timing_sequence="1",
+                cycle_length_lb="14", cycle_length_ub="14",
+                cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+                phase=phase, phase_step=step,
+            )
+        session.expire_all()
+
+        frame = roll_out_variant(variant)
+        assert frame.empty
+        assert frame.attrs["timing_status"].startswith("resolved_via_fallback:")
+
+    @pytest.mark.parametrize(
+        ("variant_cui", "alldays", "timing_sequence", "day_indefinite", "cycle_indefinite"),
+        [
+            (104, "1,(+c)", "1", True, False),
+            (105, "1", "1,(+n)", False, True),
+        ],
+    )
+    def test_indefinite_markers_identify_their_scope(
+        self, session, variant_cui, alldays, timing_sequence,
+        day_indefinite, cycle_indefinite,
+    ):
+        variant = _variant(session, variant_cui)
+        _drug(session, 1, "continuing-drug")
+        _sig(
+            session, sig_id=1, variant_cui=variant_cui, drug_cui=1,
+            route="ORAL", alldays=alldays, timing_sequence=timing_sequence,
+            cycle_length_lb="21", cycle_length_ub="21",
+            cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+        )
+        session.expire_all()
+
+        rolled = roll_out_variant(variant, decay_days=0)
+        administered = administration_frame(variant, decay_days=0)
+        assert (rolled["day_indefinite"].notna().all()) == day_indefinite
+        assert (rolled["cycle_indefinite"].notna().all()) == cycle_indefinite
+        assert (administered["indefinite"].notna().all()) == day_indefinite
+        assert (administered["cycle_indefinite"].notna().all()) == cycle_indefinite
+
+    def test_radiation_rows_are_labeled_and_anchor_later_phases(self, session):
+        variant = _variant(session, 106)
+        _drug(session, 1, "adjuvant-drug")
+        _sig(
+            session, sig_id=1, variant_cui=106, drug_cui=999,
+            route="NS", alldays="1", timing_sequence="1,2",
+            cycle_length_lb="14", cycle_length_ub="14",
+            cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+            phase=Sigs_PhaseEnum.DEFINITIVE, phase_step=1,
+            class_field=Sigs_Class_fieldEnum.RAD_SIG, component="radiotherapy",
+        )
+        _sig(
+            session, sig_id=2, variant_cui=106, drug_cui=1,
+            route="INTRAVENOUS", alldays="1", timing_sequence="1",
+            cycle_length_lb="21", cycle_length_ub="21",
+            cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+            phase=Sigs_PhaseEnum.ADJUVANT, phase_step=2,
+            component="adjuvant-drug",
+        )
+        session.expire_all()
+
+        frame = roll_out_variant(variant, decay_days=0)
+        radiation = frame[frame["modality"] == "radiation"]
+        assert len(radiation) == 2
+        assert radiation["drug"].isna().all()
+        assert set(radiation["component"]) == {"radiotherapy"}
+        assert set(radiation["component_cui"]) == {999}
+        assert frame.loc[frame["modality"] == "systemic", "elapsed_day"].iloc[0] == 28
+
+        systemic = roll_out_variant(variant, decay_days=0, systemic_only=True)
+        assert set(systemic["modality"]) == {"systemic"}
+        assert systemic["elapsed_day"].iloc[0] == 28
+
+    def test_unclassified_sig_keeps_unknown_modality(self, session):
+        variant = _variant(session, 108)
+        _drug(session, 1, "unknown-class-drug")
+        _sig(
+            session, sig_id=1, variant_cui=108, drug_cui=1,
+            route="INTRAVENOUS", alldays="1", timing_sequence="1",
+            cycle_length_lb="21", cycle_length_ub="21",
+            cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+            class_field=None,
+        )
+        session.expire_all()
+
+        assert roll_out_variant(variant, systemic_only=True)["modality"].isna().all()
+
     def test_phase_step_tie_is_unresolved(self, session):
         variant = _variant(session, 97)
         _drug(session, 1, "induction-drug")
@@ -290,8 +484,97 @@ class TestRollout:
             )
         session.expire_all()
 
-        frame = roll_out_variant(variant)
+        frame = roll_out_variant(variant, start_date=date(2020, 1, 1))
         assert frame["timing_status"].str.startswith("unresolved:").all()
+        assert frame["elapsed_day"].isna().all()
+        assert frame["calendar_date"].isna().all()
+
+
+class TestRealVariantSnapshots:
+    """Source rows from the development HemOnc database on 2026-09-24."""
+
+    def test_ddfec_ddth_cycle_length_change(self, session):
+        variant = _source_variant(session, 131576, [
+            ("Cyclophosphamide", 122, "1", "1,2,3,4", "2", "WEEK", "INTRAVENOUS", _IV_SIG, None, 1),
+            ("Docetaxel", 164, "1", "5,6,7,8", "2", "WEEK", "INTRAVENOUS", _IV_SIG, None, 1),
+            ("Epirubicin", 191, "1", "1,2,3,4", "2", "WEEK", "INTRAVENOUS", _IV_SIG, None, 1),
+            ("Filgrastim", 220, "[3,10,1]", "1,2,3,4,5,6,7,8", "2", "WEEK", "SUBCUTANEOUS", _NONIV_SIG, None, 1),
+            ("Fluorouracil", 225, "1", "1,2,3,4", "2", "WEEK", "INTRAVENOUS", _IV_SIG, None, 1),
+            ("Trastuzumab", 512, "1", "5", "2", "WEEK", "INTRAVENOUS", _IV_SIG, None, 1),
+            ("Trastuzumab", 512, "1", "6,7,8", "2", "WEEK", "INTRAVENOUS", _IV_SIG, None, 1),
+            ("Trastuzumab", 512, "1", "9,10,11,12,13,14,15,16,17,18,19,20", "3", "WEEK", "INTRAVENOUS", _IV_SIG, None, 1),
+        ])
+        frame = roll_out_variant(variant, start_date=date(2020, 1, 1), decay_days=0)
+        cycle_nine = frame[(frame["component"] == "Trastuzumab") & (frame["cycle_number"] == 9)]
+        # Eight two-week cycles end 112 days after 2020-01-01.
+        assert cycle_nine["elapsed_day"].iloc[0] == 112
+        assert cycle_nine["calendar_date"].iloc[0] == date(2020, 4, 22)
+
+    def test_dara_krd_pattern_changes_within_four_week_cycles(self, session):
+        variant = _source_variant(session, 131485, [
+            ("Carfilzomib", 89, "[8,15,7]", "1", "4", "WEEK", "INTRAVENOUS", _IV_SIG, None, 1),
+            ("Carfilzomib", 89, "1", "1", "4", "WEEK", "INTRAVENOUS", _IV_SIG, None, 1),
+            ("Carfilzomib", 89, "[1,15,7]", "2,3,4,5,6,7,8", "4", "WEEK", "INTRAVENOUS", _IV_SIG, None, 1),
+            ("Daratumumab", 139, "[1,22,7]", "1,2", "4", "WEEK", "INTRAVENOUS", _IV_SIG, None, 1),
+            ("Daratumumab", 139, "[1,15,14]", "3,4,5,6", "4", "WEEK", "INTRAVENOUS", _IV_SIG, None, 1),
+            ("Daratumumab", 139, "1", "7,8", "4", "WEEK", "INTRAVENOUS", _IV_SIG, None, 1),
+            ("Dexamethasone", 156, "[1,22,7]", "1,2,3,4", "4", "WEEK", "INTRAVENOUS", _IV_SIG, None, 1),
+            ("Dexamethasone", 156, "[1,22,7]", "5,6,7,8", "4", "WEEK", "ORAL", _NONIV_SIG, None, 1),
+            ("Lenalidomide", 299, "[1,21,1]", "1,2,3,4,5,6,7,8", "4", "WEEK", "ORAL", _NONIV_SIG, None, 1),
+        ])
+        frame = roll_out_variant(variant, decay_days=0)
+        daratumumab = frame[frame["component"] == "Daratumumab"]
+        # Cycle 3 starts at 2 × 28 = 56 days; day 15 is day 70.
+        assert set(daratumumab[daratumumab["cycle_number"] == 3]["elapsed_day"]) == {56, 70}
+        # Cycle 7 starts at 6 × 28 = 168 days and has only day 1.
+        assert set(daratumumab[daratumumab["cycle_number"] == 7]["elapsed_day"]) == {168}
+
+    def test_five_plus_two_day_control(self, session):
+        variant = _source_variant(session, 129498, [
+            ("Cytarabine", 126, "1", "1", "5", "DAY", "INTRAVENOUS", _IV_CONT_SIG, None, 1),
+            ("Daunorubicin", 143, "[1,2,1]", "1", "5", "DAY", "INTRAVENOUS", _IV_SIG, None, 1),
+        ])
+        frame = roll_out_variant(variant, decay_days=0)
+        # A single five-day block begins at day 0; its explicit days are 1 and 2.
+        assert set(frame["elapsed_day"]) == {0, 1}
+
+    def test_tislelizumab_neoadjuvant_to_adjuvant(self, session):
+        variant = _source_variant(session, 150930, [
+            ("Carboplatin", 88, "1", "1,2,3,(4)", "3", "WEEK", "INTRAVENOUS", _IV_SIG, "NEOADJUVANT", 1),
+            ("Paclitaxel", 379, "1", "1,2,3,(4)", "3", "WEEK", "INTRAVENOUS", _IV_SIG, "NEOADJUVANT", 1),
+            ("Tislelizumab", 64463, "1", "1,2,3,(4)", "3", "WEEK", "INTRAVENOUS", _IV_SIG, "NEOADJUVANT", 1),
+            ("Tislelizumab", 64463, "1", "1,2,3,4,5,6,7,8", "6", "WEEK", "INTRAVENOUS", _IV_SIG, "ADJUVANT", 3),
+        ])
+        frame = roll_out_variant(variant, decay_days=0)
+        adjuvant = frame[frame["phase"] == Sigs_PhaseEnum.ADJUVANT]
+        # Four possible three-week cycles end after 4 × 21 = 84 days.
+        assert adjuvant["elapsed_day"].min() == 84
+        assert adjuvant["elapsed_day"].iloc[1] == 126
+
+    def test_osimertinib_compact_daily_days(self, session):
+        variant = _source_variant(session, 136672, [
+            ("Carboplatin", 88, "1", "1,2,3,4", "3", "WEEK", "INTRAVENOUS", _IV_SIG, None, 1),
+            ("Osimertinib", 375, "[1,21,1]", "1,(+1)", "3", "WEEK", "ORAL", _NONIV_SIG, None, 1),
+            ("Pemetrexed", 395, "1", "1,(+1)", "3", "WEEK", "INTRAVENOUS", _IV_SIG, None, 1),
+        ])
+        frame = roll_out_variant(variant, decay_days=0)
+        oral = frame[frame["component"] == "Osimertinib"]
+        # The source's explicit range covers days 1 through 21 in cycle 1.
+        assert set(oral["elapsed_day"]) == set(range(21))
+        # Carboplatin cycle 4 begins after 3 × 21 = 63 days.
+        assert frame[(frame["component"] == "Carboplatin") & (frame["cycle_number"] == 4)]["elapsed_day"].iloc[0] == 63
+
+    def test_ipilimumab_cycle_three_overlaps_six_cycle_cp(self, session):
+        variant = _source_variant(session, 130411, [
+            ("Carboplatin", 88, "1", "1,2,3,4,5,6", "3", "WEEK", "INTRAVENOUS", _IV_SIG, None, 1),
+            ("Ipilimumab", 279, "1", "3,(+1)", "12", "WEEK", "INTRAVENOUS", _IV_SIG, None, 1),
+            ("Paclitaxel", 379, "1", "1,2,3,4,5,6", "3", "WEEK", "INTRAVENOUS", _IV_SIG, None, 1),
+        ])
+        frame = roll_out_variant(variant, decay_days=0)
+        # Ipilimumab cycle 3 starts after two three-week CP cycles: 42 days.
+        assert frame.loc[frame["component"] == "Ipilimumab", "elapsed_day"].iloc[0] == 42
+        # CP cycle 6 begins after five three-week cycles: 105 days.
+        assert frame[(frame["component"] == "Paclitaxel") & (frame["cycle_number"] == 6)]["elapsed_day"].iloc[0] == 105
 
 
 class TestAdministrationFrame:
@@ -308,7 +591,8 @@ class TestAdministrationFrame:
         frame = administration_frame(self._nsclc_ish(session), decay_days=0)
         assert list(frame.columns) == [
             "variant_cui", "variant", "route_group", "drug_cui", "drug",
-            "day", "intensity", "optional", "indefinite", "elapsed_day", "timing_status",
+            "day", "intensity", "optional", "indefinite", "cycle_indefinite",
+            "elapsed_day", "timing_status",
         ]
         assert len(frame) == 4  # carboplatin d1, etoposide d1-3
         assert set(frame["route_group"]) == {"IV", "PO"}

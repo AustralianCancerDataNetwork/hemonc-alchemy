@@ -48,6 +48,7 @@ _FRAME_COLUMNS = [
     "intensity",
     "optional",
     "indefinite",
+    "cycle_indefinite",
     "elapsed_day",
     "timing_status",
 ]
@@ -172,7 +173,8 @@ def _rollout_frame_records(
                 "day": row.day,
                 "intensity": row.intensity,
                 "optional": row.optional,
-                "indefinite": row.indefinite,
+                "indefinite": row.day_indefinite,
+                "cycle_indefinite": row.cycle_indefinite,
                 "elapsed_day": row.elapsed_day,
                 "timing_status": row.timing_status,
             }
@@ -199,7 +201,8 @@ def administration_frame(
     | `elapsed_day` | variant-relative day when cross-cycle timing resolves |
     | `intensity` | 1.0 on a dosing day, tapering over `decay_days` after |
     | `optional` | whether the dosing day itself was marked optional |
-    | `indefinite` | set when the sig continues past its stated days |
+    | `indefinite` | day-level marker when days continue past those stated |
+    | `cycle_indefinite` | cycle-level marker when cycles continue past those stated |
     | `timing_status` | whether the rollout is resolved or needs review |
 
     `intensity` tapers after each dose by `decay_factor` per day for
@@ -208,8 +211,8 @@ def administration_frame(
 
     Rows whose route is unrecognised or not specified are excluded, as are
     sigs with no resolvable days -- including open-ended `EOC` ranges, so a
-    variant can legitimately produce no rows. Where `indefinite` is set, the
-    days present are only the part that was written down.
+    variant can legitimately produce no rows. Where `indefinite` or
+    `cycle_indefinite` is set, only the written days or cycles are returned.
     """
     # Duck-typed rather than `isinstance(variants, Iterable)`: entities inherit
     # __iter__ from orm-loader's serialisation interface, so a single variant
@@ -243,7 +246,9 @@ def administration_frame(
             dropna=False,
         )
         .agg(intensity=("intensity", "max"), optional=("optional", "all"),
-             indefinite=("indefinite", "first"), timing_status=("timing_status", "first"))
+             indefinite=("indefinite", "first"),
+             cycle_indefinite=("cycle_indefinite", "first"),
+             timing_status=("timing_status", "first"))
     )
     return grouped[_FRAME_COLUMNS].sort_values(
         ["variant_cui", "route_group", "drug", "elapsed_day", "day"], ignore_index=True

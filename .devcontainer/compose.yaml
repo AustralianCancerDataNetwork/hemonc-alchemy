@@ -66,3 +66,4 @@ networks:
   # name so sibling devcontainers can join it reliably.
   default:
     name: hemonc-alchemy_default
+    external: true
