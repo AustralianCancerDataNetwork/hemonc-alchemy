@@ -13,8 +13,12 @@ The repository's `.devcontainer` is a disposable environment for exploring the m
 From the repository root:
 
 ```bash
+docker network inspect hemonc-alchemy_default >/dev/null 2>&1 || \
+  docker network create hemonc-alchemy_default
 docker compose -f .devcontainer/compose.yaml up -d
 ```
+
+The network is shared with SCOOP and must exist before Compose starts.
 
 Open the repository in VS Code's Dev Container. The project interpreter inside the Python service is `/opt/venv/bin/python`; the notebook kernel should use that environment.
 

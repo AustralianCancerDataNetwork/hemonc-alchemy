@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import logging
+
 from hemonc_alchemy.model.enums import Sigs_RouteEnum
 from hemonc_alchemy.toolkit.analytics.treatment.scheduling import (
     Day,
@@ -70,21 +72,36 @@ class TestResolveAllDays:
         resolved = resolve_all_days("[1,21,7]")
         assert resolved.days == (Day(1), Day(8), Day(15))
 
-    def test_indefinite_marker_is_preserved_not_dropped(self, caplog):
+    def test_indefinite_marker_is_preserved_and_logged_at_debug(self, caplog):
         # Previously: expand() silently `continue`d past Indefinite tokens,
-        # so a caller had no way to tell a maintenance/continuation regimen
-        # was truncated. Now the marker survives and a warning is logged.
-        resolved = resolve_all_days("1,8,15,(+n)")
+        # so a caller had no way to tell a maintenance regimen was truncated.
+        with caplog.at_level(logging.DEBUG):
+            resolved = resolve_all_days("1,8,15,(+n)")
         assert resolved.days == (Day(1), Day(8), Day(15))
         assert resolved.indefinite == Indefinite(kind="+n", max_days=None)
         assert bool(resolved) is True
-        assert any("indefinite" in message.lower() for message in caplog.messages)
+        assert any("Indefinite-dosing marker" in record.message for record in caplog.records)
+        assert all(record.levelno < logging.WARNING for record in caplog.records)
+
+    def test_known_numeric_markers_do_not_warn(self, caplog):
+        resolve_all_days("1,(+2)")
+        resolve_all_days("1,(+2)")
+        assert not caplog.records
+
+    def test_unparseable_marker_still_warns(self, caplog):
+        resolve_all_days("1,(+bogus)")
+        assert any(record.levelno == logging.WARNING for record in caplog.records)
 
     def test_indefinite_only_schedule_is_still_truthy(self):
         resolved = resolve_all_days("(+c5)")
         assert resolved.days == ()
         assert resolved.indefinite == Indefinite(kind="+c", max_days=5)
         assert bool(resolved) is True
+
+    def test_numeric_continuation_keeps_interval_without_expanding(self):
+        resolved = resolve_all_days("1,(+2)")
+        assert resolved.days == (Day(1),)
+        assert resolved.indefinite == Indefinite(kind="+k", interval=2)
 
     def test_empty_input(self):
         resolved = resolve_all_days(None)
