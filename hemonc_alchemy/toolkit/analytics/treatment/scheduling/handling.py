@@ -81,7 +81,10 @@ def parse_scalar_list(token: str):
         elif "|" in part:
             out.append(parse_choice(part))
         else:
-            out.append(Day(int(part)))
+            try:
+                out.append(Day(int(part)))
+            except ValueError:
+                logger.warning("Unparseable dosing token %r dropped", part)
     return out
 
 
@@ -102,6 +105,8 @@ def parse_optional(token: str):
     inner = token[1:-1]
 
     if inner.startswith("+"):
+        if match := re.fullmatch(r"\+([1-9][0-9]*)", inner):
+            return [Indefinite("+k", interval=int(match.group(1)))]
         match = re.fullmatch(r"\+([a-zA-Z])(\d+)?", inner)
         if not match:
             logger.warning("Unparseable indefinite-dosing token %r", token)
@@ -148,9 +153,8 @@ def expand(parsed) -> ResolvedSchedule:
                 )
             else:
                 indefinite = item
-                logger.warning(
-                    "Indefinite-dosing marker %r found (continue until progression/indefinitely); "
-                    "explicit days list is not the complete schedule",
+                logger.debug(
+                    "Indefinite-dosing marker %r found; explicit days list is not the complete schedule",
                     item,
                 )
 

@@ -12,7 +12,7 @@ from ....model.enums import Sigs_Class_fieldEnum
 RAD_SIG_CLASS_VALUE = Sigs_Class_fieldEnum.RAD_SIG
 
 
-def _sig_class_value(sig_or_value):
+def sig_class_value(sig_or_value):
     value = getattr(sig_or_value, "class_field", sig_or_value)
     if isinstance(value, Sigs_Class_fieldEnum):
         return value
@@ -26,7 +26,7 @@ def _sig_class_value(sig_or_value):
 
 def has_radiation_sig(variant) -> bool:
     """Whether any of a variant's component sigs are a radiation sig."""
-    return any(_sig_class_value(sig) == RAD_SIG_CLASS_VALUE for sig in variant.component_sigs)
+    return any(sig_class_value(sig) == RAD_SIG_CLASS_VALUE for sig in variant.component_sigs)
 
 
 def has_non_radiation_sig(variant) -> bool:
@@ -37,14 +37,14 @@ def has_non_radiation_sig(variant) -> bool:
     classification.
     """
     return any(
-        (value := _sig_class_value(sig)) is not None
+        (value := sig_class_value(sig)) is not None
         and value != RAD_SIG_CLASS_VALUE
         for sig in variant.component_sigs
     )
 
 
 def _has_unclassified_sig(variant) -> bool:
-    return any(_sig_class_value(sig) is None for sig in variant.component_sigs)
+    return any(sig_class_value(sig) is None for sig in variant.component_sigs)
 
 
 def is_concurrent_chemort(variant) -> bool:
