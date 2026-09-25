@@ -387,6 +387,48 @@ class TestRollout:
         assert ipilimumab["elapsed_day"].iloc[0] == 42
         assert set(ipilimumab["timing_status"]) == {"resolved"}
 
+    @pytest.mark.parametrize(
+        ("predecessor_lengths", "expected_day", "expected_status"),
+        [
+            ((4, 3, 1), None, "unresolved: blocks ending cycle 1 differ in cycle length"),
+            ((4, 4, 4), 28, "resolved"),
+        ],
+    )
+    def test_following_cycle_checks_all_predecessor_lengths(
+        self, session, predecessor_lengths, expected_day, expected_status
+    ):
+        # Variant 131178 has three cycle-1 blocks; sort order puts the one-week
+        # block last, but cycle 2 cannot be anchored to that block alone.
+        variant = _variant(session, 127)
+        for cui, name in (
+            (1, "cobimetinib"),
+            (2, "vemurafenib-early"),
+            (3, "vemurafenib-late"),
+            (4, "atezolizumab"),
+        ):
+            _drug(session, cui, name)
+        for sig_id, cycles, length in (
+            (1, "1,(+1)", predecessor_lengths[0]),
+            (2, "1", predecessor_lengths[1]),
+            (3, "1", predecessor_lengths[2]),
+            (4, "2,(+1)", 4),
+        ):
+            _sig(
+                session, sig_id=sig_id, variant_cui=127, drug_cui=sig_id,
+                route="ORAL", alldays="1", timing_sequence=cycles,
+                cycle_length_lb=str(length), cycle_length_ub=str(length),
+                cycle_length_unit=Sigs_Cycle_length_unitEnum.WEEK,
+            )
+        session.expire_all()
+
+        frame = roll_out_variant(variant, decay_days=0)
+        cycle_two = frame[frame["drug"] == "atezolizumab"]
+        if expected_day is None:
+            assert cycle_two["elapsed_day"].isna().all()
+        else:
+            assert cycle_two["elapsed_day"].iloc[0] == expected_day
+        assert set(cycle_two["timing_status"]) == {expected_status}
+
     def test_three_blocks_sharing_only_cycle_five_stay_resolved(self, session):
         variant = _variant(session, 126)
         for cui in (1, 2, 3):

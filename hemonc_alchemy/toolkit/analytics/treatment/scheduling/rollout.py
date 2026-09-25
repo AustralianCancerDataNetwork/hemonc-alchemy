@@ -281,6 +281,25 @@ def anchor_blocks(
 
         previous = ordered[index - 1]
         if previous.last_cycle is not None and block.first_cycle == previous.last_cycle + 1:
+            predecessors = [
+                prior.block for prior in anchored
+                if prior.block.last_cycle == previous.last_cycle
+            ]
+            lengths = {
+                (prior.cycle_length_lb, prior.cycle_length_ub, prior.cycle_length_unit)
+                for prior in predecessors
+            }
+            if len(lengths) > 1:
+                anchored.append(
+                    AnchoredBlock(
+                        block=block,
+                        anchor_kind="unresolved",
+                        unresolved=UnresolvedTiming(
+                            f"blocks ending cycle {previous.last_cycle} differ in cycle length"
+                        ),
+                    )
+                )
+                continue
             anchored.append(
                 AnchoredBlock(
                     block=block,
