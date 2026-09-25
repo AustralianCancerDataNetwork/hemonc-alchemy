@@ -92,6 +92,23 @@ class TestResolveAllDays:
         resolve_all_days("1,(+bogus)")
         assert any(record.levelno == logging.WARNING for record in caplog.records)
 
+    def test_zero_continuation_interval_is_rejected(self, caplog):
+        resolved = resolve_all_days("1,(+0)")
+        assert resolved.days == (Day(1),)
+        assert resolved.indefinite is None
+        assert any("Unparseable indefinite-dosing token" in message for message in caplog.messages)
+
+    def test_unspecified_scalar_is_dropped_with_warning(self, caplog):
+        resolved = resolve_all_days("NS")
+        assert resolved.days == ()
+        assert resolved.indefinite is None
+        assert any("NS" in message for message in caplog.messages)
+
+    def test_bare_eoc_is_dropped_without_losing_valid_days(self, caplog):
+        resolved = resolve_all_days("1,EOC")
+        assert resolved.days == (Day(1),)
+        assert any("EOC" in message for message in caplog.messages)
+
     def test_indefinite_only_schedule_is_still_truthy(self):
         resolved = resolve_all_days("(+c5)")
         assert resolved.days == ()

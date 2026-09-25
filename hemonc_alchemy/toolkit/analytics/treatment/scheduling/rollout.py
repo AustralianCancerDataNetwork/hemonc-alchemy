@@ -179,6 +179,21 @@ def group_into_blocks(events: Iterable[ScheduleEvent]) -> list[CycleBlock]:
     )
 
 
+def _overlap_conflict(block: CycleBlock, overlaps: list[AnchoredBlock]) -> UnresolvedTiming | None:
+    length = (block.cycle_length_lb, block.cycle_length_ub, block.cycle_length_unit)
+    shared = set().union(*(
+        prior.block.cycle_numbers & block.cycle_numbers for prior in overlaps
+    ))
+    if len(shared) > 1 and any(
+        (prior.block.cycle_length_lb, prior.block.cycle_length_ub, prior.block.cycle_length_unit)
+        != length for prior in overlaps
+    ):
+        return UnresolvedTiming(
+            f"cycle lengths differ across shared cycles {min(shared)}-{max(shared)}"
+        )
+    return None
+
+
 def anchor_blocks(
     blocks: Iterable[CycleBlock], *, preceding_cycle: int | None = None
 ) -> list[AnchoredBlock]:
@@ -243,6 +258,15 @@ def anchor_blocks(
             if prior.block.cycle_numbers & block.cycle_numbers
         ]
         if overlaps:
+            if conflict := _overlap_conflict(block, overlaps):
+                anchored.append(
+                    AnchoredBlock(
+                        block=block,
+                        anchor_kind="unresolved",
+                        unresolved=conflict,
+                    )
+                )
+                continue
             prior = overlaps[-1]
             intersection = prior.block.cycle_numbers & block.cycle_numbers
             anchored.append(
@@ -536,18 +560,19 @@ def roll_out_phase(
             selection=cycle_length_selection,
         )
         if start is not None:
-            starts[id(block)] = start
-            if block.timing_indefinite is None:
-                try:
-                    end = _advance(
-                        start,
-                        block,
-                        block.last_cycle - anchored_block.anchor_cycle + 1,
-                        selection=cycle_length_selection,
-                    )
-                except (TypeError, ValueError):
-                    start = None
-                else:
+            try:
+                end = _advance(
+                    start,
+                    block,
+                    1 if block.timing_indefinite is not None
+                    else block.last_cycle - anchored_block.anchor_cycle + 1,
+                    selection=cycle_length_selection,
+                )
+            except (TypeError, ValueError):
+                start = None
+            else:
+                starts[id(block)] = start
+                if block.timing_indefinite is None:
                     ends[id(block)] = end
 
         if start is None:
@@ -703,17 +728,20 @@ def roll_out_variant(
     timeline_failure = order_status if order_status.startswith("unresolved:") else None
     optional_assumptions: list[str] = []
     previous_last_cycle: int | None = None
-    previous_step: int | None = None
+    phase_steps = {phase_events[0].phase_step for _, phase_events, _ in ordered}
+    known_steps = sorted(step for step in phase_steps if step is not None)
+    missing_steps = (
+        sorted(set(range(known_steps[0], known_steps[-1] + 1)) - phase_steps)
+        if known_steps else []
+    )
 
     for phase, phase_events, phase_status in ordered:
         current_step = phase_events[0].phase_step
-        if (
-            previous_step is not None
-            and order_status == "resolved"
-            and timeline_failure is None
-            and current_step > previous_step + 1
-        ):
-            missing = ", ".join(map(str, range(previous_step + 1, current_step)))
+        missing_before = [
+            step for step in missing_steps if step < current_step
+        ] if current_step is not None else []
+        if timeline_failure is None and missing_before:
+            missing = ", ".join(map(str, missing_before))
             timeline_failure = (
                 f"unresolved: phase_step gap before step {current_step} "
                 f"(no sigs for step {missing})"
@@ -774,7 +802,6 @@ def roll_out_variant(
             previous_last_cycle = max(block.last_cycle for block in blocks)
         else:
             previous_last_cycle = None
-        previous_step = current_step
         if optional_cycles:
             optional_assumptions.append(phase_optional_status)
 

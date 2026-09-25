@@ -294,7 +294,7 @@ class TestRollout:
         )
         _sig(
             session, sig_id=2, variant_cui=93, drug_cui=2,
-            route="ORAL", alldays="1", timing_sequence="1,2",
+            route="ORAL", alldays="1", timing_sequence="1",
             cycle_length_lb="14", cycle_length_ub="14",
             cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
         )
@@ -302,6 +302,112 @@ class TestRollout:
 
         anchored = anchor_blocks(group_into_blocks(schedule_events(variant)))
         assert [item.anchor_kind for item in anchored] == ["phase_start", "overlap"]
+
+    def test_three_overlaps_reject_conflicting_cycle_starts(self, session):
+        variant = _variant(session, 119)
+        for cui in (1, 2, 3):
+            _drug(session, cui, f"drug-{cui}")
+        for sig_id, start, stop, length in ((1, 1, 5, 7), (2, 3, 7, 14), (3, 5, 9, 21)):
+            _sig(
+                session, sig_id=sig_id, variant_cui=119, drug_cui=sig_id,
+                route="INTRAVENOUS", alldays="1",
+                timing_sequence=",".join(map(str, range(start, stop + 1))),
+                cycle_length_lb=str(length), cycle_length_ub=str(length),
+                cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+            )
+        session.expire_all()
+
+        frame = roll_out_variant(variant, decay_days=0)
+        first = frame[frame["drug"] == "drug-1"]
+        second = frame[frame["drug"] == "drug-2"]
+        third = frame[frame["drug"] == "drug-3"]
+        assert first.loc[first["cycle_number"] == 5, "elapsed_day"].iloc[0] == 28
+        assert set(first["timing_status"]) == {"resolved"}
+        assert second["elapsed_day"].isna().all()
+        assert set(second["timing_status"]) == {
+            "unresolved: cycle lengths differ across shared cycles 3-5"
+        }
+        assert third["elapsed_day"].isna().all()
+        assert set(third["timing_status"]) == {
+            "unresolved: cycle lengths differ across shared cycles 5-7"
+        }
+
+    @pytest.mark.parametrize(
+        ("later_cycles", "expected_status"),
+        [
+            ("2,3,4", "unresolved: cycle lengths differ across shared cycles 2-3"),
+            ("3,4,5", "resolved"),
+        ],
+    )
+    def test_different_length_overlap_needs_multiple_shared_cycles(
+        self, session, later_cycles, expected_status
+    ):
+        variant = _variant(session, 120)
+        _drug(session, 1, "earlier-drug")
+        _drug(session, 2, "later-drug")
+        for sig_id, drug_cui, cycles, length in (
+            (1, 1, "1,2,3", 7),
+            (2, 2, later_cycles, 14),
+        ):
+            _sig(
+                session, sig_id=sig_id, variant_cui=120, drug_cui=drug_cui,
+                route="INTRAVENOUS", alldays="1", timing_sequence=cycles,
+                cycle_length_lb=str(length), cycle_length_ub=str(length),
+                cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+            )
+        session.expire_all()
+
+        frame = roll_out_variant(variant, decay_days=0)
+        later = frame[frame["drug"] == "later-drug"]
+        assert set(later["timing_status"]) == {expected_status}
+        if expected_status == "resolved":
+            assert later.loc[later["cycle_number"] == 3, "elapsed_day"].iloc[0] == 14
+        else:
+            assert later["elapsed_day"].isna().all()
+
+    def test_single_shared_cycle_with_two_prior_blocks_stays_resolved(self, session):
+        variant = _variant(session, 125)
+        for cui, name in ((1, "carboplatin"), (2, "paclitaxel"), (3, "ipilimumab")):
+            _drug(session, cui, name)
+        for sig_id, cycles, length in (
+            (1, "1,2,3,4", 3),
+            (2, "1,2,3,4,5,6", 3),
+            (3, "3", 12),
+        ):
+            _sig(
+                session, sig_id=sig_id, variant_cui=125, drug_cui=sig_id,
+                route="INTRAVENOUS", alldays="1", timing_sequence=cycles,
+                cycle_length_lb=str(length), cycle_length_ub=str(length),
+                cycle_length_unit=Sigs_Cycle_length_unitEnum.WEEK,
+            )
+        session.expire_all()
+
+        frame = roll_out_variant(variant, decay_days=0)
+        ipilimumab = frame[frame["drug"] == "ipilimumab"]
+        assert ipilimumab["elapsed_day"].iloc[0] == 42
+        assert set(ipilimumab["timing_status"]) == {"resolved"}
+
+    def test_three_blocks_sharing_only_cycle_five_stay_resolved(self, session):
+        variant = _variant(session, 126)
+        for cui in (1, 2, 3):
+            _drug(session, cui, f"drug-{cui}")
+        for sig_id, cycles, length in (
+            (1, "1,2,3,4,5", 7),
+            (2, "5", 14),
+            (3, "5,6,7,8,9", 21),
+        ):
+            _sig(
+                session, sig_id=sig_id, variant_cui=126, drug_cui=sig_id,
+                route="INTRAVENOUS", alldays="1", timing_sequence=cycles,
+                cycle_length_lb=str(length), cycle_length_ub=str(length),
+                cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+            )
+        session.expire_all()
+
+        frame = roll_out_variant(variant, decay_days=0)
+        cycle_five = frame[frame["cycle_number"] == 5]
+        assert set(cycle_five["elapsed_day"]) == {28}
+        assert set(cycle_five["timing_status"]) == {"resolved"}
 
     def test_same_cycle_length_pattern_change_forms_two_blocks(self, session):
         variant = _variant(session, 99)
@@ -397,6 +503,55 @@ class TestRollout:
         assert later["elapsed_day"].isna().all()
         assert set(later["timing_status"]) == {
             "unresolved: phase_step gap before step 3 (no sigs for step 2)"
+        }
+
+    def test_phase_step_gap_with_fallback_order_nulls_later_phase(self, session):
+        variant = _variant(session, 122)
+        _drug(session, 1, "perioperative-drug")
+        _drug(session, 2, "adjuvant-drug")
+        for sig_id, drug_cui, phase, step in (
+            (1, 1, Sigs_PhaseEnum.PERIOPERATIVE, 1),
+            (2, 2, Sigs_PhaseEnum.ADJUVANT, 3),
+        ):
+            _sig(
+                session, sig_id=sig_id, variant_cui=122, drug_cui=drug_cui,
+                route="INTRAVENOUS", alldays="1", timing_sequence="1,2",
+                cycle_length_lb="21", cycle_length_ub="21",
+                cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+                phase=phase, phase_step=step,
+            )
+        session.expire_all()
+
+        frame = roll_out_variant(variant, decay_days=0)
+        perioperative = frame[frame["phase"] == Sigs_PhaseEnum.PERIOPERATIVE]
+        adjuvant = frame[frame["phase"] == Sigs_PhaseEnum.ADJUVANT]
+        assert set(perioperative["elapsed_day"]) == {0, 21}
+        assert adjuvant["elapsed_day"].isna().all()
+        assert set(adjuvant["timing_status"]) == {
+            "unresolved: phase_step gap before step 3 (no sigs for step 2)"
+        }
+
+    def test_fallback_gap_checks_step_span_not_loop_neighbours(self, session):
+        variant = _variant(session, 123)
+        _drug(session, 1, "perioperative-drug")
+        _drug(session, 2, "adjuvant-drug")
+        for sig_id, drug_cui, phase, step in (
+            (1, 1, Sigs_PhaseEnum.PERIOPERATIVE, 4),
+            (2, 2, Sigs_PhaseEnum.ADJUVANT, 2),
+        ):
+            _sig(
+                session, sig_id=sig_id, variant_cui=123, drug_cui=drug_cui,
+                route="INTRAVENOUS", alldays="1", timing_sequence="1",
+                cycle_length_lb="21", cycle_length_ub="21",
+                cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+                phase=phase, phase_step=step,
+            )
+        session.expire_all()
+
+        frame = roll_out_variant(variant, decay_days=0)
+        assert frame["elapsed_day"].isna().all()
+        assert set(frame["timing_status"]) == {
+            "unresolved: phase_step gap before step 4 (no sigs for step 3)"
         }
 
     def test_optional_cycle_marks_rows_and_following_phase(self, session):
@@ -499,6 +654,29 @@ class TestRollout:
         assert set(maintenance["timing_status"]) == {
             "unresolved: previous phase continues (every 2 cycles)"
         }
+
+    @pytest.mark.parametrize(
+        ("length", "unit"),
+        [("21", None), ("NS", Sigs_Cycle_length_unitEnum.DAY)],
+    )
+    def test_indefinite_block_with_bad_cycle_length_is_unresolved(self, session, length, unit):
+        variant = _variant(session, 124)
+        _drug(session, 1, "continuing-drug")
+        _sig(
+            session, sig_id=1, variant_cui=124, drug_cui=1,
+            route="INTRAVENOUS", alldays="1", timing_sequence="1,(+1)",
+            cycle_length_lb=length, cycle_length_ub=length,
+            cycle_length_unit=unit,
+        )
+        session.expire_all()
+
+        for frame in (
+            roll_out_variant(variant, decay_days=0),
+            administration_frame(variant, decay_days=0),
+        ):
+            assert len(frame) == 1
+            assert frame["elapsed_day"].isna().all()
+            assert frame["timing_status"].str.startswith("unresolved:").all()
 
     def test_numeric_day_continuation_is_preserved(self, session):
         variant = _variant(session, 118)

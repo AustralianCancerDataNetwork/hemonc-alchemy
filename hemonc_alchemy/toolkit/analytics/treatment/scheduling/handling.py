@@ -81,7 +81,10 @@ def parse_scalar_list(token: str):
         elif "|" in part:
             out.append(parse_choice(part))
         else:
-            out.append(Day(int(part)))
+            try:
+                out.append(Day(int(part)))
+            except ValueError:
+                logger.warning("Unparseable dosing token %r dropped", part)
     return out
 
 
@@ -102,7 +105,7 @@ def parse_optional(token: str):
     inner = token[1:-1]
 
     if inner.startswith("+"):
-        if match := re.fullmatch(r"\+([0-9]+)", inner):
+        if match := re.fullmatch(r"\+([1-9][0-9]*)", inner):
             return [Indefinite("+k", interval=int(match.group(1)))]
         match = re.fullmatch(r"\+([a-zA-Z])(\d+)?", inner)
         if not match:
