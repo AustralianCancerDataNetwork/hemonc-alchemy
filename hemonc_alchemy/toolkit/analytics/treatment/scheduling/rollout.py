@@ -728,6 +728,18 @@ def _as_date(value: date | datetime) -> date:
     return value.date() if isinstance(value, datetime) else value
 
 
+def _phase_relative_day(
+    event: TimedEvent, phase_start: int | date, *, calendar_start_known: bool
+) -> int | None:
+    if isinstance(phase_start, date):
+        if not calendar_start_known or event.calendar_date is None:
+            return None
+        return (event.calendar_date - phase_start).days
+    if event.elapsed_day is None:
+        return None
+    return event.elapsed_day - phase_start
+
+
 def roll_out_variant(
     variant,
     *,
@@ -743,7 +755,7 @@ def roll_out_variant(
     groups = _phase_groups(events)
     ordered, order_status = _phase_order(groups)
     phase_start: int | date = _as_date(start_date) if start_date is not None else 0
-    all_timed: list[TimedEvent] = []
+    all_timed: list[tuple[TimedEvent, int | None]] = []
     timeline_failure = order_status if order_status.startswith("unresolved:") else None
     optional_assumptions: list[str] = []
     previous_last_cycle: int | None = None
@@ -777,6 +789,10 @@ def roll_out_variant(
             decay_days=decay_days,
             decay_factor=decay_factor,
         )
+        calendar_start_known = timeline_failure is None or all(
+            _unit_value(block.cycle_length_unit) not in {"month", "year"}
+            for block in blocks
+        )
         phase_optional_status = _optional_cycle_status(optional_cycles)
         for event in timed:
             row_optional_status = (
@@ -795,21 +811,27 @@ def roll_out_variant(
             )
             calendar_date = event.calendar_date if timeline_failure is None else None
             elapsed_day = event.elapsed_day if timeline_failure is None else None
+            phase_elapsed_day = _phase_relative_day(
+                event, phase_start, calendar_start_known=calendar_start_known
+            )
             if start_date is not None and calendar_date is not None:
                 elapsed_day = (calendar_date - _as_date(start_date)).days
             all_timed.append(
-                TimedEvent(
-                    schedule_event=event.schedule_event,
-                    phase=phase,
-                    phase_step=event.phase_step,
-                    cycle_number=event.cycle_number,
-                    day=event.day,
-                    elapsed_day=elapsed_day,
-                    calendar_date=calendar_date,
-                    intensity=event.intensity,
-                    optional=event.optional,
-                    cycle_indefinite=event.cycle_indefinite,
-                    timing_status=status,
+                (
+                    TimedEvent(
+                        schedule_event=event.schedule_event,
+                        phase=phase,
+                        phase_step=event.phase_step,
+                        cycle_number=event.cycle_number,
+                        day=event.day,
+                        elapsed_day=elapsed_day,
+                        calendar_date=calendar_date,
+                        intensity=event.intensity,
+                        optional=event.optional,
+                        cycle_indefinite=event.cycle_indefinite,
+                        timing_status=status,
+                    ),
+                    phase_elapsed_day,
                 )
             )
 
@@ -825,7 +847,7 @@ def roll_out_variant(
             optional_assumptions.append(phase_optional_status)
 
     records = []
-    for timed in all_timed:
+    for timed, phase_elapsed_day in all_timed:
         event = timed.schedule_event
         sig_class = sig_class_value(event.sig)
         modality = (
@@ -842,6 +864,12 @@ def roll_out_variant(
                 "phase": timed.phase,
                 "phase_step": timed.phase_step,
                 "cycle_number": timed.cycle_number,
+                "sig_id": event.sig.id,
+                "timing_sequence": event.timing_sequence,
+                "cycle_length_lb": event.cycle_length_lb,
+                "cycle_length_ub": event.cycle_length_ub,
+                "cycle_length_unit": event.cycle_length_unit,
+                "cycle_length_selection": cycle_length_selection,
                 "route_group": event.route_group,
                 "modality": modality,
                 "component_cui": event.sig.component_cui,
@@ -850,6 +878,7 @@ def roll_out_variant(
                 "drug": drug.drug if drug is not None else None,
                 "day": timed.day,
                 "elapsed_day": timed.elapsed_day,
+                "phase_elapsed_day": phase_elapsed_day,
                 "calendar_date": timed.calendar_date,
                 "intensity": timed.intensity,
                 "optional": timed.optional,
@@ -860,8 +889,10 @@ def roll_out_variant(
         )
     columns = [
         "variant_cui", "variant", "phase", "phase_step", "cycle_number",
+        "sig_id", "timing_sequence", "cycle_length_lb", "cycle_length_ub",
+        "cycle_length_unit", "cycle_length_selection",
         "route_group", "modality", "component_cui", "component",
-        "drug_cui", "drug", "day", "elapsed_day",
+        "drug_cui", "drug", "day", "elapsed_day", "phase_elapsed_day",
         "calendar_date", "intensity", "optional", "day_indefinite",
         "cycle_indefinite", "timing_status",
     ]

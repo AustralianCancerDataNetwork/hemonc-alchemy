@@ -233,6 +233,7 @@ class TestRollout:
         frame = roll_out_variant(variant, start_date=date(2020, 1, 1), decay_days=0)
         assert set(frame["cycle_number"]) == {3, 4}
         assert frame["elapsed_day"].isna().all()
+        assert frame["phase_elapsed_day"].isna().all()
         assert frame["calendar_date"].isna().all()
         assert frame["timing_status"].str.startswith("unresolved:").all()
 
@@ -521,7 +522,8 @@ class TestRollout:
         assert maintenance["elapsed_day"].min() == 28
         assert set(frame["timing_status"]) == {"resolved"}
 
-    def test_phase_step_gap_nulls_later_phases(self, session):
+    @pytest.mark.parametrize("start_date", [None, date(2020, 1, 1)])
+    def test_phase_step_gap_nulls_later_phases(self, session, start_date):
         variant = _variant(session, 113)
         for cui in (1, 2, 3):
             _drug(session, cui, f"drug-{cui}")
@@ -532,20 +534,30 @@ class TestRollout:
         ):
             _sig(
                 session, sig_id=sig_id, variant_cui=113, drug_cui=drug_cui,
-                route="INTRAVENOUS", alldays="1", timing_sequence="1",
+                route="INTRAVENOUS", alldays="1", timing_sequence="1,2",
                 cycle_length_lb="21", cycle_length_ub="21",
                 cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
                 phase=phase, phase_step=step,
             )
         session.expire_all()
 
-        frame = roll_out_variant(variant, decay_days=0)
+        frame = roll_out_variant(variant, start_date=start_date, decay_days=0)
         assert frame.loc[frame["phase"] == Sigs_PhaseEnum.NEOADJUVANT, "elapsed_day"].iloc[0] == 0
         later = frame[frame["phase"] != Sigs_PhaseEnum.NEOADJUVANT]
         assert later["elapsed_day"].isna().all()
+        assert later["calendar_date"].isna().all()
         assert set(later["timing_status"]) == {
             "unresolved: phase_step gap before step 3 (no sigs for step 2)"
         }
+        for phase in (Sigs_PhaseEnum.NEOADJUVANT, Sigs_PhaseEnum.ADJUVANT,
+                      Sigs_PhaseEnum.MAINTENANCE):
+            phase_rows = frame[frame["phase"] == phase]
+            assert set(phase_rows["phase_elapsed_day"]) == {0, 21}
+        assert set(frame["sig_id"]) == {1, 2, 3}
+        assert set(frame["cycle_length_lb"]) == {"21"}
+        assert set(frame["cycle_length_ub"]) == {"21"}
+        assert set(frame["cycle_length_unit"]) == {Sigs_Cycle_length_unitEnum.DAY}
+        assert set(frame["cycle_length_selection"]) == {"lb"}
 
     def test_phase_step_gap_with_fallback_order_nulls_later_phase(self, session):
         variant = _variant(session, 122)
@@ -572,6 +584,50 @@ class TestRollout:
         assert set(adjuvant["timing_status"]) == {
             "unresolved: phase_step gap before step 3 (no sigs for step 2)"
         }
+
+    @pytest.mark.parametrize(
+        ("start_date", "expected_phase_days"),
+        [(None, {0, 30}), (date(2020, 1, 31), None)],
+    )
+    def test_unknown_calendar_month_start_has_no_exact_phase_offset(
+        self, session, start_date, expected_phase_days
+    ):
+        variant = _source_variant(session, 129, [
+            ("neoadjuvant-drug", 1, "1", "1,2", "1", "DAY", "INTRAVENOUS", _IV_SIG, "NEOADJUVANT", 1),
+            ("adjuvant-drug", 2, "1", "1,2", "1", "MONTH", "INTRAVENOUS", _IV_SIG, "ADJUVANT", 3),
+        ])
+
+        frame = roll_out_variant(variant, start_date=start_date, decay_days=0)
+        adjuvant = frame[frame["phase"] == Sigs_PhaseEnum.ADJUVANT]
+        assert adjuvant["elapsed_day"].isna().all()
+        if expected_phase_days is None:
+            assert adjuvant["phase_elapsed_day"].isna().all()
+        else:
+            assert set(adjuvant["phase_elapsed_day"]) == expected_phase_days
+
+    def test_known_calendar_month_start_uses_actual_month_length(self, session):
+        variant = _source_variant(session, 130, [
+            ("monthly-drug", 1, "1", "1,2", "1", "MONTH", "INTRAVENOUS", _IV_SIG, "MAINTENANCE", 1),
+        ])
+
+        frame = roll_out_variant(variant, start_date=date(2020, 1, 31), decay_days=0)
+        assert set(frame["phase_elapsed_day"]) == {0, 29}
+        assert set(frame["elapsed_day"]) == {0, 29}
+
+    def test_phase_offset_records_selected_cycle_length_bound(self, session):
+        variant = _variant(session, 131)
+        _drug(session, 1, "ranged-cycle-drug")
+        _sig(
+            session, sig_id=1, variant_cui=131, drug_cui=1,
+            route="INTRAVENOUS", alldays="1", timing_sequence="1,2",
+            cycle_length_lb="14", cycle_length_ub="21",
+            cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+        )
+        session.expire_all()
+
+        frame = roll_out_variant(variant, cycle_length_selection="ub", decay_days=0)
+        assert set(frame["phase_elapsed_day"]) == {0, 21}
+        assert set(frame["cycle_length_selection"]) == {"ub"}
 
     def test_fallback_gap_checks_step_span_not_loop_neighbours(self, session):
         variant = _variant(session, 123)
@@ -693,6 +749,7 @@ class TestRollout:
         assert induction["elapsed_day"].iloc[0] == 0
         assert induction["cycle_indefinite"].iloc[0] == Indefinite(kind="+k", interval=2)
         assert maintenance["elapsed_day"].isna().all()
+        assert maintenance["phase_elapsed_day"].iloc[0] == 0
         assert set(maintenance["timing_status"]) == {
             "unresolved: previous phase continues (every 2 cycles)"
         }
@@ -781,6 +838,7 @@ class TestRollout:
             "unresolved: previous phase end is unresolved"
         }
         assert next_phase["elapsed_day"].isna().all()
+        assert next_phase["phase_elapsed_day"].iloc[0] == 0
 
     def test_fallback_ordered_phases_chain(self, session):
         variant = _variant(session, 102)
@@ -921,6 +979,7 @@ class TestRollout:
         assert frame["timing_status"].str.startswith("unresolved:").all()
         assert frame["elapsed_day"].isna().all()
         assert frame["calendar_date"].isna().all()
+        assert set(frame["phase_elapsed_day"]) == {0, 1, 2}
 
 
 class TestRealVariantSnapshots:
@@ -1102,6 +1161,7 @@ class TestAdministrationFrame:
         day_2 = frame[frame["day"] == 2]
         assert len(day_2) == 1                 # not one row per sig
         assert day_2["intensity"].iloc[0] == 1.0   # dosing day beats the other's tail
+        assert set(roll_out_variant(variant)["sig_id"]) == {1, 2}
 
     @pytest.mark.parametrize("indefinite_first", [False, True])
     def test_collapsed_sigs_preserve_cycle_indefinite(self, session, indefinite_first):

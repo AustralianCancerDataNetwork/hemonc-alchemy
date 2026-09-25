@@ -47,10 +47,10 @@ from datetime import date
 from hemonc_alchemy.toolkit.analytics.treatment.scheduling import roll_out_variant
 
 timeline = roll_out_variant(variant)
-timeline[["drug", "cycle_number", "day", "elapsed_day", "timing_status"]]
+timeline[["sig_id", "component", "phase", "cycle_number", "day", "phase_elapsed_day", "elapsed_day", "timing_status"]]
 ```
 
-`elapsed_day` is an integer relative to variant start, where day 0 is the variant start. Pass `start_date` to also receive `calendar_date` values as timezone-free `datetime.date` objects:
+`elapsed_day` is an integer relative to variant start, where day 0 is the variant start. `phase_elapsed_day` is relative to the start of each phase, with day 0 at that phase's first explicit cycle. When a missing surgery or another unresolved boundary makes the variant-relative date unknown, `elapsed_day` and `calendar_date` stay null while `phase_elapsed_day` retains the within-phase timing where it can be calculated. An unresolved block within the phase also has a null `phase_elapsed_day`. Pass `start_date` to receive known `calendar_date` values as timezone-free `datetime.date` objects:
 
 ```python
 timeline = roll_out_variant(variant, start_date=date(2026, 1, 1))
@@ -60,6 +60,8 @@ Blocks with adjacent cycle-number ranges are anchored sequentially. Blocks with 
 
 Unresolved phase ordering leaves every date in the variant null. A gap in explicit `phase_step` values leaves dates null from the later phase onward. Optional cycles are counted as given and marked `optional=True`; dates from the first optional cycle and every later phase carry a `resolved_via_fallback` status.
 
+Each rollout row includes `sig_id` (the source `Sigs.id`), `timing_sequence`, `cycle_length_lb`, `cycle_length_ub`, `cycle_length_unit`, and the `cycle_length_selection` used for this rollout. These fields identify the sig and its cycle definition when a later consumer can supply a missing phase duration. With `start_date`, a phase containing calendar-month or calendar-year cycles has null phase-relative offsets if its actual start date is unknown, since the number of days depends on that date. Without `start_date`, the existing 30-day month and 365-day year approximations apply.
+
 The timeline includes `modality` (`"systemic"`, `"radiation"`, or null for an unclassified sig), plus the source `component` and `component_cui`. Radiation rows can have a null `drug`. Pass `systemic_only=True` to omit radiation rows from the result; radiation phases still contribute to the timing of later phases. The timeline's `day_indefinite` and `cycle_indefinite` columns distinguish continuing days within a cycle from continuing cycles.
 
-`administration_frame` retains its cycle-local `day` column and adds `elapsed_day` and `timing_status`. Variants without resolvable cycle metadata still produce explicitly resolvable administration rows, with a null `elapsed_day` and an unresolved status rather than an invented calendar position. Numeric `(+k)` means continuation every k cycles in `timing_sequence` or every k days in `alldays`; the interval is retained without sampling future events. A continuing cycle marker prevents dates from being chained into a later phase.
+`administration_frame` retains its cycle-local `day` column and adds `elapsed_day` and `timing_status`. It combines sigs for the same drug and day, so use `roll_out_variant` when phase-relative timing or sig identity is needed. Variants without resolvable cycle metadata still produce explicitly resolvable administration rows, with a null `elapsed_day` and an unresolved status rather than an invented calendar position. Numeric `(+k)` means continuation every k cycles in `timing_sequence` or every k days in `alldays`; the interval is retained without sampling future events. A continuing cycle marker prevents dates from being chained into a later phase.
