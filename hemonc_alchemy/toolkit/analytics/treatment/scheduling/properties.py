@@ -8,8 +8,10 @@ clinic time versus what a patient takes at home.
     frame = administration_frame(variant)
     frame[frame.route_group == "IV"]
 
-One row per drug per day, so it composes: pivot it for the grid view, group it
-to compare variants, join it to anything else keyed on `drug_cui`.
+One row per drug per cycle day (repeated once per cycle where cross-cycle
+timing resolves, not collapsed across cycles) so it composes: pivot it for
+the grid view, group it to compare variants, join it to anything else keyed
+on `drug_cui`.
 
     frame.pivot_table(index="drug", columns="day", values="intensity")
 
@@ -152,8 +154,10 @@ def _rollout_frame_records(
     decay_days: int,
     decay_factor: float,
 ) -> list[dict]:
-    from .rollout import roll_out_variant
+    from .rollout import roll_out_variant  # local: rollout imports from this module too
 
+    # A drug repeated across N cycles yields N rows here, one per
+    # elapsed_day, not one row per cycle-local day.
     rolled = roll_out_variant(
         variant,
         decay_days=decay_days,
@@ -188,7 +192,8 @@ def administration_frame(
     decay_days: int = DEFAULT_DECAY_DAYS,
     decay_factor: float = DEFAULT_DECAY_FACTOR,
 ) -> pd.DataFrame:
-    """When each drug is given across a cycle, one row per drug per day.
+    """When each drug is given across a cycle -- one row per drug per cycle
+    day, repeated per cycle where `elapsed_day` resolves.
 
     Accepts a single variant or any iterable of them. Columns:
 

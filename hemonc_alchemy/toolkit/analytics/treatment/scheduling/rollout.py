@@ -5,10 +5,9 @@ context: cycle numbers, cycle lengths, block anchors, and phase boundaries.
 It deliberately keeps the rollout deterministic.  An indefinite source
 marker is retained as metadata; it is never sampled here.
 
-Phases are ordered by the minimum ``phase_step`` present on their sigs.  The
-small fallback below is used only for missing or untested phase labels, and
-its use is reported in ``timing_status``.  Ties or internally inconsistent
-phase steps remain unresolved rather than being guessed.
+Phases are ordered by each sig's own ``phase_step``, the same rule for every
+phase label. A missing, tied, or internally inconsistent step is unresolved
+rather than guessed.
 """
 
 from __future__ import annotations
@@ -27,14 +26,6 @@ from .....model.enums import Sigs_Cycle_length_unitEnum, Sigs_PhaseEnum
 from ..classification import RAD_SIG_CLASS_VALUE, sig_class_value
 from .handling import Indefinite, apply_sig_to_series, resolve_all_days
 from .properties import ScheduleEvent, schedule_events
-
-_FALLBACK_PHASE_RANKS = {
-    Sigs_PhaseEnum.PRE_TO_PHASE: -1.0,
-    Sigs_PhaseEnum.PERIOPERATIVE: 1.0,
-    Sigs_PhaseEnum.INTERIM_MAINTENANCE: 3.5,
-    Sigs_PhaseEnum.LATE_INTENSIFICATION: 4.5,
-    Sigs_PhaseEnum.CONTINUATION: 5.0,
-}
 
 
 @dataclass(frozen=True)
@@ -329,19 +320,33 @@ def _unit_value(unit: Sigs_Cycle_length_unitEnum | str | None) -> str | None:
     return getattr(unit, "value", unit).lower()
 
 
+def _parse_bound(value: str | None) -> Decimal | None:
+    if value is None:
+        return None
+    try:
+        return Decimal(str(value))
+    except (InvalidOperation, TypeError):
+        return None
+
+
 def _length_number(block: CycleBlock, selection: str) -> Decimal:
     if selection not in {"lb", "ub", "mean"}:
         raise ValueError("cycle_length_selection must be 'lb', 'ub', or 'mean'")
-    try:
-        lower = Decimal(str(block.cycle_length_lb))
-        upper = Decimal(str(block.cycle_length_ub or block.cycle_length_lb))
-    except (InvalidOperation, TypeError):
-        raise ValueError("cycle length is not numeric") from None
+    lower = _parse_bound(block.cycle_length_lb)
+    upper = _parse_bound(block.cycle_length_ub)
+    # One bound fills in for the other when only one is numeric, so a sig
+    # missing just lb or just ub still resolves under any selection.
     if selection == "lb":
-        return lower
-    if selection == "ub":
-        return upper
-    return (lower + upper) / 2
+        value = lower if lower is not None else upper
+    elif selection == "ub":
+        value = upper if upper is not None else lower
+    elif lower is not None and upper is not None:
+        value = (lower + upper) / 2
+    else:
+        value = lower if lower is not None else upper
+    if value is None:
+        raise ValueError("cycle length is not numeric")
+    return value
 
 
 def _calendar_add(value: date, number: int, unit: str) -> date:
@@ -643,45 +648,25 @@ def _phase_order(
         else:
             phase_steps[phase] = next(iter(steps))
 
-    known = {phase: step for phase, step in phase_steps.items() if step is not None}
     if inconsistent:
         reason = "phase_step inconsistent within " + ", ".join(map(str, inconsistent))
         status = f"unresolved: {reason}"
         return [(phase, events, status) for phase, events in groups], status
-    if len(set(known.values())) != len(known):
+
+    missing = [phase for phase, step in phase_steps.items() if step is None]
+    if missing:
+        reason = "no phase_step for " + ", ".join(str(phase) for phase in missing)
+        status = f"unresolved: {reason}"
+        return [(phase, events, status) for phase, events in groups], status
+
+    if len(set(phase_steps.values())) != len(phase_steps):
         tied = [str(phase) for phase, step in phase_steps.items() if list(phase_steps.values()).count(step) > 1]
         reason = "phase_step tie between " + ", ".join(tied)
         status = f"unresolved: {reason}"
         return [(phase, events, status) for phase, events in groups], status
 
-    fallback_used = any(phase in _FALLBACK_PHASE_RANKS for phase, _ in groups)
-    ranks: dict[Any, float] = {}
-    for phase, step in phase_steps.items():
-        if fallback_used and phase in _FALLBACK_PHASE_RANKS:
-            ranks[phase] = _FALLBACK_PHASE_RANKS[phase]
-        elif step is not None:
-            ranks[phase] = float(step)
-        else:
-            reason = f"no phase_step or fallback rule for {phase}"
-            status = f"unresolved: {reason}"
-            return [(p, e, status) for p, e in groups], status
-
-    if len(set(ranks.values())) != len(ranks):
-        reason = "fallback phase order tie between " + ", ".join(map(str, ranks))
-        status = f"unresolved: {reason}"
-        return [(phase, events, status) for phase, events in groups], status
-
-    status = "resolved"
-    if fallback_used:
-        fallback_labels = ", ".join(
-            phase.value for phase, _ in groups if phase in _FALLBACK_PHASE_RANKS
-        )
-        status = (
-            f"resolved_via_fallback: {fallback_labels} ordered by documented "
-            "convention, not phase_step"
-        )
-    ordered = sorted(groups, key=lambda item: ranks[item[0]])
-    return [(phase, events, status) for phase, events in ordered], status
+    ordered = sorted(groups, key=lambda item: phase_steps[item[0]])
+    return [(phase, events, "resolved") for phase, events in ordered], "resolved"
 
 
 def _combine_status(*statuses: str) -> str:
@@ -749,7 +734,12 @@ def roll_out_variant(
     decay_factor: float = 0.5,
     systemic_only: bool = False,
 ) -> pd.DataFrame:
-    """Compose all phases of ``variant`` into one deterministic timeline."""
+    """Compose all phases of ``variant`` into one deterministic timeline.
+
+    Radiation sigs are included by default: an RT phase still anchors the
+    phases after it (e.g. chemoradiation followed by adjuvant). Pass
+    ``systemic_only=True`` to drop radiation rows after chaining, not before.
+    """
 
     events = schedule_events(variant)
     groups = _phase_groups(events)

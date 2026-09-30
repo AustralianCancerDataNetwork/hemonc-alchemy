@@ -81,6 +81,8 @@ def parse_scalar_list(token: str):
         elif "|" in part:
             out.append(parse_choice(part))
         else:
+            # Real data has junk like "NS" or "EOC" here -- drop and log it,
+            # same as every other unparseable token in this function.
             try:
                 out.append(Day(int(part)))
             except ValueError:

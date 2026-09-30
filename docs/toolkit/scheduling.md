@@ -27,7 +27,7 @@ clinic = frame[frame.route_group == "IV"]
 matrix = administration_matrix(frame)
 ```
 
-The frame has one row per drug per explicit cycle day. `decay_days=0` gives dosing days only; the default decay adds an intensity tail to the following days for occupancy-style views. Decay rows have `intensity < 1` and are not extra doses. Passing a list of variants produces one combined frame, which should be grouped by `variant_cui`, not the human-readable `variant` label.
+The frame has one row per drug per explicit cycle day, repeated once per cycle where cross-cycle timing resolves (see `elapsed_day` below). `len(frame)` isn't a count of drug-days as a result -- use `frame["day"].nunique()` per drug for that. `decay_days=0` gives dosing days only; the default decay adds an intensity tail to the following days for occupancy-style views. Decay rows have `intensity < 1` and are not extra doses. Passing a list of variants produces one combined frame, which should be grouped by `variant_cui`, not the human-readable `variant` label.
 
 In `administration_frame`, `indefinite` marks days continuing beyond the explicit days in `alldays`, while `cycle_indefinite` marks cycles continuing beyond the explicit cycles in `timing_sequence`. These columns preserve separate source markers; neither extends the returned rows.
 
@@ -56,7 +56,7 @@ timeline[["sig_id", "component", "phase", "cycle_number", "day", "phase_elapsed_
 timeline = roll_out_variant(variant, start_date=date(2026, 1, 1))
 ```
 
-Blocks with adjacent cycle-number ranges are anchored sequentially. Blocks with overlapping cycle numbers share the relevant anchor, while genuinely ambiguous source timing remains visible in `timing_status`. When differing cycle lengths overlap across more than one shared cycle, the later block is unresolved. When blocks ending the preceding cycle differ in cycle length, the following block is unresolved. A phase can continue cycle numbering from its predecessor when its first cycle immediately follows the predecessor's last cycle. The status is `"resolved"`, `"resolved_via_fallback: ..."`, or `"unresolved: ..."`. Phases ordered by the documented fallback rule still chain from the previous phase's computed end when that end is known.
+Blocks with adjacent cycle-number ranges are anchored sequentially. Blocks with overlapping cycle numbers share the relevant anchor, while genuinely ambiguous source timing remains visible in `timing_status`. When differing cycle lengths overlap across more than one shared cycle, the later block is unresolved. When blocks ending the preceding cycle differ in cycle length, the following block is unresolved. A phase can continue cycle numbering from its predecessor when its first cycle immediately follows the predecessor's last cycle. Phases are ordered by their own `phase_step`, the same rule for every label -- a missing or tied step is `"unresolved: ..."`. The status is otherwise `"resolved"`, or `"resolved_via_fallback: ..."` where an optional cycle was assumed given (below).
 
 Unresolved phase ordering leaves every date in the variant null. A gap in explicit `phase_step` values leaves dates null from the later phase onward. Optional cycles are counted as given and marked `optional=True`; dates from the first optional cycle and every later phase carry a `resolved_via_fallback` status.
 

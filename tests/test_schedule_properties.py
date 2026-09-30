@@ -629,7 +629,24 @@ class TestRollout:
         assert set(frame["phase_elapsed_day"]) == {0, 21}
         assert set(frame["cycle_length_selection"]) == {"ub"}
 
-    def test_fallback_gap_checks_step_span_not_loop_neighbours(self, session):
+    def test_missing_bound_falls_back_to_the_other(self, session):
+        variant = _variant(session, 132)
+        _drug(session, 1, "ub-only-drug")
+        _sig(
+            session, sig_id=1, variant_cui=132, drug_cui=1,
+            route="INTRAVENOUS", alldays="1", timing_sequence="1,2",
+            cycle_length_lb=None, cycle_length_ub="21",
+            cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+        )
+        session.expire_all()
+
+        frame = roll_out_variant(variant, cycle_length_selection="ub", decay_days=0)
+        assert set(frame["phase_elapsed_day"]) == {0, 21}
+        assert set(frame["timing_status"]) == {"resolved"}
+
+    def test_phase_step_orders_every_label_the_same_way(self, session):
+        # PERIOPERATIVE's phase_step is real, not a placeholder -- it splits
+        # a pre-op block from a post-op one, same as any other label.
         variant = _variant(session, 123)
         _drug(session, 1, "perioperative-drug")
         _drug(session, 2, "adjuvant-drug")
@@ -647,8 +664,12 @@ class TestRollout:
         session.expire_all()
 
         frame = roll_out_variant(variant, decay_days=0)
-        assert frame["elapsed_day"].isna().all()
-        assert set(frame["timing_status"]) == {
+        adjuvant = frame[frame["phase"] == Sigs_PhaseEnum.ADJUVANT]
+        perioperative = frame[frame["phase"] == Sigs_PhaseEnum.PERIOPERATIVE]
+        assert adjuvant["elapsed_day"].iloc[0] == 0
+        assert set(adjuvant["timing_status"]) == {"resolved"}
+        assert perioperative["elapsed_day"].isna().all()
+        assert set(perioperative["timing_status"]) == {
             "unresolved: phase_step gap before step 4 (no sigs for step 3)"
         }
 
@@ -704,7 +725,7 @@ class TestRollout:
             "resolved_via_fallback: optional cycle 2 assumed given"
         }
 
-    def test_optional_cycle_and_phase_order_keep_both_fallback_reasons(self, session):
+    def test_optional_cycle_is_the_only_fallback_reason_for_a_plain_order(self, session):
         variant = _variant(session, 116)
         _drug(session, 1, "perioperative-drug")
         _drug(session, 2, "later-drug")
@@ -723,7 +744,7 @@ class TestRollout:
 
         frame = roll_out_variant(variant, decay_days=0)
         assert set(frame.loc[frame["phase"] == Sigs_PhaseEnum.MAINTENANCE, "timing_status"]) == {
-            "resolved_via_fallback: perioperative ordered by documented convention, not phase_step; optional cycle 2 assumed given"
+            "resolved_via_fallback: optional cycle 2 assumed given"
         }
 
     def test_numeric_continuation_prevents_later_phase_chaining(self, session):
@@ -840,7 +861,7 @@ class TestRollout:
         assert next_phase["elapsed_day"].isna().all()
         assert next_phase["phase_elapsed_day"].iloc[0] == 0
 
-    def test_fallback_ordered_phases_chain(self, session):
+    def test_perioperative_labeled_phases_chain_like_any_other(self, session):
         variant = _variant(session, 102)
         _drug(session, 1, "perioperative-drug")
         _drug(session, 2, "adjuvant-drug")
@@ -860,7 +881,7 @@ class TestRollout:
         frame = roll_out_variant(variant, decay_days=0)
         adjuvant = frame[frame["phase"] == Sigs_PhaseEnum.ADJUVANT]
         assert adjuvant["elapsed_day"].min() == 28
-        assert adjuvant["timing_status"].str.startswith("resolved_via_fallback:").all()
+        assert set(adjuvant["timing_status"]) == {"resolved"}
 
     def test_empty_rollout_keeps_prefixed_order_status(self, session):
         variant = _variant(session, 103)
@@ -868,7 +889,7 @@ class TestRollout:
         _drug(session, 2, "adjuvant-drug")
         for sig_id, drug_cui, phase, step in (
             (1, 1, Sigs_PhaseEnum.PERIOPERATIVE, 1),
-            (2, 2, Sigs_PhaseEnum.ADJUVANT, 2),
+            (2, 2, Sigs_PhaseEnum.ADJUVANT, 1),
         ):
             _sig(
                 session, sig_id=sig_id, variant_cui=103, drug_cui=drug_cui,
@@ -881,7 +902,7 @@ class TestRollout:
 
         frame = roll_out_variant(variant)
         assert frame.empty
-        assert frame.attrs["timing_status"].startswith("resolved_via_fallback:")
+        assert frame.attrs["timing_status"].startswith("unresolved:")
 
     @pytest.mark.parametrize(
         ("variant_cui", "alldays", "timing_sequence", "day_indefinite", "cycle_indefinite"),
