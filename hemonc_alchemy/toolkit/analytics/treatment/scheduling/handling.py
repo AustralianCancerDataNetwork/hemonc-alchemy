@@ -23,10 +23,14 @@ class ResolvedSchedule:
     `indefinite` is set when the schedule carries on past the days listed —
     until progression, say. When it is set, `days` is only the part that was
     written down explicitly, not the full course.
+
+    `choices` holds valid `Choice` tokens to capture a dose given on one of 
+    several alternative days.
     """
 
     days: tuple[Day, ...] = ()
     indefinite: Indefinite | None = None
+    choices: tuple[Choice, ...] = ()
 
     def __iter__(self):
         return iter(self.days)
@@ -35,7 +39,7 @@ class ResolvedSchedule:
         return len(self.days)
 
     def __bool__(self) -> bool:
-        return bool(self.days) or self.indefinite is not None
+        return bool(self.days) or self.indefinite is not None or bool(self.choices)
 
 
 def apply_sig_to_series(
@@ -71,6 +75,18 @@ def parse_choice(token: str) -> Choice:
 
 
 def parse_scalar_list(token: str):
+    # '|' means "any of the following days, unspecified which".
+    # Each '|' is resolved against its own comma-separated fragment, e.g.
+    # "1,8|9" is day 1 plus a choice of day 8 or 9. 
+    # TBC: seek confirmation of expansion rules - current implementation 
+    # based on data not specifications.
+    first_pipe = token.find("|")
+    if first_pipe != -1 and "," in token[first_pipe:]:
+        logger.warning(
+            "Ambiguous choice notation %r: comma follows '|', parsed as "
+            "independent per-fragment choices rather than a whole-list choice",
+            token,
+        )
     out = []
     for part in token.split(","):
         part = part.strip()
@@ -136,13 +152,14 @@ def parse_token(token: str):
 
 def expand(parsed) -> ResolvedSchedule:
     days: list[Day] = []
+    choices: list[Choice] = []
     indefinite: Indefinite | None = None
 
     for item in parsed:
         if isinstance(item, Day):
             days.append(item)
         elif isinstance(item, Choice):
-            days.extend(Day(day) for day in item.options)
+            choices.append(item)
         elif isinstance(item, Range):
             if isinstance(item.start, int) and isinstance(item.end, int):
                 for day in range(item.start, item.end + 1, item.step):
@@ -160,7 +177,7 @@ def expand(parsed) -> ResolvedSchedule:
                     item,
                 )
 
-    return ResolvedSchedule(days=tuple(days), indefinite=indefinite)
+    return ResolvedSchedule(days=tuple(days), indefinite=indefinite, choices=tuple(choices))
 
 
 def resolve_all_days(all_days: str | None) -> ResolvedSchedule:
@@ -170,9 +187,9 @@ def resolve_all_days(all_days: str | None) -> ResolvedSchedule:
         (Day(value=1, optional=False), Day(value=8, optional=False), Day(value=15, optional=False))
 
     See tokens.py for the notation. Check the result's `indefinite` before
-    treating `days` as the whole schedule, and note that an unparseable or
-    open-ended expression yields no days rather than raising -- anything
-    dropped is logged.
+    treating `days` as the whole schedule, and its `choices` before treating
+    `days` as completely resolved. If `alldays` is None or empty, the result 
+    is an empty schedule with no indefinite marker.
     """
     parsed = []
     for token in tokenize_all_days(all_days):

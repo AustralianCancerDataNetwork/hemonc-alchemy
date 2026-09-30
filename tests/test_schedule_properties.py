@@ -157,6 +157,21 @@ class TestScheduleEvents:
         assert event.indefinite is not None
         assert [day.value for day in event.days] == [1]
 
+    def test_a_choice_of_days_is_kept_separate_from_resolved_days(self, session):
+        # 131Iodine-Tositumomab's "therapeutic step": one dose, on whichever
+        # day 7-15 the preceding dosimetry calls for, not nine doses.
+        variant = _variant(session, 3)
+        _drug(session, 1, "tositumomab-i131")
+        _sig(
+            session, sig_id=1, variant_cui=3, drug_cui=1, route="INTRAVENOUS",
+            alldays="7|8|9|10|11|12|13|14|15",
+        )
+        session.expire_all()
+
+        event = schedule_events(variant)[0]
+        assert event.days == ()
+        assert [c.options for c in event.choices] == [list(range(7, 16))]
+
 
 class TestRollout:
     def _two_block_variant(self, session, variant_cui=90):
@@ -487,6 +502,27 @@ class TestRollout:
         assert first["elapsed_day"].iloc[0] == 98
         assert second["elapsed_day"].iloc[0] == 112
         assert set(frame["timing_status"]) == {"resolved"}
+
+    def test_negative_lead_in_days_are_not_off_by_one(self, session):
+        # Real transplant-conditioning sigs use negative days (e.g. "-14,-7,1"
+        # before allo-HSCT); day -14 must land 14 days before day 1, not 15.
+        variant = _variant(session, 133)
+        _drug(session, 1, "conditioning-drug")
+        _sig(
+            session, sig_id=1, variant_cui=133, drug_cui=1,
+            route="INTRAVENOUS", alldays="-14,-7,1", timing_sequence="1",
+            cycle_length_lb="21", cycle_length_ub="21",
+            cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+        )
+        session.expire_all()
+
+        frame = roll_out_variant(variant, start_date=date(2020, 1, 15), decay_days=0)
+        by_day = frame.set_index("day")
+        assert by_day.loc[-14, "elapsed_day"] == -14
+        assert by_day.loc[-7, "elapsed_day"] == -7
+        assert by_day.loc[1, "elapsed_day"] == 0
+        assert by_day.loc[-14, "calendar_date"] == date(2020, 1, 1)
+        assert by_day.loc[1, "calendar_date"] == date(2020, 1, 15)
 
     def test_rollout_can_return_calendar_dates(self, session):
         variant = self._two_block_variant(session, variant_cui=95)
@@ -1252,6 +1288,23 @@ class TestAdministrationFrame:
         assert second_block["elapsed_day"].min() == 112
         assert set(frame["day"]) == {1}
         assert set(frame["timing_status"]) == {"resolved"}
+
+    def test_a_choice_only_drug_still_appears_with_an_unresolved_day(self, session):
+        # Before this fix, a Choice-only sig (e.g. Tositumomab's dosimetry-
+        # driven "day 7-15, one of these") produced zero rows and the drug
+        # silently vanished from the frame instead of showing as unresolved.
+        variant = _variant(session, 134)
+        _drug(session, 1, "tositumomab-i131")
+        _sig(
+            session, sig_id=1, variant_cui=134, drug_cui=1, route="INTRAVENOUS",
+            alldays="7|8|9|10|11|12|13|14|15",
+        )
+        session.expire_all()
+
+        frame = administration_frame(variant, decay_days=0)
+        assert set(frame["drug"]) == {"tositumomab-i131"}
+        assert frame["day"].isna().all()
+        assert frame["timing_status"].str.contains("choice of days 7|8|9", regex=False).all()
 
 
 class TestAdministrationMatrix:

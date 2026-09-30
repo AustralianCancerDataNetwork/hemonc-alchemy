@@ -14,6 +14,14 @@ resolved.indefinite # Indefinite(kind="+n", max_days=None)
 
 An indefinite marker is preserved. The explicit days are only the portion represented in the source expression; inspect `resolved.indefinite` before treating the list as a complete schedule. Optional days remain marked as optional rather than being silently discarded. Unreadable tokens are reported and dropped according to the parser's documented behavior, so batch analyses should retain parse failures as a data-quality measure.
 
+A `1|2`-style token means "one of these, unspecified which" and is kept in `resolved.choices` rather than expanded into `days`.
+
+```python
+resolved = resolve_all_days("7|8|9|10|11|12|13|14|15")
+resolved.days     # ()
+resolved.choices  # (Choice([7, 8, 9, 10, 11, 12, 13, 14, 15]),)
+```
+
 ## Build an administration frame
 
 ```python
@@ -65,3 +73,5 @@ Each rollout row includes `sig_id` (the source `Sigs.id`), `timing_sequence`, `c
 The timeline includes `modality` (`"systemic"`, `"radiation"`, or null for an unclassified sig), plus the source `component` and `component_cui`. Radiation rows can have a null `drug`. Pass `systemic_only=True` to omit radiation rows from the result; radiation phases still contribute to the timing of later phases. The timeline's `day_indefinite` and `cycle_indefinite` columns distinguish continuing days within a cycle from continuing cycles.
 
 `administration_frame` retains its cycle-local `day` column and adds `elapsed_day` and `timing_status`. It combines sigs for the same drug and day, so use `roll_out_variant` when phase-relative timing or sig identity is needed. Variants without resolvable cycle metadata still produce explicitly resolvable administration rows, with a null `elapsed_day` and an unresolved status rather than an invented calendar position. Numeric `(+k)` means continuation every k cycles in `timing_sequence` or every k days in `alldays`; the interval is retained without sampling future events. A continuing cycle marker prevents dates from being chained into a later phase.
+
+A component whose only timing is a `Choice` (e.g. 131Iodine-Tositumomab's dosimetry-driven "day 7-15, one of these") still appears in both `roll_out_variant` and `administration_frame`, with `day` null and `timing_status` reading `"unresolved: choice of days ..."` -- it is not silently omitted just because none of its alternatives was picked.

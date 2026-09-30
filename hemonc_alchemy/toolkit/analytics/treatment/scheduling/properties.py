@@ -36,6 +36,7 @@ from .....model.enums import (
 )
 from .handling import Day, Indefinite, resolve_all_days
 from .routes import route_group
+from .tokens import Choice
 
 DEFAULT_DECAY_DAYS = 2
 DEFAULT_DECAY_FACTOR = 0.5
@@ -65,6 +66,7 @@ class ScheduleEvent:
     route_group: str | None
     days: tuple[Day, ...]
     indefinite: Indefinite | None
+    choices: tuple[Choice, ...]
     phase: Sigs_PhaseEnum | None
     phase_step: int | None
     portion: str | None
@@ -92,6 +94,7 @@ def schedule_events(variant) -> list[ScheduleEvent]:
                 route_group=route_group(sig.route),
                 days=resolved.days,
                 indefinite=resolved.indefinite,
+                choices=resolved.choices,
                 phase=sig.phase,
                 phase_step=sig.phase_step,
                 portion=sig.portion,

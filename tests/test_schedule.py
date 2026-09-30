@@ -6,6 +6,7 @@ import logging
 
 from hemonc_alchemy.model.enums import Sigs_RouteEnum
 from hemonc_alchemy.toolkit.analytics.treatment.scheduling import (
+    Choice,
     Day,
     Indefinite,
     resolve_all_days,
@@ -125,3 +126,32 @@ class TestResolveAllDays:
         assert resolved.days == ()
         assert resolved.indefinite is None
         assert bool(resolved) is False
+
+
+class TestChoice:
+    """A real dose given on one of several alternative days is not the same
+    as a dose given on every one of them (confirmed against hemonc.org for
+    131Iodine-Tositumomab: the "therapeutic step" is one dose, on whichever
+    day 7-15 the dosimetry calls for, not nine doses)."""
+
+    def test_choice_is_not_expanded_into_days(self):
+        resolved = resolve_all_days("7|8|9|10|11|12|13|14|15")
+        assert resolved.days == ()
+        assert resolved.choices == (Choice([7, 8, 9, 10, 11, 12, 13, 14, 15]),)
+        assert bool(resolved) is True
+
+    def test_definite_day_plus_a_choice_are_both_kept(self):
+        resolved = resolve_all_days("1,8|9")
+        assert resolved.days == (Day(1),)
+        assert resolved.choices == (Choice([8, 9]),)
+
+    def test_ambiguous_choice_shape_still_parses_but_warns(self, caplog):
+        # "1,2,3|4,5,6" could mean "days 1,2 plus a day-3-or-4 choice, then
+        # days 5,6" (applied here) or "days 1-3 or days 4-6" as two whole
+        # alternative lists -- nothing says which grouping is meant, so the
+        # plain per-fragment reading is used and the shape is flagged rather
+        # than silently trusted or silently dropped.
+        resolved = resolve_all_days("1,2,3|4,5,6")
+        assert resolved.days == (Day(1), Day(2), Day(5), Day(6))
+        assert resolved.choices == (Choice([3, 4]),)
+        assert any("Ambiguous choice notation" in message for message in caplog.messages)

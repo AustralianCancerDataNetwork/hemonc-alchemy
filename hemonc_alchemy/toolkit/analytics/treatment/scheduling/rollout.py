@@ -75,6 +75,7 @@ class AnchoredBlock:
     anchor_block: CycleBlock | None = None
     anchor_cycle: int | None = None
     unresolved: UnresolvedTiming | None = None
+    overlap_candidates: tuple[CycleBlock, ...] = ()
 
     @property
     def timing_status(self) -> str:
@@ -91,7 +92,7 @@ class TimedEvent:
     phase: Sigs_PhaseEnum | None
     phase_step: int | None
     cycle_number: int | None
-    day: int
+    day: int | None
     elapsed_day: int | None
     calendar_date: date | None
     intensity: float
@@ -258,14 +259,16 @@ def anchor_blocks(
                     )
                 )
                 continue
-            prior = overlaps[-1]
-            intersection = prior.block.cycle_numbers & block.cycle_numbers
+            shared = set().union(*(
+                prior.block.cycle_numbers & block.cycle_numbers for prior in overlaps
+            ))
             anchored.append(
                 AnchoredBlock(
                     block=block,
                     anchor_kind="overlap",
-                    anchor_block=prior.block,
-                    anchor_cycle=min(intersection),
+                    anchor_block=overlaps[-1].block,
+                    anchor_cycle=min(shared),
+                    overlap_candidates=tuple(prior.block for prior in overlaps),
                 )
             )
             continue
@@ -312,6 +315,11 @@ def anchor_blocks(
         )
 
     return anchored
+
+
+def _day_offset(day: int) -> int:
+    """0-based offset from cycle day 1; a negative lead-in day keeps its value."""
+    return day - 1 if day >= 1 else day
 
 
 def _unit_value(unit: Sigs_Cycle_length_unitEnum | str | None) -> str | None:
@@ -411,6 +419,24 @@ def _block_start(
         return None
     if anchored.anchor_kind == "phase_start":
         return phase_start
+    if anchored.anchor_kind == "overlap":
+        # Every overlapping prior must imply the same start; picking just one
+        # (as if the others didn't exist) would hide a real disagreement.
+        implied: set[int | date] = set()
+        for candidate in anchored.overlap_candidates:
+            candidate_start = starts.get(id(candidate))
+            if candidate_start is None:
+                continue
+            try:
+                cycle_delta = anchored.anchor_cycle - min(candidate.cycle_numbers)
+                implied.add(
+                    _advance(candidate_start, candidate, cycle_delta, selection=selection)
+                )
+            except ValueError:
+                continue
+        if len(implied) != 1:
+            return None
+        return next(iter(implied))
     if anchored.anchor_block is None:
         return None
     parent_start = starts.get(id(anchored.anchor_block))
@@ -418,17 +444,6 @@ def _block_start(
         return None
     if anchored.anchor_kind == "after":
         return ends.get(id(anchored.anchor_block))
-    if anchored.anchor_kind == "overlap":
-        try:
-            cycle_delta = anchored.anchor_cycle - min(anchored.anchor_block.cycle_numbers)
-            return _advance(
-                parent_start,
-                anchored.anchor_block,
-                cycle_delta,
-                selection=selection,
-            )
-        except ValueError:
-            return None
     return None
 
 
@@ -475,6 +490,38 @@ def _optional_for_day(
     )
 
 
+def _choice_status(event: ScheduleEvent) -> str:
+    options = ", ".join("|".join(map(str, choice.options)) for choice in event.choices)
+    return f"unresolved: choice of days {options}, not resolved"
+
+
+def _choice_placeholder_events(
+    event: ScheduleEvent,
+    cycle_numbers: Iterable[int | None],
+    base_status: str,
+    cycle_indefinite: Indefinite | None,
+) -> list[TimedEvent]:
+    """A row for a component whose only timing is an unresolved Choice.
+    """
+    status = _combine_status(base_status, _choice_status(event))
+    return [
+        TimedEvent(
+            schedule_event=event,
+            phase=event.phase,
+            phase_step=event.phase_step,
+            cycle_number=cycle_number,
+            day=None,
+            elapsed_day=None,
+            calendar_date=None,
+            intensity=1.0,
+            optional=False,
+            cycle_indefinite=cycle_indefinite,
+            timing_status=status,
+        )
+        for cycle_number in cycle_numbers
+    ]
+
+
 def _unresolved_block_events(
     block: CycleBlock,
     status: UnresolvedTiming,
@@ -486,6 +533,13 @@ def _unresolved_block_events(
     cycle_numbers = sorted(block.cycle_numbers) or [None]
     for event in block.events:
         series = _event_series(event, decay_days=decay_days, decay_factor=decay_factor)
+        if not series and event.choices:
+            output.extend(
+                _choice_placeholder_events(
+                    event, cycle_numbers, status.status, block.timing_indefinite
+                )
+            )
+            continue
         for cycle_number in cycle_numbers:
             for day, intensity in series.items():
                 output.append(
@@ -518,6 +572,16 @@ def _resolved_block_events(
     block = anchored.block
     for event in block.events:
         series = _event_series(event, decay_days=decay_days, decay_factor=decay_factor)
+        if not series and event.choices:
+            output.extend(
+                _choice_placeholder_events(
+                    event,
+                    sorted(block.cycle_numbers),
+                    anchored.timing_status,
+                    block.timing_indefinite,
+                )
+            )
+            continue
         for cycle_number in sorted(block.cycle_numbers):
             cycle_start = _advance(
                 start,
@@ -526,12 +590,13 @@ def _resolved_block_events(
                 selection=selection,
             )
             for day, intensity in series.items():
+                offset = _day_offset(day)
                 if isinstance(cycle_start, date):
-                    calendar_date = cycle_start + timedelta(days=day - 1)
+                    calendar_date = cycle_start + timedelta(days=offset)
                     elapsed_day = None
                 else:
                     calendar_date = None
-                    elapsed_day = cycle_start + day - 1
+                    elapsed_day = cycle_start + offset
                 output.append(
                     TimedEvent(
                         schedule_event=event,
