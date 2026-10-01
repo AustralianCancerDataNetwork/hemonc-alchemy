@@ -18,27 +18,12 @@ from .....model import (
     variants_StudyMap,
 )
 from .....model.enums import Sigs_PhaseEnum
+from .....toolkit.core.catalogue.variants import latest_variant_ids as _latest_variant_ids
 from .....toolkit.core.coercion import coerce_enum_value
 from .....toolkit.core.components import COMPONENT_SEARCH_COLUMNS
 from .specs import CategoryMapping, ComponentRequirement, TreatmentSelectionSpec
 
 _SEARCH_COLUMNS = frozenset(COMPONENT_SEARCH_COLUMNS)
-
-
-def _latest_variant_ids() -> Any:
-    ranked = (
-        select(
-            Variants.id.label("variant_id"),
-            sa.func.row_number()
-            .over(
-                partition_by=Variants.variant_cui,
-                order_by=(Variants.version.desc(), Variants.id.desc()),
-            )
-            .label("version_rank"),
-        )
-        .subquery("ranked_variants")
-    )
-    return ranked
 
 
 def category_expression(
