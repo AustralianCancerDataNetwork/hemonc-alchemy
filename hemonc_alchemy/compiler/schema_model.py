@@ -38,6 +38,13 @@ Maturity = Literal["dev", "prod", "prod-"]
 # a blanket na_values addition.
 _IDENTIFIER_PLACEHOLDER_TOKENS = {"tba", "tbd", "cbd", "pending"}
 
+# `DeclarativeBase` ClassVars a data column can legitimately collide with by
+# name (e.g. a "registry" column on a clinical-trials table). Renaming the
+# generated attribute would break `loading.py`'s `getattr(cls, column.name)`
+# convention, so these are left in place and the resulting stub conflict is
+# suppressed at the point they're emitted.
+_RESERVED_DECLARATIVE_ATTRS = {"registry", "metadata"}
+
 
 def _is_dictionary_footnote(value: str) -> bool:
     """Whether a ``Variable`` value is prose rather than a field name."""
@@ -305,9 +312,14 @@ class ColumnSpec:
             elif base_py_type == "str":
                 default_str = ", default=''"
 
+        ignore_str = (
+            "  # type: ignore[misc,assignment]  # collides with DeclarativeBase ClassVar"
+            if self.name in _RESERVED_DECLARATIVE_ATTRS
+            else ""
+        )
         return (
             f"    {self.name}: Mapped[{py_type}] = mapped_column("
-            f"{sa_type}{pk_str}{nullable_str}{default_str})"
+            f"{sa_type}{pk_str}{nullable_str}{default_str}){ignore_str}"
         )
 
 
@@ -793,20 +805,20 @@ class TableMeta:
             lines.append("")
         lines.append(f"    filename = '{self.filename}'")
         lines.append(f"    natural_key_columns = {self.pk_columns!r}")
-        lines.append(f"    source_defined_keys = {self.source_defined_keys!r}")
-        lines.append(f"    identity_keys = {self.identity_keys!r}")
-        lines.append(f"    denormalised_columns = {self.denormalised_columns!r}")
-        lines.append(f"    derived_columns = {self.derived_columns!r}")
+        lines.append(f"    source_defined_keys: list[str] = {self.source_defined_keys!r}")
+        lines.append(f"    identity_keys: list[str] = {self.identity_keys!r}")
+        lines.append(f"    denormalised_columns: list[str] = {self.denormalised_columns!r}")
+        lines.append(f"    derived_columns: list[str] = {self.derived_columns!r}")
         lines.append("")
 
         if self.enums:
-            lines.append("    enum_lookup = {")
+            lines.append("    enum_lookup: dict[str, type] = {")
             for col, enum in self.enums.items():
                 enum_cls = enum.enum_type(self)
                 lines.append(f"        '{col}': {enum_cls},")
             lines.append("    }")
         else:
-            lines.append("    enum_lookup = {}")
+            lines.append("    enum_lookup: dict[str, type] = {}")
 
         lines.append("")
 
@@ -817,13 +829,13 @@ class TableMeta:
             lines.append("    )")
             lines.append("")
 
-        for col in sorted(self.columns.values(), key=lambda c: c.name):
-            if col.name in self.denormalised_columns or col.name in self.derived_columns:
+        for column_spec in sorted(self.columns.values(), key=lambda c: c.name):
+            if column_spec.name in self.denormalised_columns or column_spec.name in self.derived_columns:
                 continue
-            lines.append(col.sa_column_line(self))
+            lines.append(column_spec.sa_column_line(self))
 
         lines.append("")
-        lines.append("    normalisation_groups = [")
+        lines.append("    normalisation_groups: list[list[str]] = [")
         for g in self.normalisation_groups:
             lines.append(f"        {list(g.columns)!r},")
         lines.append("    ]")
@@ -849,16 +861,18 @@ class TableMeta:
             lines.append("    )")
             lines.append("")
 
-        soft_m2m_counts = Counter(rel.map_column for rel in self.soft_m2m_relationships)
-        for rel in self.soft_m2m_relationships:
-            target_cls = registry.tables[rel.target_table].classname
-            map_table = rel.map_table
-            col = rel.map_column
+        soft_m2m_counts = Counter(m2m_rel.map_column for m2m_rel in self.soft_m2m_relationships)
+        for m2m_rel in self.soft_m2m_relationships:
+            target_cls = registry.tables[m2m_rel.target_table].classname
+            map_table = m2m_rel.map_table
+            map_column = m2m_rel.map_column
 
-            rel_name = self._relationship_name(col, rel.target_table, soft_m2m_counts, "objects")
+            rel_name = self._relationship_name(
+                map_column, m2m_rel.target_table, soft_m2m_counts, "objects"
+            )
 
             primary_join = self._map_primary_join(map_table)
-            secondary_join = f"{target_cls}.{rel.target_column} == {map_table}.c.{col}"
+            secondary_join = f"{target_cls}.{m2m_rel.target_column} == {map_table}.c.{map_column}"
 
             lines.append(f"    {rel_name}: Mapped[list['{target_cls}']] = sa_relationship(")
             lines.append(f"        '{target_cls}',")

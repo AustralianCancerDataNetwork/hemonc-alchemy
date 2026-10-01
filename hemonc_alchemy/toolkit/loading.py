@@ -21,11 +21,13 @@ from __future__ import annotations
 import csv
 import logging
 import tempfile
-from collections.abc import Generator
+from collections.abc import Callable, Generator
 from contextlib import contextmanager
 from datetime import date, datetime
 from enum import Enum
+from functools import partial
 from pathlib import Path
+from typing import TYPE_CHECKING, Any, Protocol
 
 import pandas as pd
 import sqlalchemy as sa
@@ -34,7 +36,39 @@ import sqlalchemy.orm as so
 from ..model.base import register_enum_casts
 from ..naming import resolve_source_csv, safe_identifier
 
+if TYPE_CHECKING:
+    from orm_loader.loaders.data_classes import TableCastingStats
+
 logger = logging.getLogger(__name__)
+
+
+def _record_cast_failure(value: Any, *, column: str, stats: TableCastingStats) -> None:
+    """`on_error` callback for `perform_cast`, bound per-column via `partial`."""
+    stats.record(column=column, value=value)
+
+
+class _MappedEntity(Protocol):
+    """Structural shape shared by every generated `EntityBase` subclass,
+    including the small per-column map/child tables.
+    """
+
+    __tablename__: str
+    __name__: str
+    __table__: sa.Table
+
+    @classmethod
+    def load_csv(cls, session: so.Session, path: Path, **kwargs: Any) -> int: ...
+
+
+class _GeneratedEntity(_MappedEntity, Protocol):
+    """A top-level generated entity: `_MappedEntity` plus the compiler's
+    per-table metadata attributes.
+    """
+
+    id: Any
+    natural_key_columns: list[str]
+    denormalised_columns: list[str]
+    derived_columns: list[str]
 
 
 def _header_renames(path: Path) -> dict[str, str]:
@@ -106,7 +140,7 @@ def _resolved_csv_path(data_dir: Path, table_name: str) -> Generator[Path, None,
 
 def load_entity(
     session: so.Session,
-    entity_cls: type,
+    entity_cls: type[_GeneratedEntity],
     data_dir: Path,
     **load_csv_kwargs,
 ) -> int:
@@ -122,7 +156,7 @@ def load_entity(
 
 def load_all(
     session: so.Session,
-    entity_cls: type,
+    entity_cls: type[_GeneratedEntity],
     data_dir: Path,
     **load_csv_kwargs,
 ) -> dict[str, int]:
@@ -138,7 +172,7 @@ def load_all(
     return {entity_cls.__tablename__: primary_total, **denorm_totals}
 
 
-def _natural_key_columns(entity_cls: type) -> list[str]:
+def _natural_key_columns(entity_cls: type[_GeneratedEntity]) -> list[str]:
     """The real declared business/natural key for an entity.
 
     Not the same thing as `entity_cls.natural_key_columns` for a
@@ -157,14 +191,15 @@ def _natural_key_columns(entity_cls: type) -> list[str]:
     return list(entity_cls.natural_key_columns)
 
 
-def _map_class_for_column(entity_cls: type, column: str) -> type:
+def _map_class_for_column(entity_cls: type[_GeneratedEntity], column: str) -> type[_MappedEntity]:
     """Find the generated map (child) table class for one denormalised
     column via the entity's own declared `{column}_items` relationship,
     rather than re-deriving the compiler's `{Parent}_{Column}Map` naming
     convention independently -- one source of truth for the mapping.
     """
     rel_name = f"{column}_items"
-    relationship_prop = sa.inspect(entity_cls).relationships.get(rel_name)
+    # Explicit raiseerr=True picks sqlalchemy's non-Optional inspect() overload.
+    relationship_prop = sa.inspect(entity_cls, raiseerr=True).relationships.get(rel_name)
     if relationship_prop is None:
         raise LookupError(
             f"{entity_cls.__name__} has no relationship '{rel_name}' for denormalised column '{column}'"
@@ -177,7 +212,9 @@ def _read_source_csv(path: Path) -> pd.DataFrame:
     return df.rename(columns=lambda c: safe_identifier(c).lower())
 
 
-def _identity_value(value: object, column: sa.Column, *, source: bool, on_error) -> object:
+def _identity_value(
+    value: Any, column: sa.Column, *, source: bool, on_error: Callable[[Any], None]
+) -> object:
     """Return a comparable representation of one parent identity value.
 
     Source CSV values and values read back from SQLAlchemy have different
@@ -239,7 +276,7 @@ def _identity_value(value: object, column: sa.Column, *, source: bool, on_error)
 
 def _surrogate_parent_lookup(
     session: so.Session,
-    entity_cls: type,
+    entity_cls: type[_GeneratedEntity],
     df: pd.DataFrame,
     denormalised_columns: set[str],
     stats,
@@ -285,9 +322,9 @@ def _surrogate_parent_lookup(
             lookup[key] = row[0]
 
     source_lookup: dict[object, int | None] = {}
-    for index, row in df.iterrows():
+    for index, source_row in df.iterrows():
         key = tuple(
-            _identity_value(row[column.name], column, source=True, on_error=failed)
+            _identity_value(source_row[column.name], column, source=True, on_error=failed)
             for column in identity_columns
         )
         source_lookup[index] = lookup.get(key)
@@ -296,7 +333,7 @@ def _surrogate_parent_lookup(
 
 def load_denormalised(
     session: so.Session,
-    entity_cls: type,
+    entity_cls: type[_GeneratedEntity],
     data_dir: Path,
 ) -> dict[str, int]:
     """Fill the child tables holding an entity's pipe-delimited columns.
@@ -378,9 +415,7 @@ def load_denormalised(
                         key_value = perform_cast(
                             key_value,
                             key_type,
-                            on_error=lambda v, _col=key_col, _stats=stats: _stats.record(
-                                column=_col, value=v
-                            ),
+                            on_error=partial(_record_cast_failure, column=key_col, stats=stats),
                             table_name=map_cls.__tablename__,
                             column_name=key_col,
                         )
@@ -399,7 +434,7 @@ def load_denormalised(
                 value = perform_cast(
                     token,
                     value_type,
-                    on_error=lambda v, _col=column, _stats=stats: _stats.record(column=_col, value=v),
+                    on_error=partial(_record_cast_failure, column=column, stats=stats),
                     table_name=map_cls.__tablename__,
                     column_name=column,
                 )

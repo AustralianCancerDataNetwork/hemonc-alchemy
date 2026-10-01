@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import subprocess
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -72,8 +73,10 @@ class TestDiffRegistriesMetadataCoverage:
     three.
     """
 
-    def _table(self, **overrides) -> TableMeta:
-        base = {"name": "indications", "description": "d", "kind": "content", "maturity": "prod", "pk_columns": []}
+    def _table(self, **overrides: Any) -> TableMeta:
+        base: dict[str, Any] = {
+            "name": "indications", "description": "d", "kind": "content", "maturity": "prod", "pk_columns": [],
+        }
         base.update(overrides)
         return TableMeta(**base)
 

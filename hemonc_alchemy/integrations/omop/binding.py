@@ -36,7 +36,7 @@ def load_omop_binding() -> OmopBinding | None:
     """Load public OMOP models lazily, returning ``None`` if extra is absent."""
 
     try:
-        from omop_alchemy.cdm.model import (
+        from omop_alchemy.cdm.model import (  # type: ignore[import-not-found]  # optional extra, not always installed
             Concept,
             Concept_Ancestor,
             Concept_Relationship,

@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import logging
+
 from hemonc_alchemy.model.enums import Sigs_RouteEnum
 from hemonc_alchemy.toolkit.analytics.treatment.scheduling import (
+    Choice,
     Day,
     Indefinite,
     resolve_all_days,
@@ -70,15 +73,42 @@ class TestResolveAllDays:
         resolved = resolve_all_days("[1,21,7]")
         assert resolved.days == (Day(1), Day(8), Day(15))
 
-    def test_indefinite_marker_is_preserved_not_dropped(self, caplog):
+    def test_indefinite_marker_is_preserved_and_logged_at_debug(self, caplog):
         # Previously: expand() silently `continue`d past Indefinite tokens,
-        # so a caller had no way to tell a maintenance/continuation regimen
-        # was truncated. Now the marker survives and a warning is logged.
-        resolved = resolve_all_days("1,8,15,(+n)")
+        # so a caller had no way to tell a maintenance regimen was truncated.
+        with caplog.at_level(logging.DEBUG):
+            resolved = resolve_all_days("1,8,15,(+n)")
         assert resolved.days == (Day(1), Day(8), Day(15))
         assert resolved.indefinite == Indefinite(kind="+n", max_days=None)
         assert bool(resolved) is True
-        assert any("indefinite" in message.lower() for message in caplog.messages)
+        assert any("Indefinite-dosing marker" in record.message for record in caplog.records)
+        assert all(record.levelno < logging.WARNING for record in caplog.records)
+
+    def test_known_numeric_markers_do_not_warn(self, caplog):
+        resolve_all_days("1,(+2)")
+        resolve_all_days("1,(+2)")
+        assert not caplog.records
+
+    def test_unparseable_marker_still_warns(self, caplog):
+        resolve_all_days("1,(+bogus)")
+        assert any(record.levelno == logging.WARNING for record in caplog.records)
+
+    def test_zero_continuation_interval_is_rejected(self, caplog):
+        resolved = resolve_all_days("1,(+0)")
+        assert resolved.days == (Day(1),)
+        assert resolved.indefinite is None
+        assert any("Unparseable indefinite-dosing token" in message for message in caplog.messages)
+
+    def test_unspecified_scalar_is_dropped_with_warning(self, caplog):
+        resolved = resolve_all_days("NS")
+        assert resolved.days == ()
+        assert resolved.indefinite is None
+        assert any("NS" in message for message in caplog.messages)
+
+    def test_bare_eoc_is_dropped_without_losing_valid_days(self, caplog):
+        resolved = resolve_all_days("1,EOC")
+        assert resolved.days == (Day(1),)
+        assert any("EOC" in message for message in caplog.messages)
 
     def test_indefinite_only_schedule_is_still_truthy(self):
         resolved = resolve_all_days("(+c5)")
@@ -86,8 +116,42 @@ class TestResolveAllDays:
         assert resolved.indefinite == Indefinite(kind="+c", max_days=5)
         assert bool(resolved) is True
 
+    def test_numeric_continuation_keeps_interval_without_expanding(self):
+        resolved = resolve_all_days("1,(+2)")
+        assert resolved.days == (Day(1),)
+        assert resolved.indefinite == Indefinite(kind="+k", interval=2)
+
     def test_empty_input(self):
         resolved = resolve_all_days(None)
         assert resolved.days == ()
         assert resolved.indefinite is None
         assert bool(resolved) is False
+
+
+class TestChoice:
+    """A real dose given on one of several alternative days is not the same
+    as a dose given on every one of them (confirmed against hemonc.org for
+    131Iodine-Tositumomab: the "therapeutic step" is one dose, on whichever
+    day 7-15 the dosimetry calls for, not nine doses)."""
+
+    def test_choice_is_not_expanded_into_days(self):
+        resolved = resolve_all_days("7|8|9|10|11|12|13|14|15")
+        assert resolved.days == ()
+        assert resolved.choices == (Choice([7, 8, 9, 10, 11, 12, 13, 14, 15]),)
+        assert bool(resolved) is True
+
+    def test_definite_day_plus_a_choice_are_both_kept(self):
+        resolved = resolve_all_days("1,8|9")
+        assert resolved.days == (Day(1),)
+        assert resolved.choices == (Choice([8, 9]),)
+
+    def test_ambiguous_choice_shape_still_parses_but_warns(self, caplog):
+        # "1,2,3|4,5,6" could mean "days 1,2 plus a day-3-or-4 choice, then
+        # days 5,6" (applied here) or "days 1-3 or days 4-6" as two whole
+        # alternative lists -- nothing says which grouping is meant, so the
+        # plain per-fragment reading is used and the shape is flagged rather
+        # than silently trusted or silently dropped.
+        resolved = resolve_all_days("1,2,3|4,5,6")
+        assert resolved.days == (Day(1), Day(2), Day(5), Day(6))
+        assert resolved.choices == (Choice([3, 4]),)
+        assert any("Ambiguous choice notation" in message for message in caplog.messages)

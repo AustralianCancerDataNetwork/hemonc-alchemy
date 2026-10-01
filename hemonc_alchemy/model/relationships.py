@@ -16,6 +16,7 @@ here rather than declared in entities.py, they only exist once
 
 from __future__ import annotations
 
+from sqlalchemy import or_
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import foreign, relationship
 
@@ -86,7 +87,13 @@ Conditions.studies = relationship(
 
 variants_StudyMap.study_objects = relationship(
     Studies,
-    primaryjoin=foreign(Studies.study) == variants_StudyMap.study,
+    # A map row's text is sometimes "study--substudy" (e.g. a trial-phase or
+    # arm suffix); fall back to matching that split form against Studies'
+    # own study/substudy columns when the raw text has no exact match.
+    primaryjoin=or_(
+        foreign(Studies.study) == variants_StudyMap.study,
+        foreign(Studies.study + "--" + Studies.substudy) == variants_StudyMap.study,
+    ),
     viewonly=True,
     lazy="selectin",
 )
