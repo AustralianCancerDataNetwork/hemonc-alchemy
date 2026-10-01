@@ -8,6 +8,7 @@ from typing import Annotated
 import typer
 
 from .compiler import audit as audit_module
+from .compiler import classification_generation as classification_generation_module
 from .compiler import diff as diff_module
 from .compiler import generate as generate_module
 from .compiler import spec_adapter
@@ -24,6 +25,9 @@ _PACKAGE_ROOT = Path(__file__).parent
 _MODEL_DIR = _PACKAGE_ROOT / "model"
 _SCHEMA_DIR = _PACKAGE_ROOT / "schema"
 _REGISTRY_JSON = _SCHEMA_DIR / "registry.json"
+_CLASSIFICATION_DATA_PATH = (
+    _PACKAGE_ROOT / "toolkit" / "analytics" / "treatment" / "classification" / "generated.py"
+)
 
 DataDirOption = Annotated[
     Path,
@@ -224,6 +228,26 @@ def audit(
 
     if audit_module.has_hard_failures(results) and not report_only:
         raise typer.Exit(code=1)
+
+
+@app.command(name="regen-classification")
+def regen_classification(data_dir: DataDirOption) -> None:
+    """Regenerate toolkit/analytics/treatment/classification/generated.py from `data_dir`'s `omop.RData`. Review the diff before committing."""
+    result = classification_generation_module.regenerate(data_dir, _CLASSIFICATION_DATA_PATH)
+
+    typer.secho(
+        f"Regenerated {_CLASSIFICATION_DATA_PATH}: "
+        f"{len(result.endocrine_main_classes)} endocrine, "
+        f"{len(result.supportive_main_classes)} supportive main_class value(s).",
+        fg=typer.colors.GREEN,
+    )
+    if result.inconsistent_main_classes:
+        typer.secho(
+            f"  {len(result.inconsistent_main_classes)} main_class value(s) had inconsistent "
+            f"component ancestry, excluded from both sets: "
+            f"{', '.join(result.inconsistent_main_classes)}",
+            fg=typer.colors.YELLOW,
+        )
 
 
 def main() -> None:

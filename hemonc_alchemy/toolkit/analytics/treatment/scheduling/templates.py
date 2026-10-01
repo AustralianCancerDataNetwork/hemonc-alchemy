@@ -10,10 +10,8 @@ import pandas as pd  # type: ignore[import-untyped]
 
 from ....core.links import variant_condition_objects
 from ..classification import (
-    is_gnrh_block,
-    is_gnrh_regimen,
-    is_hormone_block,
-    is_hormone_regimen,
+    is_endocrine_block,
+    is_endocrine_regimen,
     is_supportive_block,
     is_supportive_regimen,
 )
@@ -46,8 +44,7 @@ class CycleTemplate:
     binary_fuzzy: pd.DataFrame
     dose_iv: pd.DataFrame
     dose_po: pd.DataFrame
-    gnrh_regimen: bool
-    hormone_regimen: bool
+    endocrine_regimen: bool
     supportive_regimen: bool
 
 
@@ -139,8 +136,7 @@ def cycle_template(variant) -> CycleTemplate:
         binary_fuzzy=_fuzzy_matrix(fuzzy_frame, "IV", cycle_len, iv_drug),
         dose_iv=_dose_matrix(schedule_events(variant), "IV", iv_drug),
         dose_po=_dose_matrix(schedule_events(variant), "PO", po_drug),
-        gnrh_regimen=is_gnrh_regimen(variant),
-        hormone_regimen=is_hormone_regimen(variant),
+        endocrine_regimen=is_endocrine_regimen(variant),
         supportive_regimen=is_supportive_regimen(variant),
     )
 
@@ -187,9 +183,9 @@ def _block_frame(block: CycleBlock, *, decay_days: int, decay_factor: float = DE
 def _block_template(variant, block: CycleBlock, *, diseases) -> CycleTemplate:
     """`cycle_template`'s per-variant logic, scoped to one `CycleBlock`'s own events.
 
-    Modality (gnrh/hormone/supportive) is classified from this block's own drugs, not
+    Modality (endocrine/supportive) is classified from this block's own drugs, not
     the parent variant's -- a block's `iv_drug`/`po_drug` are already block-scoped, and a
-    mixed-modality variant (e.g. a hormone-only block followed by a targeted-therapy one)
+    mixed-modality variant (e.g. an endocrine-only block followed by a targeted-therapy one)
     would otherwise mislabel every block with the whole variant's, generally impure, mix.
     """
     cycle_len = _block_cycle_length_days(block)
@@ -211,8 +207,7 @@ def _block_template(variant, block: CycleBlock, *, diseases) -> CycleTemplate:
         binary_fuzzy=_fuzzy_matrix(fuzzy_frame, "IV", cycle_len, iv_drug),
         dose_iv=_dose_matrix(block.events, "IV", iv_drug),
         dose_po=_dose_matrix(block.events, "PO", po_drug),
-        gnrh_regimen=is_gnrh_block(block.events),
-        hormone_regimen=is_hormone_block(block.events),
+        endocrine_regimen=is_endocrine_block(block.events),
         supportive_regimen=is_supportive_block(block.events),
     )
 

@@ -81,8 +81,7 @@ def test_seven_plus_three_d_cycle_template(variant_129505):
     assert template.diseases == {"Acute myeloid leukemia"}
     assert template.iv_drug == ["Cytarabine", "Daunorubicin"]
     assert template.po_drug == []
-    assert template.gnrh_regimen is False
-    assert template.hormone_regimen is False
+    assert template.endocrine_regimen is False
     assert template.supportive_regimen is False
 
     assert template.binary_iv["Cytarabine"].tolist() == [1, 0, 0, 0, 0, 0, 0]
@@ -109,8 +108,7 @@ def test_beacopp_14_cycle_template(variant_129853):
     assert template.diseases == {"Classical Hodgkin lymphoma"}
     assert template.iv_drug == ["Bleomycin", "Cyclophosphamide", "Doxorubicin", "Etoposide", "Vincristine"]
     assert template.po_drug == ["Prednisone", "Procarbazine"]
-    assert template.gnrh_regimen is False
-    assert template.hormone_regimen is False
+    assert template.endocrine_regimen is False
     assert template.supportive_regimen is False
 
     assert template.binary_iv["Cyclophosphamide"].tolist() == [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -148,8 +146,9 @@ def test_degarelix_monotherapy_cycle_template(variant_131601):
     assert template.diseases == {"Prostate cancer"}
     assert template.iv_drug == ["Degarelix"]
     assert template.po_drug == []
-    assert template.gnrh_regimen is True  # a GnRH antagonist, per drugs.main_class
-    assert template.hormone_regimen is False
+    # A GnRH antagonist: a real "Endocrine therapeutic" descendant, same bucket as
+    # aromatase inhibitors now that GnRH and non-GnRH hormone therapy are merged.
+    assert template.endocrine_regimen is True
     assert template.supportive_regimen is False
 
     assert template.binary_iv["Degarelix"].tolist().count(1) == 2
@@ -170,8 +169,7 @@ def test_eltrombopag_monotherapy_cycle_template(variant_131885):
     assert template.diseases == {"Aplastic anemia"}
     assert template.iv_drug == []
     assert template.po_drug == ["Eltrombopag"]
-    assert template.gnrh_regimen is False
-    assert template.hormone_regimen is False
+    assert template.endocrine_regimen is False
     assert template.supportive_regimen is True  # a megakaryocyte growth factor, per drugs.main_class
 
     assert template.binary_po["Eltrombopag"].tolist() == [1] * 14
@@ -187,8 +185,9 @@ def test_anastrozole_monotherapy_cycle_template(variant_129670):
     assert template.diseases == {"Breast cancer"}
     assert template.iv_drug == []
     assert template.po_drug == ["Anastrozole"]
-    assert template.gnrh_regimen is False
-    assert template.hormone_regimen is True  # an aromatase inhibitor, per drugs.main_class
+    # An aromatase inhibitor: a real "Endocrine therapeutic" descendant, same bucket
+    # as GnRH agonists/antagonists now that GnRH and non-GnRH hormone therapy are merged.
+    assert template.endocrine_regimen is True
     assert template.supportive_regimen is False
 
     assert template.binary_po["Anastrozole"].tolist() == [1] * 84
@@ -210,8 +209,7 @@ def test_seven_plus_three_d_cycle_block_templates_match_cycle_template(variant_1
     assert block.diseases == direct.diseases
     assert block.iv_drug == direct.iv_drug
     assert block.po_drug == direct.po_drug
-    assert block.gnrh_regimen == direct.gnrh_regimen
-    assert block.hormone_regimen == direct.hormone_regimen
+    assert block.endocrine_regimen == direct.endocrine_regimen
     assert block.supportive_regimen == direct.supportive_regimen
     assert block.binary_iv.equals(direct.binary_iv)
     assert block.binary_po.equals(direct.binary_po)
@@ -253,8 +251,7 @@ def test_a_cmf_cycle_block_templates(variant_129540):
 
     for block in (first, second):
         assert block.diseases == {"Breast cancer"}
-        assert block.gnrh_regimen is False
-        assert block.hormone_regimen is False
+        assert block.endocrine_regimen is False
         assert block.supportive_regimen is False
         assert block.id == "A-CMF129540"
         assert block.common_name == "A-CMF"
