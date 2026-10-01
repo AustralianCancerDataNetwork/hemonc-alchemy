@@ -25,3 +25,16 @@ source_modules =
     hemonc_alchemy.errors
 forbidden_modules =
     omop_alchemy
+
+[importlinter:contract:toolkit-no-http-or-application-types]
+name = no HTTP, template, or application configuration types enter the toolkit
+type = forbidden
+source_modules =
+    hemonc_alchemy.toolkit.analytics
+    hemonc_alchemy.toolkit.core
+forbidden_modules =
+    fastapi
+    starlette
+    pydantic
+    jinja2
+    hemonc_explorer
