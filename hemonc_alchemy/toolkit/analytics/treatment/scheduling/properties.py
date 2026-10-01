@@ -259,7 +259,7 @@ def administration_frame(
              cycle_indefinite=("cycle_indefinite", "first"),
              timing_status=("timing_status", "first"))
     )
-    return grouped[_FRAME_COLUMNS].sort_values(
+    return grouped[_FRAME_COLUMNS].sort_values(                                         # type: ignore[call-overload],  # mypy doesn't know about `sort_values` returning a DataFrame
         ["variant_cui", "route_group", "drug", "elapsed_day", "day"], ignore_index=True
     )
 

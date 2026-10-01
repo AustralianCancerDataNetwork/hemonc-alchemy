@@ -18,7 +18,9 @@ from .....model import (
     variants_StudyMap,
 )
 from .....model.enums import Sigs_PhaseEnum
-from .....toolkit.core.catalogue.variants import latest_variant_ids as _latest_variant_ids
+from .....toolkit.core.catalogue.variants import (
+    latest_variant_ids as _latest_variant_ids,
+)
 from .....toolkit.core.coercion import coerce_enum_value
 from .....toolkit.core.components import COMPONENT_SEARCH_COLUMNS
 from .specs import CategoryMapping, ComponentRequirement, TreatmentSelectionSpec
