@@ -7,9 +7,16 @@ entities.py as `['atc', 'atc']` before schema_model.py's dedup-ordering fix.
 
 from __future__ import annotations
 
+from typing import Any
+
 import pytest
 
-from hemonc_alchemy.compiler.schema_model import NormalisationGroup, Registry, TableMeta
+from hemonc_alchemy.compiler.schema_model import (
+    ColumnSpec,
+    NormalisationGroup,
+    Registry,
+    TableMeta,
+)
 from hemonc_alchemy.compiler.validate import (
     validate_all,
     validate_registry,
@@ -17,10 +24,10 @@ from hemonc_alchemy.compiler.validate import (
 )
 
 
-def _table(**overrides) -> TableMeta:
-    base = {
+def _table(**overrides: Any) -> TableMeta:
+    base: dict[str, Any] = {
         "name": "drugs", "description": "d", "kind": "content", "maturity": "prod",
-        "pk_columns": [], "columns": {"atc": object()},
+        "pk_columns": [], "columns": {"atc": ColumnSpec(name="atc", type="string")},
     }
     base.update(overrides)
     return TableMeta(**base)
@@ -66,7 +73,7 @@ class TestSourceRegressions:
 
     def test_losing_all_columns_since_the_last_run_is_an_error(self):
         previous = Registry(tables={"canonicaltriples": _table(
-            name="canonicaltriples", columns={"class_1": object()},
+            name="canonicaltriples", columns={"class_1": ColumnSpec(name="class_1", type="string")},
             source_filename="canonical.triples.csv",
         )})
         current = Registry(tables={"canonicaltriples": _table(
@@ -106,7 +113,7 @@ class TestSourceRegressions:
         entities.write_text("x = 1\n")
         enums.write_text("y = 2\n")
         previous = Registry(tables={"variantblob": _table(
-            name="variantblob", columns={"blob": object()},
+            name="variantblob", columns={"blob": ColumnSpec(name="blob", type="string")},
         )})
         current = Registry(tables={"variantblob": _table(name="variantblob", columns={})})
         errors = validate_all(current, entities, enums, previous=previous)

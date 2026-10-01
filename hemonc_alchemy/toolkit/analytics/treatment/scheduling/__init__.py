@@ -22,12 +22,20 @@ from .rollout import (
     roll_out_variant,
 )
 from .routes import route_group
+from .templates import (
+    CycleBlockTemplate,
+    CycleTemplate,
+    cycle_block_templates,
+    cycle_template,
+)
 from .tokens import Choice, Day, Indefinite, Range
 
 __all__ = [
     "AnchoredBlock",
     "Choice",
     "CycleBlock",
+    "CycleBlockTemplate",
+    "CycleTemplate",
     "Day",
     "Indefinite",
     "Range",
@@ -40,6 +48,8 @@ __all__ = [
     "anchor_blocks",
     "cancer_services_drugs",
     "cancer_services_sigs_by_drug",
+    "cycle_block_templates",
+    "cycle_template",
     "group_into_blocks",
     "home_administered_drugs",
     "home_administered_sigs_by_drug",

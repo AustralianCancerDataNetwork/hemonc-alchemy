@@ -1172,11 +1172,13 @@ class TestAdministrationFrame:
         assert set(frame["variant_cui"]) == {10}
 
     def test_decay_tapers_after_each_dosing_day(self, session):
+        # Was a straight decay_factor**offset taper (1.0, 0.5, 0.25) with no floor;
+        # now it's exp(-decay_factor * offset) floored at 0.1, matching RG_uniq's curve.
         frame = administration_frame(self._nsclc_ish(session), decay_days=2, decay_factor=0.5)
         carbo = frame[frame["drug"] == "carboplatin"].set_index("day")["intensity"]
         assert carbo.loc[1] == 1.0
-        assert carbo.loc[2] == 0.5
-        assert carbo.loc[3] == 0.25
+        assert carbo.loc[2] == pytest.approx(0.606531, abs=1e-6)
+        assert carbo.loc[3] == pytest.approx(0.367879, abs=1e-6)
 
     def test_carries_both_drug_identifier_and_name(self, session):
         """The original keyed its grid by display name, so two distinct drugs

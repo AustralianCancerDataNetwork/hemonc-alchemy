@@ -107,12 +107,12 @@ class Authors(EntityBase, Base):
 
     filename = 'authors.csv'
     natural_key_columns = ['pmid', 'sequence', 'aff_no']
-    source_defined_keys = []
-    identity_keys = []
-    denormalised_columns = []
-    derived_columns = []
+    source_defined_keys: list[str] = []
+    identity_keys: list[str] = []
+    denormalised_columns: list[str] = []
+    derived_columns: list[str] = []
 
-    enum_lookup = {
+    enum_lookup: dict[str, type] = {
         'role': Authors_RoleEnum,
     }
 
@@ -147,7 +147,7 @@ class Authors(EntityBase, Base):
     suffix: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     temp: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
 
-    normalisation_groups = [
+    normalisation_groups: list[list[str]] = [
     ]
     pmid_exclusions_obj: Mapped[Optional['Exclusions']] = sa_relationship(
         'Exclusions',
@@ -170,12 +170,12 @@ class Conditions(EntityBase, Base):
 
     filename = 'conditions.csv'
     natural_key_columns = ['condition_cui']
-    source_defined_keys = ['condition', 'condition_cui']
-    identity_keys = ['condition_cui']
-    denormalised_columns = ['map_icd10cm', 'map_icd9cm', 'map_icdo3', 'map_icdo3_morph', 'map_oncotree', 'map_seer', 'map_type_icdo3_morph']
-    derived_columns = []
+    source_defined_keys: list[str] = ['condition', 'condition_cui']
+    identity_keys: list[str] = ['condition_cui']
+    denormalised_columns: list[str] = ['map_icd10cm', 'map_icd9cm', 'map_icdo3', 'map_icdo3_morph', 'map_oncotree', 'map_seer', 'map_type_icdo3_morph']
+    derived_columns: list[str] = []
 
-    enum_lookup = {
+    enum_lookup: dict[str, type] = {
         'condition_type': Conditions_Condition_typeEnum,
         'section': Conditions_SectionEnum,
         'age_focus': Conditions_Age_focusEnum,
@@ -215,7 +215,7 @@ class Conditions(EntityBase, Base):
     variantscount: Mapped[str] = mapped_column(String(255), nullable=False)
     variantscountdate: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
 
-    normalisation_groups = [
+    normalisation_groups: list[list[str]] = [
     ]
     map_icd10cm_items: Mapped[list['conditions_Map_icd10cmMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     map_icd9cm_items: Mapped[list['conditions_Map_icd9cmMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
@@ -287,12 +287,12 @@ class Drugs(EntityBase, Base):
 
     filename = 'drugs.csv'
     natural_key_columns = ['drug_cui']
-    source_defined_keys = ['drug', 'drug_cui']
-    identity_keys = ['drug_cui']
-    denormalised_columns = ['atc', 'canmed_major_class', 'canmed_major_class_cui', 'canmed_minor_class', 'canmed_minor_class_cui']
-    derived_columns = []
+    source_defined_keys: list[str] = ['drug', 'drug_cui']
+    identity_keys: list[str] = ['drug_cui']
+    denormalised_columns: list[str] = ['atc', 'canmed_major_class', 'canmed_major_class_cui', 'canmed_minor_class', 'canmed_minor_class_cui']
+    derived_columns: list[str] = []
 
-    enum_lookup = {
+    enum_lookup: dict[str, type] = {
         'class_type': Drugs_Class_typeEnum,
     }
 
@@ -309,7 +309,7 @@ class Drugs(EntityBase, Base):
     main_class: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     multiagent: Mapped[bool] = mapped_column(Boolean, nullable=False)
 
-    normalisation_groups = [
+    normalisation_groups: list[list[str]] = [
         ['canmed_major_class', 'canmed_major_class_cui'],
     ]
     atc_items: Mapped[list['drugs_AtcMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
@@ -364,12 +364,12 @@ class Indications(EntityBase, Base):
 
     filename = 'indications.csv'
     natural_key_columns = ['component_cui', 'condition_cui', 'regulator', 'withdrawn', 'stage', 'status', 'stage_or_status', 'age', 'ineligibility', 'prior_therapy', 'with_field', 'biomarker', 'biomarker_finding', 'study', 'substudy']
-    source_defined_keys = []
-    identity_keys = ['component_cui']
-    denormalised_columns = ['biomarker2', 'biomarker2_finding', 'biomarker2_type', 'biomarker3', 'biomarker3_finding', 'biomarker3_type', 'biomarker4', 'biomarker4_finding', 'biomarker4_type', 'biomarker_type', 'context', 'demographics', 'prior_therapy_negation', 'prior_therapy_setting', 'regimen', 'regimen_cui', 'response_contingency', 'risk_stratification']
-    derived_columns = []
+    source_defined_keys: list[str] = []
+    identity_keys: list[str] = ['component_cui']
+    denormalised_columns: list[str] = ['biomarker2', 'biomarker2_finding', 'biomarker2_type', 'biomarker3', 'biomarker3_finding', 'biomarker3_type', 'biomarker4', 'biomarker4_finding', 'biomarker4_type', 'biomarker_type', 'context', 'demographics', 'prior_therapy_negation', 'prior_therapy_setting', 'regimen', 'regimen_cui', 'response_contingency', 'risk_stratification']
+    derived_columns: list[str] = []
 
-    enum_lookup = {
+    enum_lookup: dict[str, type] = {
         'regulator': Indications_RegulatorEnum,
         'note': Indications_NoteEnum,
         'sex': Indications_SexEnum,
@@ -420,7 +420,7 @@ class Indications(EntityBase, Base):
     with_field: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     withdrawn: Mapped[str] = mapped_column(String(255), nullable=False)
 
-    normalisation_groups = [
+    normalisation_groups: list[list[str]] = [
         ['biomarker2', 'biomarker2_finding'],
         ['biomarker3', 'biomarker3_finding'],
         ['biomarker4', 'biomarker4_finding'],
@@ -617,12 +617,12 @@ class Persons(EntityBase, Base):
 
     filename = 'persons.csv'
     natural_key_columns = ['name', 'person_cui']
-    source_defined_keys = []
-    identity_keys = ['person_cui']
-    denormalised_columns = ['condition_types', 'conditions', 'country', 'location', 'orcid', 'site', 'study_groups', 'study_sponsors']
-    derived_columns = ['total_pubs']
+    source_defined_keys: list[str] = []
+    identity_keys: list[str] = ['person_cui']
+    denormalised_columns: list[str] = ['condition_types', 'conditions', 'country', 'location', 'orcid', 'site', 'study_groups', 'study_sponsors']
+    derived_columns: list[str] = ['total_pubs']
 
-    enum_lookup = {
+    enum_lookup: dict[str, type] = {
         'hyphen_type': Persons_Hyphen_typeEnum,
         'gender': Persons_GenderEnum,
         'vital_status': Persons_Vital_statusEnum,
@@ -645,7 +645,7 @@ class Persons(EntityBase, Base):
     temp: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     vital_status: Mapped[int] = mapped_column(BigInteger, nullable=False)
 
-    normalisation_groups = [
+    normalisation_groups: list[list[str]] = [
     ]
     condition_types_items: Mapped[list['persons_Condition_typesMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     conditions_items: Mapped[list['persons_ConditionsMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
@@ -726,12 +726,12 @@ class Refs(EntityBase, Base):
 
     filename = 'refs.csv'
     natural_key_columns = ['study_cui', 'substudy_cui', 'condition_cui', 'biomarker_finding', 'pmid']
-    source_defined_keys = []
-    identity_keys = []
-    denormalised_columns = ['biblio', 'doi', 'reference', 'study', 'title']
-    derived_columns = ['prop_valid_aff_city', 'prop_valid_aff_country', 'prop_valid_aff_region', 'prop_valid_aff_site']
+    source_defined_keys: list[str] = []
+    identity_keys: list[str] = []
+    denormalised_columns: list[str] = ['biblio', 'doi', 'reference', 'study', 'title']
+    derived_columns: list[str] = ['prop_valid_aff_city', 'prop_valid_aff_country', 'prop_valid_aff_region', 'prop_valid_aff_site']
 
-    enum_lookup = {
+    enum_lookup: dict[str, type] = {
         'ref_type': Refs_Ref_typeEnum,
     }
 
@@ -755,7 +755,7 @@ class Refs(EntityBase, Base):
     temp: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     url: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
 
-    normalisation_groups = [
+    normalisation_groups: list[list[str]] = [
     ]
     biblio_items: Mapped[list['refs_BiblioMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     doi_items: Mapped[list['refs_DoiMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
@@ -846,12 +846,12 @@ class Regimens(EntityBase, Base):
 
     filename = 'regimens.csv'
     natural_key_columns = ['regimen_cui']
-    source_defined_keys = ['regimen_name', 'regimen_cui']
-    identity_keys = []
-    denormalised_columns = []
-    derived_columns = []
+    source_defined_keys: list[str] = ['regimen_name', 'regimen_cui']
+    identity_keys: list[str] = []
+    denormalised_columns: list[str] = []
+    derived_columns: list[str] = []
 
-    enum_lookup = {
+    enum_lookup: dict[str, type] = {
         'regimen_type': Regimens_Regimen_typeEnum,
         'highest_evidence': Regimens_Highest_evidenceEnum,
         'all_sact_fda': Regimens_All_sact_fdaEnum,
@@ -880,7 +880,7 @@ class Regimens(EntityBase, Base):
     variantcount: Mapped[int] = mapped_column(BigInteger, nullable=False)
     variantcountdate: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 
-    normalisation_groups = [
+    normalisation_groups: list[list[str]] = [
     ]
 
 class Sigs(EntityBase, Base):
@@ -889,12 +889,12 @@ class Sigs(EntityBase, Base):
 
     filename = 'sigs.csv'
     natural_key_columns = ['variant_cui', 'portion', 'component_cui', 'subcomponent_cui', 'frequency_cui', 'timing_sequence', 'step_number']
-    source_defined_keys = []
-    identity_keys = []
-    denormalised_columns = ['cyclesigs_note', 'inparens', 'seqrel', 'seqrelwhat', 'seqrelwhen', 'seqrelwhenunit', 'study', 'timing']
-    derived_columns = []
+    source_defined_keys: list[str] = []
+    identity_keys: list[str] = []
+    denormalised_columns: list[str] = ['cyclesigs_note', 'inparens', 'seqrel', 'seqrelwhat', 'seqrelwhen', 'seqrelwhenunit', 'study', 'timing']
+    derived_columns: list[str] = []
 
-    enum_lookup = {
+    enum_lookup: dict[str, type] = {
         'phase': Sigs_PhaseEnum,
         'component_role': Sigs_Component_roleEnum,
         'cycle_length_unit': Sigs_Cycle_length_unitEnum,
@@ -955,7 +955,7 @@ class Sigs(EntityBase, Base):
     variant: Mapped[str] = mapped_column(String(255), nullable=False)
     variant_cui: Mapped[Optional[int]] = mapped_column(BigInteger, nullable=True)
 
-    normalisation_groups = [
+    normalisation_groups: list[list[str]] = [
     ]
     cyclesigs_note_items: Mapped[list['sigs_Cyclesigs_noteMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     inparens_items: Mapped[list['sigs_InparensMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
@@ -1052,12 +1052,12 @@ class Studies(EntityBase, Base):
 
     filename = 'studies.csv'
     natural_key_columns = ['study_cui', 'substudy_cui', 'condition_cui', 'biomarker_finding']
-    source_defined_keys = []
-    identity_keys = ['study']
-    denormalised_columns = ['intent', 'sponsor', 'study_group']
-    derived_columns = []
+    source_defined_keys: list[str] = []
+    identity_keys: list[str] = ['study']
+    denormalised_columns: list[str] = ['intent', 'sponsor', 'study_group']
+    derived_columns: list[str] = []
 
-    enum_lookup = {
+    enum_lookup: dict[str, type] = {
         'registry': Studies_RegistryEnum,
         'intent': Studies_IntentEnum,
         'phase': Studies_PhaseEnum,
@@ -1074,7 +1074,7 @@ class Studies(EntityBase, Base):
     phase: Mapped[str] = mapped_column(String(255), nullable=False)
     pubs_in_hemonc: Mapped[Optional[int]] = mapped_column(BigInteger, nullable=True)
     reg_study: Mapped[bool] = mapped_column(Boolean, nullable=False)
-    registry: Mapped[Optional[Studies_RegistryEnum]] = mapped_column(Enum(Studies_RegistryEnum), nullable=True)
+    registry: Mapped[Optional[Studies_RegistryEnum]] = mapped_column(Enum(Studies_RegistryEnum), nullable=True)  # type: ignore[misc,assignment]  # collides with DeclarativeBase ClassVar
     sact: Mapped[bool] = mapped_column(Boolean, nullable=False)
     sponsor_cui: Mapped[Optional[int]] = mapped_column(BigInteger, nullable=True)
     sponsor_type: Mapped[Optional[Studies_Sponsor_typeEnum]] = mapped_column(Enum(Studies_Sponsor_typeEnum), nullable=True)
@@ -1090,7 +1090,7 @@ class Studies(EntityBase, Base):
     trial_id: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     unreg_study: Mapped[bool] = mapped_column(Boolean, nullable=False)
 
-    normalisation_groups = [
+    normalisation_groups: list[list[str]] = [
     ]
     intent_items: Mapped[list['studies_IntentMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     sponsor_items: Mapped[list['studies_SponsorMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
@@ -1140,12 +1140,12 @@ class StudyResults(EntityBase, Base):
 
     filename = 'study_results.csv'
     natural_key_columns = ['study_cui', 'substudy_cui', 'condition_cui', 'biomarker_finding', 'context', 'regimen', 'r_modifier', 'comparator', 'c_modifier', 'endpoint', 'metric', 'metric_version']
-    source_defined_keys = []
-    identity_keys = []
-    denormalised_columns = ['comparator_code']
-    derived_columns = ['metric_num_that_arm', 'metric_num_this_arm']
+    source_defined_keys: list[str] = []
+    identity_keys: list[str] = []
+    denormalised_columns: list[str] = ['comparator_code']
+    derived_columns: list[str] = ['metric_num_that_arm', 'metric_num_this_arm']
 
-    enum_lookup = {
+    enum_lookup: dict[str, type] = {
         'intent': StudyResults_IntentEnum,
         'comparator_code': StudyResults_Comparator_codeEnum,
         'endpoint_class': StudyResults_Endpoint_classEnum,
@@ -1195,7 +1195,7 @@ class StudyResults(EntityBase, Base):
     temp: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     toxicity: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
 
-    normalisation_groups = [
+    normalisation_groups: list[list[str]] = [
     ]
     comparator_code_items: Mapped[list['study_results_Comparator_codeMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     regimen_cui_obj: Mapped[Optional['Regimens']] = sa_relationship(
@@ -1234,12 +1234,12 @@ class VariantEligibility(EntityBase, Base):
 
     filename = 'variant_eligibility.csv'
     natural_key_columns = ['variant_cui', 'logic_count']
-    source_defined_keys = []
-    identity_keys = []
-    denormalised_columns = ['study']
-    derived_columns = []
+    source_defined_keys: list[str] = []
+    identity_keys: list[str] = []
+    denormalised_columns: list[str] = ['study']
+    derived_columns: list[str] = []
 
-    enum_lookup = {
+    enum_lookup: dict[str, type] = {
         'subtype': VariantEligibility_SubtypeEnum,
         'unit': VariantEligibility_UnitEnum,
     }
@@ -1257,7 +1257,7 @@ class VariantEligibility(EntityBase, Base):
     unit_cui: Mapped[Optional[int]] = mapped_column(BigInteger, nullable=True)
     variant_cui: Mapped[int] = mapped_column(BigInteger, nullable=False)
 
-    normalisation_groups = [
+    normalisation_groups: list[list[str]] = [
     ]
     study_items: Mapped[list['variant_eligibility_StudyMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     regimen_cui_obj: Mapped[Optional['Regimens']] = sa_relationship(
@@ -1298,12 +1298,12 @@ class Variants(EntityBase, Base):
 
     filename = 'variants.csv'
     natural_key_columns = ['variant_cui', 'version']
-    source_defined_keys = []
-    identity_keys = ['variant_cui']
-    denormalised_columns = ['blob', 'study', 'tracer']
-    derived_columns = []
+    source_defined_keys: list[str] = []
+    identity_keys: list[str] = ['variant_cui']
+    denormalised_columns: list[str] = ['blob', 'study', 'tracer']
+    derived_columns: list[str] = []
 
-    enum_lookup = {}
+    enum_lookup: dict[str, type] = {}
 
     __table_args__ = (
         sa.UniqueConstraint('variant_cui', 'version', name='uq_variants_natural_key'),
@@ -1335,7 +1335,7 @@ class Variants(EntityBase, Base):
     variant_cui: Mapped[int] = mapped_column(BigInteger, nullable=False)
     version: Mapped[int] = mapped_column(BigInteger, nullable=False)
 
-    normalisation_groups = [
+    normalisation_groups: list[list[str]] = [
     ]
     blob_items: Mapped[list['variants_BlobMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     study_items: Mapped[list['variants_StudyMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
@@ -1385,12 +1385,12 @@ class Canonicaltriples(EntityBase, Base):
     __tablename__ = 'canonicaltriples'
     filename = 'canonical_triples.csv'
     natural_key_columns = ['class_1', 'relationship', 'class_2']
-    source_defined_keys = []
-    identity_keys = []
-    denormalised_columns = ['class_1_provenance', 'class_2_provenance']
-    derived_columns = []
+    source_defined_keys: list[str] = []
+    identity_keys: list[str] = []
+    denormalised_columns: list[str] = ['class_1_provenance', 'class_2_provenance']
+    derived_columns: list[str] = []
 
-    enum_lookup = {
+    enum_lookup: dict[str, type] = {
         'class_1': Canonicaltriples_Class_1Enum,
     }
 
@@ -1403,7 +1403,7 @@ class Canonicaltriples(EntityBase, Base):
     relationship: Mapped[str] = mapped_column(String(255), primary_key=True, nullable=False, default='')
     used_in: Mapped[str] = mapped_column(String(255), nullable=False)
 
-    normalisation_groups = [
+    normalisation_groups: list[list[str]] = [
     ]
     class_1_provenance_items: Mapped[list['canonicaltriples_Class_1_provenanceMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     class_2_provenance_items: Mapped[list['canonicaltriples_Class_2_provenanceMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
@@ -1442,12 +1442,12 @@ class HemoncClasses(EntityBase, Base):
 
     filename = 'hemonc_classes.csv'
     natural_key_columns = ['concept_class_id']
-    source_defined_keys = []
-    identity_keys = []
-    denormalised_columns = ['secondary_home_as_cui', 'secondary_home_as_string']
-    derived_columns = []
+    source_defined_keys: list[str] = []
+    identity_keys: list[str] = []
+    denormalised_columns: list[str] = ['secondary_home_as_cui', 'secondary_home_as_string']
+    derived_columns: list[str] = []
 
-    enum_lookup = {
+    enum_lookup: dict[str, type] = {
         'domain': HemoncClasses_DomainEnum,
         'omopdomain_id': HemoncClasses_Omopdomain_idEnum,
         'omopstandard_concept': HemoncClasses_Omopstandard_conceptEnum,
@@ -1466,7 +1466,7 @@ class HemoncClasses(EntityBase, Base):
     primary_field: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     primary_table: Mapped[str] = mapped_column(String(255), nullable=False)
 
-    normalisation_groups = [
+    normalisation_groups: list[list[str]] = [
     ]
     secondary_home_as_cui_items: Mapped[list['hemonc_classes_Secondary_home_as_cuiMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     secondary_home_as_string_items: Mapped[list['hemonc_classes_Secondary_home_as_stringMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
@@ -1491,12 +1491,12 @@ class HemoncRels(EntityBase, Base):
     __tablename__ = 'hemonc_rels'
     filename = 'hemonc_rels.csv'
     natural_key_columns = ['relationship_id']
-    source_defined_keys = ['relationship_id']
-    identity_keys = []
-    denormalised_columns = []
-    derived_columns = []
+    source_defined_keys: list[str] = ['relationship_id']
+    identity_keys: list[str] = []
+    denormalised_columns: list[str] = []
+    derived_columns: list[str] = []
 
-    enum_lookup = {
+    enum_lookup: dict[str, type] = {
         'in_ohdsi': HemoncRels_In_ohdsiEnum,
     }
 
@@ -1507,19 +1507,19 @@ class HemoncRels(EntityBase, Base):
     in_ohdsi: Mapped[HemoncRels_In_ohdsiEnum] = mapped_column(Enum(HemoncRels_In_ohdsiEnum), nullable=False)
     relationship_id: Mapped[str] = mapped_column(String(255), primary_key=True, nullable=False, default='')
 
-    normalisation_groups = [
+    normalisation_groups: list[list[str]] = [
     ]
 
 class Affiliations(EntityBase, Base):
     __tablename__ = 'affiliations'
     filename = 'affiliations.csv'
     natural_key_columns = ['pmid', 'sequence', 'aff_no']
-    source_defined_keys = []
-    identity_keys = []
-    denormalised_columns = ['affiliation_europmc', 'affiliation_journal']
-    derived_columns = []
+    source_defined_keys: list[str] = []
+    identity_keys: list[str] = []
+    denormalised_columns: list[str] = ['affiliation_europmc', 'affiliation_journal']
+    derived_columns: list[str] = []
 
-    enum_lookup = {}
+    enum_lookup: dict[str, type] = {}
 
     aff_no: Mapped[int] = mapped_column(BigInteger, primary_key=True, nullable=False, default=-1)
     affiliation_hemonc: Mapped[str] = mapped_column(Text, nullable=False)
@@ -1535,7 +1535,7 @@ class Affiliations(EntityBase, Base):
     valid_region: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
     valid_site: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
 
-    normalisation_groups = [
+    normalisation_groups: list[list[str]] = [
     ]
     affiliation_europmc_items: Mapped[list['affiliations_Affiliation_europmcMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     affiliation_journal_items: Mapped[list['affiliations_Affiliation_journalMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
@@ -1586,12 +1586,12 @@ class Contexts(EntityBase, Base):
     __tablename__ = 'contexts'
     filename = 'contexts.csv'
     natural_key_columns = ['context_raw']
-    source_defined_keys = ['context_raw', 'context_pretty']
-    identity_keys = []
-    denormalised_columns = ['context', 'context_pretty', 'phase', 'phenotype', 'setting', 'stage_or_status']
-    derived_columns = []
+    source_defined_keys: list[str] = ['context_raw', 'context_pretty']
+    identity_keys: list[str] = []
+    denormalised_columns: list[str] = ['context', 'context_pretty', 'phase', 'phenotype', 'setting', 'stage_or_status']
+    derived_columns: list[str] = []
 
-    enum_lookup = {
+    enum_lookup: dict[str, type] = {
         'intent': Contexts_IntentEnum,
         'risk_stratification': Contexts_Risk_stratificationEnum,
     }
@@ -1605,7 +1605,7 @@ class Contexts(EntityBase, Base):
     risk_stratification: Mapped[Optional[Contexts_Risk_stratificationEnum]] = mapped_column(Enum(Contexts_Risk_stratificationEnum), nullable=True)
     therapy_type: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
 
-    normalisation_groups = [
+    normalisation_groups: list[list[str]] = [
     ]
     context_items: Mapped[list['contexts_ContextMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     context_pretty_items: Mapped[list['contexts_Context_prettyMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
@@ -1690,12 +1690,12 @@ class Exclusions(EntityBase, Base):
     __tablename__ = 'exclusions'
     filename = 'exclusions.csv'
     natural_key_columns = ['pmid']
-    source_defined_keys = ['pmid']
-    identity_keys = []
-    denormalised_columns = ['title']
-    derived_columns = []
+    source_defined_keys: list[str] = ['pmid']
+    identity_keys: list[str] = []
+    denormalised_columns: list[str] = ['title']
+    derived_columns: list[str] = []
 
-    enum_lookup = {
+    enum_lookup: dict[str, type] = {
         'rev1': Exclusions_Rev1Enum,
         'rev2': Exclusions_Rev2Enum,
     }
@@ -1708,7 +1708,7 @@ class Exclusions(EntityBase, Base):
     rev3: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     year: Mapped[str] = mapped_column(String(255), nullable=False)
 
-    normalisation_groups = [
+    normalisation_groups: list[list[str]] = [
     ]
     title_items: Mapped[list['exclusions_TitleMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     pmid_obj: Mapped[Optional['Inclusions']] = sa_relationship(
@@ -1735,12 +1735,12 @@ class Inclusions(EntityBase, Base):
     __tablename__ = 'inclusions'
     filename = 'inclusions.csv'
     natural_key_columns = ['pmid']
-    source_defined_keys = ['pmid']
-    identity_keys = []
-    denormalised_columns = ['reason_note', 'ref_type']
-    derived_columns = []
+    source_defined_keys: list[str] = ['pmid']
+    identity_keys: list[str] = []
+    denormalised_columns: list[str] = ['reason_note', 'ref_type']
+    derived_columns: list[str] = []
 
-    enum_lookup = {
+    enum_lookup: dict[str, type] = {
         'reason': Inclusions_ReasonEnum,
     }
 
@@ -1748,7 +1748,7 @@ class Inclusions(EntityBase, Base):
     pmid: Mapped[int] = mapped_column(BigInteger, primary_key=True, nullable=False, default=-1)
     reason: Mapped[Inclusions_ReasonEnum] = mapped_column(Enum(Inclusions_ReasonEnum), nullable=False)
 
-    normalisation_groups = [
+    normalisation_groups: list[list[str]] = [
     ]
     reason_note_items: Mapped[list['inclusions_Reason_noteMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     ref_type_items: Mapped[list['inclusions_Ref_typeMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
@@ -1790,16 +1790,16 @@ class SigBranchTypes(EntityBase, Base):
 
     filename = 'sig_branch_types.csv'
     natural_key_columns = ['value']
-    source_defined_keys = ['value']
-    identity_keys = []
-    denormalised_columns = ['description']
-    derived_columns = []
+    source_defined_keys: list[str] = ['value']
+    identity_keys: list[str] = []
+    denormalised_columns: list[str] = ['description']
+    derived_columns: list[str] = []
 
-    enum_lookup = {}
+    enum_lookup: dict[str, type] = {}
 
     value: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
 
-    normalisation_groups = [
+    normalisation_groups: list[list[str]] = [
     ]
     description_items: Mapped[list['sig_branch_types_DescriptionMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
 
@@ -1815,12 +1815,12 @@ class Units(EntityBase, Base):
     __tablename__ = 'units'
     filename = 'units.csv'
     natural_key_columns = ['unit']
-    source_defined_keys = ['unit', 'concept_code']
-    identity_keys = []
-    denormalised_columns = []
-    derived_columns = []
+    source_defined_keys: list[str] = ['unit', 'concept_code']
+    identity_keys: list[str] = []
+    denormalised_columns: list[str] = []
+    derived_columns: list[str] = []
 
-    enum_lookup = {}
+    enum_lookup: dict[str, type] = {}
 
     concept_code: Mapped[int] = mapped_column(BigInteger, nullable=False)
     date_added: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -1830,19 +1830,19 @@ class Units(EntityBase, Base):
     unit: Mapped[str] = mapped_column(String(255), primary_key=True, nullable=False, default='')
     unit_type: Mapped[str] = mapped_column(String(255), nullable=False)
 
-    normalisation_groups = [
+    normalisation_groups: list[list[str]] = [
     ]
 
 class Variantblob(EntityBase, Base):
     __tablename__ = 'variantblob'
     filename = 'variant_blob.csv'
     natural_key_columns = ['version', 'chunk']
-    source_defined_keys = []
-    identity_keys = []
-    denormalised_columns = []
-    derived_columns = []
+    source_defined_keys: list[str] = []
+    identity_keys: list[str] = []
+    denormalised_columns: list[str] = []
+    derived_columns: list[str] = []
 
-    enum_lookup = {
+    enum_lookup: dict[str, type] = {
         'block': Variantblob_BlockEnum,
         'chunk_type': Variantblob_Chunk_typeEnum,
     }
@@ -1855,7 +1855,7 @@ class Variantblob(EntityBase, Base):
     order: Mapped[int] = mapped_column(BigInteger, nullable=False)
     version: Mapped[int] = mapped_column(BigInteger, primary_key=True, nullable=False, default=-1)
 
-    normalisation_groups = [
+    normalisation_groups: list[list[str]] = [
     ]
 
 __all__ = [

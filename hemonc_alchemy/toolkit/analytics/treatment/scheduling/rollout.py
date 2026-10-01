@@ -18,7 +18,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from decimal import Decimal, InvalidOperation
-from typing import Any
+from typing import Any, cast
 
 import pandas as pd  # type: ignore[import-untyped]
 
@@ -63,7 +63,9 @@ class CycleBlock:
     def is_contiguous(self) -> bool:
         if not self.cycle_numbers:
             return False
-        return len(self.cycle_numbers) == self.last_cycle - self.first_cycle + 1
+        first_cycle = cast(int, self.first_cycle)
+        last_cycle = cast(int, self.last_cycle)
+        return len(self.cycle_numbers) == last_cycle - first_cycle + 1
 
 
 @dataclass(frozen=True)
@@ -223,8 +225,9 @@ def anchor_blocks(
             )
             continue
         if index == 0:
+            first_cycle = cast(int, block.first_cycle)
             # Cycle numbers may continue when the preceding phase ends immediately before.
-            if block.first_cycle > 1 and preceding_cycle != block.first_cycle - 1:
+            if first_cycle > 1 and preceding_cycle != first_cycle - 1:
                 anchored.append(
                     AnchoredBlock(
                         block=block,
@@ -422,13 +425,14 @@ def _block_start(
     if anchored.anchor_kind == "overlap":
         # Every overlapping prior must imply the same start; picking just one
         # (as if the others didn't exist) would hide a real disagreement.
+        anchor_cycle = cast(int, anchored.anchor_cycle)
         implied: set[int | date] = set()
         for candidate in anchored.overlap_candidates:
             candidate_start = starts.get(id(candidate))
             if candidate_start is None:
                 continue
             try:
-                cycle_delta = anchored.anchor_cycle - min(candidate.cycle_numbers)
+                cycle_delta = anchor_cycle - min(candidate.cycle_numbers)
                 implied.add(
                     _advance(candidate_start, candidate, cycle_delta, selection=selection)
                 )
@@ -462,11 +466,13 @@ def _phase_end(
         starts[id(anchored.block)] = start
         if anchored.block.timing_indefinite is not None:
             continue
+        last_cycle = cast(int, anchored.block.last_cycle)
+        anchor_cycle = cast(int, anchored.anchor_cycle)
         try:
             end = _advance(
                 start,
                 anchored.block,
-                anchored.block.last_cycle - anchored.anchor_cycle + 1,
+                last_cycle - anchor_cycle + 1,
                 selection=selection,
             )
         except (TypeError, ValueError):
@@ -530,7 +536,7 @@ def _unresolved_block_events(
     decay_factor: float,
 ) -> list[TimedEvent]:
     output = []
-    cycle_numbers = sorted(block.cycle_numbers) or [None]
+    cycle_numbers: list[int | None] = cast(list[int | None], sorted(block.cycle_numbers)) or [None]
     for event in block.events:
         series = _event_series(event, decay_days=decay_days, decay_factor=decay_factor)
         if not series and event.choices:
@@ -570,6 +576,7 @@ def _resolved_block_events(
 ) -> list[TimedEvent]:
     output = []
     block = anchored.block
+    anchor_cycle = cast(int, anchored.anchor_cycle)
     for event in block.events:
         series = _event_series(event, decay_days=decay_days, decay_factor=decay_factor)
         if not series and event.choices:
@@ -586,7 +593,7 @@ def _resolved_block_events(
             cycle_start = _advance(
                 start,
                 block,
-                cycle_number - anchored.anchor_cycle,
+                cycle_number - anchor_cycle,
                 selection=selection,
             )
             for day, intensity in series.items():
@@ -629,12 +636,12 @@ def roll_out_phase(
     blocks still produce rows with null timeline values and an explicit status.
     """
 
-    block_list = list(blocks)
-    anchored = (
-        block_list
-        if all(isinstance(block, AnchoredBlock) for block in block_list)
-        else anchor_blocks(block_list)  # type: ignore[arg-type]
-    )
+    block_list: list[CycleBlock | AnchoredBlock] = list(blocks)
+    anchored: list[AnchoredBlock]
+    if all(isinstance(block, AnchoredBlock) for block in block_list):
+        anchored = cast(list[AnchoredBlock], block_list)
+    else:
+        anchored = anchor_blocks(cast(list[CycleBlock], block_list))
     starts: dict[int, int | date] = {}
     ends: dict[int, int | date] = {}
     output: list[TimedEvent] = []
@@ -654,7 +661,7 @@ def roll_out_phase(
                     start,
                     block,
                     1 if block.timing_indefinite is not None
-                    else block.last_cycle - anchored_block.anchor_cycle + 1,
+                    else cast(int, block.last_cycle) - cast(int, anchored_block.anchor_cycle) + 1,
                     selection=cycle_length_selection,
                 )
             except (TypeError, ValueError):
@@ -730,7 +737,10 @@ def _phase_order(
         status = f"unresolved: {reason}"
         return [(phase, events, status) for phase, events in groups], status
 
-    ordered = sorted(groups, key=lambda item: phase_steps[item[0]])
+    resolved_steps: dict[Any, int] = {
+        phase: step for phase, step in phase_steps.items() if step is not None
+    }
+    ordered = sorted(groups, key=lambda item: resolved_steps[item[0]])
     return [(phase, events, "resolved") for phase, events in ordered], "resolved"
 
 
@@ -895,51 +905,51 @@ def roll_out_variant(
             timeline_failure = _phase_end_failure(blocks)
         if phase_end is not None and timeline_failure is None:
             phase_start = phase_end
-            previous_last_cycle = max(block.last_cycle for block in blocks)
+            previous_last_cycle = max(cast(int, block.last_cycle) for block in blocks)
         else:
             previous_last_cycle = None
         if optional_cycles:
             optional_assumptions.append(phase_optional_status)
 
     records = []
-    for timed, phase_elapsed_day in all_timed:
-        event = timed.schedule_event
-        sig_class = sig_class_value(event.sig)
+    for timed_event, phase_elapsed_day in all_timed:
+        schedule_event = timed_event.schedule_event
+        sig_class = sig_class_value(schedule_event.sig)
         modality = (
             "radiation" if sig_class == RAD_SIG_CLASS_VALUE
             else "systemic" if sig_class is not None else None
         )
         if systemic_only and modality == "radiation":
             continue
-        drug = event.drug_object
+        drug = schedule_event.drug_object
         records.append(
             {
                 "variant_cui": variant.variant_cui,
                 "variant": variant.variant,
-                "phase": timed.phase,
-                "phase_step": timed.phase_step,
-                "cycle_number": timed.cycle_number,
-                "sig_id": event.sig.id,
-                "timing_sequence": event.timing_sequence,
-                "cycle_length_lb": event.cycle_length_lb,
-                "cycle_length_ub": event.cycle_length_ub,
-                "cycle_length_unit": event.cycle_length_unit,
+                "phase": timed_event.phase,
+                "phase_step": timed_event.phase_step,
+                "cycle_number": timed_event.cycle_number,
+                "sig_id": schedule_event.sig.id,
+                "timing_sequence": schedule_event.timing_sequence,
+                "cycle_length_lb": schedule_event.cycle_length_lb,
+                "cycle_length_ub": schedule_event.cycle_length_ub,
+                "cycle_length_unit": schedule_event.cycle_length_unit,
                 "cycle_length_selection": cycle_length_selection,
-                "route_group": event.route_group,
+                "route_group": schedule_event.route_group,
                 "modality": modality,
-                "component_cui": event.sig.component_cui,
-                "component": event.sig.component,
+                "component_cui": schedule_event.sig.component_cui,
+                "component": schedule_event.sig.component,
                 "drug_cui": drug.drug_cui if drug is not None else None,
                 "drug": drug.drug if drug is not None else None,
-                "day": timed.day,
-                "elapsed_day": timed.elapsed_day,
+                "day": timed_event.day,
+                "elapsed_day": timed_event.elapsed_day,
                 "phase_elapsed_day": phase_elapsed_day,
-                "calendar_date": timed.calendar_date,
-                "intensity": timed.intensity,
-                "optional": timed.optional,
-                "day_indefinite": event.indefinite,
-                "cycle_indefinite": timed.cycle_indefinite,
-                "timing_status": timed.timing_status,
+                "calendar_date": timed_event.calendar_date,
+                "intensity": timed_event.intensity,
+                "optional": timed_event.optional,
+                "day_indefinite": schedule_event.indefinite,
+                "cycle_indefinite": timed_event.cycle_indefinite,
+                "timing_status": timed_event.timing_status,
             }
         )
     columns = [

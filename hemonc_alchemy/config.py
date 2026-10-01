@@ -7,7 +7,7 @@ from __future__ import annotations
 from typing import Annotated, ClassVar
 
 import sqlalchemy as sa
-from oa_configurator import (
+from oa_configurator import (  # type: ignore[import-untyped]  # no py.typed marker upstream
     GenericDatabaseConfig,
     PackageConfigBase,
     RefTo,

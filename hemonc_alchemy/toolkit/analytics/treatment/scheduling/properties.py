@@ -207,15 +207,16 @@ def administration_frame(
     | `drug_cui`, `drug` | the drug, by identifier and by name |
     | `day` | day of cycle; can be negative for lead-in dosing |
     | `elapsed_day` | variant-relative day when cross-cycle timing resolves |
-    | `intensity` | 1.0 on a dosing day, tapering over `decay_days` after |
+    | `intensity` | 1.0 on a dosing day, decaying (floored, never 0) over `decay_days` after |
     | `optional` | whether the dosing day itself was marked optional |
     | `indefinite` | day-level marker when days continue past those stated |
     | `cycle_indefinite` | cycle-level marker when cycles continue past those stated |
     | `timing_status` | whether the rollout is resolved or needs review |
 
-    `intensity` tapers after each dose by `decay_factor` per day for
-    `decay_days`, so a treatment day and the days it encroaches on both
-    register. Set `decay_days=0` for dosing days alone.
+    `intensity` decays after each dose by `exp(-decay_factor * offset)`,
+    floored so it never reaches 0; `decay_days` is how many decayed rows
+    past the dose get computed, not a point where decay stops. Set
+    `decay_days=0` for dosing days alone.
 
     Rows whose route is unrecognised or not specified are excluded, as are
     sigs with no resolvable days -- including open-ended `EOC` ranges, so a

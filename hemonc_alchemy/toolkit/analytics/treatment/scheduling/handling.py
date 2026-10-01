@@ -8,12 +8,16 @@ itself.
 from __future__ import annotations
 
 import logging
+import math
 import re
 from dataclasses import dataclass
 
 from .tokens import TOKEN_RE, Choice, Day, Indefinite, Range
 
 logger = logging.getLogger(__name__)
+
+# Floor for the post-dose decay curve below, matched to regimen_matching's RG_uniq reference data.
+_DECAY_FLOOR = 0.1
 
 
 @dataclass(frozen=True)
@@ -48,11 +52,14 @@ def apply_sig_to_series(
     decay_days: int = 2,
     decay_factor: float = 0.5,
 ):
-    """Mark `days` on a per-day intensity series, tapering off afterwards.
+    """Mark `days` on a per-day intensity series, decaying afterwards.
 
-    Each dosing day is scored 1.0 (0.5 if optional) and the following
-    `decay_days` are scored progressively lower, so a treatment day and its
-    immediate aftermath both register. Used to build the administration
+    Each dosing day is scored 1.0 (0.5 if optional); each of the following
+    `decay_days` is scored `exp(-decay_factor * offset)` times that base,
+    floored at `_DECAY_FLOOR` so a dose's influence never reaches zero.
+    `decay_days` only truncates how many decay rows get computed/emitted --
+    since the curve floors instead of hitting zero, it no longer has a
+    natural stopping point of its own. Used to build the administration
     matrices in properties.py. Mutates `series` in place.
     """
     for day in days:
@@ -60,7 +67,7 @@ def apply_sig_to_series(
         d0 = day.value
 
         for offset in range(decay_days + 1):
-            value = base * (decay_factor ** offset)
+            value = base if offset == 0 else max(base * math.exp(-decay_factor * offset), _DECAY_FLOOR)
             series[d0 + offset] = max(series[d0 + offset], value)
 
 

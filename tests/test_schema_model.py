@@ -295,7 +295,11 @@ class TestSoftRelationshipsSkipDenormalisedColumns:
     def _registry(self) -> Registry:
         indications = TableMeta(
             name="indications", description="", kind="content", maturity="prod",
-            pk_columns=[], columns={"condition": object(), "regimen_cui": object()},
+            pk_columns=[],
+            columns={
+                "condition": ColumnSpec(name="condition", type="String"),
+                "regimen_cui": ColumnSpec(name="regimen_cui", type="String"),
+            },
             denormalised_columns=["regimen_cui"],
         )
         indications.normalised_tables = [
@@ -303,7 +307,7 @@ class TestSoftRelationshipsSkipDenormalisedColumns:
         ]
         regimens = TableMeta(
             name="regimens", description="", kind="content", maturity="prod",
-            pk_columns=[], columns={"regimen_cui": object()},
+            pk_columns=[], columns={"regimen_cui": ColumnSpec(name="regimen_cui", type="String")},
             source_defined_keys=["regimen_cui"],
         )
         return Registry(tables={"indications": indications, "regimens": regimens})
