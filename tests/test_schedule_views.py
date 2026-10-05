@@ -349,3 +349,47 @@ class TestRealVariantReconciliation:
         view = build_schedule_view(variant)
         assert len(view.events) == 4
         assert {e.instruction.sig_id for e in view.events} == {35, 36}
+
+
+@pytest.mark.parametrize("days,cycles", [
+    ("[1,100000000000000000000,1]", "1"),
+    ("1", "[1,1000000000,1]"),
+    ("[1,101,1]", "[1,100,1]"),
+])
+def test_limit_is_checked_before_rollout(session, monkeypatch, days, cycles):
+    import hemonc_alchemy.toolkit.analytics.treatment.scheduling.views as views
+
+    variant = _variant(session, 11)
+    _sig(session, sig_id=1, variant_cui=11, drug_cui=1, route="INTRAVENOUS",
+         alldays=days, timing_sequence=cycles)
+    def forbidden_rollout(*args, **kwargs):
+        pytest.fail("Over-limit source reached rollout")
+    monkeypatch.setattr(views, "roll_out_variant", forbidden_rollout)
+    result = build_schedule_view(variant)
+    assert result.bounded
+    assert result.coverage.represented_instructions is None
+    assert any(d.category == DiagnosticCategory.LIMIT_EXCEEDED for d in result.diagnostics)
+
+
+def test_limit_allows_exact_boundary_and_counts_across_sigs(session, monkeypatch):
+    import hemonc_alchemy.toolkit.analytics.treatment.scheduling.views as views
+
+    monkeypatch.setattr(views, "EVENT_LIMIT", 4)
+    variant = _variant(session, 12)
+    _sig(session, sig_id=1, variant_cui=12, drug_cui=1, route="INTRAVENOUS",
+         alldays="1,8", timing_sequence="1,2")
+    assert len(build_schedule_view(variant).events) == 4
+    _sig(session, sig_id=2, variant_cui=12, drug_cui=1, route="INTRAVENOUS",
+         alldays="1", timing_sequence="1")
+    session.expire_all()
+    assert build_schedule_view(variant).bounded
+
+
+def test_calendar_overflow_preserves_source_fallback(session):
+    variant = _variant(session, 13)
+    _sig(session, sig_id=1, variant_cui=13, drug_cui=1, route="INTRAVENOUS",
+         alldays="1,8", timing_sequence="1,2", cycle_length_lb="21", cycle_length_ub="21",
+         cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY)
+    result = build_schedule_view(variant, SchedulePolicy(start_date=date(9999, 12, 31)))
+    assert result.bounded
+    assert any(d.category == DiagnosticCategory.UNRESOLVED_TIMING for d in result.diagnostics)

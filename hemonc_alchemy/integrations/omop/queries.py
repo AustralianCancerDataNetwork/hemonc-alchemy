@@ -208,10 +208,18 @@ COMPONENT_ROLE_RELATIONSHIPS = (
     "Cytotoxic chemo of",
     "Targeted therapy of",
     "Immunotherapy of",
-    "Supportive med of",
-    "Steroid tx of",
     "Local therapy of",
+    "Endocrine tx of",
+    "Antineoplastic of",
+    "Radiotherapy of",
+    "AB-drug cjgt of",
+    "Radioconjugate of",
+    "Pept-drug cjgt of",
+    "Steroid tx of",
+    "Supportive med of",
     "Immunosuppressor of",
+    "Growth factor of",
+    "Anticoag tx of",
 )
 
 

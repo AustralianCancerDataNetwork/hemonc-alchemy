@@ -25,8 +25,9 @@ from .diagnostics import (
     diagnose_timing_status,
     diagnose_variant,
 )
-from .handling import Indefinite
+from .handling import Indefinite, parse_token, tokenize_all_days
 from .rollout import roll_out_variant
+from .tokens import Choice, Day, Range
 
 EVENT_LIMIT = 10_000
 MAX_COMPARED_VARIANTS = 4
@@ -223,6 +224,16 @@ def _assumptions(diagnostics: list[Diagnostic]) -> tuple[str, ...]:
 
 def _roll_out_or_diagnose(variant, policy: SchedulePolicy) -> tuple[pd.DataFrame | None, Diagnostic | None]:
     try:
+        if _exceeds_expansion_limit(variant):
+            return None, Diagnostic(
+                code=DiagnosticCode.EVENT_LIMIT_EXCEEDED,
+                category=DiagnosticCategory.LIMIT_EXCEEDED,
+                severity=DiagnosticSeverity.WARNING,
+                message=(
+                    f"source expansion may exceed {EVENT_LIMIT} events; "
+                    "timeline withheld before expansion, source dosing remains available"
+                ),
+            )
         frame = roll_out_variant(
             variant,
             start_date=policy.start_date,
@@ -237,6 +248,13 @@ def _roll_out_or_diagnose(variant, policy: SchedulePolicy) -> tuple[pd.DataFrame
             severity=DiagnosticSeverity.ERROR,
             message=f"rollout failed: {exc}; source dosing instructions remain available",
         )
+    except OverflowError:
+        return None, Diagnostic(
+            code=DiagnosticCode.TIMING_UNRESOLVED,
+            category=DiagnosticCategory.UNRESOLVED_TIMING,
+            severity=DiagnosticSeverity.ERROR,
+            message="timing exceeds the supported numeric/calendar range; source dosing remains available",
+        )
     if len(frame) > EVENT_LIMIT:
         return None, Diagnostic(
             code=DiagnosticCode.EVENT_LIMIT_EXCEEDED,
@@ -248,6 +266,40 @@ def _roll_out_or_diagnose(variant, policy: SchedulePolicy) -> tuple[pd.DataFrame
             ),
         )
     return frame, None
+
+
+def _expression_size(value: str | None) -> int:
+    """Conservative size using the shared parser, without expanding numeric ranges.
+
+    Duplicate days may overcount; rejecting that source is preferable to allocating
+    an unbounded intermediate list. Choices cost one placeholder row each.
+    """
+    count = 0
+    for token in tokenize_all_days(value):
+        for item in parse_token(token):
+            if isinstance(item, (Day, Choice)):
+                count += 1
+            elif isinstance(item, Range) and isinstance(item.start, int) and isinstance(item.end, int):
+                # range raises for step=0, just as the normal expansion does.
+                try:
+                    count += len(range(item.start, item.end + 1, item.step))
+                except OverflowError:
+                    return EVENT_LIMIT + 1
+            if count > EVENT_LIMIT:
+                return count
+    return count
+
+
+def _exceeds_expansion_limit(variant) -> bool:
+    """Bound both parsed lists and their cross-cycle product before rollout."""
+    total = 0
+    for sig in variant.component_sigs:
+        days = _expression_size(sig.alldays)
+        cycles = _expression_size(sig.timing_sequence)
+        total += max(1, days) * max(1, cycles)
+        if total > EVENT_LIMIT:
+            return True
+    return False
 
 
 def build_schedule_view(variant, policy: SchedulePolicy = DEFAULT_SCHEDULE_POLICY) -> ScheduleView:

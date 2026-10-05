@@ -1,6 +1,7 @@
 """Optional read-only integration with OMOP vocabulary tables."""
 
 from .binding import OmopBinding, load_omop_binding, omop_available
+from .component_role import attach_component_roles
 from .diagnostics import (
     BiomarkerMappingDiagnostic,
     MappingCoverage,
@@ -41,6 +42,7 @@ __all__ = [
     "StandardConceptMapping",
     "SuspiciousMappingDiagnostic",
     "VocabularyVersion",
+    "attach_component_roles",
     "biomarker_qualifier_diagnostics",
     "component_class_hierarchy",
     "component_roles",

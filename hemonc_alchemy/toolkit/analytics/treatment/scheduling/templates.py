@@ -10,6 +10,7 @@ import pandas as pd  # type: ignore[import-untyped]
 
 from ....core.links import variant_condition_objects
 from ..classification import (
+    ComponentRole,
     is_endocrine_block,
     is_endocrine_regimen,
     is_supportive_block,
@@ -46,6 +47,9 @@ class CycleTemplate:
     dose_po: pd.DataFrame
     endocrine_regimen: bool
     supportive_regimen: bool
+    # Empty here -- needs a live OMOP session, so it's filled in afterward by
+    # `integrations.omop.component_role.attach_component_roles`.
+    drug_role: dict[str, ComponentRole]
 
 
 def _cycle_length_from_bound(lb: str, unit) -> int:
@@ -138,6 +142,7 @@ def cycle_template(variant) -> CycleTemplate:
         dose_po=_dose_matrix(schedule_events(variant), "PO", po_drug),
         endocrine_regimen=is_endocrine_regimen(variant),
         supportive_regimen=is_supportive_regimen(variant),
+        drug_role={},
     )
 
 
@@ -209,6 +214,7 @@ def _block_template(variant, block: CycleBlock, *, diseases) -> CycleTemplate:
         dose_po=_dose_matrix(block.events, "PO", po_drug),
         endocrine_regimen=is_endocrine_block(block.events),
         supportive_regimen=is_supportive_block(block.events),
+        drug_role={},
     )
 
 
