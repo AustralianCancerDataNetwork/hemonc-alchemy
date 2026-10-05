@@ -20,12 +20,12 @@ from weakref import WeakKeyDictionary
 
 from sqlalchemy import select
 
+from ...caching import cached_per_engine
 from ...integrations.omop.standardise import standardise_codes
 from ...model import Studies, Variants, variants_StudyMap
 from .catalogue.variants import latest_variant_ids
 from .condition_targets import (
     broader_codes,
-    cached_per_engine,
     condition_mappings,
     condition_parents,
     resolve_condition_targets,
@@ -110,8 +110,8 @@ def family_members(session: Any) -> dict[int, frozenset[int]]:
     return compute_family_members(condition_families(session), condition_parents(session))
 
 
-def variant_families(session: Any) -> dict[int, frozenset[int]]:
-    """Latest variants' families, via their studies' conditions; variants with no known condition are omitted."""
+def variant_conditions(session: Any) -> dict[int, frozenset[int]]:
+    """Latest variants' conditions, via their studies; variants with no study condition are omitted."""
     ranked = latest_variant_ids()
     rows = session.execute(
         select(Variants.variant_cui, Studies.condition_cui)
@@ -121,12 +121,21 @@ def variant_families(session: Any) -> dict[int, frozenset[int]]:
         .where(ranked.c.version_rank == 1)
         .distinct()
     ).all()
-    families = condition_families(session)
     result: dict[int, set[int]] = defaultdict(set)
     for variant_cui, condition_cui in rows:
-        if condition_cui is not None and int(condition_cui) in families:
-            result[int(variant_cui)] |= families[int(condition_cui)]
-    return {cui: frozenset(found) for cui, found in result.items() if found}
+        if condition_cui is not None:
+            result[int(variant_cui)].add(int(condition_cui))
+    return {cui: frozenset(found) for cui, found in result.items()}
+
+
+def variant_families(session: Any) -> dict[int, frozenset[int]]:
+    """Latest variants' families, via their studies' conditions; variants with no known condition are omitted."""
+    families = condition_families(session)
+    result = {
+        cui: frozenset(f for condition in conditions for f in families.get(condition, ()))
+        for cui, conditions in variant_conditions(session).items()
+    }
+    return {cui: found for cui, found in result.items() if found}
 
 
 @dataclass(frozen=True)
@@ -223,5 +232,6 @@ __all__ = [
     "family_concept_groups",
     "family_cuis",
     "family_members",
+    "variant_conditions",
     "variant_families",
 ]

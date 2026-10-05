@@ -1,7 +1,7 @@
 """Optional read-only integration with OMOP vocabulary tables."""
 
 from .binding import OmopBinding, load_omop_binding, omop_available
-from .component_role import attach_component_roles
+from .component_role import attach_component_roles, regimen_component_roles
 from .diagnostics import (
     BiomarkerMappingDiagnostic,
     MappingCoverage,
@@ -23,6 +23,7 @@ from .mapping import (
 from .queries import (
     COMPONENT_ROLE_RELATIONSHIPS,
     HemOncRelationship,
+    canonical_drug_ingredients,
     canonical_drug_names,
     component_class_hierarchy,
     component_roles,
@@ -49,6 +50,7 @@ __all__ = [
     "VocabularyVersion",
     "attach_component_roles",
     "biomarker_qualifier_diagnostics",
+    "canonical_drug_ingredients",
     "canonical_drug_names",
     "component_class_hierarchy",
     "component_roles",
@@ -61,6 +63,7 @@ __all__ = [
     "map_to_standard",
     "omop_available",
     "public_hemonc_cuis",
+    "regimen_component_roles",
     "regimen_modalities",
     "regimen_to_hemonc",
     "resolve_hemonc_concepts",

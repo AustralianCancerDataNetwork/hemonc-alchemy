@@ -10,37 +10,21 @@ from __future__ import annotations
 
 import csv
 from collections import defaultdict
-from collections.abc import Callable, Iterable, Mapping
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, replace
-from functools import wraps
 from pathlib import Path
 from typing import Any
-from weakref import WeakKeyDictionary
 
 import sqlalchemy as sa
 from sqlalchemy.orm import aliased
 
+from ...caching import cached_per_engine
 from ...integrations.omop.binding import load_omop_binding, omop_available
 from ...integrations.omop.standardise import StandardisedCode, standardise_codes
 from ...model import Conditions
 
 PATCHES_PATH = Path(__file__).with_name("condition_patches.csv")
 OVERRIDES_PATH = Path(__file__).with_name("condition_overrides.csv")
-
-def cached_per_engine[T](fn: Callable[[Any], T]) -> Callable[[Any], T]:
-    """Cache `fn(session)` per engine; the underlying tables never change within a process."""
-    store: WeakKeyDictionary[Any, T] = WeakKeyDictionary()
-
-    @wraps(fn)
-    def wrapper(session: Any) -> T:
-        bind = session.get_bind()
-        engine = getattr(bind, "engine", bind)
-        if engine not in store:
-            store[engine] = fn(session)
-        return store[engine]
-
-    wrapper.cache_clear = store.clear  # type: ignore[attr-defined]
-    return wrapper
 
 
 @dataclass(frozen=True)
@@ -214,7 +198,6 @@ __all__ = [
     "accepted_snomed_codes",
     "apply_patches",
     "broader_codes",
-    "cached_per_engine",
     "condition_mappings",
     "condition_names",
     "condition_parents",

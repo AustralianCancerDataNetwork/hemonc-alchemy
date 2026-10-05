@@ -70,7 +70,9 @@ def omop_available(
     try:
         # Use a separate connection so a failed probe cannot leave the
         # caller's Session transaction in an aborted state.
-        with session.get_bind().connect() as connection:
+        bind = session.get_bind()
+        engine = getattr(bind, "engine", bind)
+        with engine.connect() as connection:
             connection.execute(
                 sa.select(binding.concept.concept_id).limit(1)
             ).first()

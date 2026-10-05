@@ -10,6 +10,7 @@ from typing import Any
 import sqlalchemy as sa
 from sqlalchemy.orm import aliased
 
+from hemonc_alchemy.caching import cached_per_engine
 from hemonc_alchemy.model import Conditions, Drugs, Regimens
 
 from .binding import load_omop_binding, omop_available
@@ -182,24 +183,34 @@ def _canonical_by_ingredient(rows: Iterable[Any], biosimilar_cuis: set[str]) -> 
     return result
 
 
+@cached_per_engine
+def _canonical_labels(session: Any) -> dict[int, str]:
+    # Over every mapping: whether a drug is single-ingredient can't be judged from a subset of ingredients.
+    return _canonical_by_ingredient(_drug_ingredient_rows(session), _biosimilar_cuis(session))
+
+
 def canonical_drug_names(session: Any, ingredient_ids: Iterable[int]) -> dict[int, str]:
     """RxNorm ingredient concept ID -> its one canonical HemOnc drug name; unmapped ingredients are omitted."""
 
-    values = tuple(dict.fromkeys(int(value) for value in ingredient_ids))
-    if not values:
-        return {}
-    return _canonical_by_ingredient(_drug_ingredient_rows(session, values), _biosimilar_cuis(session))
+    labels = _canonical_labels(session)
+    return {i: labels[i] for i in dict.fromkeys(int(value) for value in ingredient_ids) if i in labels}
 
 
 def hemonc_drug_canonical_names(session: Any) -> dict[str, tuple[str, ...]]:
     """HemOnc drug name -> the canonical names of its RxNorm ingredient(s); drugs with no mapping are omitted."""
 
     rows = _drug_ingredient_rows(session)
-    canonical = _canonical_by_ingredient(rows, _biosimilar_cuis(session))
+    canonical = _canonical_labels(session)
     result: dict[str, set[str]] = {}
     for _cui, name, ingredient_id, _ingredient_name in rows:
         result.setdefault(str(name), set()).add(canonical[int(ingredient_id)])
     return {name: tuple(sorted(found)) for name, found in result.items()}
+
+
+def canonical_drug_ingredients(session: Any) -> dict[str, int]:
+    """Canonical drug name -> its RxNorm ingredient concept ID; the inverse of `canonical_drug_names`."""
+
+    return {name: ingredient_id for ingredient_id, name in _canonical_labels(session).items()}
 
 
 def regimen_to_hemonc(

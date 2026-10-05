@@ -165,7 +165,7 @@ def test_biosimilars_and_combinations_share_one_canonical_drug_identity():
         # RxNorm ingredients: rituximab (11), hyaluronidase (12), aflibercept (13).
         drugs = [(101, "Rituximab", "446"), (102, "Rituximab-abbs", "445"), (103, "Rituximab and hyaluronidase human", "447"),
                  (104, "Ziv-aflibercept", "500")]
-        ingredients = [(111, "rituximab"), (112, "hyaluronidase"), (113, "aflibercept")]
+        ingredients = [(111, "rituximab ingredient"), (112, "hyaluronidase"), (113, "aflibercept")]
         for cid, name, code in drugs:
             session.execute(sa.text(
                 "INSERT INTO concept (concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, concept_code)"
@@ -185,6 +185,8 @@ def test_biosimilars_and_combinations_share_one_canonical_drug_identity():
         assert canonical_drug_names(session, [111, 112, 113, 999]) == {
             111: "Rituximab", 112: "Hyaluronidase", 113: "Ziv-aflibercept",
         }
+        # Asked alone, rituximab keeps its label: the combination still counts as multi-ingredient.
+        assert canonical_drug_names(session, [111]) == {111: "Rituximab"}
         names = hemonc_drug_canonical_names(session)
         assert names["Rituximab-abbs"] == ("Rituximab",)
         assert names["Rituximab and hyaluronidase human"] == ("Hyaluronidase", "Rituximab")
