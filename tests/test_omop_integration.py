@@ -11,9 +11,12 @@ from hemonc_alchemy.integrations.omop import (
     coverage_report,
     drug_to_rxnorm_ingredient,
     load_omop_binding,
+    map_from_standard,
     map_to_standard,
     omop_available,
     resolve_hemonc_concepts,
+    rxnorm_ingredient_to_drug,
+    snomed_to_condition,
     vocabulary_versions,
 )
 
@@ -75,6 +78,7 @@ def test_absent_omop_is_a_noop():
     assert not omop_available(session)
     assert resolve_hemonc_concepts(session, [614]) == []
     assert map_to_standard(session, [614]) == []
+    assert map_from_standard(session, [2]) == []
     session.close()
     engine.dispose()
 
@@ -100,6 +104,91 @@ def test_present_omop_preserves_identifiers_and_mapping_rows():
         assert report.mapped_cuis == 1
         assert report.unmatched_cuis == ("999",)
         assert {v.vocabulary_id for v in vocabulary_versions(session)} == {"HemOnc", "SNOMED", "RxNorm"}
+    finally:
+        session.close()
+        engine.dispose()
+
+
+def test_snomed_to_condition_is_the_reverse_of_condition_to_snomed():
+    if load_omop_binding() is None:
+        pytest.skip("the optional omop extra is not installed")
+    engine, session = _sqlite_omop_session()
+    try:
+        # A non-Condition HemOnc source mapped onto the same SNOMED concept must not leak through.
+        session.execute(sa.text(
+            "INSERT INTO concept (concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, concept_code)"
+            " VALUES (6, 'Stray drug', 'Drug', 'HemOnc', 'Component', '777')"
+        ))
+        session.execute(sa.text(
+            "INSERT INTO concept_relationship (concept_id_1, concept_id_2, relationship_id) VALUES (6, 2, 'Maps to')"
+        ))
+        session.commit()
+        snomed_concept_id = condition_to_snomed(session, [614])[0].target.concept_id
+        back = snomed_to_condition(session, [snomed_concept_id])
+        assert [m.hemonc_cui for m in back] == ["614"]
+        assert {m.hemonc_cui for m in map_from_standard(session, [snomed_concept_id])} == {"614", "777"}
+        assert snomed_to_condition(session, [999999]) == []
+    finally:
+        session.close()
+        engine.dispose()
+
+
+def test_rxnorm_ingredient_to_drug_is_the_reverse_of_drug_to_rxnorm_ingredient():
+    if load_omop_binding() is None:
+        pytest.skip("the optional omop extra is not installed")
+    engine, session = _sqlite_omop_session()
+    try:
+        forward = drug_to_rxnorm_ingredient(session, [105])
+        rxnorm_concept_id = forward[0].target.concept_id
+        back = rxnorm_ingredient_to_drug(session, [rxnorm_concept_id])
+        assert len(back) == 1
+        assert back[0].hemonc_cui == "105"
+        assert back[0].hemonc_concept.concept_name == "Cisplatin"
+        # Unknown/unmapped standard concept ids resolve to no rows.
+        assert rxnorm_ingredient_to_drug(session, [999999]) == []
+    finally:
+        session.close()
+        engine.dispose()
+
+
+def test_biosimilars_and_combinations_share_one_canonical_drug_identity():
+    from hemonc_alchemy.integrations.omop import (
+        canonical_drug_names,
+        hemonc_drug_canonical_names,
+    )
+
+    if load_omop_binding() is None:
+        pytest.skip("the optional omop extra is not installed")
+    engine, session = _sqlite_omop_session()
+    try:
+        # HemOnc: Rituximab (1), Rituximab-abbs (2), Rituximab and hyaluronidase human (3), Ziv-aflibercept (4);
+        # RxNorm ingredients: rituximab (11), hyaluronidase (12), aflibercept (13).
+        drugs = [(101, "Rituximab", "446"), (102, "Rituximab-abbs", "445"), (103, "Rituximab and hyaluronidase human", "447"),
+                 (104, "Ziv-aflibercept", "500")]
+        ingredients = [(111, "rituximab"), (112, "hyaluronidase"), (113, "aflibercept")]
+        for cid, name, code in drugs:
+            session.execute(sa.text(
+                "INSERT INTO concept (concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, concept_code)"
+                " VALUES (:i, :n, 'Drug', 'HemOnc', 'Component', :c)"), {"i": cid, "n": name, "c": code})
+        for cid, name in ingredients:
+            session.execute(sa.text(
+                "INSERT INTO concept (concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, standard_concept, concept_code)"
+                " VALUES (:i, :n, 'Drug', 'RxNorm', 'Ingredient', 'S', :c)"), {"i": cid, "n": name, "c": str(cid)})
+        for source, target in [(101, 111), (102, 111), (103, 111), (103, 112), (104, 113)]:
+            session.execute(sa.text(
+                "INSERT INTO concept_relationship (concept_id_1, concept_id_2, relationship_id) VALUES (:a, :b, 'Maps to')"),
+                {"a": source, "b": target})
+        session.execute(sa.text(
+            "INSERT INTO concept_relationship (concept_id_1, concept_id_2, relationship_id) VALUES (102, 101, 'Biosimilar of')"))
+        session.commit()
+
+        assert canonical_drug_names(session, [111, 112, 113, 999]) == {
+            111: "Rituximab", 112: "Hyaluronidase", 113: "Ziv-aflibercept",
+        }
+        names = hemonc_drug_canonical_names(session)
+        assert names["Rituximab-abbs"] == ("Rituximab",)
+        assert names["Rituximab and hyaluronidase human"] == ("Hyaluronidase", "Rituximab")
+        assert names["Ziv-aflibercept"] == ("Ziv-aflibercept",)
     finally:
         session.close()
         engine.dispose()
