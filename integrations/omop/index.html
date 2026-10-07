@@ -1482,7 +1482,7 @@
 
 
 <h1 id="omop-integration">OMOP integration<a class="headerlink" href="#omop-integration" title="Permanent link">&para;</a></h1>
-<p>The OMOP bridge is an optional read-only boundary for deployments that keep a HemOnc database and an OMOP vocabulary in the same PostgreSQL database. It does not turn HemOnc records into patient-level OMOP events, and it does not change the generated HemOnc model.</p>
+<p>The OMOP bridge provides optional read-only queries between HemOnc source records and an OMOP vocabulary. Individual query helpers specify whether they use one database session or accept separate source and vocabulary sessions.</p>
 <h2 id="the-mental-model">The mental model<a class="headerlink" href="#the-mental-model" title="Permanent link">&para;</a></h2>
 <p>There are three identifiers in a typical mapping:</p>
 <table>
@@ -1550,10 +1550,11 @@ Cisplatin (CUI 105)
 <li><code>regimen_modalities()</code> reads <code>Has modality</code> links.</li>
 <li><code>component_roles()</code> reads the directed component-role relationships and keeps their labels separate.</li>
 <li><code>component_class_hierarchy()</code> reads direct <code>Is a</code> links to <code>Component Class</code> nodes.</li>
+<li><code>main_class_ancestry()</code> combines source drug groups with the hierarchy to classify endocrine and growth-factor ancestry. See <a href="../../toolkit/treatment/#classify-drug-ancestry">Classify drug ancestry</a> for querying, applying and inspecting the results.</li>
 </ul>
 <p>These are curated HemOnc taxonomy edges, not a replacement for <code>public.indications</code>. Regulatory indication data in the HemOnc table is richer and has different semantics and coverage.</p>
 <h2 id="database-boundary">Database boundary<a class="headerlink" href="#database-boundary" title="Permanent link">&para;</a></h2>
-<p>The functions on this page perform same-database joins. If HemOnc and OMOP are in separate databases, query the source CUIs first and resolve them with a second OMOP session. PostgreSQL being on the same server is not enough for an ordinary cross-database SQL join; use an explicit application-level bridge, an FDW, or a materialized mapping subset.</p>
+<p>The mapping and relationship query helpers perform same-database joins. If HemOnc and OMOP are in separate databases, query the source CUIs first and resolve them with a second OMOP session. <code>main_class_ancestry(source_session, omop_session=vocabulary_session)</code> handles this separation directly, combining the query results in Python. PostgreSQL being on the same server is not enough for an ordinary cross-database SQL join; other queries require an explicit application-level bridge, an FDW, or a materialized mapping subset.</p>
 
 
 

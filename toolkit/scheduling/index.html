@@ -893,6 +893,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#roll-out-a-complete-variant-timeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Roll out a complete variant timeline
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1347,6 +1358,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#roll-out-a-complete-variant-timeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Roll out a complete variant timeline
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1425,6 +1447,11 @@
 <span class="n">resolved</span><span class="o">.</span><span class="n">indefinite</span> <span class="c1"># Indefinite(kind=&quot;+n&quot;, max_days=None)</span>
 </code></pre></div>
 <p>An indefinite marker is preserved. The explicit days are only the portion represented in the source expression; inspect <code>resolved.indefinite</code> before treating the list as a complete schedule. Optional days remain marked as optional rather than being silently discarded. Unreadable tokens are reported and dropped according to the parser's documented behavior, so batch analyses should retain parse failures as a data-quality measure.</p>
+<p>A <code>1|2</code>-style token means "one of these, unspecified which" and is kept in <code>resolved.choices</code> rather than expanded into <code>days</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">resolved</span> <span class="o">=</span> <span class="n">resolve_all_days</span><span class="p">(</span><span class="s2">&quot;7|8|9|10|11|12|13|14|15&quot;</span><span class="p">)</span>
+<span class="n">resolved</span><span class="o">.</span><span class="n">days</span>     <span class="c1"># ()</span>
+<span class="n">resolved</span><span class="o">.</span><span class="n">choices</span>  <span class="c1"># (Choice([7, 8, 9, 10, 11, 12, 13, 14, 15]),)</span>
+</code></pre></div>
 <h2 id="build-an-administration-frame">Build an administration frame<a class="headerlink" href="#build-an-administration-frame" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.toolkit.analytics.treatment.scheduling</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">administration_frame</span><span class="p">,</span>
@@ -1435,10 +1462,29 @@
 <span class="n">clinic</span> <span class="o">=</span> <span class="n">frame</span><span class="p">[</span><span class="n">frame</span><span class="o">.</span><span class="n">route_group</span> <span class="o">==</span> <span class="s2">&quot;IV&quot;</span><span class="p">]</span>
 <span class="n">matrix</span> <span class="o">=</span> <span class="n">administration_matrix</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
 </code></pre></div>
-<p>The frame has one row per drug per explicit cycle day. <code>decay_days=0</code> gives dosing days only; the default decay adds an intensity tail to the following days for occupancy-style views. Passing a list of variants produces one combined frame, which should be grouped by <code>variant_cui</code>, not the human-readable <code>variant</code> label.</p>
+<p>The frame has one row per drug per explicit cycle day, repeated once per cycle where cross-cycle timing resolves (see <code>elapsed_day</code> below). <code>len(frame)</code> isn't a count of drug-days as a result -- use <code>frame["day"].nunique()</code> per drug for that. <code>decay_days=0</code> gives dosing days only; the default decay adds an intensity tail to the following days for occupancy-style views. Decay rows have <code>intensity &lt; 1</code> and are not extra doses. Passing a list of variants produces one combined frame, which should be grouped by <code>variant_cui</code>, not the human-readable <code>variant</code> label.</p>
+<p>In <code>administration_frame</code>, <code>indefinite</code> marks days continuing beyond the explicit days in <code>alldays</code>, while <code>cycle_indefinite</code> marks cycles continuing beyond the explicit cycles in <code>timing_sequence</code>. These columns preserve separate source markers; neither extends the returned rows.</p>
 <p><code>route_group == "IV"</code> is a historical shorthand for clinic-administered routes and includes more than intravenous administration. <code>"PO"</code> represents home-administered routes. Unrecognized or unspecified routes are excluded from administration projections rather than guessed at, so the frame may cover less than the source variant.</p>
 <h2 id="preserve-source-shaped-values">Preserve source-shaped values<a class="headerlink" href="#preserve-source-shaped-values" title="Permanent link">&para;</a></h2>
 <p><code>ScheduleEvent</code> keeps fields such as dose and cycle-length bounds in their source form. A value like <code>"1.5-2"</code> needs an application decision before it becomes numeric. Generated enum fields remain enum members. Convert these values at the boundary where your application can state its handling of null, uncertain, or non-numeric source values.</p>
+<h2 id="roll-out-a-complete-variant-timeline">Roll out a complete variant timeline<a class="headerlink" href="#roll-out-a-complete-variant-timeline" title="Permanent link">&para;</a></h2>
+<p><code>roll_out_variant</code> composes explicit cycle numbers, block-specific cycle lengths, and phase boundaries into a deterministic treatment timeline:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.toolkit.analytics.treatment.scheduling</span><span class="w"> </span><span class="kn">import</span> <span class="n">roll_out_variant</span>
+
+<span class="n">timeline</span> <span class="o">=</span> <span class="n">roll_out_variant</span><span class="p">(</span><span class="n">variant</span><span class="p">)</span>
+<span class="n">timeline</span><span class="p">[[</span><span class="s2">&quot;sig_id&quot;</span><span class="p">,</span> <span class="s2">&quot;component&quot;</span><span class="p">,</span> <span class="s2">&quot;phase&quot;</span><span class="p">,</span> <span class="s2">&quot;cycle_number&quot;</span><span class="p">,</span> <span class="s2">&quot;day&quot;</span><span class="p">,</span> <span class="s2">&quot;phase_elapsed_day&quot;</span><span class="p">,</span> <span class="s2">&quot;elapsed_day&quot;</span><span class="p">,</span> <span class="s2">&quot;timing_status&quot;</span><span class="p">]]</span>
+</code></pre></div>
+<p><code>elapsed_day</code> is an integer relative to variant start, where day 0 is the variant start. <code>phase_elapsed_day</code> is relative to the start of each phase, with day 0 at that phase's first explicit cycle. When a missing surgery or another unresolved boundary makes the variant-relative date unknown, <code>elapsed_day</code> and <code>calendar_date</code> stay null while <code>phase_elapsed_day</code> retains the within-phase timing where it can be calculated. An unresolved block within the phase also has a null <code>phase_elapsed_day</code>. Pass <code>start_date</code> to receive known <code>calendar_date</code> values as timezone-free <code>datetime.date</code> objects:</p>
+<div class="highlight"><pre><span></span><code><span class="n">timeline</span> <span class="o">=</span> <span class="n">roll_out_variant</span><span class="p">(</span><span class="n">variant</span><span class="p">,</span> <span class="n">start_date</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</code></pre></div>
+<p>Blocks with adjacent cycle-number ranges are anchored sequentially. Blocks with overlapping cycle numbers share the relevant anchor, while genuinely ambiguous source timing remains visible in <code>timing_status</code>. When differing cycle lengths overlap across more than one shared cycle, the later block is unresolved. When blocks ending the preceding cycle differ in cycle length, the following block is unresolved. A phase can continue cycle numbering from its predecessor when its first cycle immediately follows the predecessor's last cycle. Phases are ordered by their own <code>phase_step</code>, the same rule for every label -- a missing or tied step is <code>"unresolved: ..."</code>. The status is otherwise <code>"resolved"</code>, or <code>"resolved_via_fallback: ..."</code> where an optional cycle was assumed given (below).</p>
+<p>Unresolved phase ordering leaves every date in the variant null. A gap in explicit <code>phase_step</code> values leaves dates null from the later phase onward. Optional cycles are counted as given and marked <code>optional=True</code>; dates from the first optional cycle and every later phase carry a <code>resolved_via_fallback</code> status.</p>
+<p>Each rollout row includes <code>sig_id</code> (the source <code>Sigs.id</code>), <code>timing_sequence</code>, <code>cycle_length_lb</code>, <code>cycle_length_ub</code>, <code>cycle_length_unit</code>, and the <code>cycle_length_selection</code> used for this rollout. These fields identify the sig and its cycle definition when a later consumer can supply a missing phase duration. With <code>start_date</code>, a phase containing calendar-month or calendar-year cycles has null phase-relative offsets if its actual start date is unknown, since the number of days depends on that date. Without <code>start_date</code>, the existing 30-day month and 365-day year approximations apply.</p>
+<p>The timeline includes <code>modality</code> (<code>"systemic"</code>, <code>"radiation"</code>, or null for an unclassified sig), plus the source <code>component</code> and <code>component_cui</code>. Radiation rows can have a null <code>drug</code>. Pass <code>systemic_only=True</code> to omit radiation rows from the result; radiation phases still contribute to the timing of later phases. The timeline's <code>day_indefinite</code> and <code>cycle_indefinite</code> columns distinguish continuing days within a cycle from continuing cycles.</p>
+<p><code>administration_frame</code> retains its cycle-local <code>day</code> column and adds <code>elapsed_day</code> and <code>timing_status</code>. It combines sigs for the same drug and day, so use <code>roll_out_variant</code> when phase-relative timing or sig identity is needed. Variants without resolvable cycle metadata still produce explicitly resolvable administration rows, with a null <code>elapsed_day</code> and an unresolved status rather than an invented calendar position. Numeric <code>(+k)</code> means continuation every k cycles in <code>timing_sequence</code> or every k days in <code>alldays</code>; the interval is retained without sampling future events. A continuing cycle marker prevents dates from being chained into a later phase.</p>
+<p>A component whose only timing is a <code>Choice</code> (e.g. 131Iodine-Tositumomab's dosimetry-driven "day 7-15, one of these") still appears in both <code>roll_out_variant</code> and <code>administration_frame</code>, with <code>day</code> null and <code>timing_status</code> reading <code>"unresolved: choice of days ..."</code> -- it is not silently omitted just because none of its alternatives was picked.</p>
 
 
 

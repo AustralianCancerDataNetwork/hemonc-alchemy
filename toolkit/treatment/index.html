@@ -844,6 +844,56 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#classify-drug-ancestry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Classify drug ancestry
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Classify drug ancestry">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#query-and-apply-the-ancestry-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Query and apply the ancestry index
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interpret-the-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interpret the classification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#investigate-an-unresolved-result" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Investigate an unresolved result
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#query-standalone-radiation" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1326,6 +1376,56 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#classify-drug-ancestry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Classify drug ancestry
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Classify drug ancestry">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#query-and-apply-the-ancestry-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Query and apply the ancestry index
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interpret-the-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interpret the classification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#investigate-an-unresolved-result" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Investigate an unresolved result
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#query-standalone-radiation" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1429,6 +1529,58 @@
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;all sigs are confidently classified as radiation&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>An unknown or NULL <code>class_field</code> is unknown. It does not count as systemic treatment and prevents a confident radiation-only or concurrent-chemoradiotherapy classification. Treating “unclassified” as “not present” would turn missing source information into a clinical conclusion.</p>
+<h2 id="classify-drug-ancestry">Classify drug ancestry<a class="headerlink" href="#classify-drug-ancestry" title="Permanent link">&para;</a></h2>
+<p>Use <code>is_endocrine_regimen()</code> to identify variants whose drugs are all endocrine therapies, and <code>is_supportive_regimen()</code> to identify variants whose drugs are all growth-factor therapies. Here, “supportive” specifically means growth-factor ancestry. The same classifications are available for cycle blocks through <code>is_endocrine_block()</code> and <code>is_supportive_block()</code>.</p>
+<h3 id="query-and-apply-the-ancestry-index">Query and apply the ancestry index<a class="headerlink" href="#query-and-apply-the-ancestry-index" title="Permanent link">&para;</a></h3>
+<p>Install the <a href="../../integrations/omop/#installation-and-configuration">OMOP integration</a> and configure the vocabulary connection's search path to expose its OMOP tables. Query an index from the source drug records and vocabulary relationships, then pass it to the classifiers or scheduling helpers:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.integrations.omop</span><span class="w"> </span><span class="kn">import</span> <span class="n">main_class_ancestry</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.toolkit.analytics.treatment.classification</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">is_endocrine_regimen</span><span class="p">,</span>
+    <span class="n">is_supportive_regimen</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.toolkit.analytics.treatment.scheduling</span><span class="w"> </span><span class="kn">import</span> <span class="n">cycle_block_templates</span>
+
+<span class="n">index</span> <span class="o">=</span> <span class="n">main_class_ancestry</span><span class="p">(</span><span class="n">source_session</span><span class="p">,</span> <span class="n">omop_session</span><span class="o">=</span><span class="n">vocabulary_session</span><span class="p">)</span>
+<span class="n">endocrine</span> <span class="o">=</span> <span class="n">is_endocrine_regimen</span><span class="p">(</span><span class="n">variant</span><span class="p">,</span> <span class="n">ancestry</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
+<span class="n">supportive</span> <span class="o">=</span> <span class="n">is_supportive_regimen</span><span class="p">(</span><span class="n">variant</span><span class="p">,</span> <span class="n">ancestry</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
+<span class="n">blocks</span> <span class="o">=</span> <span class="n">cycle_block_templates</span><span class="p">(</span><span class="n">variant</span><span class="p">,</span> <span class="n">ancestry</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
+</code></pre></div>
+<p>Omit <code>omop_session</code> when the source session can also access the vocabulary tables. Classifiers can infer the session from attached source objects; supplying an index also supports detached objects and separate databases.</p>
+<h3 id="interpret-the-classification">Interpret the classification<a class="headerlink" href="#interpret-the-classification" title="Permanent link">&para;</a></h3>
+<p>The predicates and <code>CycleTemplate.endocrine_regimen</code> / <code>supportive_regimen</code> flags have three possible results:</p>
+<table>
+<thead>
+<tr>
+<th>Result</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>True</code></td>
+<td>Every identified drug belongs to a fully resolved group with the requested ancestry.</td>
+</tr>
+<tr>
+<td><code>False</code></td>
+<td>A known group excludes the requested ancestry, or there are no drug entries to classify.</td>
+</tr>
+<tr>
+<td><code>None</code></td>
+<td>The available evidence cannot establish the classification, for example because a group is unresolved or the vocabulary is unavailable.</td>
+</tr>
+</tbody>
+</table>
+<p>Drug ancestry uses active HemOnc <code>Is a</code> relationships beneath Endocrine therapeutic (<code>44970</code>) and Growth factor (<code>20221</code>). These are HemOnc concept codes. Classification applies to whole <code>Drugs.main_class</code> groups: every component in the group must have a usable Component Class edge. The polyhierarchical Steroid target (<code>45523</code>) is excluded. An incomplete group is unresolved; disagreement between fully resolved components is inconsistent.</p>
+<p>A drug with NULL <code>main_class</code>, or a canonical drug instruction without a matching drug record, supplies unknown evidence. A known exclusion still yields <code>False</code>; otherwise unknown evidence yields <code>None</code>. Radiation and generic non-canonical component instructions without drug records are outside the drug ancestry scope.</p>
+<h3 id="investigate-an-unresolved-result">Investigate an unresolved result<a class="headerlink" href="#investigate-an-unresolved-result" title="Permanent link">&para;</a></h3>
+<p>Check <code>index.unavailable_reason</code> for a vocabulary availability problem. For individual groups, <code>index.resolutions</code> exposes the status, all component CUIs and the CUIs lacking usable classification edges:</p>
+<div class="highlight"><pre><span></span><code><span class="n">resolution</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">resolutions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">drug</span><span class="o">.</span><span class="n">main_class</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">resolution</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">resolution</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">resolution</span><span class="o">.</span><span class="n">component_cuis</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">resolution</span><span class="o">.</span><span class="n">unresolved_cuis</span><span class="p">)</span>
+</code></pre></div>
+<p>The index is cached per source/vocabulary engine pair. After reloading either dataset, call <code>main_class_ancestry.cache_clear()</code> or restart the process so subsequent queries use the refreshed data.</p>
 <h2 id="query-standalone-radiation">Query standalone radiation<a class="headerlink" href="#query-standalone-radiation" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.toolkit.analytics.treatment.filters</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">find_standalone_radiation_sigs</span><span class="p">,</span>
