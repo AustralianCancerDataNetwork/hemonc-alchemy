@@ -44,6 +44,12 @@ def _value(field: Any) -> str | None:
     return None if value is None or str(value).strip() == "" else str(value).strip()
 
 
+def _snomed_codes(field: Any) -> tuple[str, ...]:
+    """Normalize a scalar or pipe-separated mapping into individual codes."""
+    value = _value(field)
+    return tuple(code.strip() for code in value.split("|") if code.strip()) if value is not None else ()
+
+
 def _read_rows(path: Path) -> list[dict[str, str]]:
     if not path.exists():
         return []
@@ -69,7 +75,7 @@ def apply_patches(mappings: Iterable[ConditionMapping], patches: Mapping[int, Ma
         if patch is not None:
             mapping = replace(
                 mapping,
-                map_snomed=tuple(code for code in patch["map_SNOMED"].split("|") if code),
+                map_snomed=_snomed_codes(patch["map_SNOMED"]),
                 map_type_snomed=_value(patch["map_type_SNOMED"]),
             )
         result[mapping.condition_cui] = mapping
@@ -119,7 +125,7 @@ def raw_condition_mappings(session: Any) -> dict[int, ConditionMapping]:
         int(row.condition_cui): ConditionMapping(
             condition_cui=int(row.condition_cui),
             condition=str(row.condition),
-            map_snomed=(str(row.map_snomed),) if row.map_snomed is not None else (),
+            map_snomed=_snomed_codes(row.map_snomed),
             map_type_snomed=_value(row.map_type_snomed),
             map_ncit=_value(row.map_ncit),
             map_type_ncit=_value(row.map_type_ncit),

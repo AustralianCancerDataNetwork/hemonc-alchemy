@@ -21,6 +21,10 @@ from weakref import WeakKeyDictionary
 from sqlalchemy import select
 
 from ...caching import cached_per_engine
+from ...integrations.omop.concept_groups import (
+    concept_group_cache_scope,
+    resolve_concept_groups,
+)
 from ...integrations.omop.standardise import standardise_codes
 from ...model import Studies, Variants, variants_StudyMap
 from .catalogue.variants import latest_variant_ids
@@ -117,7 +121,7 @@ def variant_conditions(session: Any) -> dict[int, frozenset[int]]:
         select(Variants.variant_cui, Studies.condition_cui)
         .join(ranked, ranked.c.variant_id == Variants.id)
         .join(variants_StudyMap, variants_StudyMap.parent_id == Variants.id)
-        .join(Studies, Studies.study == variants_StudyMap.study)
+        .join(variants_StudyMap.study_objects)  # type: ignore[attr-defined]
         .where(ranked.c.version_rank == 1)
         .distinct()
     ).all()
@@ -180,15 +184,7 @@ def family_anchors(session: Any) -> dict[int, FamilyAnchors]:
 
 def family_concept_groups(session: Any) -> dict[int, Any]:
     """Each covered family's omop-alchemy `ResolvedConceptGroup`, built once per vocabulary and cached there."""
-    from omop_alchemy.toolkit.core.concepts import (  # type: ignore[import-not-found,import-untyped]  # optional extra
-        ConceptGroupSpec,
-        resolve_concept_group,
-    )
-
-    return {
-        family: resolve_concept_group(session, ConceptGroupSpec(name=f"hemonc_family:{family}", unit=found))
-        for family, found in family_anchors(session).items()
-    }
+    return resolve_concept_groups(session, family_anchors(session), name_prefix="hemonc_family")
 
 
 _INDEX_BY_IDENTITY: dict[str, dict[int, frozenset[int]]] = {}
@@ -197,11 +193,7 @@ _INDEX_BY_ENGINE: WeakKeyDictionary[Any, dict[int, frozenset[int]]] = WeakKeyDic
 
 def _family_index(session: Any) -> dict[int, frozenset[int]]:
     """concept_id -> families, cached on the same vocabulary scope as omop-alchemy's concept groups."""
-    from omop_alchemy.toolkit.core.concepts.identity import (  # type: ignore[import-not-found,import-untyped]
-        cache_scope,
-    )
-
-    scope = cache_scope(session)
+    scope = concept_group_cache_scope(session)
     store: Any = _INDEX_BY_IDENTITY if isinstance(scope, str) else _INDEX_BY_ENGINE
     if scope not in store:
         index: dict[int, set[int]] = defaultdict(set)

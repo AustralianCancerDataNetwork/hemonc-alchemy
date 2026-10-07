@@ -9,7 +9,7 @@ from weakref import WeakKeyDictionary
 
 import sqlalchemy as sa
 
-from ...caching import cached_per_engine
+from ...caching import cached_per_engine, with_cache_clear
 from ...model import Drugs
 from ...toolkit.analytics.treatment.classification.ancestry import (
     ENDOCRINE_ROOT_CUI,
@@ -28,6 +28,7 @@ def _ancestry_indexes(session: Any) -> WeakKeyDictionary[Any, MainClassAncestry]
     return WeakKeyDictionary()
 
 
+@with_cache_clear(_ancestry_indexes.cache_clear)
 def main_class_ancestry(session: Any, *, omop_session: Any = None) -> MainClassAncestry:
     """Runtime index cached per source/vocabulary engine pair.
 
@@ -61,7 +62,5 @@ def main_class_ancestry(session: Any, *, omop_session: Any = None) -> MainClassA
     indexes[engine] = index
     return index
 
-
-main_class_ancestry.cache_clear = _ancestry_indexes.cache_clear  # type: ignore[attr-defined]
 
 __all__ = ["main_class_ancestry"]
