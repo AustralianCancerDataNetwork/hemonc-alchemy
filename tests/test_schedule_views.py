@@ -381,7 +381,7 @@ class TestRealVariantReconciliation:
     ("[1,101,1]", "[1,100,1]"),
 ])
 def test_limit_is_checked_before_rollout(session, monkeypatch, days, cycles):
-    import hemonc_alchemy.toolkit.analytics.treatment.scheduling.views as views
+    from hemonc_alchemy.toolkit.analytics.treatment.scheduling import views
 
     variant = _variant(session, 11)
     _sig(session, sig_id=1, variant_cui=11, drug_cui=1, route="INTRAVENOUS",
@@ -396,7 +396,7 @@ def test_limit_is_checked_before_rollout(session, monkeypatch, days, cycles):
 
 
 def test_limit_allows_exact_boundary_and_counts_across_sigs(session, monkeypatch):
-    import hemonc_alchemy.toolkit.analytics.treatment.scheduling.views as views
+    from hemonc_alchemy.toolkit.analytics.treatment.scheduling import views
 
     monkeypatch.setattr(views, "EVENT_LIMIT", 4)
     variant = _variant(session, 12)

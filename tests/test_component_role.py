@@ -17,7 +17,9 @@ from hemonc_alchemy.toolkit.analytics.treatment.classification.component_role im
     is_defining,
     resolve_role,
 )
-from hemonc_alchemy.toolkit.analytics.treatment.scheduling.templates import CycleTemplate
+from hemonc_alchemy.toolkit.analytics.treatment.scheduling.templates import (
+    CycleTemplate,
+)
 
 pytestmark = pytest.mark.skipif(
     len(Base.metadata.tables) == 0,
