@@ -8,12 +8,16 @@ itself.
 from __future__ import annotations
 
 import logging
+import math
 import re
 from dataclasses import dataclass
 
 from .tokens import TOKEN_RE, Choice, Day, Indefinite, Range
 
 logger = logging.getLogger(__name__)
+
+# Floor for the post-dose decay curve below, matched to regimen_matching's RG_uniq reference data.
+_DECAY_FLOOR = 0.1
 
 
 @dataclass(frozen=True)
@@ -23,10 +27,14 @@ class ResolvedSchedule:
     `indefinite` is set when the schedule carries on past the days listed —
     until progression, say. When it is set, `days` is only the part that was
     written down explicitly, not the full course.
+
+    `choices` holds valid `Choice` tokens to capture a dose given on one of 
+    several alternative days.
     """
 
     days: tuple[Day, ...] = ()
     indefinite: Indefinite | None = None
+    choices: tuple[Choice, ...] = ()
 
     def __iter__(self):
         return iter(self.days)
@@ -35,7 +43,7 @@ class ResolvedSchedule:
         return len(self.days)
 
     def __bool__(self) -> bool:
-        return bool(self.days) or self.indefinite is not None
+        return bool(self.days) or self.indefinite is not None or bool(self.choices)
 
 
 def apply_sig_to_series(
@@ -44,11 +52,14 @@ def apply_sig_to_series(
     decay_days: int = 2,
     decay_factor: float = 0.5,
 ):
-    """Mark `days` on a per-day intensity series, tapering off afterwards.
+    """Mark `days` on a per-day intensity series, decaying afterwards.
 
-    Each dosing day is scored 1.0 (0.5 if optional) and the following
-    `decay_days` are scored progressively lower, so a treatment day and its
-    immediate aftermath both register. Used to build the administration
+    Each dosing day is scored 1.0 (0.5 if optional); each of the following
+    `decay_days` is scored `exp(-decay_factor * offset)` times that base,
+    floored at `_DECAY_FLOOR` so a dose's influence never reaches zero.
+    `decay_days` only truncates how many decay rows get computed/emitted --
+    since the curve floors instead of hitting zero, it no longer has a
+    natural stopping point of its own. Used to build the administration
     matrices in properties.py. Mutates `series` in place.
     """
     for day in days:
@@ -56,7 +67,7 @@ def apply_sig_to_series(
         d0 = day.value
 
         for offset in range(decay_days + 1):
-            value = base * (decay_factor ** offset)
+            value = base if offset == 0 else max(base * math.exp(-decay_factor * offset), _DECAY_FLOOR)
             series[d0 + offset] = max(series[d0 + offset], value)
 
 
@@ -71,6 +82,18 @@ def parse_choice(token: str) -> Choice:
 
 
 def parse_scalar_list(token: str):
+    # '|' means "any of the following days, unspecified which".
+    # Each '|' is resolved against its own comma-separated fragment, e.g.
+    # "1,8|9" is day 1 plus a choice of day 8 or 9. 
+    # TBC: seek confirmation of expansion rules - current implementation 
+    # based on data not specifications.
+    first_pipe = token.find("|")
+    if first_pipe != -1 and "," in token[first_pipe:]:
+        logger.warning(
+            "Ambiguous choice notation %r: comma follows '|', parsed as "
+            "independent per-fragment choices rather than a whole-list choice",
+            token,
+        )
     out = []
     for part in token.split(","):
         part = part.strip()
@@ -81,7 +104,12 @@ def parse_scalar_list(token: str):
         elif "|" in part:
             out.append(parse_choice(part))
         else:
-            out.append(Day(int(part)))
+            # Real data has junk like "NS" or "EOC" here -- drop and log it,
+            # same as every other unparseable token in this function.
+            try:
+                out.append(Day(int(part)))
+            except ValueError:
+                logger.warning("Unparseable dosing token %r dropped", part)
     return out
 
 
@@ -102,6 +130,8 @@ def parse_optional(token: str):
     inner = token[1:-1]
 
     if inner.startswith("+"):
+        if match := re.fullmatch(r"\+([1-9][0-9]*)", inner):
+            return [Indefinite("+k", interval=int(match.group(1)))]
         match = re.fullmatch(r"\+([a-zA-Z])(\d+)?", inner)
         if not match:
             logger.warning("Unparseable indefinite-dosing token %r", token)
@@ -129,13 +159,14 @@ def parse_token(token: str):
 
 def expand(parsed) -> ResolvedSchedule:
     days: list[Day] = []
+    choices: list[Choice] = []
     indefinite: Indefinite | None = None
 
     for item in parsed:
         if isinstance(item, Day):
             days.append(item)
         elif isinstance(item, Choice):
-            days.extend(Day(day) for day in item.options)
+            choices.append(item)
         elif isinstance(item, Range):
             if isinstance(item.start, int) and isinstance(item.end, int):
                 for day in range(item.start, item.end + 1, item.step):
@@ -148,13 +179,12 @@ def expand(parsed) -> ResolvedSchedule:
                 )
             else:
                 indefinite = item
-                logger.warning(
-                    "Indefinite-dosing marker %r found (continue until progression/indefinitely); "
-                    "explicit days list is not the complete schedule",
+                logger.debug(
+                    "Indefinite-dosing marker %r found; explicit days list is not the complete schedule",
                     item,
                 )
 
-    return ResolvedSchedule(days=tuple(days), indefinite=indefinite)
+    return ResolvedSchedule(days=tuple(days), indefinite=indefinite, choices=tuple(choices))
 
 
 def resolve_all_days(all_days: str | None) -> ResolvedSchedule:
@@ -164,9 +194,9 @@ def resolve_all_days(all_days: str | None) -> ResolvedSchedule:
         (Day(value=1, optional=False), Day(value=8, optional=False), Day(value=15, optional=False))
 
     See tokens.py for the notation. Check the result's `indefinite` before
-    treating `days` as the whole schedule, and note that an unparseable or
-    open-ended expression yields no days rather than raising -- anything
-    dropped is logged.
+    treating `days` as the whole schedule, and its `choices` before treating
+    `days` as completely resolved. If `alldays` is None or empty, the result 
+    is an empty schedule with no indefinite marker.
     """
     parsed = []
     for token in tokenize_all_days(all_days):

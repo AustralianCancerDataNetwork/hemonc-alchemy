@@ -229,10 +229,81 @@ def map_to_standard(
     return result
 
 
+def map_from_standard(
+    session: Any,
+    concept_ids: int | Iterable[int],
+    *,
+    source_domain: str | None = None,
+    include_invalid: bool = False,
+) -> list[StandardConceptMapping]:
+    """Follow active ``Maps to`` edges back to their HemOnc source concepts.
+
+    Reverse of :func:`map_to_standard`: given standard OMOP concept IDs (e.g.
+    the ``drug_concept_id`` values observed on real ``Drug_Exposure`` rows),
+    resolve which HemOnc CUI(s), if any, map onto them. One result per
+    mapping edge, so a concept reached from more than one HemOnc CUI returns
+    multiple rows.
+    """
+    values = tuple(
+        dict.fromkeys(
+            int(c) for c in ((concept_ids,) if isinstance(concept_ids, int) else concept_ids)
+        )
+    )
+    binding = load_omop_binding()
+    if not values or binding is None or not omop_available(session):
+        return []
+
+    source = aliased(binding.concept, name="source")  # the HemOnc concept
+    target = aliased(binding.concept, name="target")  # the standard concept
+    relation = binding.concept_relationship
+    source_from = sa.inspect(source).selectable
+    target_from = sa.inspect(target).selectable
+    statement = (
+        sa.select(
+            *_mapping_columns(source, target),
+            relation.relationship_id,
+            relation.invalid_reason.label("mapping_invalid_reason"),
+        )
+        .select_from(
+            source_from.join(
+                relation, relation.concept_id_1 == source.concept_id
+            ).join(target_from, target.concept_id == relation.concept_id_2)
+        )
+        .where(
+            source.vocabulary_id == "HemOnc",
+            relation.relationship_id == "Maps to",
+            target.concept_id.in_(values),
+        )
+    )
+    if source_domain is not None:
+        statement = statement.where(source.domain_id == source_domain)
+    if not include_invalid:
+        statement = statement.where(
+            relation.is_valid_expr(),
+            source.is_valid_expr(),
+            target.is_valid_expr(),
+        )
+    statement = statement.order_by(target.concept_id, source.concept_code)
+
+    result: list[StandardConceptMapping] = []
+    for row in session.execute(statement).mappings():
+        result.append(
+            StandardConceptMapping(
+                hemonc_cui=str(row["source_concept_code"]),
+                hemonc_concept=_concept_reference(row, "source_"),
+                relationship_id=str(row["relationship_id"]),
+                target=_concept_reference(row, "target_"),
+                relationship_invalid_reason=row["mapping_invalid_reason"],
+            )
+        )
+    return result
+
+
 __all__ = [
     "HemOncConcept",
     "OmopConceptReference",
     "StandardConceptMapping",
+    "map_from_standard",
     "map_to_standard",
     "resolve_hemonc_concepts",
 ]

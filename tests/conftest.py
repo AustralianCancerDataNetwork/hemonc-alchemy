@@ -21,7 +21,7 @@ import sqlalchemy as sa
 
 @pytest.fixture(scope="session")
 def pg_engine():
-    from oa_configurator.pytest_plugin import (
+    from oa_configurator.pytest_plugin import (  # type: ignore[import-untyped]  # no py.typed marker upstream
         ensure_test_db_exists,
         resolve_test_database,
     )

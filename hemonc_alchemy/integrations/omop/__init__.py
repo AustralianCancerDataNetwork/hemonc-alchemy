@@ -1,6 +1,8 @@
 """Optional read-only integration with OMOP vocabulary tables."""
 
+from .ancestry import main_class_ancestry
 from .binding import OmopBinding, load_omop_binding, omop_available
+from .component_role import attach_component_roles, regimen_component_roles
 from .diagnostics import (
     BiomarkerMappingDiagnostic,
     MappingCoverage,
@@ -15,19 +17,25 @@ from .mapping import (
     HemOncConcept,
     OmopConceptReference,
     StandardConceptMapping,
+    map_from_standard,
     map_to_standard,
     resolve_hemonc_concepts,
 )
 from .queries import (
     COMPONENT_ROLE_RELATIONSHIPS,
     HemOncRelationship,
+    canonical_drug_ingredients,
+    canonical_drug_names,
     component_class_hierarchy,
     component_roles,
     condition_to_snomed,
     drug_to_rxnorm_ingredient,
+    hemonc_drug_canonical_names,
     public_hemonc_cuis,
     regimen_modalities,
     regimen_to_hemonc,
+    rxnorm_ingredient_to_drug,
+    snomed_to_condition,
 )
 
 __all__ = [
@@ -41,19 +49,28 @@ __all__ = [
     "StandardConceptMapping",
     "SuspiciousMappingDiagnostic",
     "VocabularyVersion",
+    "attach_component_roles",
     "biomarker_qualifier_diagnostics",
+    "canonical_drug_ingredients",
+    "canonical_drug_names",
     "component_class_hierarchy",
     "component_roles",
     "condition_to_snomed",
     "coverage_report",
     "drug_to_rxnorm_ingredient",
+    "hemonc_drug_canonical_names",
     "load_omop_binding",
+    "main_class_ancestry",
+    "map_from_standard",
     "map_to_standard",
     "omop_available",
     "public_hemonc_cuis",
+    "regimen_component_roles",
     "regimen_modalities",
     "regimen_to_hemonc",
     "resolve_hemonc_concepts",
+    "rxnorm_ingredient_to_drug",
+    "snomed_to_condition",
     "suspicious_condition_mappings",
     "vocabulary_versions",
 ]

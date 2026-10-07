@@ -4,6 +4,13 @@ The distinction is whether a dose needs a clinic visit or can be taken at
 home, since that is what drives appointment and infusion-chair demand rather
 than the specific route.
 
+This is useful for both planning and resource allocation, as well as for
+scoring regimen matches. Typically in OMOP data, we see that full administration 
+records (transfusions, infusions, injections) are captured for clinic-administered 
+routes, while home-administered routes are often incompletely captured, with only 
+the prescription record or dispensing record available. These need to be handled
+differently in the scoring algorithms.
+
 `NS` (not specified) and any route not listed below are left unclassified
 rather than guessed at.
 """

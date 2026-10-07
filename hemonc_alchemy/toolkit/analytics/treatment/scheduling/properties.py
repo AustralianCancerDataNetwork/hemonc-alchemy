@@ -8,8 +8,10 @@ clinic time versus what a patient takes at home.
     frame = administration_frame(variant)
     frame[frame.route_group == "IV"]
 
-One row per drug per day, so it composes: pivot it for the grid view, group it
-to compare variants, join it to anything else keyed on `drug_cui`.
+One row per drug per cycle day (repeated once per cycle where cross-cycle
+timing resolves, not collapsed across cycles) so it composes: pivot it for
+the grid view, group it to compare variants, join it to anything else keyed
+on `drug_cui`.
 
     frame.pivot_table(index="drug", columns="day", values="intensity")
 
@@ -32,8 +34,9 @@ from .....model.enums import (
     Sigs_FrequencyEnum,
     Sigs_PhaseEnum,
 )
-from .handling import Day, Indefinite, apply_sig_to_series, resolve_all_days
+from .handling import Day, Indefinite, resolve_all_days
 from .routes import route_group
+from .tokens import Choice
 
 DEFAULT_DECAY_DAYS = 2
 DEFAULT_DECAY_FACTOR = 0.5
@@ -48,6 +51,9 @@ _FRAME_COLUMNS = [
     "intensity",
     "optional",
     "indefinite",
+    "cycle_indefinite",
+    "elapsed_day",
+    "timing_status",
 ]
 
 
@@ -60,6 +66,7 @@ class ScheduleEvent:
     route_group: str | None
     days: tuple[Day, ...]
     indefinite: Indefinite | None
+    choices: tuple[Choice, ...]
     phase: Sigs_PhaseEnum | None
     phase_step: int | None
     portion: str | None
@@ -87,6 +94,7 @@ def schedule_events(variant) -> list[ScheduleEvent]:
                 route_group=route_group(sig.route),
                 days=resolved.days,
                 indefinite=resolved.indefinite,
+                choices=resolved.choices,
                 phase=sig.phase,
                 phase_step=sig.phase_step,
                 portion=sig.portion,
@@ -143,13 +151,52 @@ def home_administered_sigs_by_drug(variant) -> dict:
     return _sigs_by_drug_where(variant, "PO")
 
 
+def _rollout_frame_records(
+    variant,
+    *,
+    decay_days: int,
+    decay_factor: float,
+) -> list[dict]:
+    from .rollout import roll_out_variant  # local: rollout imports from this module too
+
+    # A drug repeated across N cycles yields N rows here, one per
+    # elapsed_day, not one row per cycle-local day.
+    rolled = roll_out_variant(
+        variant,
+        decay_days=decay_days,
+        decay_factor=decay_factor,
+    )
+    records = []
+    for row in rolled.itertuples(index=False):
+        if row.route_group is None or row.drug_cui is None:
+            continue
+        records.append(
+            {
+                "variant_cui": row.variant_cui,
+                "variant": row.variant,
+                "route_group": row.route_group,
+                "drug_cui": row.drug_cui,
+                "drug": row.drug,
+                "day": row.day,
+                "intensity": row.intensity,
+                "optional": row.optional,
+                "indefinite": row.day_indefinite,
+                "cycle_indefinite": row.cycle_indefinite,
+                "elapsed_day": row.elapsed_day,
+                "timing_status": row.timing_status,
+            }
+        )
+    return records
+
+
 def administration_frame(
     variants,
     *,
     decay_days: int = DEFAULT_DECAY_DAYS,
     decay_factor: float = DEFAULT_DECAY_FACTOR,
 ) -> pd.DataFrame:
-    """When each drug is given across a cycle, one row per drug per day.
+    """When each drug is given across a cycle -- one row per drug per cycle
+    day, repeated per cycle where `elapsed_day` resolves.
 
     Accepts a single variant or any iterable of them. Columns:
 
@@ -159,18 +206,22 @@ def administration_frame(
     | `route_group` | `"IV"` (clinic) or `"PO"` (home) |
     | `drug_cui`, `drug` | the drug, by identifier and by name |
     | `day` | day of cycle; can be negative for lead-in dosing |
-    | `intensity` | 1.0 on a dosing day, tapering over `decay_days` after |
+    | `elapsed_day` | variant-relative day when cross-cycle timing resolves |
+    | `intensity` | 1.0 on a dosing day, decaying (floored, never 0) over `decay_days` after |
     | `optional` | whether the dosing day itself was marked optional |
-    | `indefinite` | set when the sig continues past its stated days |
+    | `indefinite` | day-level marker when days continue past those stated |
+    | `cycle_indefinite` | cycle-level marker when cycles continue past those stated |
+    | `timing_status` | whether the rollout is resolved or needs review |
 
-    `intensity` tapers after each dose by `decay_factor` per day for
-    `decay_days`, so a treatment day and the days it encroaches on both
-    register. Set `decay_days=0` for dosing days alone.
+    `intensity` decays after each dose by `exp(-decay_factor * offset)`,
+    floored so it never reaches 0; `decay_days` is how many decayed rows
+    past the dose get computed, not a point where decay stops. Set
+    `decay_days=0` for dosing days alone.
 
     Rows whose route is unrecognised or not specified are excluded, as are
     sigs with no resolvable days -- including open-ended `EOC` ranges, so a
-    variant can legitimately produce no rows. Where `indefinite` is set, the
-    days present are only the part that was written down.
+    variant can legitimately produce no rows. Where `indefinite` or
+    `cycle_indefinite` is set, only the written days or cycles are returned.
     """
     # Duck-typed rather than `isinstance(variants, Iterable)`: entities inherit
     # __iter__ from orm-loader's serialisation interface, so a single variant
@@ -181,34 +232,11 @@ def administration_frame(
     records: list[dict] = []
 
     for variant in variants:
-        for event in schedule_events(variant):
-            drug = event.drug_object
-            if event.route_group is None or drug is None or not event.days:
-                continue
-
-            series: dict[int, float] = defaultdict(float)
-            apply_sig_to_series(
-                series,
-                list(event.days),
-                decay_days=decay_days,
-                decay_factor=decay_factor,
-            )
-            optional_days = {day.value for day in event.days if day.optional}
-
-            for day, intensity in series.items():
-                records.append(
-                    {
-                        "variant_cui": variant.variant_cui,
-                        "variant": variant.variant,
-                        "route_group": event.route_group,
-                        "drug_cui": drug.drug_cui,
-                        "drug": drug.drug,
-                        "day": day,
-                        "intensity": intensity,
-                        "optional": day in optional_days,
-                        "indefinite": event.indefinite,
-                    }
-                )
+        records.extend(_rollout_frame_records(
+            variant,
+            decay_days=decay_days,
+            decay_factor=decay_factor,
+        ))
 
     if not records:
         return pd.DataFrame(columns=_FRAME_COLUMNS)
@@ -219,15 +247,20 @@ def administration_frame(
     # decay tails can land on the same day; keep the strongest.
     grouped = (
         frame.groupby(
-            ["variant_cui", "variant", "route_group", "drug_cui", "drug", "day"],
+            [
+                "variant_cui", "variant", "route_group", "drug_cui", "drug",
+                "day", "elapsed_day",
+            ],
             as_index=False,
             dropna=False,
         )
         .agg(intensity=("intensity", "max"), optional=("optional", "all"),
-             indefinite=("indefinite", "first"))
+             indefinite=("indefinite", "first"),
+             cycle_indefinite=("cycle_indefinite", "first"),
+             timing_status=("timing_status", "first"))
     )
-    return grouped[_FRAME_COLUMNS].sort_values(
-        ["variant_cui", "route_group", "drug", "day"], ignore_index=True
+    return grouped[_FRAME_COLUMNS].sort_values(                                         # type: ignore[call-overload],  # mypy doesn't know about `sort_values` returning a DataFrame
+        ["variant_cui", "route_group", "drug", "elapsed_day", "day"], ignore_index=True
     )
 
 

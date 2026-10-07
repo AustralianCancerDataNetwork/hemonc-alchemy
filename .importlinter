@@ -14,14 +14,21 @@ layers =
 
 [importlinter:contract:omop-alchemy-behind-bridge]
 name = omop-alchemy is only reachable through the optional integrations bridge
+type = protected
+protected_modules =
+    omop_alchemy
+allowed_importers =
+    hemonc_alchemy.integrations.omop
+
+[importlinter:contract:toolkit-no-http-or-application-types]
+name = no HTTP, template, or application configuration types enter the toolkit
 type = forbidden
 source_modules =
-    hemonc_alchemy.model
     hemonc_alchemy.toolkit.analytics
     hemonc_alchemy.toolkit.core
-    hemonc_alchemy.compiler
-    hemonc_alchemy.cli
-    hemonc_alchemy.config
-    hemonc_alchemy.errors
 forbidden_modules =
-    omop_alchemy
+    fastapi
+    starlette
+    pydantic
+    jinja2
+    hemonc_explorer

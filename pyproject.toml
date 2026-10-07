@@ -46,9 +46,10 @@ author = [
   "linkml-runtime>=1.9.5",
   "openpyxl>=3.1.5",
   "pyyaml>=6.0",
+  "pyreadr>=0.5",
 ]
 omop = [
-  "omop-alchemy>=1.1.0,<2.0.0",
+  "omop-alchemy>=1.2.0,<2.0.0",
 ]
 exploration = [
   "hemonc-alchemy[postgres]",
@@ -68,6 +69,7 @@ dev = [
   "mkdocstrings-python>=2.0.1",
   "mkdocs>=1.6.1",
   "mkdocs-mermaid2-plugin",
+  "pandas-stubs>=3.0.5.260914",
 ]
 
 [project.urls]
@@ -96,7 +98,12 @@ packages = ["hemonc_alchemy"]
 cache-keys = [{ file = "pyproject.toml" }, { git = { commit = true, tags = true } }]
 
 [tool.ruff]
-extend-exclude = ["hemonc_alchemy/model/entities.py", "hemonc_alchemy/model/enums.py", "reference/"]
+extend-exclude = [
+  "hemonc_alchemy/model/entities.py",
+  "hemonc_alchemy/model/enums.py",
+  "hemonc_alchemy/toolkit/analytics/treatment/classification/generated.py",
+  "reference/",
+]
 
 [tool.pytest.ini_options]
 markers = [

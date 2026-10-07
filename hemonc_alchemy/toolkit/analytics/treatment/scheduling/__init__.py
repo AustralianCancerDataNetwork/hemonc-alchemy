@@ -1,5 +1,16 @@
 """Reading and summarising dosing schedules."""
 
+from .diagnostics import (
+    Diagnostic,
+    DiagnosticCategory,
+    DiagnosticCode,
+    DiagnosticSeverity,
+    diagnose_all_days,
+    diagnose_calendar_unit,
+    diagnose_route,
+    diagnose_timing_status,
+    diagnose_variant,
+)
 from .handling import ResolvedSchedule, resolve_all_days
 from .properties import (
     ScheduleEvent,
@@ -11,23 +22,84 @@ from .properties import (
     home_administered_sigs_by_drug,
     schedule_events,
 )
+from .rollout import (
+    AnchoredBlock,
+    CycleBlock,
+    TimedEvent,
+    UnresolvedTiming,
+    anchor_blocks,
+    group_into_blocks,
+    roll_out_phase,
+    roll_out_variant,
+)
 from .routes import route_group
+from .templates import (
+    ChoiceSchedule,
+    CycleBlockTemplate,
+    CycleTemplate,
+    cycle_block_templates,
+    cycle_template,
+)
 from .tokens import Choice, Day, Indefinite, Range
+from .views import (
+    DEFAULT_SCHEDULE_POLICY,
+    EVENT_LIMIT,
+    MAX_COMPARED_VARIANTS,
+    ScheduleCoverage,
+    ScheduleEventView,
+    SchedulePolicy,
+    ScheduleView,
+    UnplacedInstruction,
+    build_schedule_view,
+    build_schedule_views,
+)
 
 __all__ = [
+    "DEFAULT_SCHEDULE_POLICY",
+    "EVENT_LIMIT",
+    "MAX_COMPARED_VARIANTS",
+    "AnchoredBlock",
     "Choice",
+    "ChoiceSchedule",
+    "CycleBlock",
+    "CycleBlockTemplate",
+    "CycleTemplate",
     "Day",
+    "Diagnostic",
+    "DiagnosticCategory",
+    "DiagnosticCode",
+    "DiagnosticSeverity",
     "Indefinite",
     "Range",
     "ResolvedSchedule",
+    "ScheduleCoverage",
     "ScheduleEvent",
+    "ScheduleEventView",
+    "SchedulePolicy",
+    "ScheduleView",
+    "TimedEvent",
+    "UnplacedInstruction",
+    "UnresolvedTiming",
     "administration_frame",
     "administration_matrix",
+    "anchor_blocks",
+    "build_schedule_view",
+    "build_schedule_views",
     "cancer_services_drugs",
     "cancer_services_sigs_by_drug",
+    "cycle_block_templates",
+    "cycle_template",
+    "diagnose_all_days",
+    "diagnose_calendar_unit",
+    "diagnose_route",
+    "diagnose_timing_status",
+    "diagnose_variant",
+    "group_into_blocks",
     "home_administered_drugs",
     "home_administered_sigs_by_drug",
     "resolve_all_days",
+    "roll_out_phase",
+    "roll_out_variant",
     "route_group",
     "schedule_events",
 ]

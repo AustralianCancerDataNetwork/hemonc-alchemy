@@ -36,7 +36,7 @@ def load_omop_binding() -> OmopBinding | None:
     """Load public OMOP models lazily, returning ``None`` if extra is absent."""
 
     try:
-        from omop_alchemy.cdm.model import (
+        from omop_alchemy.cdm.model import (  # type: ignore[import-not-found]  # optional extra, not always installed
             Concept,
             Concept_Ancestor,
             Concept_Relationship,
@@ -56,12 +56,15 @@ def load_omop_binding() -> OmopBinding | None:
 
 def omop_available(
     session: Any,
+    *,
+    require_relationships: bool = False,
 ) -> bool:
     """Return whether the optional extra and configured concept table work.
 
     Missing extras, missing schemas, permissions, connection failures, and
     incompatible OMOP installations all return ``False``.  This deliberately
     performs a harmless model query rather than reflecting database metadata.
+    An ancestry resolver can also require the relationship table.
     """
 
     binding = load_omop_binding()
@@ -70,10 +73,16 @@ def omop_available(
     try:
         # Use a separate connection so a failed probe cannot leave the
         # caller's Session transaction in an aborted state.
-        with session.get_bind().connect() as connection:
+        bind = session.get_bind()
+        engine = getattr(bind, "engine", bind)
+        with engine.connect() as connection:
             connection.execute(
                 sa.select(binding.concept.concept_id).limit(1)
             ).first()
+            if require_relationships:
+                connection.execute(
+                    sa.select(binding.concept_relationship.concept_id_1).limit(1)
+                ).first()
         return True
     except Exception:  # noqa: BLE001 - availability must never break callers
         return False

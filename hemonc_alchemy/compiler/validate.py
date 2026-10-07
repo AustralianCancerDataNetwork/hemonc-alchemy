@@ -22,8 +22,8 @@ def validate_registry(registry: Registry) -> list[str]:
     """Structural checks against the Registry, before any code is rendered."""
     errors: list[str] = []
 
-    dictionary_sheets = getattr(registry, "_dictionary_sheets", set())
-    enriched_columns = getattr(registry, "_dictionary_enriched_columns", {})
+    dictionary_sheets: set[str] = getattr(registry, "_dictionary_sheets", set())
+    enriched_columns: dict[str, set[str]] = getattr(registry, "_dictionary_enriched_columns", {})
     for table_name in sorted(dictionary_sheets):
         if not enriched_columns.get(table_name):
             errors.append(
@@ -60,9 +60,9 @@ def validate_registry(registry: Registry) -> list[str]:
             if rel.target_table not in registry.tables:
                 errors.append(f"{name}: soft relationship targets unknown table '{rel.target_table}'")
 
-        for rel in meta.soft_m2m_relationships:
-            if rel.target_table not in registry.tables:
-                errors.append(f"{name}: soft m2m relationship targets unknown table '{rel.target_table}'")
+        for m2m_rel in meta.soft_m2m_relationships:
+            if m2m_rel.target_table not in registry.tables:
+                errors.append(f"{name}: soft m2m relationship targets unknown table '{m2m_rel.target_table}'")
 
         # A column repeated within a group, or spread across two, would
         # generate a malformed or ambiguous child table. Has happened.

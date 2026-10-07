@@ -5,6 +5,7 @@
   "workspaceFolder": "/workspace/hemonc-alchemy",
   "remoteUser": "vscode",
   "updateRemoteUserUID": true,
+  "initializeCommand": "docker network create hemonc-alchemy_default || true",
   "postCreateCommand": "bash .devcontainer/post-create.sh",
   // also on start, so containers created before the kernel fix get it
   "postStartCommand": "bash .devcontainer/register-kernel.sh",
