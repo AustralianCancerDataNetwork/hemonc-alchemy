@@ -1,5 +1,6 @@
 """Optional read-only integration with OMOP vocabulary tables."""
 
+from .ancestry import main_class_ancestry
 from .binding import OmopBinding, load_omop_binding, omop_available
 from .component_role import attach_component_roles, regimen_component_roles
 from .diagnostics import (
@@ -59,6 +60,7 @@ __all__ = [
     "drug_to_rxnorm_ingredient",
     "hemonc_drug_canonical_names",
     "load_omop_binding",
+    "main_class_ancestry",
     "map_from_standard",
     "map_to_standard",
     "omop_available",

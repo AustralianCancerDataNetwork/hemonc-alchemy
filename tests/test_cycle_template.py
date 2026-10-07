@@ -26,7 +26,10 @@ _DEVCONTAINER_URL = "postgresql+psycopg://hemonc:hemonc@localhost:5432/hemonc_al
 def _load_latest_variant(cui: int):
     """The highest-`version` row for `cui`, or skip if postgres/the row is unavailable."""
     try:
-        engine = sa.create_engine(_DEVCONTAINER_URL, future=True)
+        engine = sa.create_engine(
+            _DEVCONTAINER_URL, future=True,
+            connect_args={"options": "-csearch_path=public,omop"},
+        )
         with engine.connect() as conn:
             conn.execute(sa.text("SELECT 1"))
     except Exception as exc:  # noqa: BLE001 -- any connection failure just skips

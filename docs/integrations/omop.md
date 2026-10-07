@@ -1,6 +1,6 @@
 # OMOP integration
 
-The OMOP bridge is an optional read-only boundary for deployments that keep a HemOnc database and an OMOP vocabulary in the same PostgreSQL database. It does not turn HemOnc records into patient-level OMOP events, and it does not change the generated HemOnc model.
+The OMOP bridge provides optional read-only queries between HemOnc source records and an OMOP vocabulary. Individual query helpers specify whether they use one database session or accept separate source and vocabulary sessions.
 
 ## The mental model
 
@@ -76,9 +76,10 @@ OMOP contains useful HemOnc-native relationships in this deployment:
 - `regimen_modalities()` reads `Has modality` links.
 - `component_roles()` reads the directed component-role relationships and keeps their labels separate.
 - `component_class_hierarchy()` reads direct `Is a` links to `Component Class` nodes.
+- `main_class_ancestry()` combines source drug groups with the hierarchy to classify endocrine and growth-factor ancestry. See [Classify drug ancestry](../toolkit/treatment.md#classify-drug-ancestry) for querying, applying and inspecting the results.
 
 These are curated HemOnc taxonomy edges, not a replacement for `public.indications`. Regulatory indication data in the HemOnc table is richer and has different semantics and coverage.
 
 ## Database boundary
 
-The functions on this page perform same-database joins. If HemOnc and OMOP are in separate databases, query the source CUIs first and resolve them with a second OMOP session. PostgreSQL being on the same server is not enough for an ordinary cross-database SQL join; use an explicit application-level bridge, an FDW, or a materialized mapping subset.
+The mapping and relationship query helpers perform same-database joins. If HemOnc and OMOP are in separate databases, query the source CUIs first and resolve them with a second OMOP session. `main_class_ancestry(source_session, omop_session=vocabulary_session)` handles this separation directly, combining the query results in Python. PostgreSQL being on the same server is not enough for an ordinary cross-database SQL join; other queries require an explicit application-level bridge, an FDW, or a materialized mapping subset.

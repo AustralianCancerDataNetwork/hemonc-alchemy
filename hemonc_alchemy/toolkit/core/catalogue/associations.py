@@ -30,10 +30,7 @@ def study_association_statement(spec: CatalogueSpec):
         )
         .select_from(Variants)
         .join(variants_StudyMap, variants_StudyMap.parent_id == Variants.id)
-        .join(
-            Studies,
-            Studies.study == variants_StudyMap.study,
-        )
+        .join(variants_StudyMap.study_objects)  # type: ignore[attr-defined]
         .join(Conditions, Conditions.condition_cui == Studies.condition_cui)
         .join(
             Regimens,

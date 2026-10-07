@@ -11,6 +11,7 @@ import pandas as pd  # type: ignore[import-untyped]
 from ....core.links import variant_condition_objects
 from ..classification import (
     ComponentRole,
+    MainClassAncestry,
     is_endocrine_block,
     is_endocrine_regimen,
     is_supportive_block,
@@ -54,8 +55,9 @@ class CycleTemplate:
     binary_fuzzy: pd.DataFrame
     dose_iv: pd.DataFrame
     dose_po: pd.DataFrame
-    endocrine_regimen: bool
-    supportive_regimen: bool
+    # None means ancestry evidence is unavailable or unresolved.
+    endocrine_regimen: bool | None
+    supportive_regimen: bool | None
     # Empty here -- needs a live OMOP session, so it's filled in afterward by
     # `integrations.omop.component_role.attach_component_roles`.
     drug_role: dict[str, ComponentRole]
@@ -128,7 +130,7 @@ def _dose_matrix(events: Iterable[ScheduleEvent], route: str, drugs: list[str]) 
     return table.reindex(columns=drugs, fill_value="")
 
 
-def cycle_template(variant) -> CycleTemplate:
+def cycle_template(variant, *, ancestry: MainClassAncestry | None = None) -> CycleTemplate:
     """One cycle's drug-by-day grids and identifying fields for `variant`."""
     cycle_len = _cycle_length_days(variant)
     iv_drug = [drug.drug for drug in cancer_services_drugs(variant)]
@@ -151,8 +153,8 @@ def cycle_template(variant) -> CycleTemplate:
         binary_fuzzy=_fuzzy_matrix(fuzzy_frame, "IV", cycle_len, iv_drug),
         dose_iv=_dose_matrix(schedule_events(variant), "IV", iv_drug),
         dose_po=_dose_matrix(schedule_events(variant), "PO", po_drug),
-        endocrine_regimen=is_endocrine_regimen(variant),
-        supportive_regimen=is_supportive_regimen(variant),
+        endocrine_regimen=is_endocrine_regimen(variant, ancestry=ancestry),
+        supportive_regimen=is_supportive_regimen(variant, ancestry=ancestry),
         drug_role={},
         choices=tuple(
             ChoiceSchedule((event.drug_object.drug,), event.route_group, tuple(choice.options))
@@ -202,7 +204,7 @@ def _block_frame(block: CycleBlock, *, decay_days: int, decay_factor: float = DE
     )
 
 
-def _block_template(variant, block: CycleBlock, *, diseases) -> CycleTemplate:
+def _block_template(variant, block: CycleBlock, *, diseases, ancestry: MainClassAncestry | None) -> CycleTemplate:
     """`cycle_template`'s per-variant logic, scoped to one `CycleBlock`'s own events.
 
     Modality (endocrine/supportive) is classified from this block's own drugs, not
@@ -229,8 +231,8 @@ def _block_template(variant, block: CycleBlock, *, diseases) -> CycleTemplate:
         binary_fuzzy=_fuzzy_matrix(fuzzy_frame, "IV", cycle_len, iv_drug),
         dose_iv=_dose_matrix(block.events, "IV", iv_drug),
         dose_po=_dose_matrix(block.events, "PO", po_drug),
-        endocrine_regimen=is_endocrine_block(block.events),
-        supportive_regimen=is_supportive_block(block.events),
+        endocrine_regimen=is_endocrine_block(block.events, ancestry=ancestry),
+        supportive_regimen=is_supportive_block(block.events, ancestry=ancestry),
         drug_role={},
         choices=tuple(
             ChoiceSchedule((event.drug_object.drug,), event.route_group, tuple(choice.options))
@@ -241,14 +243,14 @@ def _block_template(variant, block: CycleBlock, *, diseases) -> CycleTemplate:
     )
 
 
-def cycle_block_templates(variant) -> tuple[CycleBlockTemplate, ...]:
+def cycle_block_templates(variant, *, ancestry: MainClassAncestry | None = None) -> tuple[CycleBlockTemplate, ...]:
     """`variant`'s cycle blocks in order, each as a `CycleTemplate` paired with its repeat count."""
     blocks = group_into_blocks(schedule_events(variant))
     diseases = {condition.condition for condition in variant_condition_objects(variant)}
 
     return tuple(
         CycleBlockTemplate(
-            template=_block_template(variant, block, diseases=diseases),
+            template=_block_template(variant, block, diseases=diseases, ancestry=ancestry),
             repeat_count=len(block.cycle_numbers),
         )
         for block in blocks

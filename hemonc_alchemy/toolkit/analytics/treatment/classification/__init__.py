@@ -1,6 +1,10 @@
 """Classifying a regimen variant by treatment modality or drug ancestry."""
 
 from .ancestry import (
+    DrugAncestry,
+    MainClassAncestry,
+    MainClassResolution,
+    compute_main_class_ancestry,
     is_endocrine_block,
     is_endocrine_regimen,
     is_supportive_block,
@@ -19,6 +23,10 @@ from .modality import (
 __all__ = [
     "RAD_SIG_CLASS_VALUE",
     "ComponentRole",
+    "DrugAncestry",
+    "MainClassAncestry",
+    "MainClassResolution",
+    "compute_main_class_ancestry",
     "has_non_radiation_sig",
     "has_radiation_sig",
     "is_concurrent_chemort",

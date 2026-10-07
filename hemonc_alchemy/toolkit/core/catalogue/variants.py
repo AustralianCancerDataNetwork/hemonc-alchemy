@@ -48,7 +48,7 @@ def variant_identity_statement(spec: CatalogueSpec):
         evidence = (
             select(1)
             .select_from(variants_StudyMap)
-            .join(Studies, Studies.study == variants_StudyMap.study)
+            .join(variants_StudyMap.study_objects)  # type: ignore[attr-defined]
             .where(variants_StudyMap.parent_id == Variants.id)
         )
         if spec.condition_cuis is not None:

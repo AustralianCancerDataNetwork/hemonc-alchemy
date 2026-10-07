@@ -88,8 +88,8 @@ Conditions.studies = relationship(
 variants_StudyMap.study_objects = relationship(
     Studies,
     # A map row's text is sometimes "study--substudy" (e.g. a trial-phase or
-    # arm suffix); fall back to matching that split form against Studies'
-    # own study/substudy columns when the raw text has no exact match.
+    # arm suffix). Resolve either the exact name or that split form against
+    # Studies' own study/substudy columns. Catalogue joins reuse this relationship.
     primaryjoin=or_(
         foreign(Studies.study) == variants_StudyMap.study,
         foreign(Studies.study + "--" + Studies.substudy) == variants_StudyMap.study,
