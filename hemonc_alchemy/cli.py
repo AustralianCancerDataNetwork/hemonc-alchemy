@@ -8,7 +8,6 @@ from typing import Annotated
 import typer
 
 from .compiler import audit as audit_module
-from .compiler import classification_generation as classification_generation_module
 from .compiler import condition_target_generation as condition_target_generation_module
 from .compiler import diff as diff_module
 from .compiler import generate as generate_module
@@ -234,6 +233,10 @@ def audit(
 @app.command(name="regen-classification")
 def regen_classification(data_dir: DataDirOption) -> None:
     """Regenerate toolkit/analytics/treatment/classification/generated.py from `data_dir`'s `omop.RData`. Review the diff before committing."""
+    # pyreadr is an author/dev extra. Keep it out of the import path for the
+    # ordinary compiler commands, which do not need to read RData files.
+    from .compiler import classification_generation as classification_generation_module
+
     result = classification_generation_module.regenerate(data_dir, _CLASSIFICATION_DATA_PATH)
 
     typer.secho(
