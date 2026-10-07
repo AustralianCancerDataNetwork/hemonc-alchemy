@@ -34,6 +34,7 @@ from .rollout import (
 )
 from .routes import route_group
 from .templates import (
+    ChoiceSchedule,
     CycleBlockTemplate,
     CycleTemplate,
     cycle_block_templates,
@@ -59,6 +60,7 @@ __all__ = [
     "MAX_COMPARED_VARIANTS",
     "AnchoredBlock",
     "Choice",
+    "ChoiceSchedule",
     "CycleBlock",
     "CycleBlockTemplate",
     "CycleTemplate",

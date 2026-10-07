@@ -31,6 +31,15 @@ _CYCLE_UNIT_DAYS = {"day": 1, "week": 7, "month": 30, "year": 365}
 
 
 @dataclass(frozen=True)
+class ChoiceSchedule:
+    """One source instruction allowing a dose on any one of several cycle days."""
+
+    drugs: tuple[str, ...]
+    route_group: str
+    options: tuple[int, ...]
+
+
+@dataclass(frozen=True)
 class CycleTemplate:
     """One variant's cycle, as day x drug grids plus its identifying fields."""
 
@@ -50,6 +59,8 @@ class CycleTemplate:
     # Empty here -- needs a live OMOP session, so it's filled in afterward by
     # `integrations.omop.component_role.attach_component_roles`.
     drug_role: dict[str, ComponentRole]
+    # Source day alternatives; they are deliberately not expanded into multiple doses.
+    choices: tuple[ChoiceSchedule, ...] = ()
 
 
 def _cycle_length_from_bound(lb: str, unit) -> int:
@@ -143,6 +154,12 @@ def cycle_template(variant) -> CycleTemplate:
         endocrine_regimen=is_endocrine_regimen(variant),
         supportive_regimen=is_supportive_regimen(variant),
         drug_role={},
+        choices=tuple(
+            ChoiceSchedule((event.drug_object.drug,), event.route_group, tuple(choice.options))
+            for event in schedule_events(variant)
+            if event.drug_object is not None and event.route_group in {"IV", "PO"} and event.choices
+            for choice in event.choices
+        ),
     )
 
 
@@ -215,6 +232,12 @@ def _block_template(variant, block: CycleBlock, *, diseases) -> CycleTemplate:
         endocrine_regimen=is_endocrine_block(block.events),
         supportive_regimen=is_supportive_block(block.events),
         drug_role={},
+        choices=tuple(
+            ChoiceSchedule((event.drug_object.drug,), event.route_group, tuple(choice.options))
+            for event in block.events
+            if event.drug_object is not None and event.route_group in {"IV", "PO"} and event.choices
+            for choice in event.choices
+        ),
     )
 
 
