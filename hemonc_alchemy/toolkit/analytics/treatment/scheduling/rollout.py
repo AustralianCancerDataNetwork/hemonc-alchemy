@@ -507,8 +507,7 @@ def _choice_placeholder_events(
     base_status: str,
     cycle_indefinite: Indefinite | None,
 ) -> list[TimedEvent]:
-    """A row for a component whose only timing is an unresolved Choice.
-    """
+    """Retain unresolved day choices alongside any definite dosing days."""
     status = _combine_status(base_status, _choice_status(event))
     return [
         TimedEvent(
@@ -539,13 +538,12 @@ def _unresolved_block_events(
     cycle_numbers: list[int | None] = cast(list[int | None], sorted(block.cycle_numbers)) or [None]
     for event in block.events:
         series = _event_series(event, decay_days=decay_days, decay_factor=decay_factor)
-        if not series and event.choices:
+        if event.choices:
             output.extend(
                 _choice_placeholder_events(
                     event, cycle_numbers, status.status, block.timing_indefinite
                 )
             )
-            continue
         for cycle_number in cycle_numbers:
             for day, intensity in series.items():
                 output.append(
@@ -579,7 +577,7 @@ def _resolved_block_events(
     anchor_cycle = cast(int, anchored.anchor_cycle)
     for event in block.events:
         series = _event_series(event, decay_days=decay_days, decay_factor=decay_factor)
-        if not series and event.choices:
+        if event.choices:
             output.extend(
                 _choice_placeholder_events(
                     event,
@@ -588,7 +586,6 @@ def _resolved_block_events(
                     block.timing_indefinite,
                 )
             )
-            continue
         for cycle_number in sorted(block.cycle_numbers):
             cycle_start = _advance(
                 start,

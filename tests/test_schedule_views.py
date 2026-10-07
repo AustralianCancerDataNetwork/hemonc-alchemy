@@ -85,6 +85,30 @@ def _sig(session, *, sig_id, variant_cui, drug_cui, route, alldays, **overrides)
     return sig
 
 
+@pytest.mark.parametrize("timing_sequence, cycle_count", [(None, 1), ("1,2", 2)])
+def test_mixed_fixed_and_choice_days_remain_visible(session, timing_sequence, cycle_count):
+    variant = _variant(session, 1)
+    _drug(session, 1, "cisplatin")
+    _sig(
+        session, sig_id=1, variant_cui=1, drug_cui=1,
+        route="INTRAVENOUS", alldays="1,8|9", timing_sequence=timing_sequence,
+        cycle_length_lb="21", cycle_length_ub="21",
+        cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+    )
+    session.expire_all()
+
+    view = build_schedule_view(variant, SchedulePolicy(start_date=date(2020, 1, 1)))
+
+    fixed = [event for event in view.events if event.source_day is not None]
+    choices = [event for event in view.events if event.source_day is None]
+    assert len(fixed) == len(choices) == cycle_count
+    assert {event.source_day for event in fixed} == {1}
+    assert all("choice of days 8|9" in event.timing_status for event in choices)
+    assert all(event.elapsed_day is None and event.calendar_date is None for event in choices)
+    assert all("choice of days" not in event.timing_status for event in fixed)
+    assert any("choice of days 8|9" in finding.message for finding in view.diagnostics)
+
+
 class TestBuildScheduleView:
     def test_every_event_carries_its_source_instruction(self, session):
         variant = _variant(session, 1)
