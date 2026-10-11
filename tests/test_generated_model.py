@@ -43,3 +43,16 @@ def test_generated_schema_creates_in_sqlite():
     engine = sa.create_engine("sqlite:///:memory:")
     Base.metadata.create_all(engine)
     assert len(Base.metadata.tables) > 0
+
+
+def test_catalogue_lookup_indexes_are_created():
+    engine = sa.create_engine("sqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    inspector = sa.inspect(engine)
+    indexes = {
+        (table, index["name"], tuple(index["column_names"]))
+        for table in ("variants_study", "sigs")
+        for index in inspector.get_indexes(table)
+    }
+    assert ("variants_study", "ix_variants_study_study", ("study",)) in indexes
+    assert ("sigs", "ix_sigs_variant_cui", ("variant_cui",)) in indexes

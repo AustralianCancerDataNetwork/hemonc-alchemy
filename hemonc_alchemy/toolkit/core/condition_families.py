@@ -27,6 +27,7 @@ from ...integrations.omop.concept_groups import (
 )
 from ...integrations.omop.standardise import standardise_codes
 from ...model import Studies, Variants, variants_StudyMap
+from ...model.relationships import join_mapped_studies
 from .catalogue.variants import latest_variant_ids
 from .condition_targets import (
     broader_codes,
@@ -118,10 +119,12 @@ def variant_conditions(session: Any) -> dict[int, frozenset[int]]:
     """Latest variants' conditions, via their studies; variants with no study condition are omitted."""
     ranked = latest_variant_ids()
     rows = session.execute(
-        select(Variants.variant_cui, Studies.condition_cui)
-        .join(ranked, ranked.c.variant_id == Variants.id)
-        .join(variants_StudyMap, variants_StudyMap.parent_id == Variants.id)
-        .join(variants_StudyMap.study_objects)  # type: ignore[attr-defined]
+        join_mapped_studies(
+            select(Variants.variant_cui, Studies.condition_cui)
+            .select_from(Variants)
+            .join(ranked, ranked.c.variant_id == Variants.id)
+            .join(variants_StudyMap, variants_StudyMap.parent_id == Variants.id)
+        )
         .where(ranked.c.version_rank == 1)
         .distinct()
     ).all()
