@@ -10,6 +10,7 @@ from sqlalchemy.pool import StaticPool
 
 from hemonc_alchemy.compiler.condition_target_generation import Candidate, generate
 from hemonc_alchemy.integrations.omop import load_omop_binding
+from hemonc_alchemy.integrations.omop.schema import schema_aware_bind
 from hemonc_alchemy.integrations.omop.standardise import (
     StandardisedCode,
     standardise_codes,
@@ -259,7 +260,7 @@ def _sqlite_vocabulary():
             {"concept_id_1": 2, "concept_id_2": 1, "relationship_id": "Maps to"},
             {"concept_id_1": 2, "concept_id_2": 3, "relationship_id": "Maps to value"},
         ])
-    return engine, sa.orm.Session(engine)
+    return engine, sa.orm.Session(schema_aware_bind(engine, {"vocab": None}))
 
 
 def test_standardise_codes_keeps_condition_legs_only():

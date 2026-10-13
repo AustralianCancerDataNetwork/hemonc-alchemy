@@ -5,6 +5,7 @@ from __future__ import annotations
 import pytest
 import sqlalchemy as sa
 
+from hemonc_alchemy.integrations.omop.schema import schema_aware_bind
 from hemonc_alchemy.model import Conditions
 from hemonc_alchemy.toolkit.core import condition_families as families_module
 from hemonc_alchemy.toolkit.core import condition_targets as targets_module
@@ -139,7 +140,7 @@ def _sqlite_vocabulary_with_ancestry():
             {"ancestor_concept_id": a, "descendant_concept_id": d, "min_levels_of_separation": lv, "max_levels_of_separation": lv}
             for a, d, lv in edges + [(cid, cid, 0) for cid in concepts]
         ])
-    return engine, sa.orm.Session(engine)
+    return engine, sa.orm.Session(schema_aware_bind(engine, {"vocab": None}))
 
 
 AGNOSTIC = 99

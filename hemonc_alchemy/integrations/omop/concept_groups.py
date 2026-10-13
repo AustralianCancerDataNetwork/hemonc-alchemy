@@ -7,11 +7,14 @@ from typing import Any
 
 import sqlalchemy as sa
 
+from .schema import schema_aware_bind
+
 
 def resolve_concept_groups(
     session: Any, anchors: Mapping[int, Any], *, name_prefix: str,
 ) -> dict[int, Any]:
     """Resolve named source groups using OMOP Alchemy's vocabulary cache."""
+    session = schema_aware_bind(session)
     from omop_alchemy.toolkit.core.concepts import (  # type: ignore[import-not-found,import-untyped]
         ConceptGroupSpec,
         resolve_concept_group,
@@ -25,6 +28,7 @@ def resolve_concept_groups(
 
 def concept_group_cache_scope(session: Any) -> str | sa.Engine:
     """Vocabulary identity, or the engine when no identity is registered."""
+    session = schema_aware_bind(session)
     from omop_alchemy.toolkit.core.concepts.identity import (  # type: ignore[import-not-found,import-untyped]
         cache_scope,
     )

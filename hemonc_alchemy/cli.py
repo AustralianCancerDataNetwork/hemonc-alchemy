@@ -241,15 +241,27 @@ def regen_condition_targets(
     import sqlalchemy as sa
     from sqlalchemy.orm import Session
 
+    from .integrations.omop.schema import omop_availability, schema_aware_bind
+
     engine = sa.create_engine(db_url)
-    # TODO: replace with oa-configurator's resolved vocab schema once its schema handling lands.
-    if vocab_schema:
-        engine = engine.execution_options(schema_translate_map={"vocab": vocab_schema})
-    with Session(engine) as session:
-        result = condition_target_generation_module.regenerate(
-            data_dir, session, review_out,
-            crosswalk_path=crosswalk, proposals_path=proposals, coverage_flags_path=coverage_flags_out,
-        )
+    explicit_map = {"vocab": vocab_schema} if vocab_schema is not None else None
+    routed_engine = schema_aware_bind(engine, explicit_map)
+    try:
+        with Session(routed_engine) as session:
+            availability = omop_availability(session)
+            if not availability.available:
+                typer.secho(
+                    f"OMOP vocabulary unavailable: {availability.reason}",
+                    fg=typer.colors.RED,
+                    bold=True,
+                )
+                raise typer.Exit(code=1)
+            result = condition_target_generation_module.regenerate(
+                data_dir, session, review_out,
+                crosswalk_path=crosswalk, proposals_path=proposals, coverage_flags_path=coverage_flags_out,
+            )
+    finally:
+        engine.dispose()
     typer.secho(
         f"Wrote {len(result.patches)} patch row(s) to {condition_target_generation_module.PATCHES_PATH} and "
         f"{len(result.suggestions)} suggested change(s) to {review_out}.",

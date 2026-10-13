@@ -1,7 +1,7 @@
 """Optional read-only integration with OMOP vocabulary tables."""
 
 from .ancestry import main_class_ancestry
-from .binding import OmopBinding, load_omop_binding, omop_available
+from .binding import OmopAvailability, OmopBinding, load_omop_binding, omop_available
 from .component_role import attach_component_roles, regimen_component_roles
 from .diagnostics import (
     BiomarkerMappingDiagnostic,
@@ -37,6 +37,7 @@ from .queries import (
     rxnorm_ingredient_to_drug,
     snomed_to_condition,
 )
+from .schema import OmopUnavailableError, omop_availability, require_omop_available
 
 __all__ = [
     "COMPONENT_ROLE_RELATIONSHIPS",
@@ -44,8 +45,10 @@ __all__ = [
     "HemOncConcept",
     "HemOncRelationship",
     "MappingCoverage",
+    "OmopAvailability",
     "OmopBinding",
     "OmopConceptReference",
+    "OmopUnavailableError",
     "StandardConceptMapping",
     "SuspiciousMappingDiagnostic",
     "VocabularyVersion",
@@ -63,11 +66,13 @@ __all__ = [
     "main_class_ancestry",
     "map_from_standard",
     "map_to_standard",
+    "omop_availability",
     "omop_available",
     "public_hemonc_cuis",
     "regimen_component_roles",
     "regimen_modalities",
     "regimen_to_hemonc",
+    "require_omop_available",
     "resolve_hemonc_concepts",
     "rxnorm_ingredient_to_drug",
     "snomed_to_condition",

@@ -10,6 +10,7 @@ import sqlalchemy as sa
 import sqlalchemy.orm as so
 
 from hemonc_alchemy.integrations.omop import attach_component_roles, load_omop_binding
+from hemonc_alchemy.integrations.omop.schema import schema_aware_bind
 from hemonc_alchemy.model.base import Base
 from hemonc_alchemy.model.entities import Drugs
 from hemonc_alchemy.toolkit.analytics.treatment.classification.component_role import (
@@ -108,7 +109,7 @@ def session():
         ])
         connection.commit()
 
-    with so.Session(engine) as s:
+    with so.Session(schema_aware_bind(engine, {"vocab": None})) as s:
         s.add_all([
             Drugs(id=1, date_added=_D, drug="Cyclophosphamide", drug_cui=2001, investigational=False, multiagent=False),
             Drugs(id=2, date_added=_D, drug="Prednisone", drug_cui=2002, investigational=False, multiagent=False),

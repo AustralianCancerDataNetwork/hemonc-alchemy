@@ -13,7 +13,7 @@ from sqlalchemy.orm import aliased
 from hemonc_alchemy.caching import cached_per_engine
 from hemonc_alchemy.model import Conditions, Drugs, Regimens
 
-from .binding import load_omop_binding, omop_available
+from .binding import load_omop_binding
 from .mapping import (
     HemOncConcept,
     OmopConceptReference,
@@ -23,6 +23,7 @@ from .mapping import (
     map_to_standard,
     resolve_hemonc_concepts,
 )
+from .schema import require_omop_available
 
 
 @dataclass(frozen=True)
@@ -103,8 +104,10 @@ def rxnorm_ingredient_to_drug(
 def _drug_ingredient_rows(session: Any, ingredient_ids: Iterable[int] | None = None) -> list[Any]:
     """Valid HemOnc drug -> RxNorm ingredient `Maps to` edges: (hemonc_cui, hemonc_name, ingredient_id, ingredient_name)."""
 
+    if not require_omop_available(session, require_relationships=True):
+        return []
     binding = load_omop_binding()
-    if binding is None or not omop_available(session):
+    if binding is None:
         return []
     source = aliased(binding.concept, name="source")
     target = aliased(binding.concept, name="target")
@@ -135,8 +138,10 @@ def _drug_ingredient_rows(session: Any, ingredient_ids: Iterable[int] | None = N
 def _biosimilar_cuis(session: Any) -> set[str]:
     """HemOnc drug CUIs that HemOnc itself records as `Biosimilar of` another drug."""
 
+    if not require_omop_available(session, require_relationships=True):
+        return set()
     binding = load_omop_binding()
-    if binding is None or not omop_available(session):
+    if binding is None:
         return set()
     source = aliased(binding.concept, name="source")
     target = aliased(binding.concept, name="target")
@@ -192,6 +197,8 @@ def _canonical_labels(session: Any) -> dict[int, str]:
 def canonical_drug_names(session: Any, ingredient_ids: Iterable[int]) -> dict[int, str]:
     """RxNorm ingredient concept ID -> its one canonical HemOnc drug name; unmapped ingredients are omitted."""
 
+    if not require_omop_available(session, require_relationships=True):
+        return {}
     labels = _canonical_labels(session)
     return {i: labels[i] for i in dict.fromkeys(int(value) for value in ingredient_ids) if i in labels}
 
@@ -210,6 +217,8 @@ def hemonc_drug_canonical_names(session: Any) -> dict[str, tuple[str, ...]]:
 def canonical_drug_ingredients(session: Any) -> dict[str, int]:
     """Canonical drug name -> its RxNorm ingredient concept ID; the inverse of `canonical_drug_names`."""
 
+    if not require_omop_available(session, require_relationships=True):
+        return {}
     return {name: ingredient_id for ingredient_id, name in _canonical_labels(session).items()}
 
 
@@ -238,13 +247,11 @@ def _hemonc_relationships(
     target_class: str | None = None,
     include_invalid: bool = False,
 ) -> list[HemOncRelationship]:
-    binding = load_omop_binding()
     relationships = tuple(relationship_ids)
-    if (
-        binding is None
-        or not relationships
-        or not omop_available(session)
-    ):
+    if not relationships or not require_omop_available(session, require_relationships=True):
+        return []
+    binding = load_omop_binding()
+    if binding is None:
         return []
 
     source = aliased(binding.concept, name="source")

@@ -6,6 +6,7 @@ import pytest
 import sqlalchemy as sa
 from sqlalchemy.pool import StaticPool
 
+from hemonc_alchemy.caching import cached_per_engine
 from hemonc_alchemy.integrations.omop import (
     condition_to_snomed,
     coverage_report,
@@ -14,11 +15,16 @@ from hemonc_alchemy.integrations.omop import (
     main_class_ancestry,
     map_from_standard,
     map_to_standard,
+    omop_availability,
     omop_available,
     resolve_hemonc_concepts,
     rxnorm_ingredient_to_drug,
     snomed_to_condition,
     vocabulary_versions,
+)
+from hemonc_alchemy.integrations.omop.schema import (
+    OmopUnavailableError,
+    schema_aware_bind,
 )
 from hemonc_alchemy.toolkit.analytics.treatment.classification import DrugAncestry
 
@@ -71,18 +77,131 @@ def _sqlite_omop_session():
             {"vocabulary_id": "RxNorm", "vocabulary_version": "test-rxnorm"},
         ])
         connection.commit()
-    return engine, sa.orm.Session(engine)
+    return engine, sa.orm.Session(schema_aware_bind(engine, {"vocab": None}))
 
 
 def test_absent_omop_is_a_noop():
     engine = sa.create_engine("sqlite://")
     session = sa.orm.Session(engine)
     assert not omop_available(session)
-    assert resolve_hemonc_concepts(session, [614]) == []
-    assert map_to_standard(session, [614]) == []
-    assert map_from_standard(session, [2]) == []
+    if load_omop_binding() is None:
+        assert resolve_hemonc_concepts(session, [614]) == []
+        assert map_to_standard(session, [614]) == []
+        assert map_from_standard(session, [2]) == []
+    else:
+        with pytest.raises(OmopUnavailableError):
+            resolve_hemonc_concepts(session, [614])
+        with pytest.raises(OmopUnavailableError):
+            map_to_standard(session, [614])
+        with pytest.raises(OmopUnavailableError):
+            map_from_standard(session, [2])
     session.close()
     engine.dispose()
+
+
+def test_omop_availability_reports_unmapped_vocabulary_schema():
+    if load_omop_binding() is None:
+        pytest.skip("the optional omop extra is not installed")
+    engine = sa.create_engine("sqlite://")
+    session = sa.orm.Session(engine)
+    try:
+        availability = omop_availability(session)
+        assert not availability.available
+        assert availability.reason is not None
+        assert "schema tag 'vocab' is unmapped" in availability.reason
+        assert "OperationalError" in availability.reason
+    finally:
+        session.close()
+        engine.dispose()
+
+
+def test_omop_availability_routes_to_attached_vocabulary_schema():
+    if load_omop_binding() is None:
+        pytest.skip("the optional omop extra is not installed")
+    engine = sa.create_engine(
+        "sqlite://",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+    )
+    with engine.begin() as connection:
+        connection.execute(sa.text("ATTACH DATABASE ':memory:' AS omop"))
+        connection.execute(sa.text("CREATE TABLE omop.concept (concept_id INTEGER PRIMARY KEY)"))
+    session = sa.orm.Session(engine)
+    try:
+        missing_map = omop_availability(session)
+        assert not missing_map.available
+        assert missing_map.reason is not None
+        assert "schema tag 'vocab' is unmapped" in missing_map.reason
+
+        routed = omop_availability(session, schema_translate_map={"vocab": "omop"})
+        assert routed.available
+    finally:
+        session.close()
+        engine.dispose()
+
+
+def test_omop_queries_report_unrouted_and_wrong_schema_and_work_when_routed():
+    if load_omop_binding() is None:
+        pytest.skip("the optional omop extra is not installed")
+    engine = sa.create_engine(
+        "sqlite://",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+    )
+    with engine.begin() as connection:
+        connection.execute(sa.text("ATTACH DATABASE ':memory:' AS omop"))
+        connection.execute(sa.text(
+            "CREATE TABLE omop.concept (concept_id INTEGER PRIMARY KEY, concept_code TEXT, "
+            "concept_name TEXT, vocabulary_id TEXT, domain_id TEXT, concept_class_id TEXT, "
+            "standard_concept TEXT, invalid_reason TEXT)"
+        ))
+        connection.execute(sa.text(
+            "INSERT INTO omop.concept VALUES (105, '105', 'Cisplatin', 'HemOnc', 'Drug', "
+            "'Component', NULL, NULL)"
+        ))
+    session = sa.orm.Session(engine)
+    try:
+        with pytest.raises(OmopUnavailableError, match="schema tag 'vocab' is unmapped"):
+            resolve_hemonc_concepts(session, (105,))
+
+        schema_aware_bind(session, {"vocab": "nonexistent_schema"})
+        with pytest.raises(OmopUnavailableError, match="nonexistent_schema"):
+            resolve_hemonc_concepts(session, (105,))
+
+        schema_aware_bind(session, {"vocab": "omop"})
+        resolved = resolve_hemonc_concepts(session, (105,))
+        assert [item.hemonc_cui for item in resolved] == ["105"]
+
+        session.commit()
+        assert [item.hemonc_cui for item in resolve_hemonc_concepts(session, (105,))] == ["105"]
+        session.rollback()
+        assert [item.hemonc_cui for item in resolve_hemonc_concepts(session, (105,))] == ["105"]
+    finally:
+        session.close()
+        engine.dispose()
+
+
+def test_cached_per_engine_partitions_connection_schema_maps():
+    engine = sa.create_engine("sqlite://")
+    calls = []
+
+    @cached_per_engine
+    def cached_map(session):
+        calls.append(True)
+        return session.get_bind().get_execution_options().get("schema_translate_map")
+
+    try:
+        with engine.connect().execution_options(
+            schema_translate_map={"vocab": "omop"}
+        ) as good_connection, sa.orm.Session(bind=good_connection) as good_session:
+            assert cached_map(good_session) == {"vocab": "omop"}
+        with engine.connect().execution_options(
+            schema_translate_map={"vocab": "nonexistent_schema"}
+        ) as bad_connection, sa.orm.Session(bind=bad_connection) as bad_session:
+            assert cached_map(bad_session) == {"vocab": "nonexistent_schema"}
+        assert len(calls) == 2
+    finally:
+        engine.dispose()
 
 
 def test_present_omop_preserves_identifiers_and_mapping_rows():
@@ -265,11 +384,19 @@ def test_runtime_ancestry_joins_separate_databases_and_filters_active_edges(ance
 
 
 def test_runtime_ancestry_cache_is_scoped_to_both_engines_and_can_be_cleared(ancestry_vocabulary):
-    _, vocabulary = ancestry_vocabulary
+    vocabulary_engine, vocabulary = ancestry_vocabulary
     source_engine, source = _source_drug_session([("Same label", 100)])
     other_engine, other_source = _source_drug_session([("Same label", 105)])
     try:
         index = main_class_ancestry(source, omop_session=vocabulary)
+        wrong_connection = vocabulary_engine.connect().execution_options(
+            schema_translate_map={"vocab": "nonexistent_schema"}
+        )
+        with sa.orm.Session(bind=wrong_connection) as wrong_schema:
+            wrong_index = main_class_ancestry(source, omop_session=wrong_schema)
+            assert wrong_index.unavailable_reason is not None
+            assert "nonexistent_schema" in wrong_index.unavailable_reason
+        wrong_connection.close()
         with sa.orm.Session(bind=vocabulary.connection()) as same_engine_session:
             assert main_class_ancestry(source, omop_session=same_engine_session) is index
         other = main_class_ancestry(other_source, omop_session=vocabulary)
@@ -307,7 +434,9 @@ def test_runtime_ancestry_absent_omop_preserves_source_transaction():
     engine, session = _source_drug_session([("Hormone", 100)])
     try:
         index = main_class_ancestry(session)
-        assert index.unavailable_reason == "OMOP vocabulary is unavailable"
+        assert index.unavailable_reason is not None
+        assert "schema tag 'vocab' is unmapped" in index.unavailable_reason
+        assert "OperationalError" in index.unavailable_reason
         assert index.purity({"Hormone"}, DrugAncestry.ENDOCRINE) is None
         assert session.scalar(sa.text("SELECT count(*) FROM drugs")) == 1
     finally:
@@ -348,7 +477,9 @@ def test_runtime_ancestry_retries_after_missing_relationships(ancestry_vocabular
         vocabulary.execute(sa.text("DROP TABLE concept_relationship"))
         vocabulary.commit()
         missing = main_class_ancestry(source, omop_session=vocabulary)
-        assert missing.unavailable_reason == "OMOP vocabulary is unavailable"
+        assert missing.unavailable_reason is not None
+        assert "concept_relationship" in missing.unavailable_reason
+        assert "maps to the default schema" in missing.unavailable_reason
         assert vocabulary.scalar(sa.text("SELECT count(*) FROM concept")) > 0
         vocabulary.execute(sa.text("CREATE TABLE concept_relationship (concept_id_1 INTEGER, concept_id_2 INTEGER, relationship_id TEXT, invalid_reason TEXT, valid_start_date DATE, valid_end_date DATE)"))
         vocabulary.execute(sa.text("INSERT INTO concept_relationship (concept_id_1,concept_id_2,relationship_id) VALUES (12,10,'Is a'),(14,12,'Is a')"))

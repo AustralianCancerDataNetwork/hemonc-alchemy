@@ -9,7 +9,8 @@ from typing import Any
 import sqlalchemy as sa
 from sqlalchemy.orm import aliased
 
-from .binding import load_omop_binding, omop_available
+from .binding import load_omop_binding
+from .schema import require_omop_available
 
 
 @dataclass(frozen=True)
@@ -100,8 +101,10 @@ def resolve_hemonc_concepts(
     """
 
     values = _values(cuis)
+    if not values or not require_omop_available(session):
+        return []
     binding = load_omop_binding()
-    if not values or binding is None or not omop_available(session):
+    if binding is None:
         return []
 
     concept = binding.concept
@@ -157,8 +160,10 @@ def map_to_standard(
     """
 
     values = _values(cuis)
+    if not values or not require_omop_available(session, require_relationships=True):
+        return []
     binding = load_omop_binding()
-    if not values or binding is None or not omop_available(session):
+    if binding is None:
         return []
 
     source = aliased(binding.concept, name="source")
@@ -249,8 +254,10 @@ def map_from_standard(
             int(c) for c in ((concept_ids,) if isinstance(concept_ids, int) else concept_ids)
         )
     )
+    if not values or not require_omop_available(session, require_relationships=True):
+        return []
     binding = load_omop_binding()
-    if not values or binding is None or not omop_available(session):
+    if binding is None:
         return []
 
     source = aliased(binding.concept, name="source")  # the HemOnc concept
