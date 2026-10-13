@@ -256,6 +256,49 @@ def regen_condition_targets(
         fg=typer.colors.GREEN,
     )
 
+@app.command(name="lint-biomarkers")
+def lint_biomarkers_command(
+    database_url: Annotated[
+        str | None,
+        typer.Option(
+            envvar="HEMONC_INDICATIONS_DATABASE_URL",
+            help="SQLAlchemy URL for the HemOnc database.",
+        ),
+    ] = None,
+) -> None:
+    """List biomarker names and findings not handled by the current vocabulary/parser."""
+    from sqlalchemy.orm import Session
+
+    from .toolkit.core.indications.normalisers.biomarker import lint_biomarkers
+
+    if database_url:
+        import sqlalchemy as sa
+
+        engine = sa.create_engine(database_url)
+    else:
+        from .config import create_hemonc_engine, get_hemonc_context
+
+        _, resolved = get_hemonc_context()
+        engine = create_hemonc_engine(resolved)
+    try:
+        with Session(engine) as session:
+            report = lint_biomarkers(session)
+    finally:
+        engine.dispose()
+    for label, values in (
+        ("Unrecognised biomarker names", report.unknown_names),
+        ("Unparsed findings", report.unparsed_findings),
+    ):
+        typer.echo(f"{label} ({sum(values.values())} occurrences):")
+        if values:
+            for value, count in values.items():
+                typer.echo(f"  {value}: {count}")
+        else:
+            typer.echo("  none")
+    if report.exit_code:
+        raise typer.Exit(code=report.exit_code)
+
+
 def main() -> None:
     app()
 

@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.12"
 resolution-markers = [
     "python_full_version >= '3.15' and sys_platform == 'win32'",
@@ -1084,12 +1084,12 @@ requires-dist = [
     { name = "mkdocs-mermaid2-plugin", marker = "extra == 'dev'" },
     { name = "mkdocstrings-python", marker = "extra == 'dev'", specifier = ">=2.0.1" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.8" },
-    { name = "oa-configurator", specifier = ">=1.1.0,<2.0.0" },
-    { name = "oa-configurator", extras = ["dev", "postgres"], marker = "extra == 'dev'", specifier = ">=1.1.0,<2.0.0" },
-    { name = "omop-alchemy", marker = "extra == 'omop'", specifier = ">=1.2.0,<2.0.0" },
+    { name = "oa-configurator", specifier = ">=2.0.0,<3.0.0" },
+    { name = "oa-configurator", extras = ["dev", "postgres"], marker = "extra == 'dev'", specifier = ">=2.0.0,<3.0.0" },
+    { name = "omop-alchemy", marker = "extra == 'omop'", specifier = ">=2.0.0,<3.0.0" },
     { name = "openpyxl", marker = "extra == 'author'", specifier = ">=3.1.5" },
     { name = "openpyxl", marker = "extra == 'dev'", specifier = ">=3.1.5" },
-    { name = "orm-loader", specifier = ">=1.1.0,<2.0.0" },
+    { name = "orm-loader", specifier = ">=2.0.0,<3.0.0" },
     { name = "pandas", specifier = ">=2.0" },
     { name = "pandas-stubs", marker = "extra == 'dev'", specifier = ">=3.0.5.260914" },
     { name = "psycopg", extras = ["binary"], marker = "extra == 'dev'", specifier = ">=3.2" },
@@ -2101,7 +2101,7 @@ wheels = [
 
 [[package]]
 name = "oa-configurator"
-version = "1.1.0"
+version = "2.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -2110,10 +2110,11 @@ dependencies = [
     { name = "sqlalchemy" },
     { name = "tomli-w" },
     { name = "typer" },
+    { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/16/a5/d06e75e97281952981c75d31f3befc314f39c08c74e51952b7f363f36de0/oa_configurator-1.1.0.tar.gz", hash = "sha256:251986a616e698e3b0b273f2a9428652af79fd3975dc4dd19898f96d89bf34ad", size = 173410, upload-time = "2026-08-13T07:49:11.365Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e9/62/64bf398b8fe381d138446199be69bc437ef93fdb70aab48cebf51467f6ea/oa_configurator-2.0.0.tar.gz", hash = "sha256:26406e90aeadd4c747646763b80f16025c4c6638afec687517788bc537d0d581", size = 278382, upload-time = "2026-10-10T22:48:42.275Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/6b/5b/f3b600f3e2b6acc7c74271b12eb31cfe83d223ed28f80efa6edfd5e99d0f/oa_configurator-1.1.0-py3-none-any.whl", hash = "sha256:6af25c970338460677c4426b2ae84e870c202b758f71562440f98def227d39ef", size = 60691, upload-time = "2026-08-13T07:49:10.105Z" },
+    { url = "https://files.pythonhosted.org/packages/06/9b/99f0073d97de3545d48cf28c8f39b724d543baf83e8af8d0ba5c8bffbb01/oa_configurator-2.0.0-py3-none-any.whl", hash = "sha256:2186beb5567850ba5bfe4950c2820b909d3746c6fa233a6074a85396a343af35", size = 118027, upload-time = "2026-10-10T22:48:40.571Z" },
 ]
 
 [package.optional-dependencies]
@@ -2135,7 +2136,7 @@ postgres = [
 
 [[package]]
 name = "omop-alchemy"
-version = "1.2.0"
+version = "2.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "oa-configurator" },
@@ -2147,9 +2148,9 @@ dependencies = [
     { name = "typer" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ed/f1/6d075fdc151734ec67c678e8ee76c14d6a994e173ac474aceb23af3c671d/omop_alchemy-1.2.0.tar.gz", hash = "sha256:689b789e4a39cd63394dea6f2d4bd06f2195744dafee0d42670cabc1dea4339c", size = 691664, upload-time = "2026-09-18T01:00:22.132Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/10/4b/a925c1db558070a4a807a38456a90dab33ab766e18cd3de890dae94295ca/omop_alchemy-2.0.0.tar.gz", hash = "sha256:403848b2c377ef6200119f4d5280a1b7e1abe0c42e8681fe16a74ee87fa82259", size = 734827, upload-time = "2026-10-10T23:39:29.99Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/75/90/7b34ba5d9ffca12a074a4b5a94ec1dcd9a6bc3ec5f5581736bb56be9b095/omop_alchemy-1.2.0-py3-none-any.whl", hash = "sha256:9402ad34a011c43609b65a56baff8c50b7d8f3b7ba99f6110d6b2593c1db8995", size = 279336, upload-time = "2026-09-18T01:00:20.263Z" },
+    { url = "https://files.pythonhosted.org/packages/7a/d2/2c271ce7d09b978bf812b698baf9000f1bc56afa2d1915b58c9b079875db/omop_alchemy-2.0.0-py3-none-any.whl", hash = "sha256:17cdbf3d901f23da339b7e4d4598f22f178499733fa326884de6e0de40c78f02", size = 298023, upload-time = "2026-10-10T23:39:28.182Z" },
 ]
 
 [[package]]
@@ -2166,7 +2167,7 @@ wheels = [
 
 [[package]]
 name = "orm-loader"
-version = "1.2.0"
+version = "2.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "chardet" },
@@ -2175,9 +2176,9 @@ dependencies = [
     { name = "pyarrow" },
     { name = "sqlalchemy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/17/42/093713d63ac7af5b29d94fd33f1888f4d192b38c867b16349caa53c1c0af/orm_loader-1.2.0.tar.gz", hash = "sha256:a000527daab1aeaaeb460e135984330805d2243f5d603c8c649b7d0e2cf75ae4", size = 158420, upload-time = "2026-09-02T06:22:56.506Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6a/cd/b3a29d383b80e1c282a3ee12a28f00b5608802763dd98ed7b3adc637e630/orm_loader-2.0.0.tar.gz", hash = "sha256:73232ecb5f1474738e54f30fae89999620d57cc41456ae799669a74c690a76b3", size = 171586, upload-time = "2026-10-10T23:22:15.966Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/46/65/96fe27564dbb9b74fc1991a5ef3d057bf1cfa227f65bd742e83b2328cef0/orm_loader-1.2.0-py3-none-any.whl", hash = "sha256:068ab02e4f2767047aae02908bf50ef63f3951905da5b841a3ee6b931926ae8b", size = 69661, upload-time = "2026-09-02T06:22:55.183Z" },
+    { url = "https://files.pythonhosted.org/packages/1c/61/6687b9c1602deb1c364d4653c641698e3de298b9c4f5dc98c59698455ac7/orm_loader-2.0.0-py3-none-any.whl", hash = "sha256:a118ddc3fcb611d658b7be52f616b641804ae65067efd05753d1bc14a03b52c9", size = 74959, upload-time = "2026-10-10T23:22:14.645Z" },
 ]
 
 [[package]]
