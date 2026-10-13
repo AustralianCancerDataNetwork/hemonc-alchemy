@@ -268,8 +268,8 @@ def regen_condition_targets(
         fg=typer.colors.GREEN,
     )
 
-@app.command(name="lint-biomarkers")
-def lint_biomarkers_command(
+@app.command(name="lint-indications")
+def lint_indications_command(
     database_url: Annotated[
         str | None,
         typer.Option(
@@ -277,11 +277,16 @@ def lint_biomarkers_command(
             help="SQLAlchemy URL for the HemOnc database.",
         ),
     ] = None,
+    strict: Annotated[
+        bool,
+        typer.Option("--strict", help="Exit non-zero when indication values are unparsed."),
+    ] = False,
 ) -> None:
-    """List biomarker names and findings not handled by the current vocabulary/parser."""
+    """List unparsed indication values and normalizer invariant failures."""
     from sqlalchemy.orm import Session
 
-    from .toolkit.core.indications.normalisers.biomarker import lint_biomarkers
+    from .toolkit.core.indications.loader import load_indication_sources
+    from .toolkit.core.indications.normalisers.lint import lint_indications
 
     if database_url:
         import sqlalchemy as sa
@@ -294,21 +299,29 @@ def lint_biomarkers_command(
         engine = create_hemonc_engine(resolved)
     try:
         with Session(engine) as session:
-            report = lint_biomarkers(session)
+            sources = load_indication_sources(session)
     finally:
         engine.dispose()
-    for label, values in (
-        ("Unrecognised biomarker names", report.unknown_names),
-        ("Unparsed findings", report.unparsed_findings),
-    ):
-        typer.echo(f"{label} ({sum(values.values())} occurrences):")
+    report = lint_indications(sources)
+    for label, values in report.diagnostics:
+        total = sum(
+            count if isinstance(count, int) else len(count) - 1
+            for count in values.values()
+        )
+        typer.echo(f"{label} ({total} occurrences):")
         if values:
             for value, count in values.items():
                 typer.echo(f"  {value}: {count}")
         else:
             typer.echo("  none")
-    if report.exit_code:
-        raise typer.Exit(code=report.exit_code)
+    typer.echo(f"Invariant failures ({len(report.invariant_failures)}):")
+    for failure in report.invariant_failures:
+        typer.echo(f"  {failure}")
+    if report.invariant_failures or (strict and report.has_unparsed):
+        raise typer.Exit(code=1)
+
+
+app.command(name="lint-biomarkers")(lint_indications_command)
 
 
 def main() -> None:

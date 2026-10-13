@@ -14,7 +14,13 @@ from ....model import (
     indications_Biomarker3Map,
     indications_Biomarker4_findingMap,
     indications_Biomarker4Map,
+    indications_ContextMap,
+    indications_DemographicsMap,
+    indications_Prior_therapy_negationMap,
+    indications_Prior_therapy_settingMap,
     indications_Regimen_cuiMap,
+    indications_Response_contingencyMap,
+    indications_Risk_stratificationMap,
 )
 from ..catalogue.indications import indication_statement
 from ..catalogue.specs import DEFAULT_INDICATION_SPEC, IndicationSpec
@@ -39,6 +45,20 @@ class IndicationSource:
     biomarkers: tuple[BiomarkerSource, ...]
     regimen_cuis: tuple[int, ...]
     raw: Mapping[str, str | None]
+    stage: str | None = None
+    status: str | None = None
+    stage_or_status: str | None = None
+    age: str | None = None
+    age_unit: str | None = None
+    prior_therapy: str | None = None
+    sex: str | None = None
+    accelerated: bool = False
+    context: tuple[str, ...] = ()
+    demographics: tuple[str, ...] = ()
+    prior_therapy_setting: tuple[str, ...] = ()
+    prior_therapy_negation: tuple[str, ...] = ()
+    response_contingency: tuple[str, ...] = ()
+    risk_stratification: tuple[str, ...] = ()
 
 
 def _split(value: str | None) -> tuple[str, ...]:
@@ -47,6 +67,28 @@ def _split(value: str | None) -> tuple[str, ...]:
     return tuple(
         dict.fromkeys(part.strip() for part in value.split("|") if part.strip())
     )
+
+
+def _load_child_values(
+    session, ids: tuple[int, ...]
+) -> dict[tuple[int, str], list[str]]:
+    child_values = {}
+    for table, attribute in (
+        (indications_ContextMap, "context"),
+        (indications_DemographicsMap, "demographics"),
+        (indications_Prior_therapy_settingMap, "prior_therapy_setting"),
+        (indications_Prior_therapy_negationMap, "prior_therapy_negation"),
+        (indications_Response_contingencyMap, "response_contingency"),
+        (indications_Risk_stratificationMap, "risk_stratification"),
+    ):
+        column = getattr(table, attribute)
+        for parent_id, value in session.execute(
+            select(table.parent_id, column)
+            .where(table.parent_id.in_(ids))
+            .order_by(table.parent_id, column)
+        ):
+            child_values.setdefault((parent_id, attribute), []).append(str(value))
+    return child_values
 
 
 def load_indication_sources(
@@ -72,7 +114,9 @@ def load_indication_sources(
     for slot, table, attribute in tables:
         column = getattr(table, attribute)
         for parent_id, value in session.execute(
-            select(table.parent_id, column).where(table.parent_id.in_(ids))
+            select(table.parent_id, column)
+            .where(table.parent_id.in_(ids))
+            .order_by(table.parent_id, column)
         ):
             mapped.setdefault((parent_id, slot, attribute), []).append(
                 str(getattr(value, "value", value)) if value is not None else None
@@ -88,6 +132,8 @@ def load_indication_sources(
         )
     ):
         regimens.setdefault(parent_id, []).append(regimen_cui)
+
+    child_values = _load_child_values(session, ids)
 
     sources = []
     for row in rows:
@@ -146,6 +192,25 @@ def load_indication_sources(
                 tuple(slots),
                 tuple(regimens.get(row.id, ())),
                 MappingProxyType(raw),
+                raw.get("stage"),
+                raw.get("status"),
+                raw.get("stage_or_status"),
+                raw.get("age"),
+                raw.get("age_unit"),
+                raw.get("prior_therapy"),
+                raw.get("sex"),
+                bool(row["accelerated"]),
+                *(
+                    tuple(child_values.get((row.id, attribute), ()))
+                    for attribute in (
+                        "context",
+                        "demographics",
+                        "prior_therapy_setting",
+                        "prior_therapy_negation",
+                        "response_contingency",
+                        "risk_stratification",
+                    )
+                ),
             )
         )
     return tuple(sources)

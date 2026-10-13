@@ -19,10 +19,21 @@ from hemonc_alchemy.toolkit.core.indications import (
     load_indication_sources,
     resolve_indications,
 )
-from hemonc_alchemy.toolkit.core.indications.model import Presence
+from hemonc_alchemy.toolkit.core.indications.model import (
+    AgeCriterion,
+    ContextCriterion,
+    Presence,
+    SexCriterion,
+)
+from hemonc_alchemy.toolkit.core.indications.normalisers.age import AgeNormaliser
 from hemonc_alchemy.toolkit.core.indications.normalisers.biomarker import (
     BiomarkerNormaliser,
 )
+from hemonc_alchemy.toolkit.core.indications.normalisers.context import (
+    ContextNormaliser,
+)
+from hemonc_alchemy.toolkit.core.indications.normalisers.scope import ScopeNormaliser
+from hemonc_alchemy.toolkit.core.indications.normalisers.sex import SexNormaliser
 
 
 @pytest.fixture(scope="module")
@@ -84,7 +95,7 @@ def test_live_snapshot_coverage_and_golden_indications(
 
     assert signatures(180)[:3] == [
         (1, "ER", ("negative",)),
-        (2, "PR", ("negative",)),
+        (2, "pr", ("negative",)),
         (3, "HER2", ("negative",)),
     ]
     assert signatures(44) == [(1, "EGFR", ("exon 19 deletion", "p.L858R"))]
@@ -127,7 +138,12 @@ def test_live_presence_classification(resolved_indications):
 
 @pytest.mark.postgres
 def test_live_golden_presence_states(resolved_indications):
-    assert [c.findings[0].presence for c in resolved_indications[180].criteria[:3]] == [
+    triple_negative = [
+        c
+        for c in resolved_indications[180].criteria
+        if isinstance(c, BiomarkerCriterion) and c.slot in (1, 2, 3)
+    ]
+    assert [c.findings[0].presence for c in triple_negative] == [
         Presence.ABSENT,
         Presence.ABSENT,
         Presence.ABSENT,
@@ -136,7 +152,11 @@ def test_live_golden_presence_states(resolved_indications):
         Presence.PRESENT,
         Presence.PRESENT,
     ]
-    mmr_msi = resolved_indications[964].criteria
+    mmr_msi = [
+        c
+        for c in resolved_indications[964].criteria
+        if isinstance(c, BiomarkerCriterion)
+    ]
     assert len(mmr_msi) == 2 and mmr_msi[0].group == mmr_msi[1].group
     assert [f.presence for f in mmr_msi[0].findings] == [
         Presence.PRESENT,
@@ -154,3 +174,73 @@ def test_live_golden_presence_states(resolved_indications):
     pd_l1 = resolved_indications[203].criteria[0].findings[0]
     assert pd_l1.presence is Presence.NOT_STATED
     assert (pd_l1.comparator, pd_l1.value, pd_l1.unit) == (">=", 50, "%")
+
+
+@pytest.mark.postgres
+def test_live_age_units_and_child_map_dimensions(live_session):
+    sources = load_indication_sources(live_session)
+    by_id = {source.indication_id: source for source in sources}
+
+    for indication_id, unit in ((160, "month"), (32, "year"), (10, "unspecified")):
+        age = AgeNormaliser().normalise(by_id[indication_id])[0]
+        assert isinstance(age, AgeCriterion)
+        assert age.unit == unit
+        assert age.raw == by_id[indication_id].age
+
+    month_ages = [
+        source for source in sources if source.age and source.age_unit == "month"
+    ]
+    assert len(month_ages) == 12
+    assert sum(source.age == "1+" for source in month_ages) == 7
+
+    context = ContextNormaliser().normalise(by_id[10])[0]
+    assert isinstance(context, ContextCriterion)
+    assert context.terms[0].setting.value == "adjuvant"
+    sex_source = next(source for source in sources if source.sex == "female")
+    sex = SexNormaliser().normalise(sex_source)[0]
+    assert isinstance(sex, SexCriterion) and sex.sex.value == "female"
+
+    assert sum(bool(source.sex) for source in sources) == 79
+    assert sum(source.accelerated for source in sources) == 470
+    assert sum(len(source.context) for source in sources) == 407
+    assert sum(len(source.demographics) for source in sources) == 138
+    assert sum(len(source.prior_therapy_setting) for source in sources) == 168
+    assert sum(len(source.prior_therapy_negation) for source in sources) == 1313
+    assert sum(len(source.response_contingency) for source in sources) == 567
+    assert sum(len(source.risk_stratification) for source in sources) == 174
+
+
+@pytest.mark.postgres
+def test_live_scope_parser_coverage(live_session):
+    sources = load_indication_sources(live_session)
+    normaliser = ScopeNormaliser()
+    for column, minimum in (
+        ("stage", 0.95),
+        ("status", 0.95),
+        ("stage_or_status", 0.85),
+    ):
+        populated = [
+            source
+            for source in sources
+            if (raw := getattr(source, column)) and raw.strip()
+        ]
+        parsed = 0
+        for source in populated:
+            raw = getattr(source, column)
+            criterion = next(
+                (
+                    item
+                    for item in normaliser.normalise(source)
+                    if item.source == column
+                ),
+                None,
+            )
+            if criterion is None:
+                parsed += all(
+                    value.strip().casefold() == "not applicable"
+                    for value in raw.split("|")
+                    if value.strip()
+                )
+            else:
+                parsed += all(term.parsed for term in criterion.terms)
+        assert parsed / len(populated) >= minimum

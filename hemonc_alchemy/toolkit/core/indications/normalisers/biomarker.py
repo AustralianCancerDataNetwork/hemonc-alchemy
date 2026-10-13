@@ -1,25 +1,34 @@
 """Total text normalisation for biomarker names and findings."""
 
-import csv
 import re
-from collections import Counter
-from dataclasses import dataclass, field
-from importlib.resources import files
+from collections import Counter, defaultdict
+from dataclasses import dataclass
 
 from ..loader import IndicationSource
 from ..model import BiomarkerCriterion, Criterion, Finding, Kind, Origin, Presence
 
-_STATUS = {
-    "positive": Presence.PRESENT,
-    "present": Presence.PRESENT,
-    "detected": Presence.PRESENT,
-    "negative": Presence.ABSENT,
-    "wild-type": Presence.ABSENT,
-    "wild type": Presence.ABSENT,
-    "absent": Presence.ABSENT,
-    "not detected": Presence.ABSENT,
-    "unknown": Presence.UNKNOWN,
+_NAME_ALIASES = {
+    "erbb2": "HER2",
+    "folate receptor alpha": "FOLR1",
+    "iobenguane scan": "MIBG",
+    "mage-a4 antigen": "MAGEA4",
+    "somatostatin receptor": "SSTR",
 }
+
+_STATUS = {
+    state.value: state
+    for state in (Presence.PRESENT, Presence.ABSENT, Presence.UNKNOWN)
+}
+_STATUS.update(
+    {
+        "positive": Presence.PRESENT,
+        "detected": Presence.PRESENT,
+        "negative": Presence.ABSENT,
+        "wild-type": Presence.ABSENT,
+        "wild type": Presence.ABSENT,
+        "not detected": Presence.ABSENT,
+    }
+)
 _PROTEIN = re.compile(r"(?i)^p\.[A-Z*][A-Z0-9*_?]*$")
 _EXON = re.compile(
     r"(?i)\bexon\s+(\d+)(?:\s+(deletion|insertion|mutation|skipping))?\b"
@@ -30,17 +39,6 @@ _THRESHOLD = re.compile(
 _LEADING_THRESHOLD = re.compile(
     r"(?i)^(?P<word>>=|<=|>|<|=)\s*(?P<value>\d+(?:\.\d+)?)\s*(?P<unit>%|mutations?/mb|mut/mb|ng/ml)?(?P<qualifier>.*)$"
 )
-
-
-def _name_table() -> dict[str, str]:
-    path = files("hemonc_alchemy.toolkit.core.indications").joinpath(
-        "vocab/biomarker_names.csv"
-    )
-    with path.open("r", encoding="utf-8", newline="") as handle:
-        return {
-            row["source_label"].strip().casefold(): row["canonical"].strip()
-            for row in csv.DictReader(handle)
-        }
 
 
 def _parse_finding(raw: str) -> Finding:
@@ -173,13 +171,10 @@ class BiomarkerNormaliser:
         "biomarker4",
         "biomarker4_finding",
     )
-    _names: dict[str, str] = field(init=False, repr=False, compare=False)
-
-    def __post_init__(self):
-        object.__setattr__(self, "_names", _name_table())
 
     def canonical_name(self, name: str) -> str | None:
-        return self._names.get(name.strip().casefold())
+        value = name.strip()
+        return _NAME_ALIASES.get(value.casefold(), value)
 
     def parse_finding(self, raw: str) -> Finding:
         try:
@@ -216,17 +211,22 @@ class BiomarkerNormaliser:
         return tuple(criteria)
 
     def lint(self, sources: tuple[IndicationSource, ...]) -> "BiomarkerLint":
-        names, findings = Counter(), Counter()
+        spellings, findings = defaultdict(set), Counter()
         for source in sources:
             for slot in source.biomarkers:
                 for name in slot.biomarkers:
-                    if self.canonical_name(name) is None:
-                        names[name] += 1
+                    spellings[name.casefold()].add(name)
                 for raw in slot.findings:
                     if not self.parse_finding(raw).parsed:
                         findings[raw] += 1
         return BiomarkerLint(
-            dict(sorted(names.items())), dict(sorted(findings.items()))
+            {},
+            dict(sorted(findings.items())),
+            {
+                key: tuple(sorted(values))
+                for key, values in sorted(spellings.items())
+                if len(values) > 1
+            },
         )
 
 
@@ -234,18 +234,22 @@ class BiomarkerNormaliser:
 class BiomarkerLint:
     unknown_names: dict[str, int]
     unparsed_findings: dict[str, int]
+    case_variants: dict[str, tuple[str, ...]]
 
     @property
     def exit_code(self) -> int:
         return int(bool(self.unknown_names))
 
 
-def lint_biomarkers(session, spec=None) -> BiomarkerLint:
-    from ...catalogue.specs import DEFAULT_INDICATION_SPEC
-    from ..loader import load_indication_sources
+def lint_biomarkers(session=None, spec=None, *, sources=None) -> BiomarkerLint:
+    if sources is None:
+        from ...catalogue.specs import DEFAULT_INDICATION_SPEC
+        from ..loader import load_indication_sources
 
+        if session is None:
+            raise TypeError("session or sources is required")
+        sources = load_indication_sources(session, spec or DEFAULT_INDICATION_SPEC)
     normaliser = BiomarkerNormaliser()
-    sources = load_indication_sources(session, spec or DEFAULT_INDICATION_SPEC)
     return normaliser.lint(sources)
 
 
