@@ -13,9 +13,11 @@ def _withdrawn(value: str) -> bool:
 def resolve_indications(
     session,
     spec: IndicationSpec = DEFAULT_INDICATION_SPEC,
-    normalisers: tuple[Normaliser, ...] = default_normalisers(),
+    normalisers: tuple[Normaliser, ...] | None = None,
 ) -> tuple[ResolvedIndication, ...]:
     """Return typed criteria while retaining the original indication fields."""
+    if normalisers is None:
+        normalisers = default_normalisers()
     result = []
     for source in load_indication_sources(session, spec):
         criteria = tuple(

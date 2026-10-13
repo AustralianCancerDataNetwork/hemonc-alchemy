@@ -89,14 +89,50 @@ def test_finding_forms_keep_the_raw_text_and_fields():
 
 def test_presence_distinguishes_unknown_from_unstated_expression():
     normaliser = BiomarkerNormaliser()
-    for raw in ("high", "low", "not high", "TPS at least 1%", "CPS at least 1%"):
-        assert normaliser.parse_finding(raw).presence is Presence.NOT_STATED
+    level_and_threshold_findings = [
+        normaliser.parse_finding(raw)
+        for raw in (
+            "high",
+            "low",
+            "not high",
+            "high (IHC 3+)",
+            "TPS at least 1%",
+            "CPS at least 1%",
+            ">= 10 mutations/Mb",
+            "at least 400 ng/mL",
+        )
+    ]
+    assert all(finding.presence is not Presence.UNKNOWN for finding in level_and_threshold_findings)
+    assert all(
+        finding.presence is Presence.NOT_STATED
+        for finding in level_and_threshold_findings
+    )
+    assert all(
+        (finding.comparator is None and finding.value is None)
+        or finding.presence is not Presence.UNKNOWN
+        for finding in level_and_threshold_findings
+    )
 
     deficient = normaliser.parse_finding("deficient")
     proficient = normaliser.parse_finding("proficient")
     assert deficient.presence is Presence.PRESENT and deficient.detail == "deficient"
     assert proficient.presence is Presence.ABSENT and proficient.detail == "proficient"
     assert normaliser.parse_finding("unknown").presence is Presence.UNKNOWN
+
+
+def test_importing_resolver_does_not_load_biomarker_vocabulary(monkeypatch):
+    import importlib
+
+    from hemonc_alchemy.toolkit.core.indications.normalisers import biomarker
+
+    def fail_if_loaded():
+        raise AssertionError("CSV vocabulary read during resolver module import")
+
+    monkeypatch.setattr(biomarker, "_name_table", fail_if_loaded)
+    resolver_module = importlib.import_module(
+        "hemonc_alchemy.toolkit.core.indications.resolver"
+    )
+    importlib.reload(resolver_module)
 
 
 def test_finding_parser_is_total_and_keeps_opaque_values():
