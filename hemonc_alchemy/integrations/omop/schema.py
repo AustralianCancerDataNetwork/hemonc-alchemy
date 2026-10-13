@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any
 
 import sqlalchemy as sa
+import sqlalchemy.exc
 from sqlalchemy import event
 
 _SCHEMA_TRANSLATE_MAP = "schema_translate_map"
@@ -70,7 +72,7 @@ def _configured_map(bind: Any) -> dict[str, str | None] | None:
     return None
 
 
-def _translate_map(bind: Any, explicit: dict[str, str | None] | None) -> dict[str, str | None] | None:
+def _translate_map(bind: Any, explicit: Mapping[str, str | None] | None) -> dict[str, str | None] | None:
     if explicit is not None:
         return dict(explicit)
     existing = bind.get_execution_options().get(_SCHEMA_TRANSLATE_MAP)
@@ -81,7 +83,7 @@ def _translate_map(bind: Any, explicit: dict[str, str | None] | None) -> dict[st
 
 def schema_aware_bind(
     bind: Any,
-    schema_translate_map: dict[str, str | None] | None = None,
+    schema_translate_map: Mapping[str, str | None] | None = None,
 ) -> Any:
     """Return a bind, or session, that translates OMOP schema tags."""
     is_session = callable(getattr(bind, "get_bind", None)) and callable(
@@ -147,7 +149,7 @@ def omop_availability(
     session: Any,
     *,
     require_relationships: bool = False,
-    schema_translate_map: dict[str, str | None] | None = None,
+    schema_translate_map: Mapping[str, str | None] | None = None,
 ) -> OmopAvailability:
     """Check the optional OMOP models and return a diagnostic on failure."""
     from .binding import load_omop_binding
