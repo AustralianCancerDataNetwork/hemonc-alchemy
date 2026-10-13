@@ -38,7 +38,12 @@ DataDirOption = Annotated[
 @app.command()
 def regen(
     data_dir: DataDirOption,
-    force: Annotated[bool, typer.Option(help="Proceed even if the schema diff shows unacknowledged changes.")] = False,
+    force: Annotated[
+        bool,
+        typer.Option(
+            help="Proceed even if the schema diff shows unacknowledged changes."
+        ),
+    ] = False,
     accept_source_loss: Annotated[
         bool,
         typer.Option(
@@ -74,11 +79,14 @@ def regen(
         for loss in source_losses:
             typer.echo(f"  - {loss}")
         typer.secho(
-            "Re-run with --accept-source-loss once this is intended.", fg=typer.colors.YELLOW
+            "Re-run with --accept-source-loss once this is intended.",
+            fg=typer.colors.YELLOW,
         )
         raise typer.Exit(code=1)
 
-    errors = validate_module.validate_all(registry, _MODEL_DIR / "entities.py", _MODEL_DIR / "enums.py")
+    errors = validate_module.validate_all(
+        registry, _MODEL_DIR / "entities.py", _MODEL_DIR / "enums.py"
+    )
     if errors:
         typer.secho("Validation failed:", fg=typer.colors.RED, bold=True)
         for error in errors:
@@ -92,7 +100,11 @@ def regen(
         check=False,
     )
     if orm_check.returncode != 0:
-        typer.secho("Generated model failed to import/map cleanly:", fg=typer.colors.RED, bold=True)
+        typer.secho(
+            "Generated model failed to import/map cleanly:",
+            fg=typer.colors.RED,
+            bold=True,
+        )
         typer.echo(orm_check.stdout)
         typer.echo(orm_check.stderr)
         raise typer.Exit(code=1)
@@ -131,7 +143,9 @@ def regen(
     )
     if sourceless:
         previously_backed = (
-            {name for name, t in previous.tables.items() if t.columns} if previous else set()
+            {name for name, t in previous.tables.items() if t.columns}
+            if previous
+            else set()
         )
         newly = [name for name in sourceless if name in previously_backed]
         long_standing = [name for name in sourceless if name not in previously_backed]
@@ -153,12 +167,17 @@ def validate() -> None:
     Check the currently generated model for structural correctness.
     """
     if not _REGISTRY_JSON.exists():
-        typer.secho(f"No registry found at {_REGISTRY_JSON} — run `regen` first.", fg=typer.colors.RED)
+        typer.secho(
+            f"No registry found at {_REGISTRY_JSON} — run `regen` first.",
+            fg=typer.colors.RED,
+        )
         raise typer.Exit(code=1)
 
     registry = load_registry_json(_REGISTRY_JSON)
     try:
-        validate_module.validate_or_raise(registry, _MODEL_DIR / "entities.py", _MODEL_DIR / "enums.py")
+        validate_module.validate_or_raise(
+            registry, _MODEL_DIR / "entities.py", _MODEL_DIR / "enums.py"
+        )
     except HemOncValidationError as exc:
         typer.secho(str(exc), fg=typer.colors.RED)
         raise typer.Exit(code=1) from exc
@@ -184,7 +203,10 @@ def diff(
 ) -> None:
     """Diff the currently generated schema against the last committed one."""
     if not _REGISTRY_JSON.exists():
-        typer.secho(f"No registry found at {_REGISTRY_JSON} — run `regen` first.", fg=typer.colors.RED)
+        typer.secho(
+            f"No registry found at {_REGISTRY_JSON} — run `regen` first.",
+            fg=typer.colors.RED,
+        )
         raise typer.Exit(code=1)
 
     registry = load_registry_json(_REGISTRY_JSON)
@@ -206,9 +228,14 @@ def diff(
 @app.command()
 def audit(
     data_dir: DataDirOption,
-    output: Annotated[Path | None, typer.Option(help="Write the report here instead of printing it.")] = None,
+    output: Annotated[
+        Path | None, typer.Option(help="Write the report here instead of printing it.")
+    ] = None,
     report_only: Annotated[
-        bool, typer.Option(help="Always exit 0, even if hard mismatches are found (for local/manual review).")
+        bool,
+        typer.Option(
+            help="Always exit 0, even if hard mismatches are found (for local/manual review)."
+        ),
     ] = False,
 ) -> None:
     """
@@ -230,12 +257,40 @@ def audit(
 @app.command(name="regen-condition-targets")
 def regen_condition_targets(
     data_dir: DataDirOption,
-    db_url: Annotated[str, typer.Option(envvar="HEMONC_VOCAB_URL", help="SQLAlchemy URL of a database holding HemOnc's tables and the OMOP vocabulary.")],
-    vocab_schema: Annotated[str | None, typer.Option(help="Schema holding the OMOP vocabulary tables, if not the connection's default.")] = None,
-    review_out: Annotated[Path, typer.Option(help="Where to write the suggested-changes CSV.")] = Path("condition_targets_review.csv"),
-    proposals: Annotated[Path | None, typer.Option(help="Search proposals CSV; defaults to `data_dir`/condition_target_proposals.csv.")] = None,
-    coverage_flags_out: Annotated[Path | None, typer.Option(help="Also write targets that cover conditions outside their HemOnc subtree.")] = None,
-    crosswalk: Annotated[Path | None, typer.Option(help="NCIt -> SNOMED crosswalk JSON; defaults to `data_dir`/ncit_snomed_crosswalk.json.")] = None,
+    db_url: Annotated[
+        str,
+        typer.Option(
+            envvar="HEMONC_VOCAB_URL",
+            help="SQLAlchemy URL of a database holding HemOnc's tables and the OMOP vocabulary.",
+        ),
+    ],
+    vocab_schema: Annotated[
+        str | None,
+        typer.Option(
+            help="Schema holding the OMOP vocabulary tables, if not the connection's default."
+        ),
+    ] = None,
+    review_out: Annotated[
+        Path, typer.Option(help="Where to write the suggested-changes CSV.")
+    ] = Path("condition_targets_review.csv"),
+    proposals: Annotated[
+        Path | None,
+        typer.Option(
+            help="Search proposals CSV; defaults to `data_dir`/condition_target_proposals.csv."
+        ),
+    ] = None,
+    coverage_flags_out: Annotated[
+        Path | None,
+        typer.Option(
+            help="Also write targets that cover conditions outside their HemOnc subtree."
+        ),
+    ] = None,
+    crosswalk: Annotated[
+        Path | None,
+        typer.Option(
+            help="NCIt -> SNOMED crosswalk JSON; defaults to `data_dir`/ncit_snomed_crosswalk.json."
+        ),
+    ] = None,
 ) -> None:
     """Rewrite toolkit/core/condition_patches.csv and write a suggestions sheet. Review the diff before committing."""
     import sqlalchemy as sa
@@ -257,8 +312,12 @@ def regen_condition_targets(
                 )
                 raise typer.Exit(code=1)
             result = condition_target_generation_module.regenerate(
-                data_dir, session, review_out,
-                crosswalk_path=crosswalk, proposals_path=proposals, coverage_flags_path=coverage_flags_out,
+                data_dir,
+                session,
+                review_out,
+                crosswalk_path=crosswalk,
+                proposals_path=proposals,
+                coverage_flags_path=coverage_flags_out,
             )
     finally:
         engine.dispose()
@@ -267,6 +326,7 @@ def regen_condition_targets(
         f"{len(result.suggestions)} suggested change(s) to {review_out}.",
         fg=typer.colors.GREEN,
     )
+
 
 @app.command(name="lint-indications")
 def lint_indications_command(
@@ -279,7 +339,9 @@ def lint_indications_command(
     ] = None,
     strict: Annotated[
         bool,
-        typer.Option("--strict", help="Exit non-zero when indication values are unparsed."),
+        typer.Option(
+            "--strict", help="Exit non-zero when indication values are unparsed."
+        ),
     ] = False,
 ) -> None:
     """List unparsed indication values and normalizer invariant failures."""
@@ -291,7 +353,9 @@ def lint_indications_command(
     if database_url:
         import sqlalchemy as sa
 
-        engine = sa.create_engine(database_url)
+        engine = sa.create_engine(
+            database_url, connect_args={"options": "-csearch_path=public,omop"}
+        )
     else:
         from .config import create_hemonc_engine, get_hemonc_context
 

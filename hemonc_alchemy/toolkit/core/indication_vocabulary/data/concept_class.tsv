@@ -1,0 +1,17 @@
+concept_class_id	concept_class_name	concept_class_concept_id
+Indication	Regulatory indication (one source row)	2080000001
+Criterion Set	AND or OR grouping of indication criteria	2080000002
+Criterion Dimension	Kind of criterion held by a criterion set	2080000003
+Biomarker State	Pre-coordinated biomarker analyte with result, variant or threshold	2080000004
+Biomarker Threshold	Closed-set biomarker cut-off with numeric bounds	2080000005
+Disease Extent	Stage or extent of disease	2080000006
+Disease Status	Disease status, course or phase	2080000007
+Response Contingency	Event required before the indication applies	2080000008
+Prior Therapy Requirement	Prior treatment requirement or count band	2080000009
+Co-therapy Requirement	Required co-administered therapy not resolved to a HemOnc concept	2080000010
+Time Window	Time contingency window	2080000011
+Age Band	Age restriction band	2080000012
+Population Qualifier	Population restriction (menopausal status, risk, performance, ineligibility)	2080000013
+Treatment Context	Treatment setting not present in HemOnc Context	2080000014
+Regulator	Regulatory body issuing the approval	2080000015
+Approval Path	Regulatory approval pathway	2080000016

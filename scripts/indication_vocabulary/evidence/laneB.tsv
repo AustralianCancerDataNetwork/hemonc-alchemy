@@ -1,0 +1,87 @@
+column	raw_value	gene_context	n_indications	concept_id	concept_name	vocabulary_id	concept_class_id	domain_id	standard_concept	fit	note
+biomarker_finding	positive	*	373	9191	Positive	SNOMED	Qualifier Value	Meas Value	S	exact	searched
+biomarker_finding	mutated	BRAF/BRCA/EGFR/other	70	4126681	Detected	SNOMED	Qualifier Value	Meas Value	S	broader	Detected 4126681 for generic status; no 'Mutated' Meas Value concept found; gene-level 'gene variant measurement' parents exist (BRAF 35948173, EGFR 35962802, MET 35961878); searched
+biomarker_finding	high	MSI/TMB/other	52	4328749	High	SNOMED	Qualifier Value	Meas Value	S	broader	No MSI-high Meas Value; OMOP Genomic MSI-H 35977040 is invalid (non-standard, inactive); searched
+biomarker_finding	deficient	MMR	46	4126680	Deficient	SNOMED	Qualifier Value	Meas Value	S	exact	searched
+biomarker_finding	p.V600E	BRAF	25	19596981	BRAF protein: Substitution in position 600 of V replaced by E measurement	OMOP Genomic	Gene Protein Variant	Measurement	S	exact	Measurement-domain variant; pair with Detected/Positive value; searched
+biomarker_finding	negative	*	34	9189	Negative	SNOMED	Qualifier Value	Meas Value	S	exact	searched
+biomarker_finding	wild-type	*	32	45880310	Wild type	LOINC	Answer	Meas Value	S	exact	searched
+biomarker_finding	fusion	RET	16							none	Only partner-specific RET fusions (e.g. KIF5B::RET 19644249, CCDC6::RET 19643902); no generic RET fusion concept returned; searched
+biomarker_finding	fusion	FGFR2	9							none	No FGFR2 fusion concept returned; searched
+biomarker_finding	fusion	NTRK/NRG1/ROS1/BRAF	6							none	Only MedDRA/SNOMED NTRK fusion conditions (non-measurement; e.g. 37179095 NTRK gene fusion positive MedDRA non-standard); searched
+biomarker_finding	p.V600	BRAF	24	19596981	BRAF protein: Substitution in position 600 of V replaced by E measurement	OMOP Genomic	Gene Protein Variant	Measurement	S	narrower	Position-only; no codon-level concept. Siblings exist: V600K 19619660, V600D 19564956, V600R 19539858, V600M 19604650; BRAF gene-level 35948173 is broader; searched
+biomarker_finding	germline mutation	BRCA	16							none	Origin: LOINC 'Genomic source class [Type]' 3048520 is a test, not a value; no germline value concept; SNOMED 'Somatic mutation' 4052276 is a Condition; searched
+biomarker_finding	rearrangement	ROS1	10	35977097	ROS1 gene rearrangement measurement	OMOP Genomic	Gene DNA Variant	Measurement	S	exact	searched
+biomarker_finding	rearrangement	ALK	0	35976950	ALK gene rearrangement measurement	OMOP Genomic	Gene DNA Variant	Measurement	S	exact	Via biomarker2/3 context; class concept has no descendants; searched
+biomarker_finding	exon 19 deletion	EGFR	14	35976971	EGFR exon 19 deletion measurement	OMOP Genomic	Gene DNA Variant	Measurement	S	exact	Child of EGFR gene variant 35962802; no descendants, no links to specific variants; searched
+biomarker_finding	p.L858R	EGFR	14	19478184	EGFR protein: Substitution in position 858 of L replaced by R measurement	OMOP Genomic	Gene Protein Variant	Measurement	S	exact	searched
+biomarker_finding	exon 14 skipping alteration	MET	12	19643659	MET exon 14 skipping mutation measurement	OMOP Genomic	Gene DNA Variant	Measurement	S	exact	Child of MET gene variant 35961878 only; searched
+biomarker_finding	p.V600K	BRAF	11	19619660	BRAF protein: Substitution in position 600 of V replaced by K measurement	OMOP Genomic	Gene Protein Variant	Measurement	S	exact	searched
+biomarker_finding	CPS at least 1%	PD-L1	10							none	PD-L1 test 718584 'PD-L1 by Immune stain measurement' (OMOP Extension) exists as the test only; no CPS/threshold concept; searched
+biomarker_finding	rearrangement without a known acquired resistance mutation	NTRK	10							none	No NTRK rearrangement concept; qualifier has no concept; searched
+biomarker_finding	TPS at least 1%	PD-L1	10							none	As CPS; searched
+biomarker_finding	proficient	MMR	9							none	No Proficient Meas Value concept; Negative 9189 / Not detected 9190 is a lossy fallback; searched
+biomarker_finding	unknown	*	9							none	Unknown Meas Value hits were NAACCR-specific only; map to no value; searched
+biomarker_finding	activating mutation	EGFR	8							none	Functional class not represented; fallback EGFR gene variant 35962802 (broader); searched
+biomarker_finding	CPS at least 10%	PD-L1	8							none	searched
+biomarker_finding	deletion	17p/5q	8							none	Only MeSH 'Chromosome 17 deletion' 19356799 (Observation, non-standard); searched
+biomarker_finding	at least 1%	PD-L1/other	7							none	searched
+biomarker_finding	exon 20 insertion	EGFR	7	35976972	EGFR exon 20 insertion measurement	OMOP Genomic	Gene DNA Variant	Measurement	S	exact	searched
+biomarker_finding	mutation	various	7	4126681	Detected	SNOMED	Qualifier Value	Meas Value	S	broader	as mutated; searched
+biomarker_finding	not high	MSI/TMB	7							none	No standard concept for not-high; Low 4267416 would be narrower/lossy; searched
+biomarker_finding	p.T790M	EGFR	7	19576591	EGFR protein: Substitution in position 790 of T replaced by M measurement	OMOP Genomic	Gene Protein Variant	Measurement	S	exact	searched
+biomarker_finding	TPS at least 50%	PD-L1	7							none	searched
+biomarker_finding	p.G12C	KRAS	6	19566395	KRAS protein: Substitution in position 12 of G replaced by C measurement	OMOP Genomic	Gene Protein Variant	Measurement	S	exact	searched
+biomarker_finding	somatic mutation	BRCA	6	4052276	Somatic mutation	SNOMED	Clinical Finding	Condition	S	broader	Condition domain, not a value/origin qualifier; searched
+biomarker_finding	ITD	FLT3	5	21492353	FLT3 gene internal tandem duplication [Presence] in Blood or Tissue by Molecular genetics method	LOINC	Lab Test	Measurement	S	broader	Test concept (LOINC); no OMOP Genomic ITD concept found; searched
+biomarker_finding	p.K27M	H3	5	37116848	Diffuse midline glioma, point mutation K27M in histone H3	SNOMED	Morph Abnormality	Observation	S	broader	No genomic variant concept for H3 K27M; SNOMED morphology only; searched
+biomarker_finding	p.T315I	Bcr-Abl	5	19493964	ABL1 protein: Substitution in position 315 of T replaced by I measurement	OMOP Genomic	Gene Protein Variant	Measurement	S	exact	ABL1 gene; searched
+biomarker_finding	low	HER2/other	4	4267416	Low	SNOMED	Qualifier Value	Meas Value	S	exact	searched
+biomarker_finding	present	*	4	4181412	Present	SNOMED	Qualifier Value	Meas Value	S	exact	searched
+biomarker_finding	fusion without known acquired resistance mutation	NTRK	3							none	searched
+biomarker_finding	non-resistant mutation	*	3							none	searched
+biomarker_finding	susceptible mutation	*	3							none	searched
+biomarker_finding	>= 10 mutations/Mb	TMB	2	1001563	Mutations/Megabase [# Ratio] in Tumor	LOINC	Lab Test	Measurement	S	broader	Test concept; threshold would be value_as_number >=10; searched
+biomarker_finding	positive (IHC 3+)	HER2	2	9191	Positive	SNOMED	Qualifier Value	Meas Value	S	broader	IHC grade lost; searched
+biomarker_finding	p.D842V	PDGFRA	2	19519110	PDGFRA protein: Substitution in position 842 of D replaced by V measurement	OMOP Genomic	Gene Protein Variant	Measurement	S	exact	searched
+biomarker_finding	p.R132	IDH1	2	19556901	IDH1 protein: Substitution in position 132 of R replaced by H measurement	OMOP Genomic	Gene Protein Variant	Measurement	S	narrower	R132H only; R132C/G/S/L not looked up; searched
+biomarker_finding	>50% tumor cells strong 3+ IHC	HER2/other	1							none	searched
+biomarker_finding	at least 400 ng/mL / greater than 400 ng/mL	AFP	2							none	Numeric threshold; no concept; searched
+biomarker_finding	CPS at least 10	PD-L1	1							none	searched
+biomarker_finding	exon 18 mutation	PDGFRA	1							none	Not searched at exon level; fallback none
+biomarker_finding	p.D816V	KIT	1	19490320	KIT protein: Substitution in position 816 of D replaced by V measurement	OMOP Genomic	Gene Protein Variant	Measurement	S	exact	searched
+biomarker_finding	sensitizing mutation	EGFR	1							none	searched
+biomarker_finding	TIL at least 5%	TNBC	1							none	searched
+biomarker_finding	TKD activating mutation	FLT3	1							none	searched
+biomarker_finding	TPS at least 5%	PD-L1	1							none	searched
+biomarker_finding	translocation	KMT2A	1							none	No KMT2A translocation concept found; not directly searched beyond generic fusion queries
+biomarker2_finding	NEGATIVE	HER2/EGFR/PR	91	9189	Negative	SNOMED	Qualifier Value	Meas Value	S	exact	searched
+biomarker2_finding	WILD-TYPE	EGFR/ALK/KRAS	22	45880310	Wild type	LOINC	Answer	Meas Value	S	exact	searched
+biomarker2_finding	POSITIVE	HER2/other	11	9191	Positive	SNOMED	Qualifier Value	Meas Value	S	exact	searched
+biomarker2_finding	CPS at least 1/5	PD-L1	7							none	searched
+biomarker2_finding	HER2 IHC 0/1+/2+ ISH- low variants	HER2	3							none	No HER2-low/ultralow concept; searched
+biomarker3_finding	negative	HER2/EGFR	17	9189	Negative	SNOMED	Qualifier Value	Meas Value	S	exact	searched
+biomarker3_finding	wild-type	EGFR/PIK3CA/PTEN	12	45880310	Wild type	LOINC	Answer	Meas Value	S	exact	searched
+biomarker3_finding	mutated	PIK3CA/AKT1/ESR1/PTEN	10	4126681	Detected	SNOMED	Qualifier Value	Meas Value	S	broader	searched
+biomarker3_finding	activating mutation	AKT1	1							none	searched
+biomarker4_finding	CPS at least 10 / TIL at least 1	PD-L1	5							none	searched
+biomarker4_finding	POSITIVE / WILD-TYPE	ROS1/PD-L1	4	9191	Positive	SNOMED	Qualifier Value	Meas Value	S	exact	WT -> 45880310 likewise; searched
+prior_biomarker	(free text; see note)	various	0							none	prior_biomarker values are mostly 'not applicable' (39) plus long free-text therapy-conditional strings (HR-positive endocrine, RAS WT -> anti-EGFR, BRAF V600 BRAFi); no concept; treat as treatment-history logic, not biomarker value; searched
+biomarker3_finding	mutated	PIK3CA	8	35953202	PIK3CA gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	broader	gene-level; no specific variant requested; searched
+biomarker3_finding	mutated/negative	AKT1	3	35956980	AKT1 gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	broader	gene-level; searched
+biomarker3_finding	mutated	ESR1	3	35948983	ESR1 gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	broader	gene-level; searched
+biomarker3_finding	wild-type/mutated	PTEN	3	35955125	PTEN gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	broader	gene-level; searched
+biomarker_finding	mutated	NRAS	1	35950119	NRAS gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	broader	gene-level; searched
+biomarker	MYC	MYC	1	35952889	MYC gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	broader	gene-level; searched
+biomarker_finding	mutation/fusion	FGFR3	5	35954995	FGFR3 gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	broader	gene-level; no fusion-specific concept looked up; searched
+biomarker	t(15;17)/PML-RARA	PML-RARA	8	35977085	PML::RARA gene fusion measurement	OMOP Genomic	Gene Variant	Measurement	S	exact	also RARA::PML 19644595; searched
+biomarker	FIP1L1-PDGFRA	PDGFRA	5	19644083	FIP1L1::PDGFRA gene fusion measurement	OMOP Genomic	Gene Variant	Measurement	S	exact	; searched
+biomarker	HLA-A*02:01	HLA-A	3							none	only MeSH antigen concepts (non-standard, e.g. 19458214) and LOINC 46237874 'HLA-A*01+HLA-A*02' (Meas Value); none specific; searched
+biomarker	CLDN18.2	CLDN18.2	3							none	only investigational drug hits; searched
+biomarker_finding	MSI-high / MSS / MMR deficient / proficient	MSI/MMR	100	45773613	Mismatch repair microsatellite instability genetic test	SNOMED	Procedure	Measurement	S	broader	Tests only: also LOINC 21493972 'Microsatellite instability [Interpretation] in Cancer specimen Qualitative', 40765594 MSI [Presence] by Immune stain. Valid standard value concepts: Deficient 4126680 only; no MSI-high/MSS/Proficient standard concept (OMOP Genomic MSI-H 35977040 invalid); searched
+biomarker	PD-L1 assay	PD-L1	0	718584	PD-L1 by Immune stain measurement	OMOP Extension	Lab Test	Measurement	S	broader	assay/test concept; thresholds (CPS/TPS) still none; searched
+biomarker	PD-L1 assay	PD-L1	0	718585	PD-L1 by clone 22C3 by Immune stain measurement	OMOP Extension	Lab Test	Measurement	S	broader	assay/test concept; thresholds (CPS/TPS) still none; searched
+biomarker	PD-L1 assay	PD-L1	0	718586	PD-L1 by clone SP142 by Immune stain measurement	OMOP Extension	Lab Test	Measurement	S	broader	assay/test concept; thresholds (CPS/TPS) still none; searched
+biomarker	PD-L1 assay	PD-L1	0	718587	PD-L1 by clone SP263 by Immune stain measurement	OMOP Extension	Lab Test	Measurement	S	broader	assay/test concept; thresholds (CPS/TPS) still none; searched
+biomarker	PD-L1 assay	PD-L1	0	718588	PD-L1 by clone E1L3N by Immune stain measurement	OMOP Extension	Lab Test	Measurement	S	broader	assay/test concept; thresholds (CPS/TPS) still none; searched
+biomarker	PD-L1 assay	PD-L1	0	718589	PD-L1 by clone 28-8 by Immune stain measurement	OMOP Extension	Lab Test	Measurement	S	broader	assay/test concept; thresholds (CPS/TPS) still none; searched

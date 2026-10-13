@@ -1,0 +1,429 @@
+concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	standard_concept	valid_start_date	valid_end_date	invalid_reason	is_active	found	verified_via
+8507	MALE	Gender	Gender	Gender	M	S	1970-01-01	2099-12-31		true	yes	groundworkers concept_get
+8532	FEMALE	Gender	Gender	Gender	F	S	1970-01-01	2099-12-31		true	yes	groundworkers concept_get
+9181	Active	SNOMED	Meas Value	Qualifier Value	55561003	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+9189	Negative	SNOMED	Meas Value	Qualifier Value	260385009	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+9191	Positive	SNOMED	Meas Value	Qualifier Value	10828004	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+32944	Metastatic Disease	Episode	Episode	Disease Extent	OMOP4997716	S	1970-01-01	2099-12-31		true	yes	groundworkers concept_get
+32945	Remission	Episode	Episode	Disease Dynamic	OMOP4997717	S	1970-01-01	2099-12-31		true	yes	groundworkers concept_get
+32949	Progression	Episode	Episode	Disease Dynamic	OMOP4997721	S	1970-01-01	2099-12-31		true	yes	groundworkers concept_get
+200527	Splenomegaly	SNOMED	Condition	Disorder	16294009	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+432851	Metastatic malignant neoplasm	SNOMED	Condition	Disorder	128462008	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+439777	Anemia	SNOMED	Condition	Disorder	271737000	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+700490	Microsatellite stability measurement	OMOP Genomic	Measurement	Structural Variant	OMOP4997687	S	2021-03-28	2099-12-31		true	yes	groundworkers concept_get
+718584	PD-L1 by Immune stain measurement	OMOP Extension	Measurement	Lab Test	OMOP5036255	S	2021-01-19	2099-12-31		true	yes	groundworkers concept_get
+718585	PD-L1 by clone 22C3 by Immune stain measurement	OMOP Extension	Measurement	Lab Test	OMOP5036256	S	2021-01-19	2099-12-31		true	yes	groundworkers concept_get
+718586	PD-L1 by clone SP142 by Immune stain measurement	OMOP Extension	Measurement	Lab Test	OMOP5036257	S	2021-01-19	2099-12-31		true	yes	groundworkers concept_get
+718587	PD-L1 by clone SP263 by Immune stain measurement	OMOP Extension	Measurement	Lab Test	OMOP5036258	S	2021-01-19	2099-12-31		true	yes	groundworkers concept_get
+718588	PD-L1 by clone E1L3N by Immune stain measurement	OMOP Extension	Measurement	Lab Test	OMOP5036259	S	2021-01-19	2099-12-31		true	yes	groundworkers concept_get
+718589	PD-L1 by clone 28-8 by Immune stain measurement	OMOP Extension	Measurement	Lab Test	OMOP5036260	S	2021-01-19	2099-12-31		true	yes	groundworkers concept_get
+763933	At high risk for malignant neoplasm of breast	SNOMED	Observation	Clinical Finding		S		2099-12-31		true	yes	groundworkers concept_get (re-search agent)
+903643	tretinoin	RxNorm	Drug	Ingredient	10753	S	1970-01-01	2099-12-31		true	yes	groundworkers concept_get
+905578	AC-D	HemOnc	Regimen	Regimen	1091	S	2021-02-24	2099-12-31		true	yes	groundworkers concept_get
+905633	Amivantamab	HemOnc	Drug	Component	29753		2021-06-03	2099-12-31		true	yes	groundworkers concept_get
+905826	Autologous stem cell rescue	HemOnc	Procedure	Procedure	103294		2021-03-12	2099-12-31		true	yes	groundworkers concept_get
+911924	Antiestrogen	HemOnc	Drug	Component Class	918		2020-03-06	2099-12-31		true	yes	groundworkers concept_get
+912095	Resection	HemOnc	Procedure	Procedure	25562		2020-10-13	2024-02-26	D	false	yes	groundworkers concept_get
+912099	Tumor-reductive surgery	HemOnc	Procedure	Procedure	25931		2020-10-13	2024-02-26	D	false	yes	groundworkers concept_get
+912198	Tyrosine kinase inhibitor	HemOnc	Drug	Component Class	59504		2021-01-24	2099-12-31		true	yes	groundworkers concept_get
+1001563	Mutations/Megabase [# Ratio] in Tumor	LOINC	Measurement	Lab Test	94076-7	S	2019-12-13	2099-12-31		true	yes	groundworkers concept_get
+1001833	Epstein Barr virus DNA [Units/volume] (viral load) in Blood by NAA with probe detection	LOINC	Measurement	Lab Test	93840-7	S	2019-12-13	2099-12-31		true	yes	groundworkers concept_get
+1002393	Tumor mutation burden [Interpretation]	LOINC	Measurement	Lab Test	94077-5	S	2019-12-13	2099-12-31		true	yes	groundworkers concept_get
+1091409	Claudin 18 [Interpretation] in Tissue by Immune stain Narrative	LOINC	Measurement	Lab Test	105011-1	S	2024-08-06	2099-12-31		true	yes	groundworkers concept_get
+1091916	Folate receptor alpha [Interpretation] in Tissue by Immune stain Narrative	LOINC	Measurement	Lab Test	105010-3	S	2024-08-06	2099-12-31		true	yes	groundworkers concept_get
+1091989	Immune stain PD-L1 scoring method - Tissue	LOINC	Measurement	Lab Test	105302-4	S	2024-08-06	2099-12-31		true	yes	groundworkers concept_get
+1177364	Very low risk	LOINC	Meas Value	Answer		S		2099-12-31		true	yes	groundworkers concept_get (re-search agent)
+1314516	Ras (kras or nras) gene mutation	HCPCS	Observation	HCPCS	G9843	S	2017-01-01	2099-12-31		true	yes	groundworkers concept_get
+1469934	Homologous recombination deficiency status analysis [Presence] in Tissue by Molecular genetics method	LOINC	Measurement	Lab Test	107286-7	S	2025-02-26	2099-12-31		true	yes	groundworkers concept_get
+1524885	Anti-VEGF antibody	HemOnc	Drug	Component Class	21537		2021-12-08	2099-12-31		true	yes	groundworkers concept_get
+1525179	Perioperative therapy	HemOnc	Procedure	Context	72377		2022-06-26	2099-12-31		true	yes	groundworkers concept_get
+1525207	Radical surgery	HemOnc	Procedure	Procedure	75352		2022-09-26	2099-12-31		true	yes	groundworkers concept_get
+1617420	DNA mismatch repair in Cancer specimen by Immune stain Narrative	LOINC	Measurement	Lab Test	98279-3	S	2021-08-23	2099-12-31		true	yes	groundworkers concept_get
+1620371	Distant metastasis	LOINC	Meas Value	Answer	LA32356-0	S	1970-01-01	2099-12-31		true	yes	groundworkers concept_get
+1633294	Progressive disease	Cancer Modifier	Measurement	Staging/Grading	PD	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+1633308	AJCC/UICC Stage 4	Cancer Modifier	Measurement	Staging/Grading	AJCC/UICC-Stage-4	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+1633363	Complete response	Cancer Modifier	Measurement	Staging/Grading	CR	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+1633488	Minimal residual disease	Cancer Modifier	Measurement	Staging/Grading	MRD	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+1633518	Limited Stage	Cancer Modifier	Measurement	Staging/Grading	Limited	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+1633650	AJCC/UICC Stage 3	Cancer Modifier	Measurement	Staging/Grading	AJCC/UICC-Stage-3	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+1633748	AJCC/UICC Stage 4B	Cancer Modifier	Measurement	Staging/Grading	AJCC/UICC-Stage-4B	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+1633903	FIGO Stage 3C	Cancer Modifier	Measurement	Staging/Grading	FIGO-3C	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+1634022	Stage D2	Cancer Modifier	Measurement	Staging/Grading	Stage-D2	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+1634024	FIGO Stage 3	Cancer Modifier	Measurement	Staging/Grading	FIGO-3	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+1634028	AJCC/UICC Stage 2B	Cancer Modifier	Measurement	Staging/Grading	AJCC/UICC-Stage-2B	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+1634209	AJCC/UICC Stage 2	Cancer Modifier	Measurement	Staging/Grading	AJCC/UICC-Stage-2	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+1634306	FIGO Stage 4	Cancer Modifier	Measurement	Staging/Grading	FIGO-4	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+1634411	AJCC/UICC Stage 3B	Cancer Modifier	Measurement	Staging/Grading	AJCC/UICC-Stage-3B	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+1634494	AJCC/UICC Stage 1B	Cancer Modifier	Measurement	Staging/Grading	AJCC/UICC-Stage-1B	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+1634643	R0: No residual tumor	Cancer Modifier	Measurement	Staging/Grading	R0	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+1634903	AJCC/UICC Stage 2C	Cancer Modifier	Measurement	Staging/Grading	AJCC/UICC-Stage-2C	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+1635152	Partial response	Cancer Modifier	Measurement	Staging/Grading	PR	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+1635190	Dukes' Stage C	Cancer Modifier	Measurement	Staging/Grading	Dukes'-C	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+1635339	FIGO Stage 3B	Cancer Modifier	Measurement	Staging/Grading	FIGO-3B	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+1635506	Stable disease	Cancer Modifier	Measurement	Staging/Grading	SD	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+1635798	Extensive Stage	Cancer Modifier	Measurement	Staging/Grading	Extensive	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+1635855	AJCC/UICC Stage 3A	Cancer Modifier	Measurement	Staging/Grading	AJCC/UICC-Stage-3A	S	2022-05-09	2099-12-31		true	yes	groundworkers concept_get
+3000481	Estrogen+Progesterone receptor Ag [Presence] in Tissue by Immune stain	LOINC	Measurement	Lab Test	10480-2	S	1970-01-01	2099-12-31		true	yes	groundworkers concept_get
+3007421	CD25 Ag [Presence] in Tissue by Immune stain	LOINC	Measurement	Lab Test	29596-4	S	2001-05-08	2099-12-31		true	yes	groundworkers concept_get
+3009306	Alpha-1-Fetoprotein [Mass/volume] in Serum or Plasma	LOINC	Measurement	Lab Test	1834-1	S	1970-01-01	2099-12-31		true	yes	groundworkers concept_get
+3011615	MYC gene rearrangements [Presence] in Blood or Tissue by Molecular genetics method	LOINC	Measurement	Lab Test	21750-5	S	1999-06-30	2099-12-31		true	yes	groundworkers concept_get
+3015513	CD30 Ag [Presence] in Tissue by Immune stain	LOINC	Measurement	Lab Test	10432-3	S	1970-01-01	2099-12-31		true	yes	groundworkers concept_get
+3019066	HER2 Ag [Presence] in Tissue by Immune stain	LOINC	Measurement	Lab Test	18474-7	S	1970-01-01	2099-12-31		true	yes	groundworkers concept_get
+3026213	CD20 Ag [Presence] in Tissue by Immune stain	LOINC	Measurement	Lab Test	10438-0	S	1996-12-20	2099-12-31		true	yes	groundworkers concept_get
+3031050	CD22 Ag [Presence] in Tissue by Immune stain	LOINC	Measurement	Lab Test	49467-4	S	2007-06-18	2099-12-31		true	yes	groundworkers concept_get
+3032702	CD33 Ag [Presence] in Tissue by Immune stain	LOINC	Measurement	Lab Test	49469-0	S	2007-06-18	2099-12-31		true	yes	groundworkers concept_get
+3038382	CD117 Ag [Presence] in Tissue by Immune stain	LOINC	Measurement	Lab Test	40552-2	S	2005-04-01	2099-12-31		true	yes	groundworkers concept_get
+3041283	CD19 Ag [Presence] in Tissue by Immune stain	LOINC	Measurement	Lab Test	40553-0	S	2005-04-01	2099-12-31		true	yes	groundworkers concept_get
+3041343	Estrogen receptor Ag [Presence] in Tissue by Immune stain	LOINC	Measurement	Lab Test	40556-3	S	2005-04-01	2099-12-31		true	yes	groundworkers concept_get
+3041608	Progesterone receptor Ag [Presence] in Tissue by Immune stain	LOINC	Measurement	Lab Test	40557-1	S	2005-04-01	2099-12-31		true	yes	groundworkers concept_get
+3046580	BCL2 Ag [Presence] in Tissue by Immune stain	LOINC	Measurement	Lab Test	33054-8	S	2002-11-08	2099-12-31		true	yes	groundworkers concept_get
+3047348	Microsatellite instability [Identifier] in Tissue by Molecular genetics method Nominal	LOINC	Measurement	Lab Test	43368-0	S	2006-01-06	2099-12-31		true	yes	groundworkers concept_get
+3180137	Interpretation of mismatch repair protein expression by immunohistochemistry of excised malignant neoplasm	Nebraska Lexicon	Observation	Observable Entity	1880001000004108	S	2018-01-25	2099-12-31		true	yes	groundworkers concept_get
+4027426	Kidney excision	SNOMED	Procedure	Procedure	108022006	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4046779	Adult	SNOMED	Observation	Social Context	133936004		2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4048615	Intractable	SNOMED	Meas Value	Qualifier Value	20646008	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4049372	Plasmapheresis	SNOMED	Procedure	Procedure	20720000	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4052276	Somatic mutation	SNOMED	Condition	Clinical Finding	124975008	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4078193	Recurrence	SNOMED	Meas Value	Qualifier Value	246455001	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4081357	Chronic phase	SNOMED	Meas Value	Qualifier Value	278177007	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4081695	Blast crisis	SNOMED	Meas Value	Qualifier Value	278180008	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4087703	Severe	SNOMED	Observation	Qualifier Value	24484000	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4093346	Large prostate	SNOMED	Condition	Clinical Finding		S		2099-12-31		true	yes	groundworkers concept_get (re-search agent)
+4096030	Superficial	SNOMED	Meas Value	Qualifier Value	26283006	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4105297	Intolerance	SNOMED	Observation	Observable Entity	29544009	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4113136	Recurrent	SNOMED	Meas Value	Qualifier Value	255227004	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4114504	Progressive	SNOMED	Meas Value	Qualifier Value	255314001	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4114652	Localized	SNOMED	Meas Value	Qualifier Value	255471002	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4125638	Early stage	SNOMED	Observation	Qualifier Value	234438000	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4125639	Hereditary factor VIII deficiency disease with inhibitor	SNOMED	Condition	Disorder	234442002	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4126680	Deficient	SNOMED	Meas Value	Qualifier Value	260372006	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4126681	Detected	SNOMED	Meas Value	Qualifier Value	260373001	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4127606	Stage D2	SNOMED	Meas Value	Qualifier Value	261631005	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4130705	Early	SNOMED	Meas Value	Qualifier Value	264499004	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4136153	Relapse phase	SNOMED	Meas Value	Qualifier Value	263855007	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4137845	Well differentiated	SNOMED	Observation	Qualifier Value	263933003	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4141764	Absent response to treatment	SNOMED	Observation	Context-dependent	266721009	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4141960	Hormone refractory prostate cancer	SNOMED	Condition	Disorder	427492003	S	2007-07-31	2099-12-31		true	yes	groundworkers concept_get
+4142947	Symptomatic	SNOMED	Meas Value	Qualifier Value	264931009	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4148441	Resistant	SNOMED	Meas Value	Qualifier Value	30714006	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4155158	Moderate to severe	SNOMED	Observation	Qualifier Value	371924009	S	2002-07-31	2099-12-31		true	yes	groundworkers concept_get
+4156184	Acuteness	SNOMED	Meas Value	Qualifier Value	272118002	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4175685	Accelerated phase	SNOMED	Meas Value	Qualifier Value	278179005	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4179711	Palliative intent	SNOMED	Meas Value	Qualifier Value	363676003	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4181412	Present	SNOMED	Meas Value	Qualifier Value	52101004	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4207272	Hereditary factor VIII deficiency disease without inhibitor	SNOMED	Condition	Disorder		S		2099-12-31		true	yes	groundworkers concept_get (re-search agent)
+4212540	Chronic liver disease	SNOMED	Condition	Disorder	328383001	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4217482	Amputation	SNOMED	Procedure	Procedure	81723002	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4236661	Chronic	SNOMED	Meas Value	Qualifier Value	90734009	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4250490	Hemolysis	SNOMED	Condition	Clinical Finding	73320003	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4254665	Inoperable	SNOMED	Meas Value	Qualifier Value	74778001	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4260906	Regional	SNOMED	Meas Value	Qualifier Value	410674003	S	2004-07-31	2099-12-31		true	yes	groundworkers concept_get
+4267416	Low	SNOMED	Meas Value	Qualifier Value	62482003	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4284245	Asymptomatic	SNOMED	Meas Value	Qualifier Value		S		2099-12-31		true	yes	groundworkers concept_get (re-search agent)
+4294169	Not applicable	SNOMED	Meas Value	Qualifier Value	385432009	S	2003-01-31	2099-12-31		true	yes	groundworkers concept_get
+4294980	Operable	SNOMED	Meas Value	Qualifier Value	76234009	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4295261	Postmenopausal state	SNOMED	Observation	Clinical Finding	76498008	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4307105	Sensitive	SNOMED	Meas Value	Qualifier Value	83185005	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4308014	ECOG performance status	SNOMED	Observation	Observable Entity	423740007		2007-01-31	2099-12-31		true	yes	groundworkers concept_get
+4309389	Unresponsive	SNOMED	Observation	Clinical Finding	422768004	S	2007-01-31	2099-12-31		true	yes	groundworkers concept_get
+4311405	Biopsy	SNOMED	Procedure	Procedure	86273004	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4313265	Advanced	SNOMED	Meas Value	Qualifier Value	86005002	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4328749	High	SNOMED	Meas Value	Qualifier Value	75540009	S	2002-01-31	2099-12-31		true	yes	groundworkers concept_get
+4331463	Premenopausal state	SNOMED	Observation	Clinical Finding		S		2099-12-31		true	yes	groundworkers concept_get (re-search agent)
+19073699	hyaluronidase	RxNorm	Drug	Ingredient	5464	S	1970-01-01	2099-12-31		true	yes	groundworkers concept_get
+19356799	Chromosome 17 deletion	MeSH	Observation	Suppl Concept	C538045		2023-05-01	2099-12-31		true	yes	groundworkers concept_get
+19458214	HLA-A*02:01 antigen	MeSH	Observation	Suppl Concept	C435939		2023-05-01	2099-12-31		true	yes	groundworkers concept_get
+19464048	HLA-A*02:06:01 antigen	MeSH	Observation	Suppl Concept	C512422		2023-05-01	2099-12-31		true	yes	groundworkers concept_get
+19478184	EGFR protein: Substitution in position 858 of L replaced by R measurement	OMOP Genomic	Measurement	Gene Protein Variant	OMOP5387348	S	2024-02-26	2099-12-31		true	yes	groundworkers concept_get
+19490320	KIT protein: Substitution in position 816 of D replaced by V measurement	OMOP Genomic	Measurement	Gene Protein Variant	OMOP5399955	S	2024-02-26	2099-12-31		true	yes	groundworkers concept_get
+19493964	ABL1 protein: Substitution in position 315 of T replaced by I measurement	OMOP Genomic	Measurement	Gene Protein Variant	OMOP5403717	S	2024-02-26	2099-12-31		true	yes	groundworkers concept_get
+19519110	PDGFRA protein: Substitution in position 842 of D replaced by V measurement	OMOP Genomic	Measurement	Gene Protein Variant	OMOP5429681	S	2024-02-26	2099-12-31		true	yes	groundworkers concept_get
+19556901	IDH1 protein: Substitution in position 132 of R replaced by H measurement	OMOP Genomic	Measurement	Gene Protein Variant	OMOP5468609	S	2024-02-26	2099-12-31		true	yes	groundworkers concept_get
+19566395	KRAS protein: Substitution in position 12 of G replaced by C measurement	OMOP Genomic	Measurement	Gene Protein Variant	OMOP5478311	S	2024-02-26	2099-12-31		true	yes	groundworkers concept_get
+19576591	EGFR protein: Substitution in position 790 of T replaced by M measurement	OMOP Genomic	Measurement	Gene Protein Variant	OMOP5488769	S	2024-02-26	2099-12-31		true	yes	groundworkers concept_get
+19596981	BRAF protein: Substitution in position 600 of V replaced by E measurement	OMOP Genomic	Measurement	Gene Protein Variant	OMOP5509842	S	2024-02-26	2099-12-31		true	yes	groundworkers concept_get
+19619660	BRAF protein: Substitution in position 600 of V replaced by K measurement	OMOP Genomic	Measurement	Gene Protein Variant	OMOP5533035	S	2024-02-26	2099-12-31		true	yes	groundworkers concept_get
+19643659	MET exon 14 skipping mutation measurement	OMOP Genomic	Measurement	Gene DNA Variant	OMOP5497965	S	2024-02-26	2099-12-31		true	yes	groundworkers concept_get
+19644083	FIP1L1::PDGFRA gene fusion measurement	OMOP Genomic	Measurement	Gene Variant	OMOP5397880	S	2024-02-26	2099-12-31		true	yes	groundworkers concept_get
+21492353	FLT3 gene internal tandem duplication [Presence] in Blood or Tissue by Molecular genetics method	LOINC	Measurement	Lab Test	79210-1	S	2016-06-24	2099-12-31		true	yes	groundworkers concept_get
+21493972	Microsatellite instability [Interpretation] in Cancer specimen Qualitative	LOINC	Measurement	Lab Test	81695-9	S	2016-06-24	2099-12-31		true	yes	groundworkers concept_get
+21493983	Phosphatase and tensin homolog (PTEN) protein [Presence] in Cancer specimen by Immune stain	LOINC	Measurement	Lab Test	81706-4	S	2016-06-24	2099-12-31		true	yes	groundworkers concept_get
+35100362	Ravulizumab	HemOnc	Drug	Component	94609		2019-07-22	2099-12-31		true	yes	groundworkers concept_get
+35101507	AC-T	HemOnc	Regimen	Regimen	47375	S	2019-08-23	2099-12-31		true	yes	groundworkers concept_get
+35802858	Abemaciclib	HemOnc	Drug	Component	4		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802860	Abiraterone	HemOnc	Drug	Component	6		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802866	Trastuzumab emtansine	HemOnc	Drug	Component	12		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802869	Aldesleukin	HemOnc	Drug	Component	15		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802870	Alectinib	HemOnc	Drug	Component	16		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802871	Alemtuzumab	HemOnc	Drug	Component	17		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802887	Anastrozole	HemOnc	Drug	Component	33		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802898	Asparaginase	HemOnc	Drug	Component	45		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802902	Atezolizumab	HemOnc	Drug	Component	49		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802906	Avelumab	HemOnc	Drug	Component	53		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802908	Axitinib	HemOnc	Drug	Component	55		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802909	Azacitidine	HemOnc	Drug	Component	56		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802912	BCG vaccine	HemOnc	Drug	Component	59		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802918	Bendamustine	HemOnc	Drug	Component	65		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802921	Bevacizumab	HemOnc	Drug	Component	68		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802924	Binimetinib	HemOnc	Drug	Component	71		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802928	Bortezomib	HemOnc	Drug	Component	75		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802930	Brentuximab vedotin	HemOnc	Drug	Component	77		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802935	Cabozantinib	HemOnc	Drug	Component	82		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802939	Capecitabine	HemOnc	Drug	Component	86		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802941	Carboplatin	HemOnc	Drug	Component	88		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802942	Carfilzomib	HemOnc	Drug	Component	89		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802949	Ceritinib	HemOnc	Drug	Component	96		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802951	Cetuximab	HemOnc	Drug	Component	98		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802953	Chlorambucil	HemOnc	Drug	Component	100		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802958	Cisplatin	HemOnc	Drug	Component	105		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802966	Cobimetinib	HemOnc	Drug	Component	113		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802972	Crizotinib	HemOnc	Drug	Component	119		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802975	Cyclophosphamide	HemOnc	Drug	Component	122		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802979	Cytarabine	HemOnc	Drug	Component	126		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802984	Dabrafenib	HemOnc	Drug	Component	131		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802985	Dacarbazine	HemOnc	Drug	Component	132		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802992	Daratumumab	HemOnc	Drug	Component	139		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802996	Daunorubicin	HemOnc	Drug	Component	143		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35802998	Decitabine	HemOnc	Drug	Component	145		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803008	Dexamethasone	HemOnc	Drug	Component	156		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803013	Dinutuximab	HemOnc	Drug	Component	161		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803016	Docetaxel	HemOnc	Drug	Component	164		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803022	Doxorubicin	HemOnc	Drug	Component	170		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803025	Durvalumab	HemOnc	Drug	Component	173		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803028	Eculizumab	HemOnc	Drug	Component	176		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803035	Encorafenib	HemOnc	Drug	Component	183		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803041	Enzalutamide	HemOnc	Drug	Component	189		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803050	Erlotinib	HemOnc	Drug	Component	198		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803053	Etoposide	HemOnc	Drug	Component	201		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803054	Everolimus	HemOnc	Drug	Component	202		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803055	Exemestane	HemOnc	Drug	Component	203		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803076	Fludarabine	HemOnc	Drug	Component	224		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803077	Fluorouracil	HemOnc	Drug	Component	225		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803081	Leucovorin	HemOnc	Drug	Component	229		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803088	Fruquintinib	HemOnc	Drug	Component	236		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803089	Fulvestrant	HemOnc	Drug	Component	237		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803095	Gemcitabine	HemOnc	Drug	Component	243		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803109	Hydroxyurea	HemOnc	Drug	Component	259		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803119	Imatinib	HemOnc	Drug	Component	269		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803127	Iodine-131	HemOnc	Drug	Component	277		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803129	Ipilimumab	HemOnc	Drug	Component	279		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803130	Irinotecan	HemOnc	Drug	Component	280		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803135	Isotretinoin	HemOnc	Drug	Component	285		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803149	Lenalidomide	HemOnc	Drug	Component	299		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803151	Lenvatinib	HemOnc	Drug	Component	301		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803154	Letrozole	HemOnc	Drug	Component	304		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803175	Melphalan	HemOnc	Drug	Component	325		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803207	Nivolumab	HemOnc	Drug	Component	357		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803211	Obinutuzumab	HemOnc	Drug	Component	361		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803227	Oxaliplatin	HemOnc	Drug	Component	377		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803228	Paclitaxel nanoparticle albumin-bound	HemOnc	Drug	Component	378		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803229	Paclitaxel	HemOnc	Drug	Component	379		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803231	Palbociclib	HemOnc	Drug	Component	381		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803234	Panitumumab	HemOnc	Drug	Component	384		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803243	Pegylated liposomal doxorubicin	HemOnc	Drug	Component	393		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803244	Pembrolizumab	HemOnc	Drug	Component	394		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803245	Pemetrexed	HemOnc	Drug	Component	395		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803250	Pertuzumab	HemOnc	Drug	Component	400		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803260	Pomalidomide	HemOnc	Drug	Component	410		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803267	Prednisolone	HemOnc	Drug	Component	417		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803268	Prednisone	HemOnc	Drug	Component	418		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803269	Procarbazine	HemOnc	Drug	Component	419		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803291	Ribociclib	HemOnc	Drug	Component	441		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803296	Rituximab	HemOnc	Drug	Component	446		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803305	Ruxolitinib	HemOnc	Drug	Component	455		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803309	Sargramostim	HemOnc	Drug	Component	459		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803320	Sorafenib	HemOnc	Drug	Component	470		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803323	Sunitinib	HemOnc	Drug	Component	473		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803329	Tamoxifen	HemOnc	Drug	Component	479		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803338	Thalidomide	HemOnc	Drug	Component	488		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803352	Topotecan	HemOnc	Drug	Component	503		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803357	Trametinib	HemOnc	Drug	Component	508		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803361	Trastuzumab	HemOnc	Drug	Component	512		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803363	Tremelimumab	HemOnc	Drug	Component	514		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803382	Vemurafenib	HemOnc	Drug	Component	533		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803385	Vincristine	HemOnc	Drug	Component	536		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803400	Anticoagulation	HemOnc	Regimen	Modality	684	S	2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803401	Chemotherapy	HemOnc	Regimen	Modality	685	S	2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803403	Chemoimmunotherapy	HemOnc	Regimen	Modality	687		2019-05-27	2021-03-14	D	false	yes	groundworkers concept_get
+35803404	Chemoradiotherapy	HemOnc	Regimen	Modality	688		2019-05-27	2023-03-14	D	false	yes	groundworkers concept_get
+35803407	Endocrine therapy	HemOnc	Regimen	Modality	691	S	2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803409	Immunosuppressive therapy	HemOnc	Regimen	Modality	693	S	2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803410	Immunotherapy	HemOnc	Regimen	Modality	694	S	2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803411	Radiotherapy	HemOnc	Regimen	Modality	695	S	2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803427	All lines of therapy	HemOnc	Procedure	Context	794		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803433	Induction therapy	HemOnc	Procedure	Context	813		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803480	Consolidation after upfront therapy	HemOnc	Procedure	Context	1526		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803496	Non-curative first-line maintenance therapy	HemOnc	Procedure	Context	1656		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803507	Non-curative subsequent-line therapy	HemOnc	Procedure	Context	1874		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803514	Maintenance after upfront therapy	HemOnc	Procedure	Context	1901		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803578	Steroids	HemOnc	Drug	Component Class	2581		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803584	Adjuvant therapy	HemOnc	Procedure	Context	2618		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803588	Non-curative therapy	HemOnc	Procedure	Context	2648		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803670	Definitive therapy	HemOnc	Procedure	Context	3114		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35803699	CHOP	HemOnc	Regimen	Regimen	3469	S	2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35804133	Local therapy	HemOnc	Procedure	Context	5188		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35804141	Neoadjuvant therapy	HemOnc	Procedure	Context	5250		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35804147	Radical cystectomy	HemOnc	Procedure	Procedure	5318		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35804229	Mastectomy	HemOnc	Procedure	Procedure	6371		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35804326	Lumpectomy	HemOnc	Procedure	Procedure	9944		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35804409	Upfront therapy	HemOnc	Procedure	Context	10860		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35804597	Non-curative first-line consolidation therapy	HemOnc	Procedure	Context	12213		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35804599	CVP	HemOnc	Regimen	Regimen	12242	S	2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35804755	CapeOx	HemOnc	Regimen	Regimen	13628	S	2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35804758	mFOLFOX6	HemOnc	Regimen	Regimen	13849	S	2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35804760	Metastasectomy	HemOnc	Procedure	Procedure	13978		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35804761	FOLFIRI	HemOnc	Regimen	Regimen	14013	S	2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35804762	Surgery	HemOnc	Procedure	Procedure	14051		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35804785	Non-curative second-line therapy	HemOnc	Procedure	Context	14900		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35804788	Non-curative third-line therapy	HemOnc	Procedure	Context	15047		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35805028	R-CHOP	HemOnc	Regimen	Regimen	15921	S	2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35805341	FLOT	HemOnc	Regimen	Regimen	17950	S	2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35805724	Prophylaxis	HemOnc	Procedure	Context	20992		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35806120	Lymphadenectomy	HemOnc	Procedure	Procedure	25285		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35806596	FOLFOX	HemOnc	Regimen	Regimen	33193	S	2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35806826	Bilateral orchiectomy	HemOnc	Procedure	Procedure	33917		2019-05-27	2024-02-26	D	false	yes	groundworkers concept_get
+35807203	CDK inhibitor	HemOnc	Drug	Component Class	44963		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807206	Antiandrogen	HemOnc	Drug	Component Class	44971		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807208	BTK inhibitor	HemOnc	Drug	Component Class	44976		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807214	Anthracycline	HemOnc	Drug	Component Class	44985		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807222	Anti-HER2 antibody	HemOnc		Component Class	45001			2099-12-31		true	yes	groundworkers concept_get (re-search agent)
+35807225	EGFR inhibitor	HemOnc	Drug	Component Class	45006		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807228	Cytokine	HemOnc	Drug	Component Class	45017		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807229	ALK inhibitor	HemOnc	Drug	Component Class	45025		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807234	Retinoid	HemOnc	Drug	Component Class	45047		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807238	Alkylating agent	HemOnc	Drug	Component Class	45058		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807245	Aromatase inhibitor	HemOnc	Drug	Component Class	45079		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807257	VEGFR inhibitor	HemOnc	Drug	Component Class	45133		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807270	Anti-PD-L1 antibody	HemOnc	Drug	Component Class	45170		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807288	Nitrogen mustard	HemOnc	Drug	Component Class	45230		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807290	Biosimilar	HemOnc	Drug	Component Class	45268		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807295	Proteasome inhibitor	HemOnc	Drug	Component Class	45299		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807300	ROS1 inhibitor	HemOnc	Drug	Component Class	45334		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807304	Taxane	HemOnc	Drug	Component Class	45352		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807309	TRK inhibitor	HemOnc	Drug	Component Class	45362		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807313	Fluoropyrimidine	HemOnc	Drug	Component Class	45369		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807315	Platinum agent	HemOnc	Drug	Component Class	45388		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807317	Nitrosourea	HemOnc	Drug	Component Class	45414		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807322	Anti-PD-1 antibody	HemOnc	Drug	Component Class	45446		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807327	Purine analog	HemOnc	Drug	Component Class	45507		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807345	Anti-CD38 antibody	HemOnc	Drug	Component Class	45613		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807346	Erythrocyte growth factor	HemOnc	Drug	Component Class	45617		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807369	MTOR inhibitor	HemOnc	Drug	Component Class	45725		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807384	Hedgehog pathway inhibitor	HemOnc	Drug	Component Class	45766		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807385	GnRH agonist	HemOnc	Drug	Component Class	45768		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807402	Anti-HER2 medication	HemOnc	Drug	Component Class	45849		2019-05-27	2020-03-06	D	false	yes	groundworkers concept_get
+35807403	Immunomodulatory drugs (IMiDs)	HemOnc	Drug	Component Class	45857		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807404	JAK inhibitor	HemOnc	Drug	Component Class	45861		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807436	Granulocyte macrophage colony-stimulating factor	HemOnc	Drug	Component Class	45980		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807456	Bcl-2 inhibitor	HemOnc	Drug	Component Class	46035		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807466	Antineoplastics by class effect	HemOnc	Drug	Component Class	46112		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35807500	Androgen receptor inhibitor	HemOnc	Drug	Component Class	46196		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+35945744	SSTR2 (somatostatin receptor 2) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	11331	S	1992-08-25	2099-12-31		true	yes	groundworkers concept_get
+35946663	TNFRSF8 (TNF receptor superfamily member 8) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	11923	S	1992-01-10	2099-12-31		true	yes	groundworkers concept_get
+35948005	NPM1 (nucleophosmin 1) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	7910	S	1993-08-24	2099-12-31		true	yes	groundworkers concept_get
+35948173	BRAF (B-Raf proto-oncogene, serine/threonine kinase) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	1097	S	1991-07-16	2099-12-31		true	yes	groundworkers concept_get
+35948329	IDH1 (isocitrate dehydrogenase (NADP(+)) 1) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	5382	S	2001-06-22	2099-12-31		true	yes	groundworkers concept_get
+35948552	AFP (alpha fetoprotein) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	317	S	1996-04-01	2099-12-31		true	yes	groundworkers concept_get
+35948791	KRAS (KRAS proto-oncogene, GTPase) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	6407	S	1988-06-02	2099-12-31		true	yes	groundworkers concept_get
+35948983	ESR1 (estrogen receptor 1) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	3467	S	2001-06-22	2099-12-31		true	yes	groundworkers concept_get
+35949007	CD33 (CD33 molecule) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	1659	S	1986-01-01	2099-12-31		true	yes	groundworkers concept_get
+35949322	NTRK2 (neurotrophic receptor tyrosine kinase 2) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	8032	S	1991-07-18	2099-12-31		true	yes	groundworkers concept_get
+35950119	NRAS (NRAS proto-oncogene, GTPase) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	7989	S	2001-06-22	2099-12-31		true	yes	groundworkers concept_get
+35950178	BRCA2 (BRCA2 DNA repair associated) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	1101	S	1994-10-17	2099-12-31		true	yes	groundworkers concept_get
+35950928	BRCA1 (BRCA1 DNA repair associated) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	1100	S	1991-02-20	2099-12-31		true	yes	groundworkers concept_get
+35951049	NRG1 (neuregulin 1) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	7997	S	1999-03-19	2099-12-31		true	yes	groundworkers concept_get
+35951541	MAGEA4 (MAGE family member A4) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	6802	S	1994-04-04	2099-12-31		true	yes	groundworkers concept_get
+35951557	NTRK1 (neurotrophic receptor tyrosine kinase 1) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	8031	S	1991-07-18	2099-12-31		true	yes	groundworkers concept_get
+35952889	MYC (MYC proto-oncogene, bHLH transcription factor) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	7553	S	2001-06-22	2099-12-31		true	yes	groundworkers concept_get
+35952943	RET (ret proto-oncogene) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	9967	S	1990-07-15	2099-12-31		true	yes	groundworkers concept_get
+35953046	IDH2 (isocitrate dehydrogenase (NADP(+)) 2) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	5383	S	1986-01-01	2099-12-31		true	yes	groundworkers concept_get
+35953202	PIK3CA (phosphatidylinositol-4,5-bisphosphate 3-kinase catalytic subunit alpha) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	8975	S	1994-07-15	2099-12-31		true	yes	groundworkers concept_get
+35953981	CD22 (CD22 molecule) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	1643	S	1991-06-06	2099-12-31		true	yes	groundworkers concept_get
+35954826	ABL1 (ABL proto-oncogene 1, non-receptor tyrosine kinase) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	76	S	1986-01-01	2099-12-31		true	yes	groundworkers concept_get
+35954995	FGFR3 (fibroblast growth factor receptor 3) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	3690	S	1991-06-07	2099-12-31		true	yes	groundworkers concept_get
+35955125	PTEN (phosphatase and tensin homolog) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	9588	S	1997-04-21	2099-12-31		true	yes	groundworkers concept_get
+35955255	CLDN18 (claudin 18) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	2039	S	2000-01-31	2099-12-31		true	yes	groundworkers concept_get
+35955862	ERBB2 (erb-b2 receptor tyrosine kinase 2) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	3430	S	2001-06-22	2099-12-31		true	yes	groundworkers concept_get
+35955974	PDGFRB (platelet derived growth factor receptor beta) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	8804	S	2001-06-22	2099-12-31		true	yes	groundworkers concept_get
+35956153	FLT3 (fms related receptor tyrosine kinase 3) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	3765	S	1990-07-30	2099-12-31		true	yes	groundworkers concept_get
+35956416	FGFR1 (fibroblast growth factor receptor 1) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	3688	S	1992-02-25	2099-12-31		true	yes	groundworkers concept_get
+35956980	AKT1 (AKT serine/threonine kinase 1) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	391	S	1986-01-01	2099-12-31		true	yes	groundworkers concept_get
+35957234	H3-3A (H3.3 histone A) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	4764	S	1989-12-11	2099-12-31		true	yes	groundworkers concept_get
+35957667	PGR (progesterone receptor) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	8910	S	2001-06-22	2099-12-31		true	yes	groundworkers concept_get
+35957723	ROS1 (ROS proto-oncogene 1, receptor tyrosine kinase) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	10261	S	1986-01-01	2099-12-31		true	yes	groundworkers concept_get
+35958594	BCL2 (BCL2 apoptosis regulator) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	990	S	2001-06-22	2099-12-31		true	yes	groundworkers concept_get
+35959513	KIT (KIT proto-oncogene, receptor tyrosine kinase) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	6342	S	1986-01-01	2099-12-31		true	yes	groundworkers concept_get
+35960115	FOLH1 (folate hydrolase 1) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	3788	S	1996-12-16	2099-12-31		true	yes	groundworkers concept_get
+35960503	KMT2A (lysine methyltransferase 2A) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	7132	S	1991-11-15	2099-12-31		true	yes	groundworkers concept_get
+35960550	MS4A1 (membrane spanning 4-domains A1) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	7315	S	1989-05-23	2099-12-31		true	yes	groundworkers concept_get
+35960573	IL2RA (interleukin 2 receptor subunit alpha) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	6008	S	1990-01-22	2099-12-31		true	yes	groundworkers concept_get
+35960932	CD19 (CD19 molecule) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	1633	S	1991-06-04	2099-12-31		true	yes	groundworkers concept_get
+35961878	MET (MET proto-oncogene, receptor tyrosine kinase) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	7029	S	1986-01-01	2099-12-31		true	yes	groundworkers concept_get
+35962305	HLA-A (major histocompatibility complex, class I, A) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	4931	S	2001-06-22	2099-12-31		true	yes	groundworkers concept_get
+35962606	FGFR2 (fibroblast growth factor receptor 2) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	3689	S	1991-05-09	2099-12-31		true	yes	groundworkers concept_get
+35962723	FOLR1 (folate receptor alpha) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	3791	S	1991-08-08	2099-12-31		true	yes	groundworkers concept_get
+35962802	EGFR (epidermal growth factor receptor) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	3236	S	1986-01-01	2099-12-31		true	yes	groundworkers concept_get
+35963234	EPCAM (epithelial cell adhesion molecule) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	11529	S	1995-10-02	2099-12-31		true	yes	groundworkers concept_get
+35963556	PDGFRA (platelet derived growth factor receptor alpha) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	8803	S	1989-05-19	2099-12-31		true	yes	groundworkers concept_get
+35963763	ALK (ALK receptor tyrosine kinase) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	427	S	1993-08-24	2099-12-31		true	yes	groundworkers concept_get
+35964476	EZH2 (enhancer of zeste 2 polycomb repressive complex 2 subunit) gene variant measurement	OMOP Genomic	Measurement	Genetic Variation	3527	S	1995-12-21	2099-12-31		true	yes	groundworkers concept_get
+35976950	ALK gene rearrangement measurement	OMOP Genomic	Measurement	Gene DNA Variant	OMOP4997515	S	2024-02-26	2099-12-31		true	yes	groundworkers concept_get
+35976971	EGFR exon 19 deletion measurement	OMOP Genomic	Measurement	Gene DNA Variant	OMOP4997536	S	2024-02-26	2099-12-31		true	yes	groundworkers concept_get
+35976972	EGFR exon 20 insertion measurement	OMOP Genomic	Measurement	Gene DNA Variant	OMOP4997537	S	2024-02-26	2099-12-31		true	yes	groundworkers concept_get
+35977085	PML::RARA gene fusion measurement	OMOP Genomic	Measurement	Gene Variant	OMOP4997650	S	2021-03-28	2099-12-31		true	yes	groundworkers concept_get
+35977097	ROS1 gene rearrangement measurement	OMOP Genomic	Measurement	Gene DNA Variant	OMOP4997662	S	2024-02-26	2099-12-31		true	yes	groundworkers concept_get
+36010086	ABL1:BCR-ABL1 Fusion	OncoKB	Measurement	Variant	ABL1:BCR-ABL1 Fusion		2021-07-26	2099-12-31		true	yes	groundworkers concept_get
+36015405	PDGFRA:FIP1L1-PDGFRA Fusion	OncoKB	Measurement	Variant	PDGFRA:FIP1L1-PDGFRA Fusion		2021-07-26	2099-12-31		true	yes	groundworkers concept_get
+36016334	RARA:PML-RARA Fusion	OncoKB	Measurement	Variant	RARA:PML-RARA Fusion		2021-07-26	2099-12-31		true	yes	groundworkers concept_get
+36716186	Hormone sensitive prostate cancer	SNOMED	Condition	Disorder	722103009	S	2017-01-31	2099-12-31		true	yes	groundworkers concept_get
+36769000	Residual Tumor	Cancer Modifier	Measurement	Topography	OMOP4998677	S	2020-09-23	2099-12-31		true	yes	groundworkers concept_get
+37034836	t(15;17)(q24.1;q21.1)(PML,RARA) fusion transcript | Blood or Tissue | Translocations	LOINC	Measurement	LOINC Hierarchy	LP410506-2		1970-01-01	2099-12-31		true	yes	groundworkers concept_get
+37109700	Low risk	SNOMED	Meas Value	Qualifier Value		S		2099-12-31		true	yes	groundworkers concept_get (re-search agent)
+37109703	High risk	SNOMED	Meas Value	Qualifier Value	723509005	S	2017-07-31	2099-12-31		true	yes	groundworkers concept_get
+37116848	Diffuse midline glioma, point mutation K27M in histone H3	SNOMED	Observation	Morph Abnormality	733862004	S	2017-07-31	2099-12-31		true	yes	groundworkers concept_get
+37396673	International Prognostic Index	SNOMED	Measurement	Staging / Scales	716567001	S	2016-07-31	2099-12-31		true	yes	groundworkers concept_get
+37538150	PREMENOPAUSAL	CDISC	Observation	Observable Entity	C15491		2023-12-01	2099-12-31		true	yes	groundworkers concept_get
+37544940	LOCALLY ADVANCED	CDISC	Observation	Observable Entity	C124451		2023-12-01	2099-12-31		true	yes	groundworkers concept_get
+37557008	Interferon alfa	HemOnc	Drug	Component Class	76030		2019-05-27	2099-12-31		true	yes	groundworkers concept_get
+37557563	Alkylating agent-containing regimen	HemOnc	Drug	Regimen Class	121087		2023-11-17	2099-12-31		true	yes	groundworkers concept_get
+37557592	Anti-CD20 antibody-containing regimen	HemOnc	Drug	Regimen Class	121143		2023-11-17	2099-12-31		true	yes	groundworkers concept_get
+37557616	Anti-HER2 antibody-containing regimen	HemOnc		Regimen Class	121171			2099-12-31		true	yes	groundworkers concept_get (re-search agent)
+37557736	Chemotherapy-containing regimen	HemOnc		Regimen Class	121636			2099-12-31		true	yes	groundworkers concept_get (re-search agent)
+37557797	Docetaxel-containing regimen	HemOnc	Drug	Regimen Class	122146		2023-11-17	2099-12-31		true	yes	groundworkers concept_get
+37557802	Doxorubicin-containing regimen	HemOnc	Drug	Regimen Class	122165		2023-11-17	2099-12-31		true	yes	groundworkers concept_get
+37557822	Endocrine therapy-containing regimen	HemOnc	Drug	Regimen Class	122253		2023-11-17	2099-12-31		true	yes	groundworkers concept_get
+37557866	Fluoropyrimidine-containing regimen	HemOnc	Drug	Regimen Class	122389		2023-11-17	2099-12-31		true	yes	groundworkers concept_get
+37557868	Fluorouracil-containing regimen	HemOnc		Regimen Class	122391			2099-12-31		true	yes	groundworkers concept_get (re-search agent)
+37557886	Gemcitabine-containing regimen	HemOnc	Drug	Regimen Class	122505		2023-11-17	2099-12-31		true	yes	groundworkers concept_get
+37557894	GnRH analog	HemOnc	Drug	Component Class	122542		2023-11-17	2099-12-31		true	yes	groundworkers concept_get
+37558071	Oxaliplatin-containing regimen	HemOnc	Drug	Regimen Class	124942		2023-11-17	2099-12-31		true	yes	groundworkers concept_get
+37558073	Paclitaxel-containing regimen	HemOnc	Drug	Regimen Class	124947		2023-11-17	2099-12-31		true	yes	groundworkers concept_get
+37558102	Platinum agent-containing regimen	HemOnc	Drug	Regimen Class	125164		2023-11-17	2099-12-31		true	yes	groundworkers concept_get
+37558103	Platinum-containing chemoradiotherapy regimen	HemOnc	Drug	Regimen Class	125166		2023-11-17	2099-12-31		true	yes	groundworkers concept_get
+37558217	Taxane-containing regimen	HemOnc	Drug	Regimen Class	125880		2023-11-17	2099-12-31		true	yes	groundworkers concept_get
+37558258	Trastuzumab-containing regimen	HemOnc	Drug	Regimen Class	125977		2023-11-17	2099-12-31		true	yes	groundworkers concept_get
+37560922	Androgen-deprivation therapy	HemOnc	Drug	Component Class	139660		2024-06-14	2099-12-31		true	yes	groundworkers concept_get
+37561086	Intensified conditioning regimens for cellular therapy	HemOnc	Procedure	Context	140708		2024-06-14	2099-12-31		true	yes	groundworkers concept_get
+37561400	Residual or recurrent	HemOnc	Procedure	Context	144271		2024-09-18	2099-12-31		true	yes	groundworkers concept_get
+40758222	PDGFRA gene rearrangements [Presence] in Blood or Tissue by Molecular genetics method	LOINC	Measurement	Lab Test	55092-1	S	2009-01-27	2099-12-31		true	yes	groundworkers concept_get
+40762134	BRCA1+BRCA2 gene mutations tested for in Blood or Tissue by Molecular genetics method Nominal	LOINC	Measurement	Lab Test	59041-4	S	2010-03-09	2099-12-31		true	yes	groundworkers concept_get
+42542257	Enfortumab vedotin	HemOnc	Drug	Component	3563		2019-12-27	2099-12-31		true	yes	groundworkers concept_get
+42542298	Allogeneic stem cells	HemOnc	Drug	Component	38881		2019-09-05	2099-12-31		true	yes	groundworkers concept_get
+42542413	Anthracycline-containing regimen	HemOnc	Drug	Regimen Class	51063		2020-01-25	2099-12-31		true	yes	groundworkers concept_get
+42542414	Bevacizumab-containing regimen	HemOnc	Drug	Regimen Class	51072		2020-01-25	2099-12-31		true	yes	groundworkers concept_get
+42542415	Irinotecan-containing regimen	HemOnc	Drug	Regimen Class	51124		2020-01-25	2099-12-31		true	yes	groundworkers concept_get
+42542417	Platinum doublet	HemOnc	Drug	Regimen Class	51164		2020-01-25	2099-12-31		true	yes	groundworkers concept_get
+42542440	Rituximab-containing regimen	HemOnc	Drug	Regimen Class	54181		2020-02-16	2099-12-31		true	yes	groundworkers concept_get
+42622644	Non-muscle invasive bladder cancer	MedDRA	Condition	LLT	10087211		2022-03-01	2099-12-31		true	yes	groundworkers concept_get
+43021226	Hypersensitivity condition	SNOMED	Condition	Clinical Finding	473010000	S	2013-01-31	2099-12-31		true	yes	groundworkers concept_get
+43562686	Transfusion dependent anemia	MedDRA	Condition	LLT	10074295		2013-06-13	2099-12-31		true	yes	groundworkers concept_get
+44791967	Tumour hormone receptor status	SNOMED	Observation	Observable Entity	310871000000100	S	2008-04-01	2099-12-31		true	yes	groundworkers concept_get
+44804452	Age group	SNOMED	Observation	Qualifier Value	720431000000109	S	2010-10-01	2099-12-31		true	yes	groundworkers concept_get
+45773613	Mismatch repair microsatellite instability genetic test	SNOMED	Measurement	Procedure	925031000000104	S	2014-10-01	2099-12-31		true	yes	groundworkers concept_get
+45877597	No response	LOINC	Meas Value	Answer	LA10996-9	S	1970-01-01	2099-12-31		true	yes	groundworkers concept_get
+45877868	At risk	LOINC	Meas Value	Answer		S		2099-12-31		true	yes	groundworkers concept_get (re-search agent)
+45878201	Adult	LOINC	Meas Value	Answer		S		2099-12-31		true	yes	groundworkers concept_get (re-search agent)
+45880310	Wild type	LOINC	Meas Value	Answer	LA9658-1	S	1970-01-01	2099-12-31		true	yes	groundworkers concept_get
+45880636	Pediatric	LOINC	Meas Value	Answer	LA19834-3	S	1970-01-01	2099-12-31		true	yes	groundworkers concept_get
+46238024	Intermediate risk	LOINC	Meas Value	Answer	LA22380-2	S	1970-01-01	2099-12-31		true	yes	groundworkers concept_get
+46272912	Tumor surgically unresectable	SNOMED	Condition	Clinical Finding	711361003	S	2015-07-31	2099-12-31		true	yes	groundworkers concept_get

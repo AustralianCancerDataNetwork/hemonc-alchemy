@@ -12,10 +12,12 @@ import os
 
 import pytest
 import sqlalchemy as sa
+from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
 
 from hemonc_alchemy.toolkit.core.indications import (
     BiomarkerCriterion,
+    implied_findings,
     load_indication_sources,
     resolve_indications,
 )
@@ -48,6 +50,12 @@ def live_session():
     )
     try:
         with Session(engine) as session:
+            try:
+                session.connection()
+            except OperationalError as exc:
+                pytest.skip(
+                    f"Live HemOnc database is unreachable ({type(exc).__name__})."
+                )
             yield session
     finally:
         engine.dispose()
@@ -134,6 +142,32 @@ def test_live_presence_classification(resolved_indications):
         for finding in findings
         if finding.presence is Presence.UNKNOWN
     )
+
+
+@pytest.mark.postgres
+def test_live_finding_implication_golden_cases(live_session):
+    assert {finding.raw for finding in implied_findings("EGFR", "p.L858R")} >= {
+        "activating mutation",
+        "sensitizing mutation",
+        "mutated",
+    }
+    assert {finding.raw for finding in implied_findings("BRAF", "p.V600E")} >= {
+        "p.V600",
+        "mutated",
+    }
+    assert {
+        finding.raw for finding in implied_findings("PD-L1", "TPS at least 60%")
+    } >= {"TPS at least 1%", "TPS at least 50%"}
+
+
+@pytest.mark.postgres
+def test_live_implication_vocabulary_lint(live_session):
+    from hemonc_alchemy.toolkit.core.indications.implications import (
+        lint_finding_implications,
+    )
+
+    report = lint_finding_implications(load_indication_sources(live_session))
+    assert report.failures == ()
 
 
 @pytest.mark.postgres

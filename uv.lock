@@ -1024,6 +1024,7 @@ dependencies = [
     { name = "oa-configurator" },
     { name = "orm-loader" },
     { name = "pandas" },
+    { name = "pyyaml" },
     { name = "rich" },
     { name = "sqlalchemy" },
     { name = "typer" },
@@ -1035,7 +1036,6 @@ author = [
     { name = "linkml-runtime" },
     { name = "openpyxl" },
     { name = "pyreadr" },
-    { name = "pyyaml" },
 ]
 dev = [
     { name = "import-linter" },
@@ -1053,7 +1053,6 @@ dev = [
     { name = "pyreadr" },
     { name = "pytest" },
     { name = "pytest-cov" },
-    { name = "pyyaml" },
     { name = "ruff" },
 ]
 exploration = [
@@ -1099,8 +1098,7 @@ requires-dist = [
     { name = "pyreadr", marker = "extra == 'dev'", specifier = ">=0.5" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=4.0" },
-    { name = "pyyaml", marker = "extra == 'author'", specifier = ">=6.0" },
-    { name = "pyyaml", marker = "extra == 'dev'", specifier = ">=6.0" },
+    { name = "pyyaml", specifier = ">=6.0" },
     { name = "rich", specifier = ">=13.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.4" },
     { name = "sqlalchemy", specifier = ">=2.0.45" },

@@ -1,0 +1,180 @@
+concept_id_1	concept_id_2	relationship_id	status	provenance	reviewer	reviewed_on	priority	note
+2020000009	2020000011	Clinically implies	proposed	carried over from the earlier finding implication data; no external citation supplied			lung-first	confirm the target classes and identify a clinical source
+2020000009	2020000074	Clinically implies	proposed	carried over from the earlier finding implication data; no external citation supplied			lung-first	confirm the target classes and identify a clinical source
+2020000010	2020000011	Clinically implies	proposed	carried over from the earlier finding implication data; no external citation supplied			lung-first	confirm the target classes and identify a clinical source
+2020000010	2020000074	Clinically implies	proposed	carried over from the earlier finding implication data; no external citation supplied			lung-first	confirm the target classes and identify a clinical source
+2020000059	2020000117	Equiv in indic	proposed	carried over from the earlier finding implication data; no external citation supplied			lung-first	confirm the target classes and identify a clinical source
+32944	4313265	Is a	proposed	clinical judgement: 'metastatic' is a kind of 'advanced'; no such link in SNOMED or Cancer Modifier			lung-first	
+2020000003	2020000040	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			lung-first	
+2020000009	2020000012	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			lung-first	
+2020000010	2020000012	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			lung-first	
+2020000011	2020000012	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			lung-first	
+2020000013	2020000012	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			lung-first	
+2020000018	2020000012	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			lung-first	
+2020000033	2020000043	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			lung-first	
+2020000036	2020000012	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			lung-first	
+2020000041	2020000033	Is a	proposed	structural rule: protein substitution at a codon is a kind of change at that codon			lung-first	
+2020000041	2020000043	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			lung-first	
+2020000042	2020000033	Is a	proposed	structural rule: protein substitution at a codon is a kind of change at that codon			lung-first	
+2020000042	2020000043	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			lung-first	
+2020000051	2020000136	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			lung-first	
+2020000074	2020000012	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			lung-first	
+2020000120	2020000127	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			lung-first	
+2020000130	2020000048	Is a	proposed	structural rule: a qualified result is a kind of the plain result			lung-first	
+2020000143	2020000145	Is a	proposed	population subset: a higher cut-off is met only when every lower cut-off is met			lung-first	
+2020000146	2020000143	Is a	proposed	population subset: a higher cut-off is met only when every lower cut-off is met			lung-first	
+2030000001	4313265	Is a	proposed	clinical judgement: 'locally advanced' is a kind of 'advanced'; no such link in SNOMED or Cancer Modifier			lung-first	
+2030000002	4125638	Is a	proposed	existing concept is broader than 'node-positive early' (evidence lane)			lung-first	
+2030000007	4313265	Is a	proposed	clinical judgement: 'regionally advanced' is a kind of 'advanced'; no such link in SNOMED or Cancer Modifier			lung-first	
+2030000009	4294980	Is a	proposed	existing concept is broader than 'Operable node-positive' (evidence lane)			lung-first	
+2030000010	4294980	Is a	proposed	existing concept is broader than 'Operable node-negative' (evidence lane)			lung-first	
+2030000022	1633650	Is a	proposed	existing concept is broader than 'Stage III and N+' (evidence lane)			lung-first	
+2030000028	4125638	Is a	proposed	existing concept is broader than '(Early greater than 2 cm in diameter or node positive)' (evidence lane)			lung-first	
+2030000030	4125638	Is a	proposed	existing concept is broader than 'stage II or III early' (evidence lane)			lung-first	
+2032000009	4113136	Is a	proposed	existing concept is broader than 'First recurrence' (evidence lane)			lung-first	
+2032000014	4113136	Is a	proposed	existing concept is broader than 'Locally unresectable recurrent' (evidence lane)			lung-first	
+2032000017	4113136	Is a	proposed	existing concept is broader than 'Recurrent locoregional' (evidence lane)			lung-first	
+2032000019	4113136	Is a	proposed	clinical judgement: 'locally recurrent' is a kind of 'recurrent'; no such link in SNOMED or Cancer Modifier			lung-first	
+2032000022	46272912	Is a	proposed	existing concept is broader than 'Surgical resection is likely to result in severe morbidity' (evidence lane)			lung-first	
+2032000024	46272912	Is a	proposed	existing concept is broader than 'Surgical resection likely to result in severe morbidity' (evidence lane)			lung-first	
+2032000026	46272912	Is a	proposed	existing concept is broader than 'Unresectable stage IIIb' (evidence lane)			lung-first	
+2032000029	32944	Is a	proposed	existing concept is broader than 'Metastatic to liver AND Incurable by surgery or other means' (evidence lane)			lung-first	
+2032000034	46272912	Is a	proposed	existing concept is broader than 'unresectable hepatic metastases affecting less than 50% of the liver and no extrahepatic disease' (evidence lane)			lung-first	
+2032000038	4113136	Is a	proposed	existing concept is broader than 'Local relapse' (evidence lane)			lung-first	
+2032000040	1633650	Is a	proposed	existing concept is broader than 'Stage III who are not candidates for surgical resection or definitive chemoradiation' (evidence lane)			lung-first	
+2032000042	46272912	Is a	proposed	existing concept is broader than 'Symptomatic associated with severe morbidity or functional limitations' (evidence lane)			lung-first	
+2032000043	32944	Is a	proposed	existing concept is broader than 'symptomatic bone metastases and no known visceral metastatic disease' (evidence lane)			lung-first	
+2032000044	32944	Is a	proposed	existing concept is broader than 'Metastatic to bone' (evidence lane)			lung-first	
+2032000046	32944	Is a	proposed	existing concept is broader than 'Non-visceral metastatic' (evidence lane)			lung-first	
+2032000049	4307105	Is a	proposed	existing concept is broader than 'Sensitive disease defined as disease responding to chemotherapy but subsequently progressing at least 60 days (in the phase 3 study) or at least 90 days (in the phase 2 studies) after chemotherapy' (evidence lane)			lung-first	
+2034000001	1635506	Is a	proposed	existing concept is broader than 'complete resection AND no progression' (evidence lane)			lung-first	
+2034000003	1635506	Is a	proposed	existing concept is broader than 'without progression' (evidence lane)			lung-first	
+2034000004	1635506	Is a	proposed	existing concept is broader than 'not progressed' (evidence lane)			lung-first	
+2034000005	1635506	Is a	proposed	existing concept is broader than 'progression-free' (evidence lane)			lung-first	
+2034000008	4141764	Is a	proposed	existing concept is broader than 'Not sufficiently effective' (evidence lane)			lung-first	
+2034000009	4148441	Is a	proposed	existing concept is broader than 'Platinum resistant' (evidence lane)			lung-first	
+2034000018	1635506	Is a	proposed	existing concept is broader than 'stabilised' (evidence lane)			lung-first	
+2034000019	1635506	Is a	proposed	existing concept is broader than 'no progression' (evidence lane)			lung-first	
+2034000024	4141764	Is a	proposed	existing concept is broader than 'unsatisfactory' (evidence lane)			lung-first	
+2034000031	4141764	Is a	proposed	existing concept is broader than 'insufficient response' (evidence lane)			lung-first	
+2034000032	1635506	Is a	proposed	existing concept is broader than 'non-progressing' (evidence lane)			lung-first	
+2034000033	4141764	Is a	proposed	existing concept is broader than 'Inadequate response' (evidence lane)			lung-first	
+2036000009	35807225	Is a	proposed	existing concept is broader than 'EGFR TKI'			lung-first	
+2036000011	35804762	Is a	proposed	existing concept is broader than 'resection'			lung-first	
+2036000029	35803401	Is a	proposed	existing concept is broader than 'chemotherapy-based regimens'			lung-first	
+2036000031	4148441	Is a	proposed	existing concept is broader than 'PLATINUM_TO_RESISTANT' (evidence lane)			lung-first	
+2036000037	35803401	Is a	proposed	existing concept is broader than 'Multi-agent chemotherapy regimen'			lung-first	
+2036000038	35803401	Is a	proposed	existing concept is broader than 'Multi-agent chemotherapy regimens in non-transplant candidates'			lung-first	
+2036000058	35803401	Is a	proposed	existing concept is broader than 'High-dose chemotherapy'			lung-first	
+2036000063	35803401	Is a	proposed	existing concept is broader than 'multiagent'			lung-first	
+2036000072	37558102	Is a	proposed	existing concept is broader than 'Platinum-based regimen x 4'			lung-first	
+2036000097	35804762	Is a	proposed	existing concept is broader than 'Surgical resection'			lung-first	
+2036000108	35807225	Is a	proposed	existing concept is broader than 'EGFR-TKI therapy'			lung-first	
+2036000112	35803401	Is a	proposed	existing concept is broader than 'Combination chemotherapy for metastatic disease'			lung-first	
+2036000116	35803401	Is a	proposed	existing concept is broader than 'Multi-agent cytotoxic chemotherapy'			lung-first	
+2036000119	35804762	Is a	proposed	existing concept is broader than 'Nephrectomy'			lung-first	
+2036000121	42542417	Is a	proposed	existing concept is broader than 'Platinum-doublet excluding pemetrexed x 4'			lung-first	
+2036000151	4307105	Is a	proposed	existing concept is broader than 'CHEMOTHERAPY_TO_SENSITIVE' (evidence lane)			lung-first	
+2036000157	35803401	Is a	proposed	existing concept is broader than 'Other chemotherapy'			lung-first	
+2037000006	35803401	Is a	proposed	existing concept is broader than 'Multi-agent chemotherapy'			lung-first	
+2037000026	35803401	Is a	proposed	existing concept is broader than 'High-dose chemotherapy'			lung-first	
+2020000012	2020000026	Opposite of	proposed	polarity pair of results for the same analyte			lung-first	
+2020000014	2020000032	Opposite of	proposed	polarity pair of results for the same analyte			lung-first	
+2020000043	2020000102	Opposite of	proposed	polarity pair of results for the same analyte			lung-first	
+2020000048	2020000002	Opposite of	proposed	polarity pair of results for the same analyte			lung-first	
+2020000054	2020000047	Opposite of	proposed	polarity pair of results for the same analyte			lung-first	
+2020000022	2020000133	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			later	
+2020000037	2020000134	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			later	
+2020000038	2020000134	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			later	
+2020000039	2020000135	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			later	
+2020000062	2020000137	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			later	
+2020000066	2020000065	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			later	
+2020000072	2020000071	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			later	
+2020000079	2020000138	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			later	
+2020000084	2020000139	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			later	
+2020000090	2020000089	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			later	
+2020000092	2020000140	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			later	
+2020000104	2020000100	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			later	
+2020000105	2020000100	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			later	
+2020000113	2020000077	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			later	
+2020000119	2020000141	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			later	
+2020000142	2020000144	Is a	proposed	population subset: a higher cut-off is met only when every lower cut-off is met			later	
+2020000148	2020000149	Is a	proposed	population subset: a higher cut-off is met only when every lower cut-off is met			later	
+2020000150	2020000148	Is a	proposed	population subset: a higher cut-off is met only when every lower cut-off is met			later	
+2020000155	2020000002	Is a	proposed	structural rule: a qualified result is a kind of the plain result			later	
+2020000156	2020000126	Is a	proposed	structural rule: a qualified result is a kind of the plain result			later	
+2032000010	1633488	Is a	proposed	existing concept is broader than 'first or second complete remission with minimal residual disease (MRD) greater than or equal to 0.1%' (evidence lane)			later	
+2032000011	4136153	Is a	proposed	existing concept is broader than 'first relapse' (evidence lane)			later	
+2032000012	1633363	Is a	proposed	existing concept is broader than 'CR1' (evidence lane)			later	
+2032000013	1633363	Is a	proposed	existing concept is broader than 'CR2' (evidence lane)			later	
+2032000020	4260906	Is a	proposed	existing concept is broader than 'Locoregional' (evidence lane)			later	
+2032000021	4250490	Is a	proposed	existing concept is broader than 'extravascular hemolysis' (evidence lane)			later	
+2032000031	439777	Is a	proposed	existing concept is broader than 'transfusion-dependent anemia' (evidence lane)			later	
+2032000036	200527	Is a	proposed	existing concept is broader than 'disease-related splenomegaly or symptoms in adult patients with moderate to severe anaemia' (evidence lane)			later	
+2032000037	439777	Is a	proposed	existing concept is broader than 'moderate to severe anemia' (evidence lane)			later	
+2032000041	4254665	Is a	proposed	existing concept is broader than 'not candidate for curative surgery' (evidence lane)			later	
+2032000045	4156184	Is a	proposed	existing concept is broader than 'acute' (evidence lane)			later	
+2034000002	4155158	Is a	proposed	existing concept is broader than 'moderate to severe symptoms inadequately controlled' (evidence lane)			later	
+2034000006	1633363	Is a	proposed	existing concept is broader than 'CRi after induction' (evidence lane)			later	
+2034000007	1633363	Is a	proposed	existing concept is broader than 'CRi after induction +/- consolidation' (evidence lane)			later	
+2034000010	4307105	Is a	proposed	existing concept is broader than 'Platinum-sensitive' (evidence lane)			later	
+2034000011	1633488	Is a	proposed	existing concept is broader than 'CR1 or CR2 with MRD greater than or equal to 0.1%' (evidence lane)			later	
+2034000014	1634643	Is a	proposed	existing concept is broader than 'complete resection' (evidence lane)			later	
+2034000016	4048615	Is a	proposed	existing concept is broader than 'double-refractory' (evidence lane)			later	
+2034000022	4048615	Is a	proposed	existing concept is broader than 'refractory to last therapy' (evidence lane)			later	
+2034000023	1634643	Is a	proposed	existing concept is broader than 'complete gross resection' (evidence lane)			later	
+2034000027	36769000	Is a	proposed	existing concept is broader than 'residual pathologic disease' (evidence lane)			later	
+2034000036	1633363	Is a	proposed	existing concept is broader than 'CR or better for at least 6 months' (evidence lane)			later	
+2034000037	36769000	Is a	proposed	existing concept is broader than 'residual invasive disease' (evidence lane)			later	
+2034000038	36769000	Is a	proposed	existing concept is broader than 'invasive residual disease in the breast and/or lymph nodes' (evidence lane)			later	
+2036000004	35803427	Is a	proposed	existing concept is broader than '1+ metastatic' (evidence lane)			later	
+2036000032	4307105	Is a	proposed	existing concept is broader than 'PLATINUM_TO_SENSITIVE' (evidence lane)			later	
+2036000048	35804133	Is a	proposed	existing concept is broader than 'Surgery AND Radiotherapy' (evidence lane)			later	
+2036000052	35804133	Is a	proposed	existing concept is broader than 'Radiotherapy' (evidence lane)			later	
+2036000056	35807225	Is a	proposed	existing concept is broader than 'EGFR-directed therapy'			later	
+2036000060	35803588	Is a	proposed	existing concept is broader than 'Advanced disease' (evidence lane)			later	
+2036000061	1525179	Is a	proposed	existing concept is broader than 'neoadjuvant or adjuvant' (evidence lane)			later	
+2036000065	35807203	Is a	proposed	existing concept is broader than 'CDK4/6 inhibitor'			later	
+2036000071	35803588	Is a	proposed	existing concept is broader than 'Advanced or metastatic' (evidence lane)			later	
+2036000074	35807245	Is a	proposed	existing concept is broader than 'non-steroidal aromatase inhibitor'			later	
+2036000085	42542298	Is a	proposed	existing concept is broader than 'Allogeneic HSCT'			later	
+2036000094	35807346	Is a	proposed	existing concept is broader than 'erythropoietin-based therapy'			later	
+2036000103	1525207	Is a	proposed	existing concept is broader than 'Radical resection'			later	
+2036000105	35803407	Is a	proposed	existing concept is broader than 'New hormonal agent'			later	
+2036000107	37561400	Is a	proposed	existing concept is broader than 'Relapsed platinum-sensitive' (evidence lane)			later	
+2036000114	1525179	Is a	proposed	existing concept is broader than '(neo)adjuvant' (evidence lane)			later	
+2036000132	35803578	Is a	proposed	existing concept is broader than 'Corticosteroids'			later	
+2036000146	35804229	Is a	proposed	existing concept is broader than 'Total mastectomy'			later	
+2036000147	35804326	Is a	proposed	existing concept is broader than 'Segmental mastectomy'			later	
+2036000148	35806120	Is a	proposed	existing concept is broader than 'axillary dissection'			later	
+2036000149	35803411	Is a	proposed	existing concept is broader than 'breast irradiation'			later	
+2037000004	37557866	Is a	proposed	existing concept is broader than 'Fluorouracil-based chemotherapy'			later	
+2037000009	4049372	Is a	proposed	existing concept is broader than 'Plasma exchange'			later	
+2037000013	35807466	Is a	proposed	existing concept is broader than 'Other effective agents'			later	
+2037000015	35807466	Is a	proposed	existing concept is broader than 'Antineoplastic agents'			later	
+2037000019	35807466	Is a	proposed	existing concept is broader than 'certain other approved antineoplastic agents'			later	
+2037000025	35807290	Is a	proposed	existing concept is broader than 'Bevacizumab biosimilar'			later	
+2040000001	37109703	Is a	proposed	existing concept is broader than 'high risk for recurrence AND Ki-67 > 20%' (evidence lane)			later	
+2040000002	37109703	Is a	proposed	existing concept is broader than 'high risk for recurrence' (evidence lane)			later	
+2040000006	8507	Is a	proposed	existing concept is broader than 'men' (evidence lane)			later	
+2040000007	37109703	Is a	proposed	existing concept is broader than 'High-risk of developing metastases' (evidence lane)			later	
+2040000025	37109703	Is a	proposed	existing concept is broader than 'High risk of relapse or progression' (evidence lane)			later	
+2040000028	37109703	Is a	proposed	existing concept is broader than 'poor-risk' (evidence lane)			later	
+2040000034	37109703	Is a	proposed	existing concept is broader than 'high risk of recurrence after surgery and radiation' (evidence lane)			later	
+2040000046	45877868	Is a	proposed	existing concept is broader than 'at risk of developing metastatic disease' (evidence lane)			later	
+2040000050	4295261	Is a	proposed	existing concept is broader than 'postmenopausal with osteoporosis at high risk for fracture' (evidence lane)			later	
+2040000055	8507	Is a	proposed	existing concept is broader than 'adult men' (evidence lane)			later	
+2040000063	37109703	Is a	proposed	existing concept is broader than 'High risk for metastasis' (evidence lane)			later	
+2040000065	4137845	Is a	proposed	existing concept is broader than 'Well- or moderately-differentiated' (evidence lane)			later	
+2040000066	4295261	Is a	proposed	existing concept is broader than 'postmenopausal without symptomatic visceral disease' (evidence lane)			later	
+2040000067	4137845	Is a	proposed	existing concept is broader than 'Well-differentiated non-functional GI or lung origin' (evidence lane)			later	
+2040000071	45878201	Is a	proposed	existing concept is broader than 'adults 75 years or older' (evidence lane)			later	
+2040000076	37109703	Is a	proposed	existing concept is broader than 'High risk for systemic recurrence' (evidence lane)			later	
+2040000078	4137845	Is a	proposed	existing concept is broader than 'Well or moderately differentiated' (evidence lane)			later	
+2040000110	37396673	Is a	proposed	existing concept is broader than 'IPI 2+' (evidence lane)			later	
+2020000019	2020000027	Opposite of	proposed	polarity pair of results for the same analyte			later	
+2020000021	2020000044	Opposite of	proposed	polarity pair of results for the same analyte			later	
+2020000040	2020000055	Opposite of	proposed	polarity pair of results for the same analyte			later	
+2020000063	2020000093	Opposite of	proposed	polarity pair of results for the same analyte			later	
+2020000064	2020000094	Opposite of	proposed	polarity pair of results for the same analyte			later	
+2020000128	2020000028	Opposite of	proposed	polarity pair of results for the same analyte			later	

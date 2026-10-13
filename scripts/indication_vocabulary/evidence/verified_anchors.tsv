@@ -1,0 +1,898 @@
+concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	standard_concept	valid_start_date	valid_end_date	invalid_reason	is_active	found	verified_via
+35802856	Capivasertib	HemOnc	Drug	Component	2			2099-12-31		true	yes	groundworkers concept_by_code
+35802858	Abemaciclib	HemOnc	Drug	Component	4			2099-12-31		true	yes	groundworkers concept_by_code
+35802860	Abiraterone	HemOnc	Drug	Component	6			2099-12-31		true	yes	groundworkers concept_by_code
+35802861	Acalabrutinib	HemOnc	Drug	Component	7			2099-12-31		true	yes	groundworkers concept_by_code
+35802866	Trastuzumab emtansine	HemOnc	Drug	Component	12			2099-12-31		true	yes	groundworkers concept_by_code
+35802867	Afatinib	HemOnc	Drug	Component	13			2099-12-31		true	yes	groundworkers concept_by_code
+35802869	Aldesleukin	HemOnc	Drug	Component	15			2099-12-31		true	yes	groundworkers concept_by_code
+35802870	Alectinib	HemOnc	Drug	Component	16			2099-12-31		true	yes	groundworkers concept_by_code
+35802871	Alemtuzumab	HemOnc	Drug	Component	17			2099-12-31		true	yes	groundworkers concept_by_code
+35802874	All-trans retinoic acid	HemOnc	Drug	Component	20			2099-12-31		true	yes	groundworkers concept_by_code
+35802877	Altretamine	HemOnc	Drug	Component	23			2099-12-31		true	yes	groundworkers concept_by_code
+35802884	Amrubicin	HemOnc	Drug	Component	30			2099-12-31		true	yes	groundworkers concept_by_code
+35802886	Anagrelide	HemOnc	Drug	Component	32			2099-12-31		true	yes	groundworkers concept_by_code
+35802887	Anastrozole	HemOnc	Drug	Component	33			2099-12-31		true	yes	groundworkers concept_by_code
+35802890	Antithymocyte globulin horse ATG	HemOnc	Drug	Component	36			2099-12-31		true	yes	groundworkers concept_by_code
+35802892	Apalutamide	HemOnc	Drug	Component	39			2099-12-31		true	yes	groundworkers concept_by_code
+35802893	Apatinib	HemOnc	Drug	Component	40			2099-12-31		true	yes	groundworkers concept_by_code
+35802894	Apixaban	HemOnc	Drug	Component	41			2099-12-31		true	yes	groundworkers concept_by_code
+35802895	Aprepitant	HemOnc	Drug	Component	42			2099-12-31		true	yes	groundworkers concept_by_code
+35802896	Argatroban	HemOnc	Drug	Component	43			2099-12-31		true	yes	groundworkers concept_by_code
+35802897	Arsenic trioxide	HemOnc	Drug	Component	44			2099-12-31		true	yes	groundworkers concept_by_code
+35802898	Asparaginase	HemOnc	Drug	Component	45			2099-12-31		true	yes	groundworkers concept_by_code
+35802899	Asparaginase Erwinia chrysanthemi	HemOnc	Drug	Component	46			2099-12-31		true	yes	groundworkers concept_by_code
+35802902	Atezolizumab	HemOnc	Drug	Component	49			2099-12-31		true	yes	groundworkers concept_by_code
+35802905	Avatrombopag	HemOnc	Drug	Component	52			2099-12-31		true	yes	groundworkers concept_by_code
+35802906	Avelumab	HemOnc	Drug	Component	53			2099-12-31		true	yes	groundworkers concept_by_code
+35802907	Axicabtagene ciloleucel	HemOnc	Drug	Component	54			2099-12-31		true	yes	groundworkers concept_by_code
+35802908	Axitinib	HemOnc	Drug	Component	55			2099-12-31		true	yes	groundworkers concept_by_code
+35802909	Azacitidine	HemOnc	Drug	Component	56			2099-12-31		true	yes	groundworkers concept_by_code
+35802912	BCG vaccine	HemOnc	Drug	Component	59			2099-12-31		true	yes	groundworkers concept_by_code
+35802916	Belinostat	HemOnc	Drug	Component	63			2099-12-31		true	yes	groundworkers concept_by_code
+35802917	Belotecan	HemOnc	Drug	Component	64			2099-12-31		true	yes	groundworkers concept_by_code
+35802918	Bendamustine	HemOnc	Drug	Component	65			2099-12-31		true	yes	groundworkers concept_by_code
+35802919	Betrixaban	HemOnc	Drug	Component	66			2099-12-31		true	yes	groundworkers concept_by_code
+35802920	Bevacizumab-awwb	HemOnc	Drug	Component	67			2099-12-31		true	yes	groundworkers concept_by_code
+35802921	Bevacizumab	HemOnc	Drug	Component	68			2099-12-31		true	yes	groundworkers concept_by_code
+35802922	Bexarotene	HemOnc	Drug	Component	69			2099-12-31		true	yes	groundworkers concept_by_code
+35802923	Bicalutamide	HemOnc	Drug	Component	70			2099-12-31		true	yes	groundworkers concept_by_code
+35802924	Binimetinib	HemOnc	Drug	Component	71			2099-12-31		true	yes	groundworkers concept_by_code
+35802926	Bleomycin	HemOnc	Drug	Component	73			2099-12-31		true	yes	groundworkers concept_by_code
+35802927	Blinatumomab	HemOnc	Drug	Component	74			2099-12-31		true	yes	groundworkers concept_by_code
+35802928	Bortezomib	HemOnc	Drug	Component	75			2099-12-31		true	yes	groundworkers concept_by_code
+35802929	Bosutinib	HemOnc	Drug	Component	76			2099-12-31		true	yes	groundworkers concept_by_code
+35802930	Brentuximab vedotin	HemOnc	Drug	Component	77			2099-12-31		true	yes	groundworkers concept_by_code
+35802931	Brigatinib	HemOnc	Drug	Component	78			2099-12-31		true	yes	groundworkers concept_by_code
+35802933	Busulfan	HemOnc	Drug	Component	80			2099-12-31		true	yes	groundworkers concept_by_code
+35802934	Cabazitaxel	HemOnc	Drug	Component	81			2099-12-31		true	yes	groundworkers concept_by_code
+35802935	Cabozantinib	HemOnc	Drug	Component	82			2099-12-31		true	yes	groundworkers concept_by_code
+35802936	Calaspargase	HemOnc	Drug	Component	83			2099-12-31		true	yes	groundworkers concept_by_code
+35802939	Capecitabine	HemOnc	Drug	Component	86			2099-12-31		true	yes	groundworkers concept_by_code
+35802940	Caplacizumab	HemOnc	Drug	Component	87			2099-12-31		true	yes	groundworkers concept_by_code
+35802941	Carboplatin	HemOnc	Drug	Component	88			2099-12-31		true	yes	groundworkers concept_by_code
+35802942	Carfilzomib	HemOnc	Drug	Component	89			2099-12-31		true	yes	groundworkers concept_by_code
+35802943	Carmustine	HemOnc	Drug	Component	90			2099-12-31		true	yes	groundworkers concept_by_code
+35802944	Carmustine wafer polifeprosan 20	HemOnc	Drug	Component	91			2099-12-31		true	yes	groundworkers concept_by_code
+35802946	Catumaxomab	HemOnc	Drug	Component	93			2099-12-31		true	yes	groundworkers concept_by_code
+35802948	Cemiplimab	HemOnc	Drug	Component	95			2099-12-31		true	yes	groundworkers concept_by_code
+35802949	Ceritinib	HemOnc	Drug	Component	96			2099-12-31		true	yes	groundworkers concept_by_code
+35802951	Cetuximab	HemOnc	Drug	Component	98			2099-12-31		true	yes	groundworkers concept_by_code
+35802952	Chidamide	HemOnc	Drug	Component	99			2099-12-31		true	yes	groundworkers concept_by_code
+35802953	Chlorambucil	HemOnc	Drug	Component	100			2099-12-31		true	yes	groundworkers concept_by_code
+35802958	Cisplatin	HemOnc	Drug	Component	105			2099-12-31		true	yes	groundworkers concept_by_code
+35802960	Cladribine	HemOnc	Drug	Component	107			2099-12-31		true	yes	groundworkers concept_by_code
+35802964	Clofarabine	HemOnc	Drug	Component	111			2099-12-31		true	yes	groundworkers concept_by_code
+35802966	Cobimetinib	HemOnc	Drug	Component	113			2099-12-31		true	yes	groundworkers concept_by_code
+35802968	Copanlisib	HemOnc	Drug	Component	115			2099-12-31		true	yes	groundworkers concept_by_code
+35802971	Crizanlizumab	HemOnc	Drug	Component	118			2099-12-31		true	yes	groundworkers concept_by_code
+35802972	Crizotinib	HemOnc	Drug	Component	119			2099-12-31		true	yes	groundworkers concept_by_code
+35802975	Cyclophosphamide	HemOnc	Drug	Component	122			2099-12-31		true	yes	groundworkers concept_by_code
+35802979	Cytarabine	HemOnc	Drug	Component	126			2099-12-31		true	yes	groundworkers concept_by_code
+35802980	Cytarabine and daunorubicin liposomal	HemOnc	Drug	Component	127			2099-12-31		true	yes	groundworkers concept_by_code
+35802981	Cytarabine liposomal	HemOnc	Drug	Component	128			2099-12-31		true	yes	groundworkers concept_by_code
+35802983	Dabigatran	HemOnc	Drug	Component	130			2099-12-31		true	yes	groundworkers concept_by_code
+35802984	Dabrafenib	HemOnc	Drug	Component	131			2099-12-31		true	yes	groundworkers concept_by_code
+35802985	Dacarbazine	HemOnc	Drug	Component	132			2099-12-31		true	yes	groundworkers concept_by_code
+35802986	Dacomitinib	HemOnc	Drug	Component	133			2099-12-31		true	yes	groundworkers concept_by_code
+35802987	Dactinomycin	HemOnc	Drug	Component	134			2099-12-31		true	yes	groundworkers concept_by_code
+35802988	Dalteparin	HemOnc	Drug	Component	135			2099-12-31		true	yes	groundworkers concept_by_code
+35802992	Daratumumab	HemOnc	Drug	Component	139			2099-12-31		true	yes	groundworkers concept_by_code
+35802993	Darbepoetin alfa	HemOnc	Drug	Component	140			2099-12-31		true	yes	groundworkers concept_by_code
+35802994	Darolutamide	HemOnc	Drug	Component	141			2099-12-31		true	yes	groundworkers concept_by_code
+35802995	Dasatinib	HemOnc	Drug	Component	142			2099-12-31		true	yes	groundworkers concept_by_code
+35802996	Daunorubicin	HemOnc	Drug	Component	143			2099-12-31		true	yes	groundworkers concept_by_code
+35802997	Daunorubicin liposomal	HemOnc	Drug	Component	144			2099-12-31		true	yes	groundworkers concept_by_code
+35802998	Decitabine	HemOnc	Drug	Component	145			2099-12-31		true	yes	groundworkers concept_by_code
+35802999	Deferasirox	HemOnc	Drug	Component	146			2099-12-31		true	yes	groundworkers concept_by_code
+35803002	Defibrotide	HemOnc	Drug	Component	150			2099-12-31		true	yes	groundworkers concept_by_code
+35803003	Degarelix	HemOnc	Drug	Component	151			2099-12-31		true	yes	groundworkers concept_by_code
+35803004	Denileukin diftitox	HemOnc	Drug	Component	152			2099-12-31		true	yes	groundworkers concept_by_code
+35803006	Denosumab	HemOnc	Drug	Component	154			2099-12-31		true	yes	groundworkers concept_by_code
+35803008	Dexamethasone	HemOnc	Drug	Component	156			2099-12-31		true	yes	groundworkers concept_by_code
+35803013	Dinutuximab	HemOnc	Drug	Component	161			2099-12-31		true	yes	groundworkers concept_by_code
+35803016	Docetaxel	HemOnc	Drug	Component	164			2099-12-31		true	yes	groundworkers concept_by_code
+35803022	Doxorubicin	HemOnc	Drug	Component	170			2099-12-31		true	yes	groundworkers concept_by_code
+35803025	Durvalumab	HemOnc	Drug	Component	173			2099-12-31		true	yes	groundworkers concept_by_code
+35803026	Dutasteride	HemOnc	Drug	Component	174			2099-12-31		true	yes	groundworkers concept_by_code
+35803027	Duvelisib	HemOnc	Drug	Component	175			2099-12-31		true	yes	groundworkers concept_by_code
+35803028	Eculizumab	HemOnc	Drug	Component	176			2099-12-31		true	yes	groundworkers concept_by_code
+35803029	Edoxaban	HemOnc	Drug	Component	177			2099-12-31		true	yes	groundworkers concept_by_code
+35803031	Elotuzumab	HemOnc	Drug	Component	179			2099-12-31		true	yes	groundworkers concept_by_code
+35803032	Eltrombopag	HemOnc	Drug	Component	180			2099-12-31		true	yes	groundworkers concept_by_code
+35803033	Emicizumab	HemOnc	Drug	Component	181			2099-12-31		true	yes	groundworkers concept_by_code
+35803034	Enasidenib	HemOnc	Drug	Component	182			2099-12-31		true	yes	groundworkers concept_by_code
+35803035	Encorafenib	HemOnc	Drug	Component	183			2099-12-31		true	yes	groundworkers concept_by_code
+35803036	Enoxaparin	HemOnc	Drug	Component	184			2099-12-31		true	yes	groundworkers concept_by_code
+35803037	Ensartinib	HemOnc	Drug	Component	185			2099-12-31		true	yes	groundworkers concept_by_code
+35803038	Entinostat	HemOnc	Drug	Component	186			2099-12-31		true	yes	groundworkers concept_by_code
+35803040	Entrectinib	HemOnc	Drug	Component	188			2099-12-31		true	yes	groundworkers concept_by_code
+35803041	Enzalutamide	HemOnc	Drug	Component	189			2099-12-31		true	yes	groundworkers concept_by_code
+35803043	Epirubicin	HemOnc	Drug	Component	191			2099-12-31		true	yes	groundworkers concept_by_code
+35803044	Epoetin alfa-epbx	HemOnc	Drug	Component	192			2099-12-31		true	yes	groundworkers concept_by_code
+35803048	Erdafitinib	HemOnc	Drug	Component	196			2099-12-31		true	yes	groundworkers concept_by_code
+35803049	Eribulin	HemOnc	Drug	Component	197			2099-12-31		true	yes	groundworkers concept_by_code
+35803050	Erlotinib	HemOnc	Drug	Component	198			2099-12-31		true	yes	groundworkers concept_by_code
+35803053	Etoposide	HemOnc	Drug	Component	201			2099-12-31		true	yes	groundworkers concept_by_code
+35803054	Everolimus	HemOnc	Drug	Component	202			2099-12-31		true	yes	groundworkers concept_by_code
+35803055	Exemestane	HemOnc	Drug	Component	203			2099-12-31		true	yes	groundworkers concept_by_code
+35803057	Factor IX recombinant	HemOnc	Drug	Component	205			2099-12-31		true	yes	groundworkers concept_by_code
+35803060	Factor VIII recombinant	HemOnc	Drug	Component	208			2099-12-31		true	yes	groundworkers concept_by_code
+35803061	Factor VIIa recombinant	HemOnc	Drug	Component	209			2099-12-31		true	yes	groundworkers concept_by_code
+35803063	Andexanet alfa	HemOnc	Drug	Component	211			2099-12-31		true	yes	groundworkers concept_by_code
+35803066	Ferric carboxymaltose	HemOnc	Drug	Component	214			2099-12-31		true	yes	groundworkers concept_by_code
+35803067	Ferric gluconate	HemOnc	Drug	Component	215			2099-12-31		true	yes	groundworkers concept_by_code
+35803069	Ferumoxytol	HemOnc	Drug	Component	217			2099-12-31		true	yes	groundworkers concept_by_code
+35803072	Filgrastim	HemOnc	Drug	Component	220			2099-12-31		true	yes	groundworkers concept_by_code
+35803074	Floxuridine	HemOnc	Drug	Component	222			2099-12-31		true	yes	groundworkers concept_by_code
+35803076	Fludarabine	HemOnc	Drug	Component	224			2099-12-31		true	yes	groundworkers concept_by_code
+35803077	Fluorouracil	HemOnc	Drug	Component	225			2099-12-31		true	yes	groundworkers concept_by_code
+35803079	Flutamide	HemOnc	Drug	Component	227			2099-12-31		true	yes	groundworkers concept_by_code
+35803081	Leucovorin	HemOnc	Drug	Component	229			2099-12-31		true	yes	groundworkers concept_by_code
+35803082	Fondaparinux	HemOnc	Drug	Component	230			2099-12-31		true	yes	groundworkers concept_by_code
+35803084	Forodesine	HemOnc	Drug	Component	232			2099-12-31		true	yes	groundworkers concept_by_code
+35803085	Fosaprepitant	HemOnc	Drug	Component	233			2099-12-31		true	yes	groundworkers concept_by_code
+35803086	Fostamatinib	HemOnc	Drug	Component	234			2099-12-31		true	yes	groundworkers concept_by_code
+35803088	Fruquintinib	HemOnc	Drug	Component	236			2099-12-31		true	yes	groundworkers concept_by_code
+35803089	Fulvestrant	HemOnc	Drug	Component	237			2099-12-31		true	yes	groundworkers concept_by_code
+35803094	Gefitinib	HemOnc	Drug	Component	242			2099-12-31		true	yes	groundworkers concept_by_code
+35803095	Gemcitabine	HemOnc	Drug	Component	243			2099-12-31		true	yes	groundworkers concept_by_code
+35803096	Gemtuzumab ozogamicin	HemOnc	Drug	Component	244			2099-12-31		true	yes	groundworkers concept_by_code
+35803097	Gilteritinib	HemOnc	Drug	Component	245			2099-12-31		true	yes	groundworkers concept_by_code
+35803098	Glasdegib	HemOnc	Drug	Component	246			2099-12-31		true	yes	groundworkers concept_by_code
+35803099	Glucarpidase	HemOnc	Drug	Component	247			2099-12-31		true	yes	groundworkers concept_by_code
+35803100	Goserelin	HemOnc	Drug	Component	248			2099-12-31		true	yes	groundworkers concept_by_code
+35803101	Granisetron	HemOnc	Drug	Component	249			2099-12-31		true	yes	groundworkers concept_by_code
+35803105	Heptaplatin	HemOnc	Drug	Component	255			2099-12-31		true	yes	groundworkers concept_by_code
+35803106	Histrelin	HemOnc	Drug	Component	256			2099-12-31		true	yes	groundworkers concept_by_code
+35803109	Hydroxyurea	HemOnc	Drug	Component	259			2099-12-31		true	yes	groundworkers concept_by_code
+35803112	Ibritumomab tiuxetan	HemOnc	Drug	Component	262			2099-12-31		true	yes	groundworkers concept_by_code
+35803113	Ibrutinib	HemOnc	Drug	Component	263			2099-12-31		true	yes	groundworkers concept_by_code
+35803114	Icotinib	HemOnc	Drug	Component	264			2099-12-31		true	yes	groundworkers concept_by_code
+35803115	Idarubicin	HemOnc	Drug	Component	265			2099-12-31		true	yes	groundworkers concept_by_code
+35803116	Idarucizumab	HemOnc	Drug	Component	266			2099-12-31		true	yes	groundworkers concept_by_code
+35803117	Idelalisib	HemOnc	Drug	Component	267			2099-12-31		true	yes	groundworkers concept_by_code
+35803118	Ifosfamide	HemOnc	Drug	Component	268			2099-12-31		true	yes	groundworkers concept_by_code
+35803119	Imatinib	HemOnc	Drug	Component	269			2099-12-31		true	yes	groundworkers concept_by_code
+35803120	Imetelstat	HemOnc	Drug	Component	270			2099-12-31		true	yes	groundworkers concept_by_code
+35803122	Infigratinib	HemOnc	Drug	Component	272			2099-12-31		true	yes	groundworkers concept_by_code
+35803123	Inotuzumab ozogamicin	HemOnc	Drug	Component	273			2099-12-31		true	yes	groundworkers concept_by_code
+35803124	Interferon alfa-2a	HemOnc	Drug	Component	274			2099-12-31		true	yes	groundworkers concept_by_code
+35803125	Interferon alfa-2b	HemOnc	Drug	Component	275			2099-12-31		true	yes	groundworkers concept_by_code
+35803129	Ipilimumab	HemOnc	Drug	Component	279			2099-12-31		true	yes	groundworkers concept_by_code
+35803130	Irinotecan	HemOnc	Drug	Component	280			2099-12-31		true	yes	groundworkers concept_by_code
+35803131	Irinotecan liposome	HemOnc	Drug	Component	281			2099-12-31		true	yes	groundworkers concept_by_code
+35803133	Iron sucrose	HemOnc	Drug	Component	283			2099-12-31		true	yes	groundworkers concept_by_code
+35803134	Isatuximab	HemOnc	Drug	Component	284			2099-12-31		true	yes	groundworkers concept_by_code
+35803137	Ivosidenib	HemOnc	Drug	Component	287			2099-12-31		true	yes	groundworkers concept_by_code
+35803138	Ixabepilone	HemOnc	Drug	Component	288			2099-12-31		true	yes	groundworkers concept_by_code
+35803139	Ixazomib	HemOnc	Drug	Component	289			2099-12-31		true	yes	groundworkers concept_by_code
+35803141	L-glutamine	HemOnc	Drug	Component	291			2099-12-31		true	yes	groundworkers concept_by_code
+35803144	Lanreotide	HemOnc	Drug	Component	294			2099-12-31		true	yes	groundworkers concept_by_code
+35803146	Lapatinib	HemOnc	Drug	Component	296			2099-12-31		true	yes	groundworkers concept_by_code
+35803148	Larotrectinib	HemOnc	Drug	Component	298			2099-12-31		true	yes	groundworkers concept_by_code
+35803149	Lenalidomide	HemOnc	Drug	Component	299			2099-12-31		true	yes	groundworkers concept_by_code
+35803150	Lenograstim	HemOnc	Drug	Component	300			2099-12-31		true	yes	groundworkers concept_by_code
+35803151	Lenvatinib	HemOnc	Drug	Component	301			2099-12-31		true	yes	groundworkers concept_by_code
+35803154	Letrozole	HemOnc	Drug	Component	304			2099-12-31		true	yes	groundworkers concept_by_code
+35803155	Leuprolide	HemOnc	Drug	Component	305			2099-12-31		true	yes	groundworkers concept_by_code
+35803156	Levamisole	HemOnc	Drug	Component	306			2099-12-31		true	yes	groundworkers concept_by_code
+35803158	Levoleucovorin	HemOnc	Drug	Component	308			2099-12-31		true	yes	groundworkers concept_by_code
+35803161	Lomustine	HemOnc	Drug	Component	311			2099-12-31		true	yes	groundworkers concept_by_code
+35803164	Lorlatinib	HemOnc	Drug	Component	314			2099-12-31		true	yes	groundworkers concept_by_code
+35803165	Lusutrombopag	HemOnc	Drug	Component	315			2099-12-31		true	yes	groundworkers concept_by_code
+35803166	Lutetium Lu 177 dotatate	HemOnc	Drug	Component	316			2099-12-31		true	yes	groundworkers concept_by_code
+35803168	Tafasitamab	HemOnc	Drug	Component	318			2099-12-31		true	yes	groundworkers concept_by_code
+35803175	Melphalan	HemOnc	Drug	Component	325			2099-12-31		true	yes	groundworkers concept_by_code
+35803176	Mepolizumab	HemOnc	Drug	Component	326			2099-12-31		true	yes	groundworkers concept_by_code
+35803177	Mercaptopurine	HemOnc	Drug	Component	327			2099-12-31		true	yes	groundworkers concept_by_code
+35803179	Methotrexate	HemOnc	Drug	Component	329			2099-12-31		true	yes	groundworkers concept_by_code
+35803180	Methoxsalen	HemOnc	Drug	Component	330			2099-12-31		true	yes	groundworkers concept_by_code
+35803183	Midostaurin	HemOnc	Drug	Component	333			2099-12-31		true	yes	groundworkers concept_by_code
+35803184	Mitomycin	HemOnc	Drug	Component	334			2099-12-31		true	yes	groundworkers concept_by_code
+35803185	Mitotane	HemOnc	Drug	Component	335			2099-12-31		true	yes	groundworkers concept_by_code
+35803186	Mitoxantrone	HemOnc	Drug	Component	336			2099-12-31		true	yes	groundworkers concept_by_code
+35803188	Mogamulizumab	HemOnc	Drug	Component	338			2099-12-31		true	yes	groundworkers concept_by_code
+35803189	Momelotinib	HemOnc	Drug	Component	339			2099-12-31		true	yes	groundworkers concept_by_code
+35803192	Moxetumomab pasudotox	HemOnc	Drug	Component	342			2099-12-31		true	yes	groundworkers concept_by_code
+35803193	Mycophenolate mofetil	HemOnc	Drug	Component	343			2099-12-31		true	yes	groundworkers concept_by_code
+35803197	Necitumumab	HemOnc	Drug	Component	347			2099-12-31		true	yes	groundworkers concept_by_code
+35803199	Nelarabine	HemOnc	Drug	Component	349			2099-12-31		true	yes	groundworkers concept_by_code
+35803200	Neratinib	HemOnc	Drug	Component	350			2099-12-31		true	yes	groundworkers concept_by_code
+35803201	Netupitant and palonosetron	HemOnc	Drug	Component	351			2099-12-31		true	yes	groundworkers concept_by_code
+35803202	Nilotinib	HemOnc	Drug	Component	352			2099-12-31		true	yes	groundworkers concept_by_code
+35803203	Nilutamide	HemOnc	Drug	Component	353			2099-12-31		true	yes	groundworkers concept_by_code
+35803205	Nintedanib	HemOnc	Drug	Component	355			2099-12-31		true	yes	groundworkers concept_by_code
+35803206	Niraparib	HemOnc	Drug	Component	356			2099-12-31		true	yes	groundworkers concept_by_code
+35803207	Nivolumab	HemOnc	Drug	Component	357			2099-12-31		true	yes	groundworkers concept_by_code
+35803209	Non-pegylated liposomal doxorubicin	HemOnc	Drug	Component	359			2099-12-31		true	yes	groundworkers concept_by_code
+35803211	Obinutuzumab	HemOnc	Drug	Component	361			2099-12-31		true	yes	groundworkers concept_by_code
+35803212	Octreotide	HemOnc	Drug	Component	362			2099-12-31		true	yes	groundworkers concept_by_code
+35803213	Octreotide LAR	HemOnc	Drug	Component	363			2099-12-31		true	yes	groundworkers concept_by_code
+35803214	Ofatumumab	HemOnc	Drug	Component	364			2099-12-31		true	yes	groundworkers concept_by_code
+35803215	Olanzapine	HemOnc	Drug	Component	365			2099-12-31		true	yes	groundworkers concept_by_code
+35803216	Olaparib	HemOnc	Drug	Component	366			2099-12-31		true	yes	groundworkers concept_by_code
+35803217	Olaratumab	HemOnc	Drug	Component	367			2099-12-31		true	yes	groundworkers concept_by_code
+35803218	Omacetaxine	HemOnc	Drug	Component	368			2099-12-31		true	yes	groundworkers concept_by_code
+35803222	Oprelvekin	HemOnc	Drug	Component	372			2099-12-31		true	yes	groundworkers concept_by_code
+35803225	Osimertinib	HemOnc	Drug	Component	375			2099-12-31		true	yes	groundworkers concept_by_code
+35803227	Oxaliplatin	HemOnc	Drug	Component	377			2099-12-31		true	yes	groundworkers concept_by_code
+35803228	Paclitaxel nanoparticle albumin-bound	HemOnc	Drug	Component	378			2099-12-31		true	yes	groundworkers concept_by_code
+35803229	Paclitaxel	HemOnc	Drug	Component	379			2099-12-31		true	yes	groundworkers concept_by_code
+35803230	Pacritinib	HemOnc	Drug	Component	380			2099-12-31		true	yes	groundworkers concept_by_code
+35803231	Palbociclib	HemOnc	Drug	Component	381			2099-12-31		true	yes	groundworkers concept_by_code
+35803232	Palonosetron	HemOnc	Drug	Component	382			2099-12-31		true	yes	groundworkers concept_by_code
+35803234	Panitumumab	HemOnc	Drug	Component	384			2099-12-31		true	yes	groundworkers concept_by_code
+35803235	Panobinostat	HemOnc	Drug	Component	385			2099-12-31		true	yes	groundworkers concept_by_code
+35803237	Pazopanib	HemOnc	Drug	Component	387			2099-12-31		true	yes	groundworkers concept_by_code
+35803238	Pegaspargase	HemOnc	Drug	Component	388			2099-12-31		true	yes	groundworkers concept_by_code
+35803239	Pegfilgrastim-jmdb	HemOnc	Drug	Component	389			2099-12-31		true	yes	groundworkers concept_by_code
+35803240	Pegfilgrastim	HemOnc	Drug	Component	390			2099-12-31		true	yes	groundworkers concept_by_code
+35803241	Peginterferon alfa-2a	HemOnc	Drug	Component	391			2099-12-31		true	yes	groundworkers concept_by_code
+35803242	Peginterferon alfa-2b	HemOnc	Drug	Component	392			2099-12-31		true	yes	groundworkers concept_by_code
+35803243	Pegylated liposomal doxorubicin	HemOnc	Drug	Component	393			2099-12-31		true	yes	groundworkers concept_by_code
+35803244	Pembrolizumab	HemOnc	Drug	Component	394			2099-12-31		true	yes	groundworkers concept_by_code
+35803245	Pemetrexed	HemOnc	Drug	Component	395			2099-12-31		true	yes	groundworkers concept_by_code
+35803247	Pentostatin	HemOnc	Drug	Component	397			2099-12-31		true	yes	groundworkers concept_by_code
+35803250	Pertuzumab	HemOnc	Drug	Component	400			2099-12-31		true	yes	groundworkers concept_by_code
+35803256	Pixantrone	HemOnc	Drug	Component	406			2099-12-31		true	yes	groundworkers concept_by_code
+35803257	Plerixafor	HemOnc	Drug	Component	407			2099-12-31		true	yes	groundworkers concept_by_code
+35803260	Pomalidomide	HemOnc	Drug	Component	410			2099-12-31		true	yes	groundworkers concept_by_code
+35803261	Ponatinib	HemOnc	Drug	Component	411			2099-12-31		true	yes	groundworkers concept_by_code
+35803264	Pralatrexate	HemOnc	Drug	Component	414			2099-12-31		true	yes	groundworkers concept_by_code
+35803267	Prednisolone	HemOnc	Drug	Component	417			2099-12-31		true	yes	groundworkers concept_by_code
+35803269	Procarbazine	HemOnc	Drug	Component	419			2099-12-31		true	yes	groundworkers concept_by_code
+35803273	Prothrombin Complex Concentrate human	HemOnc	Drug	Component	423			2099-12-31		true	yes	groundworkers concept_by_code
+35803276	Quizartinib	HemOnc	Drug	Component	426			2099-12-31		true	yes	groundworkers concept_by_code
+35803278	Radium-223	HemOnc	Drug	Component	428			2099-12-31		true	yes	groundworkers concept_by_code
+35803279	Radotinib	HemOnc	Drug	Component	429			2099-12-31		true	yes	groundworkers concept_by_code
+35803283	Ramucirumab	HemOnc	Drug	Component	433			2099-12-31		true	yes	groundworkers concept_by_code
+35803286	Rasburicase	HemOnc	Drug	Component	436			2099-12-31		true	yes	groundworkers concept_by_code
+35803288	Regorafenib	HemOnc	Drug	Component	438			2099-12-31		true	yes	groundworkers concept_by_code
+35803291	Ribociclib	HemOnc	Drug	Component	441			2099-12-31		true	yes	groundworkers concept_by_code
+35803295	Rituximab-abbs	HemOnc	Drug	Component	445			2099-12-31		true	yes	groundworkers concept_by_code
+35803296	Rituximab	HemOnc	Drug	Component	446			2099-12-31		true	yes	groundworkers concept_by_code
+35803297	Rituximab and hyaluronidase human	HemOnc	Drug	Component	447			2099-12-31		true	yes	groundworkers concept_by_code
+35803298	Rivaroxaban	HemOnc	Drug	Component	448			2099-12-31		true	yes	groundworkers concept_by_code
+35803300	Rolapitant	HemOnc	Drug	Component	450			2099-12-31		true	yes	groundworkers concept_by_code
+35803301	Romidepsin	HemOnc	Drug	Component	451			2099-12-31		true	yes	groundworkers concept_by_code
+35803302	Romiplostim	HemOnc	Drug	Component	452			2099-12-31		true	yes	groundworkers concept_by_code
+35803303	Ropeginterferon alfa-2b	HemOnc	Drug	Component	453			2099-12-31		true	yes	groundworkers concept_by_code
+35803304	Rucaparib	HemOnc	Drug	Component	454			2099-12-31		true	yes	groundworkers concept_by_code
+35803305	Ruxolitinib	HemOnc	Drug	Component	455			2099-12-31		true	yes	groundworkers concept_by_code
+35803306	Sacituzumab govitecan	HemOnc	Drug	Component	456			2099-12-31		true	yes	groundworkers concept_by_code
+35803307	Samarium-153	HemOnc	Drug	Component	457			2099-12-31		true	yes	groundworkers concept_by_code
+35803311	Selinexor	HemOnc	Drug	Component	461			2099-12-31		true	yes	groundworkers concept_by_code
+35803312	Selumetinib	HemOnc	Drug	Component	462			2099-12-31		true	yes	groundworkers concept_by_code
+35803316	Siltuximab	HemOnc	Drug	Component	466			2099-12-31		true	yes	groundworkers concept_by_code
+35803317	Sipuleucel-T	HemOnc	Drug	Component	467			2099-12-31		true	yes	groundworkers concept_by_code
+35803319	Sonidegib	HemOnc	Drug	Component	469			2099-12-31		true	yes	groundworkers concept_by_code
+35803320	Sorafenib	HemOnc	Drug	Component	470			2099-12-31		true	yes	groundworkers concept_by_code
+35803322	Streptozocin	HemOnc	Drug	Component	472			2099-12-31		true	yes	groundworkers concept_by_code
+35803323	Sunitinib	HemOnc	Drug	Component	473			2099-12-31		true	yes	groundworkers concept_by_code
+35803325	Tagraxofusp	HemOnc	Drug	Component	475			2099-12-31		true	yes	groundworkers concept_by_code
+35803326	Talazoparib	HemOnc	Drug	Component	476			2099-12-31		true	yes	groundworkers concept_by_code
+35803327	Talimogene laherparepvec	HemOnc	Drug	Component	477			2099-12-31		true	yes	groundworkers concept_by_code
+35803328	Tamibarotene	HemOnc	Drug	Component	478			2099-12-31		true	yes	groundworkers concept_by_code
+35803329	Tamoxifen	HemOnc	Drug	Component	479			2099-12-31		true	yes	groundworkers concept_by_code
+35803330	Tbo-filgrastim	HemOnc	Drug	Component	480			2099-12-31		true	yes	groundworkers concept_by_code
+35803331	Tegafur gimeracil oteracil	HemOnc	Drug	Component	481			2099-12-31		true	yes	groundworkers concept_by_code
+35803333	Telotristat	HemOnc	Drug	Component	483			2099-12-31		true	yes	groundworkers concept_by_code
+35803334	Temozolomide	HemOnc	Drug	Component	484			2099-12-31		true	yes	groundworkers concept_by_code
+35803335	Temsirolimus	HemOnc	Drug	Component	485			2099-12-31		true	yes	groundworkers concept_by_code
+35803336	Teniposide	HemOnc	Drug	Component	486			2099-12-31		true	yes	groundworkers concept_by_code
+35803338	Thalidomide	HemOnc	Drug	Component	488			2099-12-31		true	yes	groundworkers concept_by_code
+35803340	Thiotepa	HemOnc	Drug	Component	490			2099-12-31		true	yes	groundworkers concept_by_code
+35803341	Ticagrelor	HemOnc	Drug	Component	492			2099-12-31		true	yes	groundworkers concept_by_code
+35803344	Tinzaparin	HemOnc	Drug	Component	495			2099-12-31		true	yes	groundworkers concept_by_code
+35803347	Tisagenlecleucel	HemOnc	Drug	Component	498			2099-12-31		true	yes	groundworkers concept_by_code
+35803349	Tivozanib	HemOnc	Drug	Component	500			2099-12-31		true	yes	groundworkers concept_by_code
+35803350	Tocilizumab	HemOnc	Drug	Component	501			2099-12-31		true	yes	groundworkers concept_by_code
+35803352	Topotecan	HemOnc	Drug	Component	503			2099-12-31		true	yes	groundworkers concept_by_code
+35803353	Toremifene	HemOnc	Drug	Component	504			2099-12-31		true	yes	groundworkers concept_by_code
+35803355	Tositumomab and I-131	HemOnc	Drug	Component	506			2099-12-31		true	yes	groundworkers concept_by_code
+35803356	Trabectedin	HemOnc	Drug	Component	507			2099-12-31		true	yes	groundworkers concept_by_code
+35803357	Trametinib	HemOnc	Drug	Component	508			2099-12-31		true	yes	groundworkers concept_by_code
+35803358	Tranexamic acid	HemOnc	Drug	Component	509			2099-12-31		true	yes	groundworkers concept_by_code
+35803359	Trastuzumab-dkst	HemOnc	Drug	Component	510			2099-12-31		true	yes	groundworkers concept_by_code
+35803360	Trastuzumab-pkrb	HemOnc	Drug	Component	511			2099-12-31		true	yes	groundworkers concept_by_code
+35803361	Trastuzumab	HemOnc	Drug	Component	512			2099-12-31		true	yes	groundworkers concept_by_code
+35803363	Tremelimumab	HemOnc	Drug	Component	514			2099-12-31		true	yes	groundworkers concept_by_code
+35803364	Treosulfan	HemOnc	Drug	Component	515			2099-12-31		true	yes	groundworkers concept_by_code
+35803365	Trifluridine and tipiracil	HemOnc	Drug	Component	516			2099-12-31		true	yes	groundworkers concept_by_code
+35803367	Triptorelin	HemOnc	Drug	Component	518			2099-12-31		true	yes	groundworkers concept_by_code
+35803369	Ublituximab	HemOnc	Drug	Component	520			2099-12-31		true	yes	groundworkers concept_by_code
+35803372	Uridine triacetate	HemOnc	Drug	Component	523			2099-12-31		true	yes	groundworkers concept_by_code
+35803377	Valrubicin	HemOnc	Drug	Component	528			2099-12-31		true	yes	groundworkers concept_by_code
+35803378	Vandetanib	HemOnc	Drug	Component	529			2099-12-31		true	yes	groundworkers concept_by_code
+35803382	Vemurafenib	HemOnc	Drug	Component	533			2099-12-31		true	yes	groundworkers concept_by_code
+35803383	Venetoclax	HemOnc	Drug	Component	534			2099-12-31		true	yes	groundworkers concept_by_code
+35803384	Vinblastine	HemOnc	Drug	Component	535			2099-12-31		true	yes	groundworkers concept_by_code
+35803385	Vincristine	HemOnc	Drug	Component	536			2099-12-31		true	yes	groundworkers concept_by_code
+35803386	Vincristine liposomal	HemOnc	Drug	Component	537			2099-12-31		true	yes	groundworkers concept_by_code
+35803389	Vinorelbine	HemOnc	Drug	Component	540			2099-12-31		true	yes	groundworkers concept_by_code
+35803390	Vismodegib	HemOnc	Drug	Component	541			2099-12-31		true	yes	groundworkers concept_by_code
+35803392	Vorapaxar	HemOnc	Drug	Component	543			2099-12-31		true	yes	groundworkers concept_by_code
+35803394	Vorinostat	HemOnc	Drug	Component	545			2099-12-31		true	yes	groundworkers concept_by_code
+35803398	Ziv-aflibercept	HemOnc	Drug	Component	549			2099-12-31		true	yes	groundworkers concept_by_code
+911920	Capmatinib	HemOnc	Drug	Component	3231			2099-12-31		true	yes	groundworkers concept_by_code
+42542257	Enfortumab vedotin	HemOnc	Drug	Component	3563			2099-12-31		true	yes	groundworkers concept_by_code
+42542260	Trastuzumab deruxtecan	HemOnc	Drug	Component	3590			2099-12-31		true	yes	groundworkers concept_by_code
+37556794	Abarelix	HemOnc	Drug	Component	3652			2099-12-31		true	yes	groundworkers concept_by_code
+911953	Belantamab mafodotin	HemOnc	Drug	Component	4380			2099-12-31		true	yes	groundworkers concept_by_code
+911976	Tucatinib	HemOnc	Drug	Component	4683			2099-12-31		true	yes	groundworkers concept_by_code
+911978	Daratumumab and hyaluronidase	HemOnc	Drug	Component	4940			2099-12-31		true	yes	groundworkers concept_by_code
+911990	Alitretinoin	HemOnc	Drug	Component	6008			2099-12-31		true	yes	groundworkers concept_by_code
+905596	Brexucabtagene autoleucel	HemOnc	Drug	Component	6632			2099-12-31		true	yes	groundworkers concept_by_code
+35101867	Alpelisib	HemOnc	Drug	Component	10396			2099-12-31		true	yes	groundworkers concept_by_code
+912008	Anakinra	HemOnc	Drug	Component	12282			2099-12-31		true	yes	groundworkers concept_by_code
+1524825	Aumolertinib	HemOnc	Drug	Component	12637			2099-12-31		true	yes	groundworkers concept_by_code
+1524829	Bevacizumab-adcd	HemOnc	Drug	Component	13334			2099-12-31		true	yes	groundworkers concept_by_code
+912017	Pemigatinib	HemOnc	Drug	Component	13351			2099-12-31		true	yes	groundworkers concept_by_code
+912021	Ripretinib	HemOnc	Drug	Component	13651			2099-12-31		true	yes	groundworkers concept_by_code
+912026	Selpercatinib	HemOnc	Drug	Component	13759			2099-12-31		true	yes	groundworkers concept_by_code
+912033	Decitabine and cedazuridine	HemOnc	Drug	Component	14235			2099-12-31		true	yes	groundworkers concept_by_code
+912041	Camrelizumab	HemOnc	Drug	Component	14742			2099-12-31		true	yes	groundworkers concept_by_code
+912057	Relugolix	HemOnc	Drug	Component	18352			2099-12-31		true	yes	groundworkers concept_by_code
+1524876	Elacestrant	HemOnc	Drug	Component	18359			2099-12-31		true	yes	groundworkers concept_by_code
+1524878	Envafolimab	HemOnc	Drug	Component	18741			2099-12-31		true	yes	groundworkers concept_by_code
+912075	Tepotinib	HemOnc	Drug	Component	19782			2099-12-31		true	yes	groundworkers concept_by_code
+1524879	Futibatinib	HemOnc	Drug	Component	20248			2099-12-31		true	yes	groundworkers concept_by_code
+35805716	NovoTTF-100A system (Optune)	HemOnc	Drug	Component	20851			2099-12-31		true	yes	groundworkers concept_by_code
+912085	Lisocabtagene maraleucel	HemOnc	Drug	Component	21215			2099-12-31		true	yes	groundworkers concept_by_code
+35101749	Idecabtagene vicleucel	HemOnc	Drug	Component	23426			2099-12-31		true	yes	groundworkers concept_by_code
+42542280	Avapritinib	HemOnc	Drug	Component	25334			2099-12-31		true	yes	groundworkers concept_by_code
+912093	Pexidartinib	HemOnc	Drug	Component	25485			2099-12-31		true	yes	groundworkers concept_by_code
+912094	Pralsetinib	HemOnc	Drug	Component	25527			2099-12-31		true	yes	groundworkers concept_by_code
+912103	Lurbinectedin	HemOnc	Drug	Component	26763			2099-12-31		true	yes	groundworkers concept_by_code
+912108	Naxitamab	HemOnc	Drug	Component	26950			2099-12-31		true	yes	groundworkers concept_by_code
+905621	Asparaginase erwinia chrysanthemi-rywn	HemOnc	Drug	Component	27223			2099-12-31		true	yes	groundworkers concept_by_code
+905627	Voxelotor	HemOnc	Drug	Component	29560			2099-12-31		true	yes	groundworkers concept_by_code
+905629	Belumosudil	HemOnc	Drug	Component	29663			2099-12-31		true	yes	groundworkers concept_by_code
+905630	Belzutifan	HemOnc	Drug	Component	29688			2099-12-31		true	yes	groundworkers concept_by_code
+905633	Amivantamab	HemOnc	Drug	Component	29753			2099-12-31		true	yes	groundworkers concept_by_code
+905636	Azacitidine oral	HemOnc	Drug	Component	29973			2099-12-31		true	yes	groundworkers concept_by_code
+1524935	Penpulimab	HemOnc	Drug	Component	32384			2099-12-31		true	yes	groundworkers concept_by_code
+1524936	Rezvilutamide	HemOnc	Drug	Component	33912			2099-12-31		true	yes	groundworkers concept_by_code
+905668	Dostarlimab	HemOnc	Drug	Component	34976			2099-12-31		true	yes	groundworkers concept_by_code
+1524945	Serplulimab	HemOnc	Drug	Component	35064			2099-12-31		true	yes	groundworkers concept_by_code
+1524954	Sugemalimab	HemOnc	Drug	Component	36080			2099-12-31		true	yes	groundworkers concept_by_code
+912148	Flumatinib	HemOnc	Drug	Component	38662			2099-12-31		true	yes	groundworkers concept_by_code
+1525003	Sirolimus protein-bound particles	HemOnc	Drug	Component	43485			2099-12-31		true	yes	groundworkers concept_by_code
+35807336	Cyclosporine	HemOnc	Drug	Component	45569			2099-12-31		true	yes	groundworkers concept_by_code
+1525012	Adagrasib	HemOnc	Drug	Component	45753			2099-12-31		true	yes	groundworkers concept_by_code
+35101515	Emapalumab	HemOnc	Drug	Component	46354			2099-12-31		true	yes	groundworkers concept_by_code
+1525015	Tebentafusp	HemOnc	Drug	Component	47700			2099-12-31		true	yes	groundworkers concept_by_code
+42542386	Rituximab-pvvr	HemOnc	Drug	Component	48315			2099-12-31		true	yes	groundworkers concept_by_code
+42542388	Trastuzumab-anns	HemOnc	Drug	Component	48338			2099-12-31		true	yes	groundworkers concept_by_code
+42542389	Trastuzumab-dttb	HemOnc	Drug	Component	48339			2099-12-31		true	yes	groundworkers concept_by_code
+42542390	Trastuzumab-qyyp	HemOnc	Drug	Component	48340			2099-12-31		true	yes	groundworkers concept_by_code
+35101953	Fedratinib	HemOnc	Drug	Component	48561			2099-12-31		true	yes	groundworkers concept_by_code
+1525023	Zimberelimab	HemOnc	Drug	Component	48632			2099-12-31		true	yes	groundworkers concept_by_code
+35101252	Trastuzumab and hyaluronidase	HemOnc	Drug	Component	49082			2099-12-31		true	yes	groundworkers concept_by_code
+42542411	Zanubrutinib	HemOnc	Drug	Component	50482			2099-12-31		true	yes	groundworkers concept_by_code
+37556903	Furmonertinib	HemOnc	Drug	Component	51224			2099-12-31		true	yes	groundworkers concept_by_code
+1525037	Ciltacabtagene autoleucel	HemOnc	Drug	Component	51229			2099-12-31		true	yes	groundworkers concept_by_code
+42542420	Asciminib	HemOnc	Drug	Component	53780			2099-12-31		true	yes	groundworkers concept_by_code
+905700	Loncastuximab tesirine	HemOnc	Drug	Component	53908			2099-12-31		true	yes	groundworkers concept_by_code
+42542436	Luspatercept	HemOnc	Drug	Component	54062			2099-12-31		true	yes	groundworkers concept_by_code
+42542441	Tazemetostat	HemOnc	Drug	Component	54224			2099-12-31		true	yes	groundworkers concept_by_code
+1525057	Mitapivat	HemOnc	Drug	Component	58331			2099-12-31		true	yes	groundworkers concept_by_code
+1525063	Nivolumab and relatlimab	HemOnc	Drug	Component	59120			2099-12-31		true	yes	groundworkers concept_by_code
+905710	Dalpiciclib	HemOnc	Drug	Component	59131			2099-12-31		true	yes	groundworkers concept_by_code
+912179	Margetuximab	HemOnc	Drug	Component	59291			2099-12-31		true	yes	groundworkers concept_by_code
+912193	Sotorasib	HemOnc	Drug	Component	59461			2099-12-31		true	yes	groundworkers concept_by_code
+912199	Umbralisib	HemOnc	Drug	Component	59505			2099-12-31		true	yes	groundworkers concept_by_code
+905727	Sintilimab	HemOnc	Drug	Component	61131			2099-12-31		true	yes	groundworkers concept_by_code
+905738	Iptacopan	HemOnc	Drug	Component	61269			2099-12-31		true	yes	groundworkers concept_by_code
+905740	Melphalan flufenamide	HemOnc	Drug	Component	61306			2099-12-31		true	yes	groundworkers concept_by_code
+905743	Pirtobrutinib	HemOnc	Drug	Component	61419			2099-12-31		true	yes	groundworkers concept_by_code
+905757	Sutimlimab	HemOnc	Drug	Component	61962			2099-12-31		true	yes	groundworkers concept_by_code
+905776	Tislelizumab	HemOnc	Drug	Component	64463			2099-12-31		true	yes	groundworkers concept_by_code
+905777	Toripalimab	HemOnc	Drug	Component	64471			2099-12-31		true	yes	groundworkers concept_by_code
+905786	Teclistamab	HemOnc	Drug	Component	65150			2099-12-31		true	yes	groundworkers concept_by_code
+1525130	Epcoritamab	HemOnc	Drug	Component	66092			2099-12-31		true	yes	groundworkers concept_by_code
+1525149	Lutetium Lu 177 vipivotide tetraxetan	HemOnc	Drug	Component	68645			2099-12-31		true	yes	groundworkers concept_by_code
+1525156	Mobocertinib	HemOnc	Drug	Component	69109			2099-12-31		true	yes	groundworkers concept_by_code
+1525163	Pegfilgrastim-apgf	HemOnc	Drug	Component	69847			2099-12-31		true	yes	groundworkers concept_by_code
+1525167	Rituximab-arrx	HemOnc	Drug	Component	70306			2099-12-31		true	yes	groundworkers concept_by_code
+1525170	Tisotumab vedotin	HemOnc	Drug	Component	71307			2099-12-31		true	yes	groundworkers concept_by_code
+1525182	Rilzabrutinib	HemOnc	Drug	Component	72560			2099-12-31		true	yes	groundworkers concept_by_code
+1525201	Lanreotide LAR	HemOnc	Drug	Component	75279			2099-12-31		true	yes	groundworkers concept_by_code
+1525205	Pimitespib	HemOnc	Drug	Component	75337			2099-12-31		true	yes	groundworkers concept_by_code
+35100444	Pegfilgrastim-cbqv	HemOnc	Drug	Component	93181			2099-12-31		true	yes	groundworkers concept_by_code
+35100416	Polatuzumab vedotin	HemOnc	Drug	Component	93818			2099-12-31		true	yes	groundworkers concept_by_code
+35100362	Ravulizumab	HemOnc	Drug	Component	94609			2099-12-31		true	yes	groundworkers concept_by_code
+35100700	Strontium-89	HemOnc	Drug	Component	98422			2099-12-31		true	yes	groundworkers concept_by_code
+37557073	Mirvetuximab soravtansine	HemOnc	Drug	Component	109643			2099-12-31		true	yes	groundworkers concept_by_code
+37557120	Glofitamab	HemOnc	Drug	Component	110791			2099-12-31		true	yes	groundworkers concept_by_code
+37557145	Mosunetuzumab	HemOnc	Drug	Component	111261			2099-12-31		true	yes	groundworkers concept_by_code
+37557150	Nadofaragene firadenovec	HemOnc	Drug	Component	111273			2099-12-31		true	yes	groundworkers concept_by_code
+37557157	Olutasidenib	HemOnc	Drug	Component	111358			2099-12-31		true	yes	groundworkers concept_by_code
+37557162	Pertuzumab and Trastuzumab hyaluronidase	HemOnc	Drug	Component	111391			2099-12-31		true	yes	groundworkers concept_by_code
+37557167	Pyrotinib	HemOnc	Drug	Component	111427			2099-12-31		true	yes	groundworkers concept_by_code
+37557177	Talquetamab	HemOnc	Drug	Component	111584			2099-12-31		true	yes	groundworkers concept_by_code
+37557231	Etranacogene dezaparvovec	HemOnc	Drug	Component	114383			2099-12-31		true	yes	groundworkers concept_by_code
+37557233	Lifileuecel	HemOnc	Drug	Component	114432			2099-12-31		true	yes	groundworkers concept_by_code
+37557234	Protein C human	HemOnc	Drug	Component	114468			2099-12-31		true	yes	groundworkers concept_by_code
+37557235	Retifanlimab	HemOnc	Drug	Component	114475			2099-12-31		true	yes	groundworkers concept_by_code
+37557237	Tabelecleucel	HemOnc	Drug	Component	114494			2099-12-31		true	yes	groundworkers concept_by_code
+37557250	Iobenguane I 131	HemOnc	Drug	Component	115124			2099-12-31		true	yes	groundworkers concept_by_code
+37557374	Bevacizumab-maly	HemOnc	Drug	Component	119949			2099-12-31		true	yes	groundworkers concept_by_code
+37557382	Borofalan-10B	HemOnc	Drug	Component	119973			2099-12-31		true	yes	groundworkers concept_by_code
+37557418	Daratumumab and vorhyaluronidase	HemOnc	Drug	Component	120089			2099-12-31		true	yes	groundworkers concept_by_code
+37557419	Darinaparsin	HemOnc	Drug	Component	120090			2099-12-31		true	yes	groundworkers concept_by_code
+37557427	Donafenib	HemOnc	Drug	Component	120118			2099-12-31		true	yes	groundworkers concept_by_code
+37557431	Elranatamab	HemOnc	Drug	Component	120161			2099-12-31		true	yes	groundworkers concept_by_code
+37557447	Fosnetupitant	HemOnc	Drug	Component	120195			2099-12-31		true	yes	groundworkers concept_by_code
+37557462	Interferon gamma-1a	HemOnc	Drug	Component	120420			2099-12-31		true	yes	groundworkers concept_by_code
+37557475	Mifamurtide	HemOnc	Drug	Component	120531			2099-12-31		true	yes	groundworkers concept_by_code
+37557477	Miriplatin	HemOnc	Drug	Component	120535			2099-12-31		true	yes	groundworkers concept_by_code
+37557479	Niraparib and abiraterone	HemOnc	Drug	Component	120586			2099-12-31		true	yes	groundworkers concept_by_code
+37557480	Nirogacestat	HemOnc	Drug	Component	120587			2099-12-31		true	yes	groundworkers concept_by_code
+37557483	Olverembatinib	HemOnc	Drug	Component	120610			2099-12-31		true	yes	groundworkers concept_by_code
+37557516	Taloporfin	HemOnc	Drug	Component	120803			2099-12-31		true	yes	groundworkers concept_by_code
+37557521	Tirabrutinib	HemOnc	Drug	Component	120817			2099-12-31		true	yes	groundworkers concept_by_code
+37557528	Valemetostat	HemOnc	Drug	Component	120865			2099-12-31		true	yes	groundworkers concept_by_code
+37557532	Vonoprazan	HemOnc	Drug	Component	120882			2099-12-31		true	yes	groundworkers concept_by_code
+37557533	Vorasidenib	HemOnc	Drug	Component	120883			2099-12-31		true	yes	groundworkers concept_by_code
+37557580	Anlotinib	HemOnc	Drug	Component	121127			2099-12-31		true	yes	groundworkers concept_by_code
+37557751	Concizumab	HemOnc	Drug	Component	121922			2099-12-31		true	yes	groundworkers concept_by_code
+37557790	Dinutuximab beta	HemOnc	Drug	Component	122132			2099-12-31		true	yes	groundworkers concept_by_code
+37557807	Eculizumab-aeeb	HemOnc	Drug	Component	122214			2099-12-31		true	yes	groundworkers concept_by_code
+37557809	Eculizumab-epys	HemOnc	Drug	Component	122216			2099-12-31		true	yes	groundworkers concept_by_code
+37557854	Fadrozole	HemOnc	Drug	Component	122313			2099-12-31		true	yes	groundworkers concept_by_code
+37557860	Fitusiran	HemOnc	Drug	Component	122376			2099-12-31		true	yes	groundworkers concept_by_code
+37557968	Lazertinib	HemOnc	Drug	Component	123749			2099-12-31		true	yes	groundworkers concept_by_code
+37558002	Melphalan for Injection-Hepatic Delivery System	HemOnc	Drug	Component	124558			2099-12-31		true	yes	groundworkers concept_by_code
+37558016	Mitomycin pyelocalyceal	HemOnc	Drug	Component	124616			2099-12-31		true	yes	groundworkers concept_by_code
+37558025	Motixafortide	HemOnc	Drug	Component	124664			2099-12-31		true	yes	groundworkers concept_by_code
+37558306	Zolbetuximab	HemOnc	Drug	Component	127128			2099-12-31		true	yes	groundworkers concept_by_code
+37560710	Danicopan	HemOnc	Drug	Component	135141			2099-12-31		true	yes	groundworkers concept_by_code
+37560738	Eflornithine	HemOnc	Drug	Component	135220			2099-12-31		true	yes	groundworkers concept_by_code
+37560841	Repotrectinib	HemOnc	Drug	Component	136156			2099-12-31		true	yes	groundworkers concept_by_code
+37560871	Tarlatamab	HemOnc	Drug	Component	136303			2099-12-31		true	yes	groundworkers concept_by_code
+37560914	ADAMTS13 recombinant	HemOnc	Drug	Component	139603			2099-12-31		true	yes	groundworkers concept_by_code
+37560917	Afamitresgene autoleucel	HemOnc	Drug	Component	139608			2099-12-31		true	yes	groundworkers concept_by_code
+37561055	Exagamglogene autotemcel	HemOnc	Drug	Component	140113			2099-12-31		true	yes	groundworkers concept_by_code
+37561155	Nogapendekin alfa inbakicept	HemOnc	Drug	Component	141155			2099-12-31		true	yes	groundworkers concept_by_code
+37561219	Tovorafenib	HemOnc	Drug	Component	141487			2099-12-31		true	yes	groundworkers concept_by_code
+37561221	Trastuzumab-strf	HemOnc	Drug	Component	141495			2099-12-31		true	yes	groundworkers concept_by_code
+37561253	Axatilimab	HemOnc	Drug	Component	142045			2099-12-31		true	yes	groundworkers concept_by_code
+37561255	Bevacizumab-tnjn	HemOnc	Drug	Component	142084			2099-12-31		true	yes	groundworkers concept_by_code
+37561338	Efanesoctocog alfa	HemOnc	Drug	Component	142348			2099-12-31		true	yes	groundworkers concept_by_code
+37561368	Ivonescimab	HemOnc	Drug	Component	143813			2099-12-31		true	yes	groundworkers concept_by_code
+37561374	Mavorixafor	HemOnc	Drug	Component	144015			2099-12-31		true	yes	groundworkers concept_by_code
+37561498	Betibeglogene autotemcel (Zynteglo)	HemOnc	Drug	Component	145082			2099-12-31		true	yes	groundworkers concept_by_code
+37561559	Cadonilimab	HemOnc	Drug	Component	145172			2099-12-31		true	yes	groundworkers concept_by_code
+37561809	Finotonlimab	HemOnc	Drug	Component	145560			2099-12-31		true	yes	groundworkers concept_by_code
+37561861	Inavolisib	HemOnc	Drug	Component	145920			2099-12-31		true	yes	groundworkers concept_by_code
+37561923	Nimotuzumab	HemOnc	Drug	Component	146267			2099-12-31		true	yes	groundworkers concept_by_code
+37561930	Obecabtagene autoleucel	HemOnc	Drug	Component	146281			2099-12-31		true	yes	groundworkers concept_by_code
+37561997	Revumenib	HemOnc	Drug	Component	146444			2099-12-31		true	yes	groundworkers concept_by_code
+37562068	Zanidatamab	HemOnc	Drug	Component	146793			2099-12-31		true	yes	groundworkers concept_by_code
+37562071	Zuberitamab	HemOnc	Drug	Component	146843			2099-12-31		true	yes	groundworkers concept_by_code
+42542125	Acquired hemophilia A	HemOnc	Condition	Condition	551			2099-12-31		true	yes	groundworkers concept_by_code
+42542126	Acute myeloid leukemia	HemOnc	Condition	Condition	552			2099-12-31		true	yes	groundworkers concept_by_code
+42542127	Acute promyelocytic leukemia	HemOnc	Condition	Condition	553			2099-12-31		true	yes	groundworkers concept_by_code
+42542128	Carcinoma of unknown primary	HemOnc	Condition	Condition	554			2099-12-31		true	yes	groundworkers concept_by_code
+42542129	Adrenocortical carcinoma	HemOnc	Condition	Condition	555			2099-12-31		true	yes	groundworkers concept_by_code
+42542130	Adult T-cell leukemia-lymphoma	HemOnc	Condition	Condition	556			2099-12-31		true	yes	groundworkers concept_by_code
+42542132	Anal cancer	HemOnc	Condition	Condition	558			2099-12-31		true	yes	groundworkers concept_by_code
+42542133	Anaplastic glioma	HemOnc	Condition	Condition	559			2099-12-31		true	yes	groundworkers concept_by_code
+42542134	Anaplastic large cell lymphoma	HemOnc	Condition	Condition	560			2099-12-31		true	yes	groundworkers concept_by_code
+42542136	Aplastic anemia	HemOnc	Condition	Condition	562			2099-12-31		true	yes	groundworkers concept_by_code
+42542137	Atypical hemolytic uremic syndrome	HemOnc	Condition	Condition	563			2099-12-31		true	yes	groundworkers concept_by_code
+42542139	Warm autoimmune hemolytic anemia	HemOnc	Condition	Condition	565			2099-12-31		true	yes	groundworkers concept_by_code
+42542141	B-cell acute lymphoblastic leukemia	HemOnc	Condition	Condition	567			2099-12-31		true	yes	groundworkers concept_by_code
+42542142	Bladder cancer	HemOnc	Condition	Condition	569			2099-12-31		true	yes	groundworkers concept_by_code
+42542143	Blastic plasmacytoid dendritic cell neoplasm	HemOnc	Condition	Condition	570			2099-12-31		true	yes	groundworkers concept_by_code
+42542144	Bone sarcoma	HemOnc	Condition	Condition	571			2099-12-31		true	yes	groundworkers concept_by_code
+42542145	Breast cancer	HemOnc	Condition	Condition	572			2099-12-31		true	yes	groundworkers concept_by_code
+42542146	Burkitt lymphoma	HemOnc	Condition	Condition	573			2099-12-31		true	yes	groundworkers concept_by_code
+42542147	CNS carcinoma	HemOnc	Condition	Condition	574			2099-12-31		true	yes	groundworkers concept_by_code
+42542148	CNS leukemia	HemOnc	Condition	Condition	575			2099-12-31		true	yes	groundworkers concept_by_code
+42542149	CNS lymphoma	HemOnc	Condition	Condition	576			2099-12-31		true	yes	groundworkers concept_by_code
+42542151	Castleman disease	HemOnc	Condition	Condition	578			2099-12-31		true	yes	groundworkers concept_by_code
+42542152	Cervical cancer	HemOnc	Condition	Condition	579			2099-12-31		true	yes	groundworkers concept_by_code
+42542153	Cholangiocarcinoma	HemOnc	Condition	Condition	580			2099-12-31		true	yes	groundworkers concept_by_code
+42542154	Chronic lymphocytic leukemia	HemOnc	Condition	Condition	581			2099-12-31		true	yes	groundworkers concept_by_code
+42542155	Chronic myeloid leukemia	HemOnc	Condition	Condition	582			2099-12-31		true	yes	groundworkers concept_by_code
+42542156	Chronic myelomonocytic leukemia	HemOnc	Condition	Condition	583			2099-12-31		true	yes	groundworkers concept_by_code
+42542157	Cold agglutinin disease	HemOnc	Condition	Condition	584			2099-12-31		true	yes	groundworkers concept_by_code
+42542158	Colon cancer	HemOnc	Condition	Condition	585			2099-12-31		true	yes	groundworkers concept_by_code
+42542159	Cutaneous T-cell lymphoma	HemOnc	Condition	Condition	586			2099-12-31		true	yes	groundworkers concept_by_code
+42542160	Cutaneous basal cell carcinoma	HemOnc	Condition	Condition	587			2099-12-31		true	yes	groundworkers concept_by_code
+42542161	Cutaneous squamous cell carcinoma	HemOnc	Condition	Condition	588			2099-12-31		true	yes	groundworkers concept_by_code
+42542162	Diffuse large B-cell lymphoma	HemOnc	Condition	Condition	589			2099-12-31		true	yes	groundworkers concept_by_code
+42542163	Endometrial cancer	HemOnc	Condition	Condition	593			2099-12-31		true	yes	groundworkers concept_by_code
+42542164	Erdheim-Chester disease	HemOnc	Condition	Condition	594			2099-12-31		true	yes	groundworkers concept_by_code
+42542165	Esophageal cancer	HemOnc	Condition	Condition	595			2099-12-31		true	yes	groundworkers concept_by_code
+42542166	Essential thrombocythemia	HemOnc	Condition	Condition	596			2099-12-31		true	yes	groundworkers concept_by_code
+42542167	Ewing sarcoma	HemOnc	Condition	Condition	597			2099-12-31		true	yes	groundworkers concept_by_code
+42542169	Follicular lymphoma	HemOnc	Condition	Condition	599			2099-12-31		true	yes	groundworkers concept_by_code
+42542171	Gastric cancer	HemOnc	Condition	Condition	601			2099-12-31		true	yes	groundworkers concept_by_code
+42542172	Gastrointestinal stromal tumor	HemOnc	Condition	Condition	602			2099-12-31		true	yes	groundworkers concept_by_code
+42542173	Gestational trophoblastic neoplasia	HemOnc	Condition	Condition	603			2099-12-31		true	yes	groundworkers concept_by_code
+42542174	Glioblastoma	HemOnc	Condition	Condition	604			2099-12-31		true	yes	groundworkers concept_by_code
+42542175	Graft versus host disease	HemOnc	Condition	Condition	605			2099-12-31		true	yes	groundworkers concept_by_code
+42542177	Hairy cell leukemia	HemOnc	Condition	Condition	607			2099-12-31		true	yes	groundworkers concept_by_code
+42542178	Head and neck cancer	HemOnc	Condition	Condition	608			2099-12-31		true	yes	groundworkers concept_by_code
+42542179	Hemophagocytic lymphohistiocytosis	HemOnc	Condition	Condition	609			2099-12-31		true	yes	groundworkers concept_by_code
+42542180	Heparin-induced thrombocytopenia	HemOnc	Condition	Condition	610			2099-12-31		true	yes	groundworkers concept_by_code
+42542182	Hepatocellular carcinoma	HemOnc	Condition	Condition	612			2099-12-31		true	yes	groundworkers concept_by_code
+42542184	Classical Hodgkin lymphoma	HemOnc	Condition	Condition	614			2099-12-31		true	yes	groundworkers concept_by_code
+42542186	Hypereosinophilic syndrome	HemOnc	Condition	Condition	616			2099-12-31		true	yes	groundworkers concept_by_code
+42542187	Immune thrombocytopenia	HemOnc	Condition	Condition	617			2099-12-31		true	yes	groundworkers concept_by_code
+42542190	Langerhans cell histiocytosis	HemOnc	Condition	Condition	620			2099-12-31		true	yes	groundworkers concept_by_code
+42542192	Light-chain (AL) amyloidosis	HemOnc	Condition	Condition	622			2099-12-31		true	yes	groundworkers concept_by_code
+42542193	Low-grade glioma	HemOnc	Condition	Condition	623			2099-12-31		true	yes	groundworkers concept_by_code
+42542195	Mantle cell lymphoma	HemOnc	Condition	Condition	625			2099-12-31		true	yes	groundworkers concept_by_code
+42542196	Marginal zone lymphoma	HemOnc	Condition	Condition	626			2099-12-31		true	yes	groundworkers concept_by_code
+42542198	Medulloblastoma	HemOnc	Condition	Condition	628			2099-12-31		true	yes	groundworkers concept_by_code
+42542199	Melanoma	HemOnc	Condition	Condition	629			2099-12-31		true	yes	groundworkers concept_by_code
+42542201	Merkel cell carcinoma	HemOnc	Condition	Condition	631			2099-12-31		true	yes	groundworkers concept_by_code
+42542202	Mesothelioma	HemOnc	Condition	Condition	632			2099-12-31		true	yes	groundworkers concept_by_code
+42542203	Multiple myeloma	HemOnc	Condition	Condition	633			2099-12-31		true	yes	groundworkers concept_by_code
+42542204	Myelodysplastic syndrome	HemOnc	Condition	Condition	634			2099-12-31		true	yes	groundworkers concept_by_code
+42542205	Myelofibrosis	HemOnc	Condition	Condition	635			2099-12-31		true	yes	groundworkers concept_by_code
+42542208	Nasopharyngeal carcinoma	HemOnc	Condition	Condition	639			2099-12-31		true	yes	groundworkers concept_by_code
+42542209	Neuroblastoma	HemOnc	Condition	Condition	640			2099-12-31		true	yes	groundworkers concept_by_code
+42542210	Neuroendocrine tumor	HemOnc	Condition	Condition	641			2099-12-31		true	yes	groundworkers concept_by_code
+42542211	Non-small cell lung cancer	HemOnc	Condition	Condition	642			2099-12-31		true	yes	groundworkers concept_by_code
+42542213	Osteosarcoma	HemOnc	Condition	Condition	644			2099-12-31		true	yes	groundworkers concept_by_code
+42542214	Ovarian cancer	HemOnc	Condition	Condition	645			2099-12-31		true	yes	groundworkers concept_by_code
+42542215	POEMS syndrome	HemOnc	Condition	Condition	646			2099-12-31		true	yes	groundworkers concept_by_code
+42542216	Pancreatic NET	HemOnc	Condition	Condition	647			2099-12-31		true	yes	groundworkers concept_by_code
+42542217	Pancreatic cancer	HemOnc	Condition	Condition	648			2099-12-31		true	yes	groundworkers concept_by_code
+42542218	Paroxysmal nocturnal hemoglobinuria	HemOnc	Condition	Condition	649			2099-12-31		true	yes	groundworkers concept_by_code
+42542219	Penile cancer	HemOnc	Condition	Condition	650			2099-12-31		true	yes	groundworkers concept_by_code
+42542221	Peripheral T-cell lymphoma	HemOnc	Condition	Condition	652			2099-12-31		true	yes	groundworkers concept_by_code
+42542222	Pheochromocytoma	HemOnc	Condition	Condition	653			2099-12-31		true	yes	groundworkers concept_by_code
+42542224	Polycythemia vera	HemOnc	Condition	Condition	655			2099-12-31		true	yes	groundworkers concept_by_code
+42542225	Post-transplant lymphoproliferative disorder	HemOnc	Condition	Condition	656			2099-12-31		true	yes	groundworkers concept_by_code
+42542226	Primary mediastinal B-cell lymphoma	HemOnc	Condition	Condition	657			2099-12-31		true	yes	groundworkers concept_by_code
+42542227	Prostate cancer	HemOnc	Condition	Condition	658			2099-12-31		true	yes	groundworkers concept_by_code
+42542228	Rectal cancer	HemOnc	Condition	Condition	659			2099-12-31		true	yes	groundworkers concept_by_code
+42542229	Renal cell carcinoma	HemOnc	Condition	Condition	660			2099-12-31		true	yes	groundworkers concept_by_code
+42542230	Rhabdomyosarcoma	HemOnc	Condition	Condition	661			2099-12-31		true	yes	groundworkers concept_by_code
+42542231	Rosai-Dorfman-Destombes disease	HemOnc	Condition	Condition	662			2099-12-31		true	yes	groundworkers concept_by_code
+42542233	Sickle cell anemia	HemOnc	Condition	Condition	665			2099-12-31		true	yes	groundworkers concept_by_code
+42542234	Small cell lung cancer	HemOnc	Condition	Condition	666			2099-12-31		true	yes	groundworkers concept_by_code
+42542235	Soft tissue sarcoma	HemOnc	Condition	Condition	667			2099-12-31		true	yes	groundworkers concept_by_code
+42542237	Systemic mastocytosis	HemOnc	Condition	Condition	669			2099-12-31		true	yes	groundworkers concept_by_code
+42542238	T-cell acute lymphoblastic leukemia	HemOnc	Condition	Condition	670			2099-12-31		true	yes	groundworkers concept_by_code
+42542239	Testicular cancer	HemOnc	Condition	Condition	671			2099-12-31		true	yes	groundworkers concept_by_code
+42542240	Thrombocytopenia in liver disease	HemOnc	Condition	Condition	672			2099-12-31		true	yes	groundworkers concept_by_code
+42542241	Acquired thrombotic thrombocytopenic purpura	HemOnc	Condition	Condition	673			2099-12-31		true	yes	groundworkers concept_by_code
+42542242	Thymoma	HemOnc	Condition	Condition	674			2099-12-31		true	yes	groundworkers concept_by_code
+42542243	Thyroid cancer	HemOnc	Condition	Condition	675			2099-12-31		true	yes	groundworkers concept_by_code
+42542244	Transformed lymphoma	HemOnc	Condition	Condition	676			2099-12-31		true	yes	groundworkers concept_by_code
+42542245	Uveal melanoma	HemOnc	Condition	Condition	677			2099-12-31		true	yes	groundworkers concept_by_code
+42542247	Venous thromboembolism	HemOnc	Condition	Condition	679			2099-12-31		true	yes	groundworkers concept_by_code
+42542248	Vulvar cancer	HemOnc	Condition	Condition	680			2099-12-31		true	yes	groundworkers concept_by_code
+42542249	WHIM syndrome	HemOnc	Condition	Condition	681			2099-12-31		true	yes	groundworkers concept_by_code
+42542250	Waldenstroem macroglobulinemia	HemOnc	Condition	Condition	682			2099-12-31		true	yes	groundworkers concept_by_code
+42542251	Wilms tumor	HemOnc	Condition	Condition	683			2099-12-31		true	yes	groundworkers concept_by_code
+905580	Esophageal squamous cell carcinoma	HemOnc	Condition	Condition	1235			2099-12-31		true	yes	groundworkers concept_by_code
+42542263	BCR::ABL1 B-cell acute lymphoblastic leukemia	HemOnc	Condition	Condition	4770			2099-12-31		true	yes	groundworkers concept_by_code
+905610	Esophageal adenocarcinoma	HemOnc	Condition	Condition	16419			2099-12-31		true	yes	groundworkers concept_by_code
+42542277	Acute lymphoblastic leukemia	HemOnc	Condition	Condition	24309			2099-12-31		true	yes	groundworkers concept_by_code
+905619	Beta thalassemia	HemOnc	Condition	Condition	24524			2099-12-31		true	yes	groundworkers concept_by_code
+912088	Non-small cell lung cancer nonsquamous	HemOnc	Condition	Condition	25309			2099-12-31		true	yes	groundworkers concept_by_code
+912089	Non-small cell lung cancer squamous	HemOnc	Condition	Condition	25316			2099-12-31		true	yes	groundworkers concept_by_code
+905620	Anaplastic large cell lymphoma pediatric	HemOnc	Condition	Condition	25958			2099-12-31		true	yes	groundworkers concept_by_code
+912115	Upper tract urothelial carcinoma	HemOnc	Condition	Condition	28039			2099-12-31		true	yes	groundworkers concept_by_code
+42542288	ALK Non-small cell lung cancer	HemOnc	Condition	Condition	30824			2099-12-31		true	yes	groundworkers concept_by_code
+42542291	ROS1 Non-small cell lung cancer	HemOnc	Condition	Condition	30982			2099-12-31		true	yes	groundworkers concept_by_code
+905651	B-cell acute lymphoblastic leukemia pediatric	HemOnc	Condition	Condition	32320			2099-12-31		true	yes	groundworkers concept_by_code
+905661	Chronic myeloid leukemia pediatric	HemOnc	Condition	Condition	33893			2099-12-31		true	yes	groundworkers concept_by_code
+905676	High-grade glioma pediatric	HemOnc	Condition	Condition	35588			2099-12-31		true	yes	groundworkers concept_by_code
+905680	Classical Hodgkin lymphoma pediatric	HemOnc	Condition	Condition	36072			2099-12-31		true	yes	groundworkers concept_by_code
+1524978	PEComa	HemOnc	Condition	Condition	37829			2099-12-31		true	yes	groundworkers concept_by_code
+42542302	Malignant solid neoplasm	HemOnc	Condition	Condition	44382			2099-12-31		true	yes	groundworkers concept_by_code
+1525008	Subependymal giant cell astrocytoma	HemOnc	Condition	Condition	45070			2099-12-31		true	yes	groundworkers concept_by_code
+42542305	Acute leukemia	HemOnc	Condition	Condition	46072			2099-12-31		true	yes	groundworkers concept_by_code
+42542308	Gastrointestinal cancer	HemOnc	Condition	Condition	46076			2099-12-31		true	yes	groundworkers concept_by_code
+42542309	High-grade glioma	HemOnc	Condition	Condition	46077			2099-12-31		true	yes	groundworkers concept_by_code
+42542317	Non-Hodgkin lymphoma	HemOnc	Condition	Condition	46089			2099-12-31		true	yes	groundworkers concept_by_code
+42542318	CNS cancer	HemOnc	Condition	Condition	46090			2099-12-31		true	yes	groundworkers concept_by_code
+42542322	Indolent lymphoma	HemOnc	Condition	Condition	46094			2099-12-31		true	yes	groundworkers concept_by_code
+42542324	Colorectal cancer	HemOnc	Condition	Condition	46096			2099-12-31		true	yes	groundworkers concept_by_code
+42542326	Non-melanoma skin cancer	HemOnc	Condition	Condition	46098			2099-12-31		true	yes	groundworkers concept_by_code
+42542333	Inherited hemoglobinopathy	HemOnc	Condition	Condition	46106			2099-12-31		true	yes	groundworkers concept_by_code
+42542336	Malignant hematologic neoplasm	HemOnc	Condition	Condition	46212			2099-12-31		true	yes	groundworkers concept_by_code
+42542337	Lymphoma	HemOnc	Condition	Condition	46214			2099-12-31		true	yes	groundworkers concept_by_code
+42542341	Leukemia	HemOnc	Condition	Condition	46221			2099-12-31		true	yes	groundworkers concept_by_code
+1525018	Tenosynovial giant cell tumor	HemOnc	Condition	Condition	47742			2099-12-31		true	yes	groundworkers concept_by_code
+1525049	ERBB2 Non-small cell lung cancer	HemOnc	Condition	Condition	52958			2099-12-31		true	yes	groundworkers concept_by_code
+42542423	Epithelioid sarcoma	HemOnc	Condition	Condition	53861			2099-12-31		true	yes	groundworkers concept_by_code
+42542427	Giant-cell tumor of bone	HemOnc	Condition	Condition	53894			2099-12-31		true	yes	groundworkers concept_by_code
+42542431	Kaposi sarcoma	HemOnc	Condition	Condition	54036			2099-12-31		true	yes	groundworkers concept_by_code
+42542434	Leiomyosarcoma	HemOnc	Condition	Condition	54053			2099-12-31		true	yes	groundworkers concept_by_code
+42542435	Liposarcoma	HemOnc	Condition	Condition	54056			2099-12-31		true	yes	groundworkers concept_by_code
+1525079	Clear cell renal cell carcinoma	HemOnc	Condition	Condition	60013			2099-12-31		true	yes	groundworkers concept_by_code
+905720	Low-grade serous ovarian cancer	HemOnc	Condition	Condition	60907			2099-12-31		true	yes	groundworkers concept_by_code
+905755	Low-grade glioma pediatric	HemOnc	Condition	Condition	61937			2099-12-31		true	yes	groundworkers concept_by_code
+1525122	Desmoid tumor	HemOnc	Condition	Condition	65779			2099-12-31		true	yes	groundworkers concept_by_code
+1525125	Thyroid cancer differentiated	HemOnc	Condition	Condition	65823			2099-12-31		true	yes	groundworkers concept_by_code
+1525135	Juvenile myelomonocytic leukemia	HemOnc	Condition	Condition	66360			2099-12-31		true	yes	groundworkers concept_by_code
+1525153	Malignant pleural mesothelioma	HemOnc	Condition	Condition	68879			2099-12-31		true	yes	groundworkers concept_by_code
+1525154	Thyroid cancer medullary	HemOnc	Condition	Condition	68942			2099-12-31		true	yes	groundworkers concept_by_code
+1525161	Non-Hodgkin lymphoma pediatric	HemOnc	Condition	Condition	69527			2099-12-31		true	yes	groundworkers concept_by_code
+1525204	BCR::ABL1 B-cell acute lymphoblastic leukemia pediatric	HemOnc	Condition	Condition	75336			2099-12-31		true	yes	groundworkers concept_by_code
+37557215	High-grade B-cell lymphoma	HemOnc	Condition	Condition	112856			2099-12-31		true	yes	groundworkers concept_by_code
+37557265	Angiosarcoma	HemOnc	Condition	Condition	116594			2099-12-31		true	yes	groundworkers concept_by_code
+37557340	Alveolar soft part sarcoma	HemOnc	Condition	Condition	119873			2099-12-31		true	yes	groundworkers concept_by_code
+37557379	Biliary tract cancer	HemOnc	Condition	Condition	119957			2099-12-31		true	yes	groundworkers concept_by_code
+37557460	Inflammatory myofibroblastic tumor	HemOnc	Condition	Condition	120415			2099-12-31		true	yes	groundworkers concept_by_code
+37557471	Malignant glioma	HemOnc	Condition	Condition	120508			2099-12-31		true	yes	groundworkers concept_by_code
+37557905	Hepatic veno-occlusive disease	HemOnc	Condition	Condition	122736			2099-12-31		true	yes	groundworkers concept_by_code
+37557960	KMT2A Acute lymphoblastic leukemia infant	HemOnc	Condition	Condition	123646			2099-12-31		true	yes	groundworkers concept_by_code
+37557994	Malignant neoplasm	HemOnc	Condition	Condition	124482			2099-12-31		true	yes	groundworkers concept_by_code
+37558184	Small bowel adenocarcinoma	HemOnc	Condition	Condition	125621			2099-12-31		true	yes	groundworkers concept_by_code
+37558276	Urothelial carcinoma	HemOnc	Condition	Condition	126044			2099-12-31		true	yes	groundworkers concept_by_code
+37561027	Congenital thrombotic thrombocytopenic purpura	HemOnc	Condition	Condition	139953			2099-12-31		true	yes	groundworkers concept_by_code
+37561167	Pyruvate kinase deficiency	HemOnc	Condition	Condition	141252			2099-12-31		true	yes	groundworkers concept_by_code
+37561189	Smoldering multiple myeloma	HemOnc	Condition	Condition	141403			2099-12-31		true	yes	groundworkers concept_by_code
+37561995	Retinoblastoma	HemOnc	Condition	Condition	146442			2099-12-31		true	yes	groundworkers concept_by_code
+37562031	Synovial sarcoma	HemOnc	Condition	Condition	146576			2099-12-31		true	yes	groundworkers concept_by_code
+911925	Capecitabine and Trastuzumab (XH) and Tucatinib	HemOnc	Regimen	Regimen	987	S		2099-12-31		true	yes	groundworkers concept_by_code
+35803445	7+3d and GO	HemOnc	Regimen	Regimen	1093	S		2099-12-31		true	yes	groundworkers concept_by_code
+911934	Acalabrutinib and Obinutuzumab	HemOnc	Regimen	Regimen	1354	S		2099-12-31		true	yes	groundworkers concept_by_code
+35803466	Azacitidine and Venetoclax	HemOnc	Regimen	Regimen	1365	S		2099-12-31		true	yes	groundworkers concept_by_code
+35803474	Decitabine and Venetoclax	HemOnc	Regimen	Regimen	1475	S		2099-12-31		true	yes	groundworkers concept_by_code
+35803476	Glasdegib and LoDAC	HemOnc	Regimen	Regimen	1478	S		2099-12-31		true	yes	groundworkers concept_by_code
+35803478	LoDAC and Venetoclax	HemOnc	Regimen	Regimen	1517	S		2099-12-31		true	yes	groundworkers concept_by_code
+35102022	Docetaxel and Prednisolone	HemOnc	Regimen	Regimen	1727	S		2099-12-31		true	yes	groundworkers concept_by_code
+35803509	7+3d and Midostaurin	HemOnc	Regimen	Regimen	1889	S		2099-12-31		true	yes	groundworkers concept_by_code
+35803513	Midostaurin monotherapy	HemOnc	Regimen	Regimen	1900	S		2099-12-31		true	yes	groundworkers concept_by_code
+35803517	Ivosidenib monotherapy	HemOnc	Regimen	Regimen	1917	S		2099-12-31		true	yes	groundworkers concept_by_code
+35803549	Arsenic trioxide and ATRA	HemOnc	Regimen	Regimen	2295	S		2099-12-31		true	yes	groundworkers concept_by_code
+35803573	Cisplatin monotherapy	HemOnc	Regimen	Regimen	2561	S		2099-12-31		true	yes	groundworkers concept_by_code
+35803574	Cisplatin and Docetaxel (DC)	HemOnc	Regimen	Regimen	2569	S		2099-12-31		true	yes	groundworkers concept_by_code
+35803575	Cisplatin and Gemcitabine (GC)	HemOnc	Regimen	Regimen	2570	S		2099-12-31		true	yes	groundworkers concept_by_code
+35803579	Erlotinib and Bevacizumab	HemOnc	Regimen	Regimen	2587	S		2099-12-31		true	yes	groundworkers concept_by_code
+35803595	Alemtuzumab monotherapy	HemOnc	Regimen	Regimen	2712	S		2099-12-31		true	yes	groundworkers concept_by_code
+35803621	FCR	HemOnc	Regimen	Regimen	2937	S		2099-12-31		true	yes	groundworkers concept_by_code
+35803677	Nivolumab monotherapy	HemOnc	Regimen	Regimen	3192	S		2099-12-31		true	yes	groundworkers concept_by_code
+35803678	Pembrolizumab monotherapy	HemOnc	Regimen	Regimen	3199	S		2099-12-31		true	yes	groundworkers concept_by_code
+35803679	Carmustine monotherapy	HemOnc	Regimen	Regimen	3206	S		2099-12-31		true	yes	groundworkers concept_by_code
+911938	Capmatinib monotherapy	HemOnc	Regimen	Regimen	3245	S		2099-12-31		true	yes	groundworkers concept_by_code
+35803686	Temozolomide and RT	HemOnc	Regimen	Regimen	3342	S		2099-12-31		true	yes	groundworkers concept_by_code
+35803688	Bevacizumab monotherapy	HemOnc	Regimen	Regimen	3350	S		2099-12-31		true	yes	groundworkers concept_by_code
+35803696	BV-CHP	HemOnc	Regimen	Regimen	3452	S		2099-12-31		true	yes	groundworkers concept_by_code
+42542258	Enfortumab vedotin monotherapy	HemOnc	Regimen	Regimen	3566	S		2099-12-31		true	yes	groundworkers concept_by_code
+42542261	Trastuzumab deruxtecan monotherapy	HemOnc	Regimen	Regimen	3594	S		2099-12-31		true	yes	groundworkers concept_by_code
+911941	Isa-Pd	HemOnc	Regimen	Regimen	3623	S		2099-12-31		true	yes	groundworkers concept_by_code
+911956	Belantamab mafodotin monotherapy	HemOnc	Regimen	Regimen	4407	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804056	Blinatumomab monotherapy	HemOnc	Regimen	Regimen	4614	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804064	Inotuzumab ozogamicin monotherapy	HemOnc	Regimen	Regimen	4733	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804083	Imatinib monotherapy	HemOnc	Regimen	Regimen	4907	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804100	Dabrafenib and Trametinib	HemOnc	Regimen	Regimen	5134	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804101	Vemurafenib monotherapy	HemOnc	Regimen	Regimen	5142	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804138	Atezolizumab monotherapy	HemOnc	Regimen	Regimen	5450	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804156	Carboplatin and Gemcitabine (GCb)	HemOnc	Regimen	Regimen	5458	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804158	Gemcitabine and Paclitaxel	HemOnc	Regimen	Regimen	5559	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804159	Avelumab monotherapy	HemOnc	Regimen	Regimen	5626	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804163	Docetaxel and Ramucirumab	HemOnc	Regimen	Regimen	5678	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804164	Durvalumab monotherapy	HemOnc	Regimen	Regimen	5679	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804168	Pemetrexed monotherapy	HemOnc	Regimen	Regimen	5720	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804201	Paclitaxel and Trastuzumab (TH)	HemOnc	Regimen	Regimen	5783	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804217	THP (Docetaxel)	HemOnc	Regimen	Regimen	6027	S		2099-12-31		true	yes	groundworkers concept_by_code
+911992	Cobimetinib, Vemurafenib, Atezolizumab	HemOnc	Regimen	Regimen	6053	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804219	TAC (Docetaxel)	HemOnc	Regimen	Regimen	6086	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804222	Trastuzumab monotherapy	HemOnc	Regimen	Regimen	6132	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804227	Capecitabine monotherapy	HemOnc	Regimen	Regimen	6323	S		2099-12-31		true	yes	groundworkers concept_by_code
+911994	Dara-Kd	HemOnc	Regimen	Regimen	6547	S		2099-12-31		true	yes	groundworkers concept_by_code
+911995	Durvalumab and Tremelimumab	HemOnc	Regimen	Regimen	7161	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804246	Capecitabine and Docetaxel (TX)	HemOnc	Regimen	Regimen	7233	S		2099-12-31		true	yes	groundworkers concept_by_code
+911998	Encorafenib and Cetuximab	HemOnc	Regimen	Regimen	7741	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804254	Cyclophosphamide and Non-pegylated liposomal doxorubicin (MC)	HemOnc	Regimen	Regimen	7783	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804255	Paclitaxel and Bevacizumab	HemOnc	Regimen	Regimen	7894	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804258	Abemaciclib monotherapy	HemOnc	Regimen	Regimen	7939	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804259	Capecitabine and Ixabepilone	HemOnc	Regimen	Regimen	8085	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804264	Pegylated liposomal doxorubicin and Bevacizumab	HemOnc	Regimen	Regimen	8189	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804267	Ixabepilone monotherapy	HemOnc	Regimen	Regimen	8205	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804269	Olaparib monotherapy	HemOnc	Regimen	Regimen	8256	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804270	Talazoparib monotherapy	HemOnc	Regimen	Regimen	8270	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804284	Fulvestrant monotherapy	HemOnc	Regimen	Regimen	8935	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804285	Fulvestrant and Ribociclib	HemOnc	Regimen	Regimen	8954	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804287	Letrozole and Palbociclib	HemOnc	Regimen	Regimen	9025	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804288	Letrozole and Ribociclib	HemOnc	Regimen	Regimen	9026	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804292	Lapatinib and Letrozole	HemOnc	Regimen	Regimen	9204	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804294	Abemaciclib and Fulvestrant	HemOnc	Regimen	Regimen	9212	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804295	Everolimus and Exemestane	HemOnc	Regimen	Regimen	9270	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804297	Fulvestrant and Palbociclib	HemOnc	Regimen	Regimen	9371	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804307	TCH (Docetaxel)	HemOnc	Regimen	Regimen	9487	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804311	Capecitabine and Lapatinib	HemOnc	Regimen	Regimen	9577	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804312	Capecitabine and Trastuzumab (XH)	HemOnc	Regimen	Regimen	9584	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804316	Capecitabine and Neratinib	HemOnc	Regimen	Regimen	9724	S		2099-12-31		true	yes	groundworkers concept_by_code
+905603	Dara-Pd (SC daratumumab)	HemOnc	Regimen	Regimen	9752	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804318	Carboplatin and nab-Paclitaxel	HemOnc	Regimen	Regimen	9810	S		2099-12-31		true	yes	groundworkers concept_by_code
+35101866	Alpelisib and Fulvestrant	HemOnc	Regimen	Regimen	10413	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804390	Alectinib monotherapy	HemOnc	Regimen	Regimen	10668	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804391	Ceritinib monotherapy	HemOnc	Regimen	Regimen	10693	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804392	Afatinib monotherapy	HemOnc	Regimen	Regimen	10705	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804434	Dabrafenib monotherapy	HemOnc	Regimen	Regimen	11071	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804435	Ipilimumab and Nivolumab	HemOnc	Regimen	Regimen	11084	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804520	Bortezomib monotherapy	HemOnc	Regimen	Regimen	11189	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804527	Cisplatin and Paclitaxel (TP)	HemOnc	Regimen	Regimen	11235	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804540	Cisplatin and Paclitaxel (TP) and Bevacizumab	HemOnc	Regimen	Regimen	11505	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804544	Paclitaxel, Topotecan, Bevacizumab	HemOnc	Regimen	Regimen	11554	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804545	FULV	HemOnc	Regimen	Regimen	11598	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804567	Gemcitabine and nab-Paclitaxel	HemOnc	Regimen	Regimen	11761	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804572	Chlorambucil and Obinutuzumab (GClb)	HemOnc	Regimen	Regimen	11865	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804573	Chlorambucil and Ofatumumab	HemOnc	Regimen	Regimen	11877	S		2099-12-31		true	yes	groundworkers concept_by_code
+905605	Cabazitaxel and Prednisolone	HemOnc	Regimen	Regimen	12061	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804585	Bendamustine and Obinutuzumab	HemOnc	Regimen	Regimen	12097	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804590	Idelalisib and Rituximab	HemOnc	Regimen	Regimen	12120	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804591	Lenalidomide and Rituximab (R2)	HemOnc	Regimen	Regimen	12127	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804592	O-FC	HemOnc	Regimen	Regimen	12140	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804606	Acalabrutinib monotherapy	HemOnc	Regimen	Regimen	12460	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804608	Bendamustine and Ofatumumab	HemOnc	Regimen	Regimen	12492	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804612	Ibrutinib and Rituximab	HemOnc	Regimen	Regimen	12543	S		2099-12-31		true	yes	groundworkers concept_by_code
+912013	Olaparib and Bevacizumab	HemOnc	Regimen	Regimen	13258	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804755	CapeOx	HemOnc	Regimen	Regimen	13628	S		2099-12-31		true	yes	groundworkers concept_by_code
+912024	Sacituzumab govitecan monotherapy	HemOnc	Regimen	Regimen	13710	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804757	FOLFOX4	HemOnc	Regimen	Regimen	13829	S		2099-12-31		true	yes	groundworkers concept_by_code
+1524831	Bv-AVEPC	HemOnc	Regimen	Regimen	13998	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804766	CapeOx and Bevacizumab	HemOnc	Regimen	Regimen	14197	S		2099-12-31		true	yes	groundworkers concept_by_code
+912034	Decitabine and cedazuridine monotherapy	HemOnc	Regimen	Regimen	14236	S		2099-12-31		true	yes	groundworkers concept_by_code
+1524832	Carboplatin and Etoposide (CE) and Serplulimab	HemOnc	Regimen	Regimen	14342	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804770	FOLFIRI and Bevacizumab	HemOnc	Regimen	Regimen	14656	S		2099-12-31		true	yes	groundworkers concept_by_code
+912042	Lenalidomide and Tafasitamab	HemOnc	Regimen	Regimen	14816	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804786	FOLFIRI and Ramucirumab	HemOnc	Regimen	Regimen	14991	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804787	FOLFIRI and Ziv-aflibercept	HemOnc	Regimen	Regimen	14992	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804792	FOLFIRI and Cetuximab	HemOnc	Regimen	Regimen	15194	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804794	FOLFOX4 and Panitumumab	HemOnc	Regimen	Regimen	15196	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804795	Cetuximab monotherapy	HemOnc	Regimen	Regimen	15199	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804798	Irinotecan and Cetuximab	HemOnc	Regimen	Regimen	15219	S		2099-12-31		true	yes	groundworkers concept_by_code
+1524839	Cisplatin and Gemcitabine (GC) and Durvalumab	HemOnc	Regimen	Regimen	15243	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804800	Panitumumab monotherapy	HemOnc	Regimen	Regimen	15275	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804802	Fluorouracil and Levamisole	HemOnc	Regimen	Regimen	15300	S		2099-12-31		true	yes	groundworkers concept_by_code
+35804822	Cemiplimab monotherapy	HemOnc	Regimen	Regimen	15636	S		2099-12-31		true	yes	groundworkers concept_by_code
+35805028	R-CHOP	HemOnc	Regimen	Regimen	15921	S		2099-12-31		true	yes	groundworkers concept_by_code
+35805080	Pixantrone monotherapy	HemOnc	Regimen	Regimen	16588	S		2099-12-31		true	yes	groundworkers concept_by_code
+37556825	Dara-RVd (SC daratumumab)	HemOnc	Regimen	Regimen	16911	S		2099-12-31		true	yes	groundworkers concept_by_code
+35101813	Axitinib and Pembrolizumab	HemOnc	Regimen	Regimen	17145	S		2099-12-31		true	yes	groundworkers concept_by_code
+35805229	Erlotinib monotherapy	HemOnc	Regimen	Regimen	17426	S		2099-12-31		true	yes	groundworkers concept_by_code
+35805230	Trastuzumab emtansine monotherapy	HemOnc	Regimen	Regimen	17428	S		2099-12-31		true	yes	groundworkers concept_by_code
+35805329	Cisplatin and Etoposide (EP)	HemOnc	Regimen	Regimen	17834	S		2099-12-31		true	yes	groundworkers concept_by_code
+35805360	Cisplatin and Fluorouracil (CF) and Trastuzumab	HemOnc	Regimen	Regimen	18281	S		2099-12-31		true	yes	groundworkers concept_by_code
+35805364	DCF	HemOnc	Regimen	Regimen	18354	S		2099-12-31		true	yes	groundworkers concept_by_code
+912058	Dara-CyBorD	HemOnc	Regimen	Regimen	18361	S		2099-12-31		true	yes	groundworkers concept_by_code
+37556828	Elacestrant monotherapy	HemOnc	Regimen	Regimen	18395	S		2099-12-31		true	yes	groundworkers concept_by_code
+912062	Selpercatinib monotherapy	HemOnc	Regimen	Regimen	18504	S		2099-12-31		true	yes	groundworkers concept_by_code
+35805371	Paclitaxel and Ramucirumab	HemOnc	Regimen	Regimen	18506	S		2099-12-31		true	yes	groundworkers concept_by_code
+35805372	Ramucirumab monotherapy	HemOnc	Regimen	Regimen	18539	S		2099-12-31		true	yes	groundworkers concept_by_code
+912070	Trifluridine and tipiracil and Bevacizumab	HemOnc	Regimen	Regimen	18840	S		2099-12-31		true	yes	groundworkers concept_by_code
+35805766	Cetuximab and RT	HemOnc	Regimen	Regimen	21383	S		2099-12-31		true	yes	groundworkers concept_by_code
+35805795	Lenvatinib monotherapy	HemOnc	Regimen	Regimen	22216	S		2099-12-31		true	yes	groundworkers concept_by_code
+35805797	Cabozantinib monotherapy	HemOnc	Regimen	Regimen	22317	S		2099-12-31		true	yes	groundworkers concept_by_code
+35805807	A-AVD	HemOnc	Regimen	Regimen	22609	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806053	Lenalidomide and Dexamethasone (Rd)	HemOnc	Regimen	Regimen	24196	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806059	Bortezomib and Dexamethasone (Vd)	HemOnc	Regimen	Regimen	24294	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806082	VR-CAP	HemOnc	Regimen	Regimen	24552	S		2099-12-31		true	yes	groundworkers concept_by_code
+42542281	Avapritinib monotherapy	HemOnc	Regimen	Regimen	25348	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806137	Binimetinib and Encorafenib	HemOnc	Regimen	Regimen	25829	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806138	Cobimetinib and Vemurafenib	HemOnc	Regimen	Regimen	25841	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806173	Cisplatin and Pemetrexed	HemOnc	Regimen	Regimen	26070	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806258	VMP	HemOnc	Regimen	Regimen	26214	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806259	VTD	HemOnc	Regimen	Regimen	26215	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806268	Thalidomide and Dexamethasone (TD)	HemOnc	Regimen	Regimen	26267	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806280	Carfilzomib monotherapy	HemOnc	Regimen	Regimen	26520	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806282	Dara-VMP	HemOnc	Regimen	Regimen	26535	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806283	IRd	HemOnc	Regimen	Regimen	26544	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806284	KRd	HemOnc	Regimen	Regimen	26556	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806306	Bortezomib and Dexamethasone (Vd) and Panobinostat	HemOnc	Regimen	Regimen	27175	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806307	Bortezomib and Pegylated liposomal doxorubicin	HemOnc	Regimen	Regimen	27198	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806309	Carfilzomib and Dexamethasone (Kd)	HemOnc	Regimen	Regimen	27208	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806311	Dara-Rd	HemOnc	Regimen	Regimen	27262	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806312	Dara-Vd	HemOnc	Regimen	Regimen	27281	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806313	Elo-Pd	HemOnc	Regimen	Regimen	27294	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806314	Elo-Rd	HemOnc	Regimen	Regimen	27301	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806326	Dara-Pd	HemOnc	Regimen	Regimen	27662	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806364	Larotrectinib monotherapy	HemOnc	Regimen	Regimen	28567	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806375	GM-CSF, IL-2, Isotretinoin, Dinutuximab	HemOnc	Regimen	Regimen	28721	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806401	Carboplatin and Paclitaxel (CP) and Bevacizumab	HemOnc	Regimen	Regimen	29570	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806403	Carboplatin, Pemetrexed, Pembrolizumab	HemOnc	Regimen	Regimen	29572	S		2099-12-31		true	yes	groundworkers concept_by_code
+905634	Amivantamab monotherapy	HemOnc	Regimen	Regimen	29758	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806407	ABCP	HemOnc	Regimen	Regimen	29978	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806408	Atezolizumab and Bevacizumab	HemOnc	Regimen	Regimen	29980	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806413	Gefitinib monotherapy	HemOnc	Regimen	Regimen	30152	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806414	Carboplatin, nab-Paclitaxel, Pembrolizumab	HemOnc	Regimen	Regimen	30166	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806415	Carboplatin and Paclitaxel (CP) and Pembrolizumab	HemOnc	Regimen	Regimen	30172	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806416	Cisplatin and Gemcitabine (GC) and Necitumumab	HemOnc	Regimen	Regimen	30186	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806423	Brigatinib monotherapy	HemOnc	Regimen	Regimen	30835	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806424	Crizotinib monotherapy	HemOnc	Regimen	Regimen	30848	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806484	Rucaparib monotherapy	HemOnc	Regimen	Regimen	32005	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806485	Niraparib monotherapy	HemOnc	Regimen	Regimen	32012	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806489	Topotecan and Bevacizumab	HemOnc	Regimen	Regimen	32297	S		2099-12-31		true	yes	groundworkers concept_by_code
+37556847	Pirtobrutinib monotherapy	HemOnc	Regimen	Regimen	32500	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806590	Erlotinib and Gemcitabine	HemOnc	Regimen	Regimen	32789	S		2099-12-31		true	yes	groundworkers concept_by_code
+912132	Cabozantinib and Nivolumab	HemOnc	Regimen	Regimen	32918	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806595	FULV and nanoliposomal Irinotecan	HemOnc	Regimen	Regimen	33180	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806835	ADT and Apalutamide	HemOnc	Regimen	Regimen	34148	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806836	ADT and Enzalutamide	HemOnc	Regimen	Regimen	34156	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806837	ADT and Abiraterone	HemOnc	Regimen	Regimen	34248	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806847	Nilutamide and Orchiectomy	HemOnc	Regimen	Regimen	34455	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806848	Abiraterone monotherapy	HemOnc	Regimen	Regimen	34477	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806854	Cabazitaxel and Prednisone	HemOnc	Regimen	Regimen	34641	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806858	Docetaxel and Prednisone	HemOnc	Regimen	Regimen	34709	S		2099-12-31		true	yes	groundworkers concept_by_code
+905669	Dostarlimab monotherapy	HemOnc	Regimen	Regimen	34981	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806900	Axitinib and Avelumab	HemOnc	Regimen	Regimen	35414	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806906	Everolimus and Lenvatinib	HemOnc	Regimen	Regimen	35823	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806941	Carboplatin and Etoposide (CE) and Atezolizumab	HemOnc	Regimen	Regimen	36179	S		2099-12-31		true	yes	groundworkers concept_by_code
+35101649	Bendamustine and Rituximab (BR) and Polatuzumab vedotin	HemOnc	Regimen	Regimen	36282	S		2099-12-31		true	yes	groundworkers concept_by_code
+35806967	Doxorubicin and Olaratumab	HemOnc	Regimen	Regimen	36972	S		2099-12-31		true	yes	groundworkers concept_by_code
+1524963	AC-TH (Docetaxel)	HemOnc	Regimen	Regimen	37198	S		2099-12-31		true	yes	groundworkers concept_by_code
+1524972	AC-TH (Paclitaxel)	HemOnc	Regimen	Regimen	37298	S		2099-12-31		true	yes	groundworkers concept_by_code
+1524994	ADT, Darolutamide, Docetaxel	HemOnc	Regimen	Regimen	39183	S		2099-12-31		true	yes	groundworkers concept_by_code
+35101611	Carboplatin, nab-Paclitaxel, Atezolizumab	HemOnc	Regimen	Regimen	43119	S		2099-12-31		true	yes	groundworkers concept_by_code
+42542355	Docetaxel and Nintedanib	HemOnc	Regimen	Regimen	47638	S		2099-12-31		true	yes	groundworkers concept_by_code
+42542359	FCR (SC Rituximab)	HemOnc	Regimen	Regimen	47670	S		2099-12-31		true	yes	groundworkers concept_by_code
+42542361	FULV and Bevacizumab	HemOnc	Regimen	Regimen	47679	S		2099-12-31		true	yes	groundworkers concept_by_code
+1525016	Tebentafusp monotherapy	HemOnc	Regimen	Regimen	47727	S		2099-12-31		true	yes	groundworkers concept_by_code
+42542374	Rituximab and hyaluronidase monotherapy	HemOnc	Regimen	Regimen	48078	S		2099-12-31		true	yes	groundworkers concept_by_code
+42542382	Lenvatinib and Pembrolizumab	HemOnc	Regimen	Regimen	48278	S		2099-12-31		true	yes	groundworkers concept_by_code
+35101963	Entrectinib monotherapy	HemOnc	Regimen	Regimen	48540	S		2099-12-31		true	yes	groundworkers concept_by_code
+35101280	Quizartinib monotherapy	HemOnc	Regimen	Regimen	48960	S		2099-12-31		true	yes	groundworkers concept_by_code
+1525033	Azacitidine and Ivosidenib	HemOnc	Regimen	Regimen	49832	S		2099-12-31		true	yes	groundworkers concept_by_code
+42542396	Carboplatin and Etoposide (CE) and Durvalumab	HemOnc	Regimen	Regimen	49859	S		2099-12-31		true	yes	groundworkers concept_by_code
+42542398	Cisplatin and Etoposide (EP) and Durvalumab	HemOnc	Regimen	Regimen	49885	S		2099-12-31		true	yes	groundworkers concept_by_code
+42542404	Erlotinib and Ramucirumab	HemOnc	Regimen	Regimen	49968	S		2099-12-31		true	yes	groundworkers concept_by_code
+905698	Isa-Kd	HemOnc	Regimen	Regimen	50222	S		2099-12-31		true	yes	groundworkers concept_by_code
+42542407	Pomalidomide and Dexamethasone (Pd)	HemOnc	Regimen	Regimen	50298	S		2099-12-31		true	yes	groundworkers concept_by_code
+42542412	Zanubrutinib monotherapy	HemOnc	Regimen	Regimen	50483	S		2099-12-31		true	yes	groundworkers concept_by_code
+905701	Loncastuximab tesirine monotherapy	HemOnc	Regimen	Regimen	53914	S		2099-12-31		true	yes	groundworkers concept_by_code
+1525062	Pola-R-CHP	HemOnc	Regimen	Regimen	59028	S		2099-12-31		true	yes	groundworkers concept_by_code
+905708	Cisplatin and Gemcitabine (GC) and Camrelizumab	HemOnc	Regimen	Regimen	59045	S		2099-12-31		true	yes	groundworkers concept_by_code
+1525074	Cisplatin and Gemcitabine (GC) and Nivolumab	HemOnc	Regimen	Regimen	59984	S		2099-12-31		true	yes	groundworkers concept_by_code
+905828	Cisplatin and Gemcitabine (GC) and Pembrolizumab	HemOnc	Regimen	Regimen	60461	S		2099-12-31		true	yes	groundworkers concept_by_code
+905731	Tepotinib monotherapy	HemOnc	Regimen	Regimen	61163	S		2099-12-31		true	yes	groundworkers concept_by_code
+905741	Melphalan flufenamide and Dexamethasone	HemOnc	Regimen	Regimen	61307	S		2099-12-31		true	yes	groundworkers concept_by_code
+905768	SVd	HemOnc	Regimen	Regimen	62486	S		2099-12-31		true	yes	groundworkers concept_by_code
+1525118	Cisplatin and Gemcitabine (GC) and Toripalimab	HemOnc	Regimen	Regimen	65364	S		2099-12-31		true	yes	groundworkers concept_by_code
+1525171	Tisotumab vedotin monotherapy	HemOnc	Regimen	Regimen	71308	S		2099-12-31		true	yes	groundworkers concept_by_code
+1525211	Tislelizumab monotherapy	HemOnc	Regimen	Regimen	75394	S		2099-12-31		true	yes	groundworkers concept_by_code
+35101150	Dara-VTD	HemOnc	Regimen	Regimen	77167	S		2099-12-31		true	yes	groundworkers concept_by_code
+35100304	Selinexor and Dexamethasone (Sd)	HemOnc	Regimen	Regimen	96863	S		2099-12-31		true	yes	groundworkers concept_by_code
+37557069	Isa-RVd	HemOnc	Regimen	Regimen	109344	S		2099-12-31		true	yes	groundworkers concept_by_code
+37557075	Teclistamab monotherapy	HemOnc	Regimen	Regimen	110063	S		2099-12-31		true	yes	groundworkers concept_by_code
+37557146	Mosunetuzumab monotherapy	HemOnc	Regimen	Regimen	111262	S		2099-12-31		true	yes	groundworkers concept_by_code
+37557191	Abiraterone and Olaparib	HemOnc	Regimen	Regimen	112451	S		2099-12-31		true	yes	groundworkers concept_by_code
+37557220	Penpulimab monotherapy	HemOnc	Regimen	Regimen	113976	S		2099-12-31		true	yes	groundworkers concept_by_code
+37557224	Toripalimab monotherapy	HemOnc	Regimen	Regimen	114203	S		2099-12-31		true	yes	groundworkers concept_by_code
+37557225	Tucatinib and Trastuzumab	HemOnc	Regimen	Regimen	114220	S		2099-12-31		true	yes	groundworkers concept_by_code
+37557236	Retifanlimab monotherapy	HemOnc	Regimen	Regimen	114476	S		2099-12-31		true	yes	groundworkers concept_by_code
+37557238	Tabelecleucel monotherapy	HemOnc	Regimen	Regimen	114495	S		2099-12-31		true	yes	groundworkers concept_by_code
+37557264	Adagrasib and Cetuximab	HemOnc	Regimen	Regimen	116565	S		2099-12-31		true	yes	groundworkers concept_by_code
+37557271	Carboplatin and Paclitaxel (CP) and Dostarlimab	HemOnc	Regimen	Regimen	116702	S		2099-12-31		true	yes	groundworkers concept_by_code
+37557299	Epcoritamab monotherapy	HemOnc	Regimen	Regimen	117017	S		2099-12-31		true	yes	groundworkers concept_by_code
+37557432	Elranatamab monotherapy	HemOnc	Regimen	Regimen	120162	S		2099-12-31		true	yes	groundworkers concept_by_code
+37557435	Enfortumab vedotin and Pembrolizumab	HemOnc	Regimen	Regimen	120168	S		2099-12-31		true	yes	groundworkers concept_by_code
+37557718	Capivasertib and Fulvestrant	HemOnc	Regimen	Regimen	121532	S		2099-12-31		true	yes	groundworkers concept_by_code
+37557722	Carboplatin and Paclitaxel (CP) and Durvalumab	HemOnc	Regimen	Regimen	121537	S		2099-12-31		true	yes	groundworkers concept_by_code
+37558037	NALIRIFOX	HemOnc	Regimen	Regimen	124704	S		2099-12-31		true	yes	groundworkers concept_by_code
+37558406	Carboplatin and Paclitaxel (CP) and Bevacizumab-awwb	HemOnc	Regimen	Regimen	127239	S		2099-12-31		true	yes	groundworkers concept_by_code
+37558408	Cisplatin and Paclitaxel (TP) and Bevacizumab-awwb	HemOnc	Regimen	Regimen	127241	S		2099-12-31		true	yes	groundworkers concept_by_code
+37558695	Paclitaxel and Bevacizumab-maly	HemOnc	Regimen	Regimen	127527	S		2099-12-31		true	yes	groundworkers concept_by_code
+37558703	Carboplatin and Paclitaxel (CP) and Bevacizumab-maly	HemOnc	Regimen	Regimen	127535	S		2099-12-31		true	yes	groundworkers concept_by_code
+37558705	Cisplatin and Paclitaxel (TP) and Bevacizumab-maly	HemOnc	Regimen	Regimen	127537	S		2099-12-31		true	yes	groundworkers concept_by_code
+37558707	Paclitaxel, Topotecan, Bevacizumab-maly	HemOnc	Regimen	Regimen	127539	S		2099-12-31		true	yes	groundworkers concept_by_code
+37558876	Rituximab-abbs monotherapy	HemOnc	Regimen	Regimen	127710	S		2099-12-31		true	yes	groundworkers concept_by_code
+37559325	Rituximab-pvvr monotherapy	HemOnc	Regimen	Regimen	128181	S		2099-12-31		true	yes	groundworkers concept_by_code
+37559327	FCR (rituximab-pvvr)	HemOnc	Regimen	Regimen	128183	S		2099-12-31		true	yes	groundworkers concept_by_code
+37559385	R-CHOP (rituximab-pvvr)	HemOnc	Regimen	Regimen	128242	S		2099-12-31		true	yes	groundworkers concept_by_code
+37560658	Carboplatin, Pemetrexed, Amivantamab	HemOnc	Regimen	Regimen	135019	S		2099-12-31		true	yes	groundworkers concept_by_code
+37560845	Sotorasib and Panitumumab	HemOnc	Regimen	Regimen	136234	S		2099-12-31		true	yes	groundworkers concept_by_code
+37560929	Axitinib and Toripalimab	HemOnc	Regimen	Regimen	139709	S		2099-12-31		true	yes	groundworkers concept_by_code
+37560980	Carboplatin and nab-Paclitaxel (CnP) and Serplulimab	HemOnc	Regimen	Regimen	139842	S		2099-12-31		true	yes	groundworkers concept_by_code
+37561234	Zanubrutinib and Obinutuzumab (ZO)	HemOnc	Regimen	Regimen	141635	S		2099-12-31		true	yes	groundworkers concept_by_code
+37561301	Carboplatin and Paclitaxel (CP) and Bevacizumab-tnjn	HemOnc	Regimen	Regimen	142164	S		2099-12-31		true	yes	groundworkers concept_by_code
+37561325	Cisplatin and Paclitaxel (TP) and Bevacizumab-tnjn	HemOnc	Regimen	Regimen	142238	S		2099-12-31		true	yes	groundworkers concept_by_code
+37561388	Paclitaxel, Topotecan, Bevacizumab-tnjn	HemOnc	Regimen	Regimen	144170	S		2099-12-31		true	yes	groundworkers concept_by_code
+37561434	Lazertinib and Amivantamab	HemOnc	Regimen	Regimen	144660	S		2099-12-31		true	yes	groundworkers concept_by_code
+37561488	BCG vaccine and Nogapendekin alfa inbakicept	HemOnc	Regimen	Regimen	145067	S		2099-12-31		true	yes	groundworkers concept_by_code
+37561828	Fulvestrant, Inavolisib, Palbociclib	HemOnc	Regimen	Regimen	145589	S		2099-12-31		true	yes	groundworkers concept_by_code

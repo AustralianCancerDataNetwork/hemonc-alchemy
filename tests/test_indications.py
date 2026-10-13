@@ -305,7 +305,7 @@ def test_indication_lint_reports_unparsed_values_without_invariant_failures():
         stage="unmapped stage",
         context=("unmapped setting",),
     )
-    report = lint_indications((row,))
+    report = lint_indications((row,), check_implications=False)
     diagnostics = dict(report.diagnostics)
     assert diagnostics["Unparsed findings"] == {"ITD": 1}
     assert diagnostics["Unparsed stage values"] == {"unmapped stage": 1}
@@ -469,4 +469,22 @@ def test_wheel_contains_indication_package_files_when_uv_is_available(tmp_path):
     assert all(
         f"hemonc_alchemy/toolkit/core/indications/normalisers/{name}" in members
         for name in ("age.py", "biomarker.py", "context.py", "scope.py", "sex.py")
+    )
+    assert (
+        "hemonc_alchemy/toolkit/core/indications/data/finding_implications.yaml"
+        in members
+    )
+    vocabulary = importlib.resources.files(
+        "hemonc_alchemy.toolkit.core.indication_vocabulary"
+    )
+    tables = [entry.name for entry in vocabulary.joinpath("data").iterdir()]
+    modules = [entry.name for entry in vocabulary.iterdir() if entry.is_file()]
+    assert tables and modules
+    assert all(
+        f"hemonc_alchemy/toolkit/core/indication_vocabulary/data/{name}" in members
+        for name in tables
+    )
+    assert all(
+        f"hemonc_alchemy/toolkit/core/indication_vocabulary/{name}" in members
+        for name in modules
     )

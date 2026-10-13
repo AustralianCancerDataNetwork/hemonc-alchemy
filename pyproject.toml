@@ -35,6 +35,7 @@ dependencies = [
   "orm-loader>=2.0.0,<3.0.0",
   "typer>=0.12",
   "rich>=13.0",
+  "pyyaml>=6.0",
 ]
 
 [project.optional-dependencies]
@@ -45,7 +46,6 @@ author = [
   "linkml>=1.9.6",
   "linkml-runtime>=1.9.5",
   "openpyxl>=3.1.5",
-  "pyyaml>=6.0",
   "pyreadr>=0.5",
 ]
 omop = [
@@ -93,6 +93,10 @@ raw-options = { tag_regex = '^v?(?P<version>[0-9]+\.[0-9]+\.[0-9]+)$' }
 
 [tool.hatch.build.targets.wheel]
 packages = ["hemonc_alchemy"]
+include = [
+  "hemonc_alchemy/toolkit/core/indications/data/**",
+  "hemonc_alchemy/toolkit/core/indication_vocabulary/data/**",
+]
 
 [tool.uv]
 cache-keys = [{ file = "pyproject.toml" }, { git = { commit = true, tags = true } }]

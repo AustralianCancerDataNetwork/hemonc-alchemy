@@ -1,0 +1,393 @@
+indication_id	regulator	component_cui	component	condition_cui	condition	reason
+37	PMDA		Acalabrutinib		Mantle cell lymphoma	component_cui is null; condition_cui is null
+79	PMDA	17	Alemtuzumab	557	Allogeneic HSCT conditioning regimen	condition code is a Regimen Class concept
+94	PMDA		Amivantamab		Non-small cell lung cancer	component_cui is null; condition_cui is null
+95	PMDA		Amivantamab and vorhyaluronidase		Non-small cell lung cancer	component_cui is null; condition_cui is null
+96	PMDA		Amivantamab and vorhyaluronidase		Non-small cell lung cancer	component_cui is null; condition_cui is null
+101	FDA	12282	Anakinra	168693	Rheumatoid arthritis	condition code not in the HemOnc load
+112	FDA	211	Andexanet alfa	168660	Bleeding with anticoagulation	condition code not in the HemOnc load
+113	PMDA	211	Andexanet alfa	168660	Bleeding with anticoagulation	condition code not in the HemOnc load
+119	FDA	147897	Antithrombin III human	168653	Antithrombin III deficiency	component code not in the HemOnc load; condition code not in the HemOnc load
+120	FDA	147898	Antithrombin III recombinant	168653	Antithrombin III deficiency	component code not in the HemOnc load; condition code not in the HemOnc load
+131	FDA	41	Apixaban	168656	Atrial fibrillation	condition code not in the HemOnc load
+135	FDA	42	Aprepitant	161377	Chemotherapy-induced nausea and vomiting	condition code not in the HemOnc load
+136	FDA	42	Aprepitant	161377	Chemotherapy-induced nausea and vomiting	condition code not in the HemOnc load
+137	FDA	42	Aprepitant	168685	Nausea and vomiting	condition code not in the HemOnc load
+153	PMDA		Asciminib		Chronic myeloid leukemia	component_cui is null; condition_cui is null
+209	PMDA		Atezolizumab		Extranodal NK- and T-cell lymphoma nasal type	component_cui is null; condition_cui is null
+210	PMDA		Atezolizumab		Thymoma	component_cui is null; condition_cui is null
+211	FDA		Atezolizumab		Bladder cancer	component_cui is null; condition_cui is null
+214	EMA		Aumolertinib		Non-small cell lung cancer	component_cui is null; condition_cui is null
+215	EMA		Aumolertinib		Non-small cell lung cancer	component_cui is null; condition_cui is null
+226	PMDA		Avatrombopag		Immune thrombocytopenia	component_cui is null; condition_cui is null
+246	FDA	153955	Avutometinib and defactinib	60907	Low-grade serous ovarian cancer	component code not in the HemOnc load
+251	FDA		Axicabtagene ciloleucel		High-grade B-cell lymphoma	component_cui is null; condition_cui is null
+286	FDA	59	BCG vaccine	168659	Bladder carcinoma in situ	condition code not in the HemOnc load
+290	PMDA		Belantamab mafodotin		Multiple myeloma	component_cui is null; condition_cui is null
+305	FDA	29688	Belzutifan	168689	Paraganglioma	condition code not in the HemOnc load
+307	PMDA		Belzutifan		Renal cell carcinoma	component_cui is null; condition_cui is null
+308	FDA		Belzutifan		Clear cell renal cell carcinoma	component_cui is null; condition_cui is null
+319	PMDA	65	Bendamustine	114735	Cellular therapy conditioning regimen	condition code is a Regimen Class concept
+321	NMPA	167354	Benmelstobart	666	Small cell lung cancer	component code not in the HemOnc load
+322	NMPA	167354	Benmelstobart	593	Endometrial cancer	component code not in the HemOnc load
+323	NMPA	167354	Benmelstobart	642	Non-small cell lung cancer	component code not in the HemOnc load
+427	PMDA	71	Binimetinib	168448	Thyroid cancer anaplastic	condition code not in the HemOnc load
+428	NMPA	154172	Bireociclib		Breast cancer	component code not in the HemOnc load; condition_cui is null
+429	NMPA	154172	Bireociclib		Breast cancer	component code not in the HemOnc load; condition_cui is null
+498	PMDA		Brentuximab vedotin		Classical Hodgkin lymphoma	component_cui is null; condition_cui is null
+529	PMDA	80	Busulfan	566	Autologous HSCT conditioning regimen	condition code is a Regimen Class concept
+596	FDA		Capivasertib		Prostate cancer	component_cui is null; condition_cui is null
+631	EMA	93	Catumaxomab	168664	Carcinoma	condition code not in the HemOnc load
+632	EMA	93	Catumaxomab	168664	Carcinoma	condition code not in the HemOnc load
+700	FDA	121922	Concizumab	155718	Hemophilia A	condition code not in the HemOnc load
+701	FDA	121922	Concizumab	155719	Hemophilia B	condition code not in the HemOnc load
+704	FDA	148363	Cosibelimab	588	Cutaneous squamous cell carcinoma	component code not in the HemOnc load
+705	FDA	148363	Cosibelimab	588	Cutaneous squamous cell carcinoma	component code not in the HemOnc load
+727	PMDA	154727	Crovalimab	649	Paroxysmal nocturnal hemoglobinuria	component code not in the HemOnc load
+728	FDA	154727	Crovalimab	649	Paroxysmal nocturnal hemoglobinuria	component code not in the HemOnc load
+731	PMDA	122	Cyclophosphamide	114735	Cellular therapy conditioning regimen	condition code is a Regimen Class concept
+749	PMDA	126	Cytarabine	114735	Cellular therapy conditioning regimen	condition code is a Regimen Class concept
+762	FDA	130	Dabigatran	168696	Stroke prevention	condition code not in the HemOnc load
+780	FDA	131	Dabrafenib	168448	Thyroid cancer anaplastic	condition code not in the HemOnc load
+792	PMDA		Dabrafenib		BRAF-mutated Malignant solid neoplasm	component_cui is null; condition_cui is null
+806	FDA	134	Dactinomycin	168697	Testicular cancer nonseminoma	condition code not in the HemOnc load
+807	FDA	134	Dactinomycin	168697	Testicular cancer nonseminoma	condition code not in the HemOnc load
+818	NMPA		Dalpiciclib		Breast cancer	component_cui is null; condition_cui is null
+848	PMDA		Daratumumab and vorhyaluronidase		Smoldering multiple myeloma	component_cui is null; condition_cui is null
+849	FDA	140	Darbepoetin alfa	161376	Anemia	condition code not in the HemOnc load
+850	PMDA	140	Darbepoetin alfa	161376	Anemia	condition code not in the HemOnc load
+877	PMDA	148417	Datopotamab deruxtecan	572	Breast cancer	component code not in the HemOnc load
+878	FDA	148417	Datopotamab deruxtecan	572	Breast cancer	component code not in the HemOnc load
+879	EMA	148417	Datopotamab deruxtecan	572	Breast cancer	component code not in the HemOnc load
+880	FDA	148417	Datopotamab deruxtecan	642	Non-small cell lung cancer	component code not in the HemOnc load
+881	FDA	148417	Datopotamab deruxtecan	642	Non-small cell lung cancer	component code not in the HemOnc load
+882	FDA		Datopotamab deruxtecan		Breast cancer	component_cui is null; condition_cui is null
+896	FDA		Decitabine and cedazuridine		Acute myeloid leukemia	component_cui is null; condition_cui is null
+897	FDA	146	Deferasirox	168668	Chronic iron overload	condition code not in the HemOnc load
+898	FDA	146	Deferasirox	168668	Chronic iron overload	condition code not in the HemOnc load
+913	FDA	154	Denosumab	168688	Osteoporosis	condition code not in the HemOnc load
+914	FDA	154	Denosumab	168695	Skeletal metastases from solid tumors	condition code not in the HemOnc load
+915	PMDA	154	Denosumab	168661	Bone lesions	condition code not in the HemOnc load
+935	NMPA	162869	Disitamab vedotin	601	Gastric cancer	component code not in the HemOnc load
+936	NMPA	162869	Disitamab vedotin	126044	Urothelial carcinoma	component code not in the HemOnc load
+937	NMPA	162869	Disitamab vedotin	126044	Urothelial carcinoma	component code not in the HemOnc load
+959	FDA	160450	Dordaviprone	160443	Diffuse midline glioma	component code not in the HemOnc load; condition code not in the HemOnc load
+960	FDA	160450	Dordaviprone	160443	Diffuse midline glioma	component code not in the HemOnc load; condition code not in the HemOnc load
+961	FDA	160450	Dordaviprone	160443	Diffuse midline glioma	component code not in the HemOnc load; condition code not in the HemOnc load
+962	FDA	160450	Dordaviprone	160443	Diffuse midline glioma	component code not in the HemOnc load; condition code not in the HemOnc load
+963	FDA	160450	Dordaviprone	160443	Diffuse midline glioma	component code not in the HemOnc load; condition code not in the HemOnc load
+983	FDA		Doxorubicin		Lymphoma	component_cui is null; condition_cui is null
+1010	PMDA		Durvalumab		Bladder cancer	component_cui is null; condition_cui is null
+1011	PMDA		Durvalumab		Non-small cell lung cancer	component_cui is null; condition_cui is null
+1013	FDA		Durvalumab		Bladder cancer	component_cui is null; condition_cui is null
+1014	FDA	174	Dutasteride	168658	Benign prostatic hyperplasia	condition code not in the HemOnc load
+1033	PMDA	177	Edoxaban	168654	Arterial thromboembolism	condition code not in the HemOnc load
+1035	FDA	177	Edoxaban	168656	Atrial fibrillation	condition code not in the HemOnc load
+1038	FDA	142348	Efanesoctocog alfa	155718	Hemophilia A	condition code not in the HemOnc load
+1039	FDA	142348	Efanesoctocog alfa	155718	Hemophilia A	condition code not in the HemOnc load
+1040	FDA	142348	Efanesoctocog alfa	155718	Hemophilia A	condition code not in the HemOnc load
+1041	FDA	155027	Efgartigimod alfa	168684	Myasthenia gravis	component code not in the HemOnc load; condition code not in the HemOnc load
+1042	PMDA	155027	Efgartigimod alfa	168684	Myasthenia gravis	component code not in the HemOnc load; condition code not in the HemOnc load
+1043	PMDA	155027	Efgartigimod alfa	617	Immune thrombocytopenia	component code not in the HemOnc load
+1054	FDA	180	Eltrombopag	168667	Chronic HCV	condition code not in the HemOnc load
+1060	FDA	181	Emicizumab	155718	Hemophilia A	condition code not in the HemOnc load
+1061	PMDA	181	Emicizumab	155718	Hemophilia A	condition code not in the HemOnc load
+1062	FDA	181	Emicizumab	155718	Hemophilia A	condition code not in the HemOnc load
+1064	EMA	181	Emicizumab	155718	Hemophilia A	condition code not in the HemOnc load
+1065	EMA	181	Emicizumab	155718	Hemophilia A	condition code not in the HemOnc load
+1075	PMDA	183	Encorafenib	168448	Thyroid cancer anaplastic	condition code not in the HemOnc load
+1077	PMDA		Encorafenib		Colorectal cancer	component_cui is null; condition_cui is null
+1137	FDA	192	Epoetin alfa-epbx	161376	Anemia	condition code not in the HemOnc load
+1169	PMDA	201	Etoposide	114735	Cellular therapy conditioning regimen	condition code is a Regimen Class concept
+1171	FDA	114383	Etranacogene dezaparvovec	155719	Hemophilia B	condition code not in the HemOnc load
+1172	EMA	114383	Etranacogene dezaparvovec	155719	Hemophilia B	condition code not in the HemOnc load
+1173	PMDA	202	Everolimus	168687	Organ rejection	condition code not in the HemOnc load
+1185	FDA	202	Everolimus	168692	Renal angiomyolipoma	condition code not in the HemOnc load
+1192	FDA	202	Everolimus	168692	Renal angiomyolipoma	condition code not in the HemOnc load
+1201	FDA	205	Factor IX recombinant	155719	Hemophilia B	condition code not in the HemOnc load
+1202	PMDA	205	Factor IX recombinant	155719	Hemophilia B	condition code not in the HemOnc load
+1204	FDA	209	Factor VIIa recombinant	153737	Acquired hemophilia	condition code not in the HemOnc load
+1205	FDA	209	Factor VIIa recombinant	168669	Congenital factor VII deficiency	condition code not in the HemOnc load
+1207	PMDA	209	Factor VIIa recombinant	168676	Glanzmann thrombasthenia	condition code not in the HemOnc load
+1208	FDA	208	Factor VIII recombinant	155718	Hemophilia A	condition code not in the HemOnc load
+1209	PMDA	208	Factor VIII recombinant	155718	Hemophilia A	condition code not in the HemOnc load
+1211	FDA	155155	Febuxostat	168679	Hyperuricemia	component code not in the HemOnc load; condition code not in the HemOnc load
+1213	PMDA		Fedratinib		Myelofibrosis	component_cui is null; condition_cui is null
+1214	FDA	214	Ferric carboxymaltose	168681	Iron deficiency anemia	condition code not in the HemOnc load
+1215	FDA	214	Ferric carboxymaltose	168681	Iron deficiency anemia	condition code not in the HemOnc load
+1216	FDA	215	Ferric gluconate	168681	Iron deficiency anemia	condition code not in the HemOnc load
+1217	FDA	217	Ferumoxytol	168681	Iron deficiency anemia	condition code not in the HemOnc load
+1218	FDA	155192	Fidanacogene elaparvovec	155719	Hemophilia B	component code not in the HemOnc load; condition code not in the HemOnc load
+1221	FDA	220	Filgrastim	161387	Febrile neutropenia	condition code not in the HemOnc load
+1222	FDA	220	Filgrastim	161387	Febrile neutropenia	condition code not in the HemOnc load
+1223	FDA	220	Filgrastim	168686	Neutropenia	condition code not in the HemOnc load
+1224	FDA	220	Filgrastim	161387	Febrile neutropenia	condition code not in the HemOnc load
+1225	FDA	220	Filgrastim	668	Stem cell mobilization regimen	condition code is a Regimen Class concept
+1227	FDA	122376	Fitusiran	155718	Hemophilia A	condition code not in the HemOnc load
+1228	FDA	122376	Fitusiran	155718	Hemophilia A	condition code not in the HemOnc load
+1229	FDA	122376	Fitusiran	155719	Hemophilia B	condition code not in the HemOnc load
+1230	FDA	122376	Fitusiran	155719	Hemophilia B	condition code not in the HemOnc load
+1236	PMDA	224	Fludarabine	557	Allogeneic HSCT conditioning regimen	condition code is a Regimen Class concept
+1237	PMDA	224	Fludarabine	557	Allogeneic HSCT conditioning regimen	condition code is a Regimen Class concept
+1241	PMDA	224	Fludarabine	114735	Cellular therapy conditioning regimen	condition code is a Regimen Class concept
+1257	FDA	230	Fondaparinux	168671	DVT prophylaxis	condition code not in the HemOnc load
+1259	FDA	233	Fosaprepitant	161377	Chemotherapy-induced nausea and vomiting	condition code not in the HemOnc load
+1260	PMDA	120195	Fosnetupitant	161377	Chemotherapy-induced nausea and vomiting	condition code not in the HemOnc load
+1269	NMPA		Fruquintinib		Endometrial cancer	component_cui is null; condition_cui is null
+1286	FDA		Gedatolisib		Breast cancer	component_cui is null; condition_cui is null
+1306	FDA	163153	Gemcitabine intravesical system	569	Bladder cancer	component code not in the HemOnc load
+1325	FDA	247	Glucarpidase	168682	Methotrexate toxicity	condition code not in the HemOnc load
+1326	PMDA	247	Glucarpidase	168682	Methotrexate toxicity	condition code not in the HemOnc load
+1329	FDA	249	Granisetron	161377	Chemotherapy-induced nausea and vomiting	condition code not in the HemOnc load
+1330	FDA	249	Granisetron	161377	Chemotherapy-induced nausea and vomiting	condition code not in the HemOnc load
+1331	FDA	249	Granisetron	161377	Chemotherapy-induced nausea and vomiting	condition code not in the HemOnc load
+1332	FDA	249	Granisetron	161377	Chemotherapy-induced nausea and vomiting	condition code not in the HemOnc load
+1333	PMDA	155558	Gumarontinib	642	Non-small cell lung cancer	component code not in the HemOnc load
+1384	FDA	266	Idarucizumab	168660	Bleeding with anticoagulation	condition code not in the HemOnc load
+1385	PMDA	266	Idarucizumab	168660	Bleeding with anticoagulation	condition code not in the HemOnc load
+1411	FDA		Imatinib		Dermatofibrosarcoma protuberans	component_cui is null; condition_cui is null
+1419	PMDA	269	Imatinib	168666	Chronic eosinophilic leukemia	condition code not in the HemOnc load
+1423	FDA	155893	Imlunestrant	572	Breast cancer	component code not in the HemOnc load
+1424	EMA		Imlunestrant		Breast cancer	component_cui is null; condition_cui is null
+1425	PMDA		Imlunestrant		Breast cancer	component_cui is null; condition_cui is null
+1430	FDA		Infigratinib		Cholangiocarcinoma	component_cui is null; condition_cui is null
+1445	FDA	115124	Iobenguane I 131	168689	Paraganglioma	condition code not in the HemOnc load
+1447	PMDA	115124	Iobenguane I 131	168689	Paraganglioma	condition code not in the HemOnc load
+1449	PMDA		Iobenguane I 131		Neuroblastoma	component_cui is null; condition_cui is null
+1484	PMDA		Ipilimumab		Hepatocellular carcinoma	component_cui is null; condition_cui is null
+1485	PMDA		Ipilimumab		Colorectal cancer	component_cui is null; condition_cui is null
+1502	FDA	283	Iron sucrose	168681	Iron deficiency anemia	condition code not in the HemOnc load
+1507	FDA		Isatuximab		Multiple myeloma	component_cui is null; condition_cui is null
+1508	FDA		Isatuximab		Multiple myeloma	component_cui is null; condition_cui is null
+1509	FDA		Isatuximab		Multiple myeloma	component_cui is null; condition_cui is null
+1526	FDA	294	Lanreotide	168651	Acromegaly	condition code not in the HemOnc load
+1529	HC	75279	Lanreotide LAR	168651	Acromegaly	condition code not in the HemOnc load
+1530	HC	75279	Lanreotide LAR	168651	Acromegaly	condition code not in the HemOnc load
+1532	HC	75279	Lanreotide LAR	168663	Carcinoid syndrome	condition code not in the HemOnc load
+1591	NMPA	149198	Lerociclib	572	Breast cancer	component code not in the HemOnc load
+1592	NMPA	149198	Lerociclib	572	Breast cancer	component code not in the HemOnc load
+1619	EMA	156581	Linvoseltamab	633	Multiple myeloma	component code not in the HemOnc load
+1620	FDA	156581	Linvoseltamab	633	Multiple myeloma	component code not in the HemOnc load
+1634	FDA	21215	Lisocabtagene maraleucel		Marginal zone lymphoma	condition_cui is null
+1648	NMPA	149306	Lumrotatug	617	Immune thrombocytopenia	component code not in the HemOnc load
+1652	EMA		Lurbinectedin		Small cell lung cancer	component_cui is null; condition_cui is null
+1672	PMDA		Lutetium Lu 177 vipivotide tetraxetan		Prostate cancer	component_cui is null; condition_cui is null
+1674	FDA	156806	Marstacimab	46106	Congenital hemophilia	component code not in the HemOnc load
+1675	PMDA	156806	Marstacimab	46106	Congenital hemophilia	component code not in the HemOnc load
+1684	FDA	326	Mepolizumab	168655	Asthma	condition code not in the HemOnc load
+1712	FDA	160775	Mitomycin intravesical solution	569	Bladder cancer	component code not in the HemOnc load
+1721	FDA	69109	Mobocertinib		EGFR-mutated Non-small cell lung cancer	condition_cui is null
+1722	FDA	69109	Mobocertinib		EGFR-mutated Non-small cell lung cancer	condition_cui is null
+1740	FDA	124664	Motixafortide	668	Stem cell mobilization regimen	condition code is a Regimen Class concept
+1762	FDA	351	Netupitant and palonosetron	161377	Chemotherapy-induced nausea and vomiting	condition code not in the HemOnc load
+1775	FDA	355	Nintedanib	168680	Idiopathic pulmonary fibrosis	condition code not in the HemOnc load
+1883	PMDA		Nivolumab		Hepatocellular carcinoma	component_cui is null; condition_cui is null
+1884	PMDA		Nivolumab		Colorectal cancer	component_cui is null; condition_cui is null
+1888	FDA	149598	Nivolumab and hyaluronidase	642	Non-small cell lung cancer	component code not in the HemOnc load
+1889	FDA	149598	Nivolumab and hyaluronidase	642	Non-small cell lung cancer	component code not in the HemOnc load
+1890	FDA	149598	Nivolumab and hyaluronidase	642	Non-small cell lung cancer	component code not in the HemOnc load
+1891	FDA	149598	Nivolumab and hyaluronidase	68879	Malignant pleural mesothelioma	component code not in the HemOnc load
+1892	FDA	149598	Nivolumab and hyaluronidase	1235	Esophageal squamous cell carcinoma	component code not in the HemOnc load
+1893	FDA	149598	Nivolumab and hyaluronidase	1235	Esophageal squamous cell carcinoma	component code not in the HemOnc load
+1894	FDA	149598	Nivolumab and hyaluronidase	660	Renal cell carcinoma	component code not in the HemOnc load
+1895	FDA	149598	Nivolumab and hyaluronidase	660	Renal cell carcinoma	component code not in the HemOnc load
+1896	FDA	149598	Nivolumab and hyaluronidase	126044	Urothelial carcinoma	component code not in the HemOnc load
+1897	FDA	149598	Nivolumab and hyaluronidase	595	Esophageal cancer	component code not in the HemOnc load
+1898	FDA	149598	Nivolumab and hyaluronidase	46096	Colorectal cancer	component code not in the HemOnc load
+1899	FDA	149598	Nivolumab and hyaluronidase	1235	Esophageal squamous cell carcinoma	component code not in the HemOnc load
+1900	FDA	149598	Nivolumab and hyaluronidase	46096	Colorectal cancer	component code not in the HemOnc load
+1901	FDA	149598	Nivolumab and hyaluronidase	629	Melanoma	component code not in the HemOnc load
+1902	FDA	149598	Nivolumab and hyaluronidase	642	Non-small cell lung cancer	component code not in the HemOnc load
+1903	FDA	149598	Nivolumab and hyaluronidase	25316	Non-small cell lung cancer squamous	component code not in the HemOnc load
+1904	FDA	149598	Nivolumab and hyaluronidase	126044	Urothelial carcinoma	component code not in the HemOnc load
+1905	FDA	149598	Nivolumab and hyaluronidase	608	Head and neck cancer	component code not in the HemOnc load
+1906	FDA	149598	Nivolumab and hyaluronidase	126044	Urothelial carcinoma	component code not in the HemOnc load
+1907	FDA	149598	Nivolumab and hyaluronidase	612	Hepatocellular carcinoma	component code not in the HemOnc load
+1908	FDA	149598	Nivolumab and hyaluronidase	629	Melanoma	component code not in the HemOnc load
+1909	FDA	149598	Nivolumab and hyaluronidase	629	Melanoma	component code not in the HemOnc load
+1910	FDA	149598	Nivolumab and hyaluronidase	660	Renal cell carcinoma	component code not in the HemOnc load
+1911	FDA	149598	Nivolumab and hyaluronidase	642	Non-small cell lung cancer	component code not in the HemOnc load
+1912	FDA	149598	Nivolumab and hyaluronidase	126044	Urothelial carcinoma	component code not in the HemOnc load
+1913	FDA	149598	Nivolumab and hyaluronidase	629	Melanoma	component code not in the HemOnc load
+1914	FDA	149598	Nivolumab and hyaluronidase	16419	Esophageal adenocarcinoma	component code not in the HemOnc load
+1915	FDA	149598	Nivolumab and hyaluronidase	601	Gastric cancer	component code not in the HemOnc load
+1916	FDA	149598	Nivolumab and hyaluronidase	44382	Malignant solid neoplasm	component code not in the HemOnc load
+1917	FDA	149598	Nivolumab and hyaluronidase	44382	Malignant solid neoplasm	component code not in the HemOnc load
+1918	FDA	149598	Nivolumab and hyaluronidase	629	Melanoma	component code not in the HemOnc load
+1922	EMA		Nogapendekin alfa inbakicept		Bladder cancer	component_cui is null; condition_cui is null
+1937	EMA	164317	Odronextamab	589	Diffuse large B-cell lymphoma	component code not in the HemOnc load
+1938	EMA	164317	Odronextamab	599	Follicular lymphoma	component code not in the HemOnc load
+1948	FDA	364	Ofatumumab	168683	Multiple sclerosis	condition code not in the HemOnc load
+1949	PMDA	365	Olanzapine	161377	Chemotherapy-induced nausea and vomiting	condition code not in the HemOnc load
+2001	FDA	372	Oprelvekin	168665	Chemotherapy-induced thrombocytopenia	condition code not in the HemOnc load
+2002	NMPA	164347	Orelabrutinib	581	Chronic lymphocytic leukemia	component code not in the HemOnc load
+2003	NMPA	164347	Orelabrutinib	625	Mantle cell lymphoma	component code not in the HemOnc load
+2014	PMDA		Osimertinib		Non-small cell lung cancer	component_cui is null; condition_cui is null
+2033	PMDA	379	Paclitaxel	168675	Germ cell tumor	condition code not in the HemOnc load
+2057	FDA		Palbociclib		Breast cancer	component_cui is null; condition_cui is null
+2058	FDA	382	Palonosetron	161377	Chemotherapy-induced nausea and vomiting	condition code not in the HemOnc load
+2059	NMPA	164385	Pamiparib	645	Ovarian cancer	component code not in the HemOnc load
+2067	PMDA		Panitumumab		Colorectal cancer	component_cui is null; condition_cui is null
+2091	PMDA	160925	Pegcetacoplan	649	Paroxysmal nocturnal hemoglobinuria	component code not in the HemOnc load
+2092	PMDA	390	Pegfilgrastim	668	Stem cell mobilization regimen	condition code is a Regimen Class concept
+2093	FDA	69847	Pegfilgrastim-apgf	168686	Neutropenia	condition code not in the HemOnc load
+2094	FDA	93181	Pegfilgrastim-cbqv	168686	Neutropenia	condition code not in the HemOnc load
+2095	FDA	389	Pegfilgrastim-jmdb	168686	Neutropenia	condition code not in the HemOnc load
+2096	FDA	391	Peginterferon alfa-2a	168667	Chronic HCV	condition code not in the HemOnc load
+2097	FDA	392	Peginterferon alfa-2b	168667	Chronic HCV	condition code not in the HemOnc load
+2195	EMA	394	Pembrolizumab	168674	Gastroesophageal junction adenocarcinoma	condition code not in the HemOnc load
+2254	PMDA		Pembrolizumab		Malignant pleural mesothelioma	component_cui is null; condition_cui is null
+2258	PMDA		Pembrolizumab		Head and neck cancer	component_cui is null; condition_cui is null
+2259	FDA		Pembrolizumab		Bladder cancer	component_cui is null; condition_cui is null
+2262	FDA	164436	Pembrolizumab and berahyaluronidase	642	Non-small cell lung cancer	component code not in the HemOnc load
+2263	FDA	164436	Pembrolizumab and berahyaluronidase	25309	Non-small cell lung cancer nonsquamous	component code not in the HemOnc load
+2264	FDA	164436	Pembrolizumab and berahyaluronidase	25309	Non-small cell lung cancer nonsquamous	component code not in the HemOnc load
+2265	FDA	164436	Pembrolizumab and berahyaluronidase	25316	Non-small cell lung cancer squamous	component code not in the HemOnc load
+2266	FDA	164436	Pembrolizumab and berahyaluronidase	46096	Colorectal cancer	component code not in the HemOnc load
+2267	FDA	164436	Pembrolizumab and berahyaluronidase	608	Head and neck cancer	component code not in the HemOnc load
+2268	FDA	164436	Pembrolizumab and berahyaluronidase	608	Head and neck cancer	component code not in the HemOnc load
+2269	FDA	164436	Pembrolizumab and berahyaluronidase	601	Gastric cancer	component code not in the HemOnc load
+2270	FDA	164436	Pembrolizumab and berahyaluronidase	642	Non-small cell lung cancer	component code not in the HemOnc load
+2271	FDA	164436	Pembrolizumab and berahyaluronidase	660	Renal cell carcinoma	component code not in the HemOnc load
+2272	FDA	164436	Pembrolizumab and berahyaluronidase	660	Renal cell carcinoma	component code not in the HemOnc load
+2273	FDA	164436	Pembrolizumab and berahyaluronidase	44382	Malignant solid neoplasm	component code not in the HemOnc load
+2274	FDA	164436	Pembrolizumab and berahyaluronidase	44382	Malignant solid neoplasm	component code not in the HemOnc load
+2275	FDA	164436	Pembrolizumab and berahyaluronidase	1235	Esophageal squamous cell carcinoma	component code not in the HemOnc load
+2276	FDA	164436	Pembrolizumab and berahyaluronidase	593	Endometrial cancer	component code not in the HemOnc load
+2277	FDA	164436	Pembrolizumab and berahyaluronidase	593	Endometrial cancer	component code not in the HemOnc load
+2278	FDA	164436	Pembrolizumab and berahyaluronidase	569	Bladder cancer	component code not in the HemOnc load
+2279	FDA	164436	Pembrolizumab and berahyaluronidase	579	Cervical cancer	component code not in the HemOnc load
+2280	FDA	164436	Pembrolizumab and berahyaluronidase	46096	Colorectal cancer	component code not in the HemOnc load
+2281	FDA	164436	Pembrolizumab and berahyaluronidase	629	Melanoma	component code not in the HemOnc load
+2282	FDA	164436	Pembrolizumab and berahyaluronidase	660	Renal cell carcinoma	component code not in the HemOnc load
+2283	FDA	164436	Pembrolizumab and berahyaluronidase	642	Non-small cell lung cancer	component code not in the HemOnc load
+2284	FDA	164436	Pembrolizumab and berahyaluronidase	642	Non-small cell lung cancer	component code not in the HemOnc load
+2285	FDA	164436	Pembrolizumab and berahyaluronidase	126044	Urothelial carcinoma	component code not in the HemOnc load
+2286	FDA	164436	Pembrolizumab and berahyaluronidase	608	Head and neck cancer	component code not in the HemOnc load
+2287	FDA	164436	Pembrolizumab and berahyaluronidase	642	Non-small cell lung cancer	component code not in the HemOnc load
+2288	FDA	164436	Pembrolizumab and berahyaluronidase	612	Hepatocellular carcinoma	component code not in the HemOnc load
+2289	FDA	164436	Pembrolizumab and berahyaluronidase	629	Melanoma	component code not in the HemOnc load
+2290	FDA	164436	Pembrolizumab and berahyaluronidase	629	Melanoma	component code not in the HemOnc load
+2291	FDA	164436	Pembrolizumab and berahyaluronidase	579	Cervical cancer	component code not in the HemOnc load
+2292	FDA	164436	Pembrolizumab and berahyaluronidase	642	Non-small cell lung cancer	component code not in the HemOnc load
+2293	FDA	164436	Pembrolizumab and berahyaluronidase	608	Head and neck cancer	component code not in the HemOnc load
+2294	FDA	164436	Pembrolizumab and berahyaluronidase	629	Melanoma	component code not in the HemOnc load
+2295	FDA	164436	Pembrolizumab and berahyaluronidase	601	Gastric cancer	component code not in the HemOnc load
+2296	FDA	164436	Pembrolizumab and berahyaluronidase	601	Gastric cancer	component code not in the HemOnc load
+2297	FDA	164436	Pembrolizumab and berahyaluronidase	601	Gastric cancer	component code not in the HemOnc load
+2298	FDA	164436	Pembrolizumab and berahyaluronidase	68879	Malignant pleural mesothelioma	component code not in the HemOnc load
+2299	FDA	164436	Pembrolizumab and berahyaluronidase	572	Breast cancer	component code not in the HemOnc load
+2300	FDA	164436	Pembrolizumab and berahyaluronidase	579	Cervical cancer	component code not in the HemOnc load
+2301	FDA	164436	Pembrolizumab and berahyaluronidase	595	Esophageal cancer	component code not in the HemOnc load
+2302	FDA	164436	Pembrolizumab and berahyaluronidase	126044	Urothelial carcinoma	component code not in the HemOnc load
+2303	FDA	164436	Pembrolizumab and berahyaluronidase	126044	Urothelial carcinoma	component code not in the HemOnc load
+2304	FDA	164436	Pembrolizumab and berahyaluronidase	126044	Urothelial carcinoma	component code not in the HemOnc load
+2305	FDA	164436	Pembrolizumab and berahyaluronidase	119957	Biliary tract cancer	component code not in the HemOnc load
+2306	FDA	164436	Pembrolizumab and berahyaluronidase	572	Breast cancer	component code not in the HemOnc load
+2307	FDA	164436	Pembrolizumab and berahyaluronidase	593	Endometrial cancer	component code not in the HemOnc load
+2308	FDA	164436	Pembrolizumab and berahyaluronidase	631	Merkel cell carcinoma	component code not in the HemOnc load
+2309	FDA	164436	Pembrolizumab and berahyaluronidase	588	Cutaneous squamous cell carcinoma	component code not in the HemOnc load
+2310	FDA	164436	Pembrolizumab and berahyaluronidase	44382	Malignant solid neoplasm	component code not in the HemOnc load
+2311	FDA	164436	Pembrolizumab and berahyaluronidase	126044	Urothelial carcinoma	component code not in the HemOnc load
+2312	FDA	164436	Pembrolizumab and berahyaluronidase	569	Bladder cancer	component code not in the HemOnc load
+2313	FDA	164436	Pembrolizumab and berahyaluronidase	645	Ovarian cancer	component code not in the HemOnc load
+2366	FDA	164455	Pertuzumab-dpzb	572	Breast cancer	component code not in the HemOnc load
+2367	FDA	164455	Pertuzumab-dpzb	572	Breast cancer	component code not in the HemOnc load
+2368	FDA	164455	Pertuzumab-dpzb	572	Breast cancer	component code not in the HemOnc load
+2371	NMPA	168194	Pimicotinib	47742	Tenosynovial giant cell tumor	component code not in the HemOnc load
+2377	PMDA		Pirtobrutinib		Chronic lymphocytic leukemia	component_cui is null; condition_cui is null
+2379	FDA		Pivekimab sunirine		Blastic plasmacytoid dendritic cell neoplasm	component_cui is null; condition_cui is null
+2381	PMDA	407	Plerixafor	668	Stem cell mobilization regimen	condition code is a Regimen Class concept
+2417	PMDA	114468	Protein C human	168670	Congenital protein C deficiency	condition code not in the HemOnc load
+2418	EMA	114468	Protein C human	168691	Purpura fulminans	condition code not in the HemOnc load
+2419	FDA	423	Prothrombin Complex Concentrate human	168700	VKA toxicity	condition code not in the HemOnc load
+2420	FDA	423	Prothrombin Complex Concentrate human	168700	VKA toxicity	condition code not in the HemOnc load
+2449	FDA	436	Rasburicase	168679	Hyperuricemia	condition code not in the HemOnc load
+2450	PMDA	436	Rasburicase	168679	Hyperuricemia	condition code not in the HemOnc load
+2469	FDA	161011	Relacorilant	645	Ovarian cancer	component code not in the HemOnc load
+2470	NMPA	164707	Relmacabtagene autoleucel	589	Diffuse large B-cell lymphoma	component code not in the HemOnc load
+2471	NMPA	164707	Relmacabtagene autoleucel	112856	High-grade B-cell lymphoma	component code not in the HemOnc load
+2472	NMPA	164707	Relmacabtagene autoleucel	657	Primary mediastinal B-cell lymphoma	component code not in the HemOnc load
+2473	NMPA	164707	Relmacabtagene autoleucel	676	Transformed lymphoma	component code not in the HemOnc load
+2474	PMDA	18352	Relugolix	168699	Uterine fibroid	condition code not in the HemOnc load
+2477	FDA	150098	Remestemcel-L	605	Graft versus host disease	component code not in the HemOnc load
+2481	PMDA		Repotrectinib		NTRK-mutated Malignant solid neoplasm	component_cui is null; condition_cui is null
+2486	PMDA		Retifanlimab		Anal cancer	component_cui is null; condition_cui is null
+2489	NMPA	158132	Rezivertinib	642	Non-small cell lung cancer	component code not in the HemOnc load
+2511	PMDA	446	Rituximab	168657	B-cell lymphoproliferative disorder	condition code not in the HemOnc load
+2517	PMDA		Rituximab		Warm autoimmune hemolytic anemia	component_cui is null; condition_cui is null
+2537	FDA	448	Rivaroxaban	168656	Atrial fibrillation	condition code not in the HemOnc load
+2541	FDA	450	Rolapitant	161377	Chemotherapy-induced nausea and vomiting	condition code not in the HemOnc load
+2586	FDA		Sacituzumab govitecan		Breast cancer	component_cui is null; condition_cui is null
+2587	FDA		Sacituzumab govitecan		Breast cancer	component_cui is null; condition_cui is null
+2588	NMPA	161039	Sacituzumab tirumotecan	572	Breast cancer	component code not in the HemOnc load
+2589	NMPA	161039	Sacituzumab tirumotecan	25309	Non-small cell lung cancer nonsquamous	component code not in the HemOnc load
+2590	FDA	457	Samarium-153	168695	Skeletal metastases from solid tumors	condition code not in the HemOnc load
+2591	NMPA	164853	Savolitinib	642	Non-small cell lung cancer	component code not in the HemOnc load
+2601	FDA		Selpercatinib		Thyroid cancer medullary	component_cui is null; condition_cui is null
+2616	FDA	462	Selumetinib	168690	Plexiform neurofibroma	condition code not in the HemOnc load
+2617	PMDA	462	Selumetinib	168690	Plexiform neurofibroma	condition code not in the HemOnc load
+2623	FDA	164896	Sevabertinib		HER2-mutated Non-small cell lung cancer	component code not in the HemOnc load; condition_cui is null
+2637	NMPA	150307	Socazolimab	579	Cervical cancer	component code not in the HemOnc load
+2638	NMPA	150307	Socazolimab	666	Small cell lung cancer	component code not in the HemOnc load
+2642	FDA		Sonrotoclax		Mantle cell lymphoma	component_cui is null; condition_cui is null
+2657	PMDA		Sotorasib		Colorectal cancer	component_cui is null; condition_cui is null
+2660	FDA	98422	Strontium-89	168695	Skeletal metastases from solid tumors	condition code not in the HemOnc load
+2661	PMDA	98422	Strontium-89	168662	Cancer-related bone pain	condition code not in the HemOnc load
+2677	FDA	161113	Sunvozertinib	642	Non-small cell lung cancer	component code not in the HemOnc load
+2678	NMPA	165069	Surufatinib	641	Neuroendocrine tumor	component code not in the HemOnc load
+2679	NMPA	165069	Surufatinib	647	Pancreatic NET	component code not in the HemOnc load
+2692	PMDA		Tafasitamab		Follicular lymphoma	component_cui is null; condition_cui is null
+2694	PMDA		Tagraxofusp		Blastic plasmacytoid dendritic cell neoplasm	component_cui is null; condition_cui is null
+2704	FDA	161120	Taletrectinib	642	Non-small cell lung cancer	component code not in the HemOnc load
+2705	FDA	161120	Taletrectinib	642	Non-small cell lung cancer	component code not in the HemOnc load
+2706	PMDA		Taletrectinib		Non-small cell lung cancer	component_cui is null; condition_cui is null
+2709	PMDA		Talquetamab		Multiple myeloma	component_cui is null; condition_cui is null
+2726	EMA		Tarlatamab		Small cell lung cancer	component_cui is null; condition_cui is null
+2727	PMDA	158879	Tasurgratinib	119957	Biliary tract cancer	component code not in the HemOnc load
+2732	FDA	480	Tbo-filgrastim	168686	Neutropenia	condition code not in the HemOnc load
+2750	PMDA		Tegafur gimeracil oteracil		Biliary tract cancer	component_cui is null; condition_cui is null
+2752	FDA	158894	Telisotuzumab vedotin	25309	c-Met-positive Non-small cell lung cancer	component code not in the HemOnc load
+2783	FDA	492	Ticagrelor	168652	Acute coronary syndrome	condition code not in the HemOnc load
+2784	FDA	492	Ticagrelor	168652	Acute coronary syndrome	condition code not in the HemOnc load
+2822	FDA	501	Tocilizumab	168693	Rheumatoid arthritis	condition code not in the HemOnc load
+2852	EMA		Tovorafenib		Low-grade glioma pediatric	component_cui is null; condition_cui is null
+2853	EMA	507	Trabectedin		Soft tissue sarcoma	condition_cui is null
+2854	EMA	507	Trabectedin		Soft tissue sarcoma	condition_cui is null
+2873	FDA	508	Trametinib	168448	Thyroid cancer anaplastic	condition code not in the HemOnc load
+2883	PMDA		Trametinib		Low-grade serous ovarian cancer	component_cui is null; condition_cui is null
+2902	PMDA	512	Trastuzumab	168694	Salivary gland tumor	condition code not in the HemOnc load
+2925	PMDA		Trastuzumab deruxtecan		Breast cancer	component_cui is null; condition_cui is null
+2927	FDA		Trastuzumab deruxtecan		HER2-positive Breast cancer	component_cui is null; condition_cui is null
+2928	FDA		Trastuzumab deruxtecan		HER2-positive Breast cancer	component_cui is null; condition_cui is null
+2958	EMA	515	Treosulfan	557	Allogeneic HSCT conditioning regimen	condition code is a Regimen Class concept
+2959	EMA	515	Treosulfan	557	Allogeneic HSCT conditioning regimen	condition code is a Regimen Class concept
+2960	EMA	515	Treosulfan	557	Allogeneic HSCT conditioning regimen	condition code is a Regimen Class concept
+2961	FDA	515	Treosulfan	557	Allogeneic HSCT conditioning regimen	condition code is a Regimen Class concept
+2962	EMA	515	Treosulfan	557	Allogeneic HSCT conditioning regimen	condition code is a Regimen Class concept
+2972	PMDA		Tucatinib		Breast cancer	component_cui is null; condition_cui is null
+2975	NMPA	150504	Tunlametinib	629	Melanoma	component code not in the HemOnc load
+2976	FDA	520	Ublituximab	168683	Multiple sclerosis	condition code not in the HemOnc load
+2981	FDA	523	Uridine triacetate	168672	Fluoropyrimidine toxicity	condition code not in the HemOnc load
+2982	FDA	523	Uridine triacetate	168672	Fluoropyrimidine toxicity	condition code not in the HemOnc load
+2983	NMPA	165253	Utidelone	572	Breast cancer	component code not in the HemOnc load
+2989	NMPA	168491	Vebreltinib	642	Non-small cell lung cancer	component code not in the HemOnc load
+2990	NMPA	168491	Vebreltinib	604	Glioblastoma	component code not in the HemOnc load
+3009	PMDA		Venetoclax		Chronic lymphocytic leukemia	component_cui is null; condition_cui is null
+3010	FDA	161163	Vepdegestrant	572	Breast cancer	component code not in the HemOnc load
+3011	FDA	150561	Vimseltinib	47742	Tenosynovial giant cell tumor	component code not in the HemOnc load
+3012	EMA	150561	Vimseltinib	47742	Tenosynovial giant cell tumor	component code not in the HemOnc load
+3019	FDA	535	Vinblastine	168677	Histiocytic lymphoma	condition code not in the HemOnc load
+3044	FDA	165324	Von Willebrand factor recombinant	159149	Von Willebrand disease	component code not in the HemOnc load; condition code not in the HemOnc load
+3045	FDA	165324	Von Willebrand factor recombinant	159149	Von Willebrand disease	component code not in the HemOnc load; condition code not in the HemOnc load
+3046	PMDA	120882	Vonoprazan	168673	Gastric ulcer	condition code not in the HemOnc load
+3047	FDA	543	Vorapaxar	168698	Thrombotic cardiovascular event	condition code not in the HemOnc load
+3050	PMDA		Vorasidenib		Malignant gliomas	component_cui is null; condition_cui is null
+3078	FDA	150749	Zenocutuzumab	642	Non-small cell lung cancer	component code not in the HemOnc load
+3079	FDA	150749	Zenocutuzumab	648	Pancreatic cancer	component code not in the HemOnc load
+3080	FDA	150749	Zenocutuzumab	580	Cholangiocarcinoma	component code not in the HemOnc load
+3081	FDA		Zidesamtinib		Non-small cell lung cancer	component_cui is null; condition_cui is null
+3082	FDA	165580	Ziftomenib	552	Acute myeloid leukemia	component code not in the HemOnc load
+3090	FDA	161243	Zongertinib	642	HER2-mutated Non-small cell lung cancer	component code not in the HemOnc load
+3091	PMDA		Zongertinib		HER2-mutated Non-small cell lung cancer	component_cui is null; condition_cui is null
+3092	FDA	161243	Zongertinib	52958	HER2-mutated Non-small cell lung cancer	component code not in the HemOnc load
