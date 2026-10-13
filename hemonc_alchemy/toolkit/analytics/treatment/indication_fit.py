@@ -35,6 +35,11 @@ class CriterionStatus(str, Enum):
     UNEVALUATED = "UNEVALUATED"
 
 
+class CoTherapyMode(str, Enum):
+    REPORT = "REPORT"
+    MATCH = "MATCH"
+
+
 class LinkKind(str, Enum):
     EQUAL = "EQUAL"
     IS_A = "IS_A"
@@ -86,6 +91,7 @@ class PatientState:
     prior_therapy_concept_ids: tuple[int, ...] = ()
     numeric_facts: tuple[NumericFact, ...] = ()
     limitations: tuple[str, ...] = ()
+    co_therapy_concept_ids: tuple[int, ...] | None = None
 
     @classmethod
     def from_measurements(
@@ -102,6 +108,7 @@ class PatientState:
         setting: SettingDeclaration | None = None,
         prior_therapy_concept_ids: Sequence[int] = (),
         numeric_facts: Sequence[NumericFact] = (),
+        co_therapy_concept_ids: Sequence[int] | None = None,
         translator: ConceptIdTranslator | None = None,
     ) -> PatientState:
         connector = _connector(vocabulary)
@@ -161,12 +168,19 @@ class PatientState:
             ),
             numeric_facts=tuple(numeric_facts),
             limitations=limitations,
+            co_therapy_concept_ids=(
+                None
+                if co_therapy_concept_ids is None
+                else _translate_ids(co_therapy_concept_ids, translator)
+            ),
         )
 
 
 @dataclass(frozen=True)
 class FitPolicy:
     assume_no_prior_therapy: bool = True
+    adult_min_age_years: float = 18.0
+    co_therapy: CoTherapyMode = CoTherapyMode.REPORT
     allowed_context_concept_ids: frozenset[int] = frozenset(
         {
             35803480,
@@ -218,6 +232,7 @@ class FitResult:
     unevaluated: tuple[UnevaluatedCriterion, ...]
     vocabulary_version: VocabularyVersion
     limitations: tuple[str, ...]
+    co_therapy_requirements: tuple[tuple[int, ...], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -239,6 +254,9 @@ class FitRegimensResult:
     components_only: tuple[RegimenFitGroup, ...]
     vocabulary_version: VocabularyVersion
     limitations: tuple[str, ...]
+    unknown_fits: tuple[FitResult, ...] = ()
+    unknown_regimens: tuple[RegimenFitGroup, ...] = ()
+    unknown_components_only: tuple[RegimenFitGroup, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -454,6 +472,11 @@ def _translate_state(
         prior_therapy_concept_ids=_translate_ids(
             state.prior_therapy_concept_ids, translator
         ),
+        co_therapy_concept_ids=(
+            None
+            if state.co_therapy_concept_ids is None
+            else _translate_ids(state.co_therapy_concept_ids, translator)
+        ),
         setting=replace(
             state.setting,
             prior_therapy_concept_ids=_translate_ids(
@@ -636,6 +659,8 @@ def _fact_ids(state: PatientState, dimension: str) -> tuple[int, ...]:
         return (*state.disease_status_concept_ids, *state.condition_concept_ids)
     if dimension in {"condition", "disease"}:
         return state.condition_concept_ids
+    if dimension == "with_field":
+        return state.co_therapy_concept_ids or ()
     if dimension in {"prior_therapy", "prior_therapy_negation"}:
         return (
             *state.prior_therapy_concept_ids,
@@ -756,10 +781,65 @@ class _AlternativeMatch:
     opposite_edges: tuple[VocabularyRelationship, ...] = ()
 
 
+_AGE_GROUPS = frozenset({"adult", "pediatric"})
+_MONOTHERAPY = "monotherapy (no co-therapy)"
+
+
+def _concept_label(vocabulary: IndicationVocabulary, concept_id: int | None) -> str:
+    concept = vocabulary.concept(concept_id) if concept_id is not None else None
+    return _normalise_source_value(concept.concept_name) if concept else ""
+
+
+def _age_group_outcome(
+    term: CriterionTerm, context: _MatchContext
+) -> _TargetOutcome | None:
+    group = _concept_label(context.vocabulary, term.concept_id)
+    if group not in _AGE_GROUPS:
+        return None
+    state = context.state
+    years = (
+        _convert_value(state.age_value, state.age_unit, "years")
+        if state.age_value is not None and state.age_unit
+        else None
+    )
+    if years is None:
+        return _TargetOutcome(None, False, True)
+    minimum = context.policy.adult_min_age_years
+    met = years >= minimum if group == "adult" else years < minimum
+    return (
+        _TargetOutcome((LinkKind.EQUAL, ()), False, False)
+        if met
+        else _TargetOutcome(None, True, False)
+    )
+
+
+def _monotherapy_outcome(
+    term: CriterionTerm, context: _MatchContext
+) -> _TargetOutcome | None:
+    if _concept_label(context.vocabulary, term.concept_id) != _MONOTHERAPY:
+        return None
+    given = context.state.co_therapy_concept_ids
+    if given is None:
+        return _TargetOutcome(None, False, True)
+    if not given:
+        return _TargetOutcome((LinkKind.EQUAL, ()), False, False)
+    return _TargetOutcome(None, True, False)
+
+
 def _term_outcome(
     term: CriterionTerm, dimension: str, context: _MatchContext
 ) -> _TargetOutcome:
     state = context.state
+    if term.concept_id is not None and term.bounds is None:
+        special = (
+            _age_group_outcome(term, context)
+            if dimension == "age"
+            else _monotherapy_outcome(term, context)
+            if dimension == "with_field"
+            else None
+        )
+        if special is not None:
+            return special
     if term.concept_id is None:
         if term.bounds is None:
             return _TargetOutcome(None, False, True)
@@ -792,6 +872,9 @@ def _concept_outcome(
         return _biomarker_target_outcome(target_id, context)
     if dimension == "prior_therapy":
         known = _has_prior_therapy(state) or policy.assume_no_prior_therapy
+        return _TargetOutcome(None, known, not known)
+    if dimension == "with_field":
+        known = state.co_therapy_concept_ids is not None
         return _TargetOutcome(None, known, not known)
     known = (dimension == "age" and state.age_value is not None) or bool(
         _fact_ids(state, dimension)
@@ -848,7 +931,7 @@ def _criterion_status(
     tuple[VocabularyRelationship, ...],
     str,
 ]:
-    precheck = _criterion_precheck(criterion, state, vocabulary)
+    precheck = _criterion_precheck(criterion, state, vocabulary, policy)
     if precheck is not None:
         return precheck
     observed_analytes = set(state.observed_analyte_concept_ids)
@@ -867,6 +950,7 @@ def _criterion_precheck(
     criterion: _Criterion,
     state: PatientState,
     vocabulary: IndicationVocabulary,
+    policy: FitPolicy,
 ) -> tuple[CriterionStatus, None, tuple[()], tuple[()], str] | None:
     dimension = criterion.dimension
     unsupported = {
@@ -874,10 +958,17 @@ def _criterion_precheck(
         "prior_biomarker",
         "prior_biomarker_status",
         "demographics",
-        "with_field",
         "risk_stratification",
         "exposure_phenotype",
     }
+    if dimension == "with_field" and policy.co_therapy is CoTherapyMode.REPORT:
+        return (
+            CriterionStatus.SATISFIED,
+            None,
+            (),
+            (),
+            "Co-therapy belongs to the regimen and is reported, not evaluated.",
+        )
     if dimension in unsupported:
         return (
             CriterionStatus.UNEVALUATED,
@@ -893,6 +984,7 @@ def _criterion_precheck(
         and vocabulary.has_bounds
         and not any(
             term.bounds is not None
+            or _concept_label(vocabulary, term.concept_id) in _AGE_GROUPS
             for group in criterion.alternatives
             for term in group
         )
@@ -1089,6 +1181,19 @@ def _translate_result(
             )
             for criterion in result.unevaluated
         ),
+        co_therapy_requirements=tuple(
+            tuple(sorted(translator.to_real(value) for value in alternative))
+            for alternative in result.co_therapy_requirements
+        ),
+    )
+
+
+def _co_therapy_requirements(indication: _Indication) -> tuple[tuple[int, ...], ...]:
+    return tuple(
+        tuple(sorted(term.concept_id for term in alternative if term.concept_id))
+        for criterion in indication.criteria
+        if criterion.dimension == "with_field" and criterion.polarity == "requires"
+        for alternative in criterion.alternatives
     )
 
 
@@ -1202,6 +1307,7 @@ def fits(
         unevaluated,
         connector.version(),
         tuple(dict.fromkeys(limitations)),
+        _co_therapy_requirements(indication),
     )
     return _translate_result(result, translator)
 
@@ -1265,6 +1371,7 @@ def fit_regimens(
     conditions = _translate_ids(condition_concept_ids, translator)
     index = _index_for(connector)
     matched = []
+    unknown = []
     for indication in index.indications.values():
         if conditions and (
             not indication.conditions
@@ -1277,7 +1384,10 @@ def fit_regimens(
         result = fits(state, indication.concept_id, policy, connector, translator)
         if result.status == FitStatus.FIT:
             matched.append((indication, result))
+        elif result.status == FitStatus.UNKNOWN:
+            unknown.append((indication, result))
     regimen_groups, component_groups = _group_fits(matched, translator)
+    unknown_regimens, unknown_components = _group_fits(unknown, translator)
     return FitRegimensResult(
         tuple(result for _, result in matched),
         regimen_groups,
@@ -1285,14 +1395,20 @@ def fit_regimens(
         connector.version(),
         tuple(
             dict.fromkeys(
-                limit for _, result in matched for limit in result.limitations
+                limit
+                for _, result in (*matched, *unknown)
+                for limit in result.limitations
             )
         ),
+        tuple(result for _, result in unknown),
+        unknown_regimens,
+        unknown_components,
     )
 
 
 __all__ = [
     "BiomarkerMeasurement",
+    "CoTherapyMode",
     "CriterionResult",
     "CriterionStatus",
     "EdgeUsed",

@@ -10,7 +10,9 @@ import pytest
 
 from hemonc_alchemy.toolkit.analytics.treatment.indication_fit import (
     BiomarkerMeasurement,
+    CoTherapyMode,
     CriterionStatus,
+    FitPolicy,
     FitStatus,
     PatientState,
     SettingDeclaration,
@@ -238,6 +240,7 @@ def test_ind_excludes_uses_default_no_prior_therapy_policy(vocabulary):
     assert excluded.status is CriterionStatus.FAILED
 
 
+# One more drug-level fit than before: a tumour-agnostic indication for a malignant neoplasm now applies to lung cancer through the condition hierarchy.
 def test_nsclc_patient_snapshot_counts_are_stable(vocabulary):
     lung = 42542211
     pd_l1 = source_target(vocabulary, "biomarker", "PD-L1")
@@ -322,12 +325,12 @@ def test_nsclc_patient_snapshot_counts_are_stable(vocabulary):
         for result in (fit_regimens(state, (lung,), vocabulary=vocabulary),)
     )
     assert snapshot == (
+        (21, 0, 18),
+        (21, 0, 18),
         (20, 0, 17),
         (20, 0, 17),
-        (19, 0, 16),
-        (19, 0, 16),
-        (19, 0, 16),
-        (19, 0, 16),
+        (20, 0, 17),
+        (20, 0, 17),
     )
 
 
@@ -444,3 +447,128 @@ def test_import_does_not_load_tsv_data():
         [sys.executable, "-c", script], capture_output=True, text=True, check=False
     )
     assert completed.returncode == 0, completed.stderr
+
+
+class _AgeGroupVocabulary(_TinyVocabulary):
+    def __init__(self):
+        super().__init__()
+        self._concepts[8] = VocabularyConcept(
+            8, "Adult", "Observation", "test", "Population Qualifier", "", "q1", "", ""
+        )
+        self._criteria = (
+            VocabularyCriterion(1, "age", "requires", ((CriterionTerm(8),),)),
+        )
+
+
+@pytest.mark.parametrize(
+    ("age", "unit", "policy", "expected"),
+    [
+        (240, "months", FitPolicy(), FitStatus.FIT),
+        (17, "years", FitPolicy(), FitStatus.NO_FIT),
+        (None, None, FitPolicy(), FitStatus.UNKNOWN),
+        (19, "years", FitPolicy(adult_min_age_years=21), FitStatus.NO_FIT),
+        (19, "years", FitPolicy(adult_min_age_years=16), FitStatus.FIT),
+    ],
+)
+def test_adult_group_is_evaluated_against_the_policy_age(age, unit, policy, expected):
+    state = PatientState(age_value=age, age_unit=unit)
+    result = fits(state, 1, policy, vocabulary=_AgeGroupVocabulary())
+    assert result.status is expected
+    assert not result.unevaluated
+
+
+def test_fit_regimens_also_returns_the_unknown_indications(vocabulary):
+    lung = 42542211
+    state = PatientState.from_measurements(
+        (BiomarkerMeasurement(None, variant_concept_id=35976971),),
+        vocabulary=vocabulary,
+        condition_concept_ids=(lung,),
+        age_value=60,
+        age_unit="years",
+    )
+    result = fit_regimens(state, (lung,), vocabulary=vocabulary)
+    assert result.fits and result.unknown_fits
+    assert all(item.status is FitStatus.FIT for item in result.fits)
+    assert all(item.status is FitStatus.UNKNOWN for item in result.unknown_fits)
+    assert {item.indication_concept_id for item in result.fits}.isdisjoint(
+        item.indication_concept_id for item in result.unknown_fits
+    )
+    grouped = {
+        indication
+        for group in (*result.unknown_regimens, *result.unknown_components_only)
+        for indication in group.indication_concept_ids
+    }
+    assert grouped == {item.indication_concept_id for item in result.unknown_fits}
+
+
+def test_co_therapy_is_reported_by_default_and_matched_on_request(vocabulary):
+    indication = local_id(vocabulary, "HOL-IND-92")
+    carboplatin, pemetrexed = (
+        term.concept_id
+        for criterion in vocabulary.criteria(indication)
+        if criterion.dimension == "with_field"
+        for term in criterion.alternatives[0]
+    )
+    state = PatientState()
+
+    reported = fits(state, indication, vocabulary=vocabulary)
+    assert criterion_for(reported, "with_field").status is CriterionStatus.SATISFIED
+    assert reported.co_therapy_requirements == (
+        tuple(sorted((carboplatin, pemetrexed))),
+    )
+
+    match = FitPolicy(co_therapy=CoTherapyMode.MATCH)
+    unknown = fits(state, indication, match, vocabulary=vocabulary)
+    assert criterion_for(unknown, "with_field").status is CriterionStatus.UNKNOWN
+    given = fits(
+        replace(state, co_therapy_concept_ids=(carboplatin, pemetrexed)),
+        indication,
+        match,
+        vocabulary=vocabulary,
+    )
+    assert criterion_for(given, "with_field").status is CriterionStatus.SATISFIED
+    alone = fits(
+        replace(state, co_therapy_concept_ids=()),
+        indication,
+        match,
+        vocabulary=vocabulary,
+    )
+    assert criterion_for(alone, "with_field").status is CriterionStatus.FAILED
+
+
+def test_monotherapy_term_matches_only_a_declared_absence_of_co_therapy(vocabulary):
+    indication = local_id(vocabulary, "HOL-IND-203")
+    match = FitPolicy(co_therapy=CoTherapyMode.MATCH)
+    for given, expected in (
+        (None, CriterionStatus.UNKNOWN),
+        ((), CriterionStatus.SATISFIED),
+        ((35802856,), CriterionStatus.FAILED),
+    ):
+        result = fits(
+            PatientState(co_therapy_concept_ids=given),
+            indication,
+            match,
+            vocabulary=vocabulary,
+        )
+        assert criterion_for(result, "with_field").status is expected
+
+
+def test_a_more_specific_patient_condition_matches_the_broader_indications(vocabulary):
+    lung, egfr_lung = 42542211, 42542290
+    findings = (BiomarkerMeasurement(None, variant_concept_id=35976971),)
+
+    def run(condition):
+        state = PatientState.from_measurements(
+            findings,
+            vocabulary=vocabulary,
+            condition_concept_ids=(condition,),
+            age_value=60,
+            age_unit="years",
+        )
+        return fit_regimens(state, (condition,), vocabulary=vocabulary)
+
+    parent, child = run(lung), run(egfr_lung)
+    assert child.fits and child.unknown_fits
+    assert {item.indication_concept_id for item in parent.fits} <= {
+        item.indication_concept_id for item in child.fits
+    }

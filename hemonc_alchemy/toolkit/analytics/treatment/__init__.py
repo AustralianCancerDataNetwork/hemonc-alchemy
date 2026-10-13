@@ -16,6 +16,7 @@ from .filters import (
 )
 from .indication_fit import (
     BiomarkerMeasurement,
+    CoTherapyMode,
     FitPolicy,
     FitRegimensResult,
     FitResult,
@@ -52,6 +53,7 @@ __all__ = [
     "MAX_COMPARED_VARIANTS",
     "BiomarkerMeasurement",
     "CategoryRequirement",
+    "CoTherapyMode",
     "ComponentRequirement",
     "DosingInstruction",
     "FitPolicy",
