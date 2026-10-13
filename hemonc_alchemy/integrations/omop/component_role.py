@@ -8,7 +8,7 @@ from typing import Any
 
 import sqlalchemy as sa
 
-from ...caching import cached_per_engine
+from ...caching import cached_per_engine, with_cache_clear
 from ...model import Drugs
 from ...toolkit.analytics.treatment.classification.component_role import (
     ComponentRole,
@@ -16,10 +16,11 @@ from ...toolkit.analytics.treatment.classification.component_role import (
 )
 from ...toolkit.analytics.treatment.scheduling.templates import CycleTemplate
 from .queries import component_roles
+from .schema import require_omop_available
 
 
 @cached_per_engine
-def regimen_component_roles(session: Any) -> dict[int, dict[str, ComponentRole]]:
+def _regimen_component_roles(session: Any) -> dict[int, dict[str, ComponentRole]]:
     """regimen_cui -> drug name -> role, for every drug HemOnc tags with a role in that regimen."""
     name_by_cui = {str(cui): name for name, cui in session.execute(sa.select(Drugs.drug, Drugs.drug_cui)).all()}
     tags: dict[int, dict[str, set[str]]] = defaultdict(lambda: defaultdict(set))
@@ -28,6 +29,14 @@ def regimen_component_roles(session: Any) -> dict[int, dict[str, ComponentRole]]
         if name is not None and relationship.target.concept_code.isdigit():
             tags[int(relationship.target.concept_code)][name].add(relationship.relationship_id)
     return {regimen: {name: resolve_role(found) for name, found in drugs.items()} for regimen, drugs in tags.items()}
+
+
+@with_cache_clear(_regimen_component_roles.cache_clear)
+def regimen_component_roles(session: Any) -> dict[int, dict[str, ComponentRole]]:
+    """regimen_cui -> drug name -> role, for every drug HemOnc tags with a role in that regimen."""
+    if not require_omop_available(session, require_relationships=True):
+        return {}
+    return _regimen_component_roles(session)
 
 
 def attach_component_roles(

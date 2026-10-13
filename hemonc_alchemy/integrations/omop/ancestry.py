@@ -9,7 +9,7 @@ from weakref import WeakKeyDictionary
 
 import sqlalchemy as sa
 
-from ...caching import cached_per_engine, with_cache_clear
+from ...caching import cache_context, cached_per_engine, with_cache_clear
 from ...model import Drugs
 from ...toolkit.analytics.treatment.classification.ancestry import (
     ENDOCRINE_ROOT_CUI,
@@ -17,13 +17,15 @@ from ...toolkit.analytics.treatment.classification.ancestry import (
     MainClassAncestry,
     compute_main_class_ancestry,
 )
-from .binding import omop_available
 from .mapping import resolve_hemonc_concepts
 from .queries import _hemonc_relationships
+from .schema import omop_availability
 
 
 @cached_per_engine
-def _ancestry_indexes(session: Any) -> WeakKeyDictionary[Any, MainClassAncestry]:
+def _ancestry_indexes(
+    session: Any,
+) -> WeakKeyDictionary[Any, dict[tuple[tuple[str, str | None], ...], MainClassAncestry]]:
     """One vocabulary-engine cache for each source engine."""
     return WeakKeyDictionary()
 
@@ -38,13 +40,16 @@ def main_class_ancestry(session: Any, *, omop_session: Any = None) -> MainClassA
     reloading source or vocabulary data via main_class_ancestry.cache_clear().
     """
     vocabulary_session = session if omop_session is None else omop_session
-    bind = vocabulary_session.get_bind()
-    engine = getattr(bind, "engine", bind)
+    availability = omop_availability(vocabulary_session, require_relationships=True)
+    if not availability.available:
+        return MainClassAncestry(
+            MappingProxyType({}), availability.reason or "OMOP vocabulary is unavailable"
+        )
+    engine, schema_map = cache_context(vocabulary_session)
     indexes = _ancestry_indexes(session)
-    if engine in indexes:
-        return indexes[engine]
-    if not omop_available(vocabulary_session, require_relationships=True):
-        return MainClassAncestry(MappingProxyType({}), "OMOP vocabulary is unavailable")
+    engine_indexes = indexes.setdefault(engine, {})
+    if schema_map in engine_indexes:
+        return engine_indexes[schema_map]
 
     roots = resolve_hemonc_concepts(vocabulary_session, (ENDOCRINE_ROOT_CUI, SUPPORTIVE_ROOT_CUI))
     relationships = _hemonc_relationships(vocabulary_session, ("Is a",))
@@ -59,7 +64,7 @@ def main_class_ancestry(session: Any, *, omop_session: Any = None) -> MainClassA
         available_roots=(root.hemonc_cui for root in roots
                          if root.concept.concept_class_id == "Component Class"),
     )
-    indexes[engine] = index
+    engine_indexes[schema_map] = index
     return index
 
 

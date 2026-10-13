@@ -1,0 +1,27 @@
+gap_id	area	description	home	owner	indications_affected	completes	status
+G01	indication model	No Indication, Regulator or Approval Path concept classes, no Ind or State relationship types, and no native criterion tables for AND, OR, polarity and numeric attributes	HemOnc	HemOnc team	3093	all indication concepts	open
+G02	anchors	Component codes used by indications but absent from the HemOnc load, or null	HemOnc	HemOnc team	246	Ind has component	open
+G03	anchors	Condition codes used by indications but absent from the HemOnc load, null, or pointing at Regimen Class concepts	HemOnc	HemOnc team	239	Ind has condition	open
+G04	regulators	No `Has MFDS indication` relationship type; NMPA, EMA, PMDA, HC and FDA pair relationships incomplete against the indications table	HemOnc	HemOnc team	254	derived Component to Condition pair views	open
+G05	stage and status	No closed value sets or enums for stage, status and stage_or_status (spelling and case variants such as Localled advanced)	HemOnc	HemOnc team	1816	Disease Extent and Disease Status concepts	open
+G06	workflow values	`not applicable` placeholder used as a value in several columns	HemOnc	HemOnc team	40	clean null handling	open
+G07	prior therapy	prior_therapy_negation carries extended logic values (`TRUE AND FALSE`, `unless unsuitable`)	HemOnc	HemOnc team	4	polarity of prior-therapy criteria	open
+G08	prior therapy	Therapy descriptors with no HemOnc concept (SACT, standard therapies, multi-modality treatment, R-CHP, TC, generic approved-drug phrases)	HemOnc	HemOnc team	182	prior therapy and co-therapy descriptors	open
+G09	regimen links	Indications whose regimen text has no regimen_cui	HemOnc	HemOnc team	2490	Ind has regimen	open
+G10	biomarker findings	Clinical class concepts: activating, sensitizing, non-resistant, susceptible, TKD activating mutation	OMOP Genomic or a clinical classification	OMOP Genomic team	20	Clinically implies targets (held locally)	open
+G11	biomarker findings	No generic fusion or rearrangement concept per gene (RET, FGFR2, NTRK, NRG1, ROS1, BRAF fusions; rearrangement without known acquired resistance)	OMOP Genomic	OMOP Genomic team	60	fusion biomarker states	open
+G12	biomarker findings	No codon-level group concept (BRAF p.V600 any substitution, IDH1 p.R132)	OMOP Genomic	OMOP Genomic team	27	codon biomarker states	open
+G13	biomarker findings	Scoring methods are not concepts (PD-L1 CPS, TPS, TIL, IHC 3+); only assay concepts exist (OMOP Extension 718584 to 718589). The cut-offs themselves are numeric attributes held natively	OMOP Genomic and LOINC	OMOP Genomic team	62	score states for PD-L1 scoring methods and TMB; cut-offs stay numeric attributes	open
+G14	biomarker findings	HER2 IHC categories (0, 1+, 2+, 3+, low, ultralow) have no result concepts; slot-2 enum labels for HER2 negative and low are truncated in the source	LOINC and OMOP	OMOP vocabulary team	9	HER2 biomarker states	open
+G15	biomarker findings	No valid standard value concepts for MSI-high, microsatellite stable or MMR proficient; MSI-H 35977040 is deprecated (replaced by 700490, an analyte, not a result)	OMOP Genomic, SNOMED	OMOP vocabulary team	60	MSI and MMR result values	open
+G16	biomarker findings	Germline versus somatic origin has no result concept	LOINC and OMOP	OMOP vocabulary team	22	origin biomarker states	open
+G17	biomarker findings	Result values for unknown and not high	OMOP	OMOP vocabulary team	16	unknown and negative threshold states	open
+G18	biomarker analytes	Analytes with no standard concept: 17p and 5q deletion, KMT2A translocation, PDGFRA exon 18, FLT3 ITD (test only), H3 K27M (morphology only), HLA-A alleles, CLDN18.2 isoform, CCR4, MIBG and iobenguane scan, PSMA, MAGE-A4, somatostatin receptor	OMOP Genomic and LOINC	OMOP Genomic team	43	analyte anchors	open
+G19	biomarker analytes	No EGFR, ALK, ROS1 or MET protein (IHC) concept	LOINC	LOINC team	51	protein analytes	open
+G20	disease extent	Locally advanced exists only as a non-standard CDISC concept with no link to Advanced; node-positive, inflammatory, muscle-invasive, non-muscle-invasive, non-metastatic, persistent, newly diagnosed have no standard concept	Cancer Modifier, SNOMED	OMOP Cancer Modifier team	327	Disease Extent and Status concepts	open
+G21	exposure	Platinum-sensitive and platinum-resistant exist only as generic Sensitive and Resistant	SNOMED, Cancer Modifier	OMOP vocabulary team	15	exposure concepts	open
+G22	time and counts	Time windows and prior-line count bands have no concepts	HemOnc	HemOnc team	637	time window and prior-line count attributes on criterion terms	open
+G23	population	Population qualifiers: premenopausal (CDISC only), ECOG 0 to 1 values, comorbidities precluding intensive chemotherapy, good performance status, low-to-intermediate risk, factor VIII inhibitor presence	SNOMED, CDISC, HemOnc	OMOP vocabulary team	236	Population Qualifier concepts	open
+G24	age	Age bands: only generic age groups exist (Age group 44804452, Newborn 4046034, Adolescent 4305318, LOINC Pediatric 45880636); SNOMED Adult 4046779 is non-standard; no numeric bands	HemOnc	HemOnc team	892	age attributes on criterion terms; adult and pediatric as qualifiers	open
+G25	ineligibility	No vocabulary for ineligibility; no pre-coordinated ineligible-for-X concept found	HemOnc	HemOnc team	157	Population Qualifier concepts	open
+G26	free text	prior_biomarker free text kept as a note	HemOnc	HemOnc team	12	criteria not expressible	open

@@ -1,0 +1,131 @@
+column	raw_value	n_indications	prev_concept_id	concept_id	concept_name	vocabulary_id	concept_class_id	concept_code	standard_concept	valid_end_date	invalid_reason	fit	agrees_with_previous	note
+prior_therapy	sact	146										none	yes	no HemOnc concept (exact searches HemOnc and all vocabularies empty or non-HemOnc only: SACT CDISC observable; not drug/modality)
+prior_therapy	platinum-based regimen	123	37558102	37558102	Platinum agent-containing regimen	HemOnc	Regimen Class	125164		2099-12-31		exact	yes	HemOnc has X-containing concept only; no X-based concept found (exact+fulltext); containing concept used
+prior_therapy	chemotherapy	114	35803401	35803401	Chemotherapy	HemOnc	Modality	685	S	2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	chemotherapy	74	35803401	35803401	Chemotherapy	HemOnc	Modality	685	S	2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	surgery	66	35804762	35804762	Surgery	HemOnc	Procedure	14051		2099-12-31		exact	yes	second Surgery concept 35807515 is inactive; valid one kept
+with_field	carboplatin	49	35802941	35802941	Carboplatin	HemOnc	Component	88		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	paclitaxel	48	35803229	35803229	Paclitaxel	HemOnc	Component	379		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	dexamethasone	47	35803008	35803008	Dexamethasone	HemOnc	Component	156		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	cisplatin	46	35802958	35802958	Cisplatin	HemOnc	Component	105		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	not applicable	39										none	yes	placeholder text; exact hits only in NAACCR/SNOMED qualifier, not HemOnc
+with_field	ipilimumab	29	35803129	35803129	Ipilimumab	HemOnc	Component	279		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	fluorouracil	27	35803077	35803077	Fluorouracil	HemOnc	Component	225		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	fluoropyrimidine	26	35807313	35807313	Fluoropyrimidine	HemOnc	Component Class	45369		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	prednisone	22	35803268	35803268	Prednisone	HemOnc	Component	418		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	nivolumab	20	35803207	35803207	Nivolumab	HemOnc	Component	357		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	gemcitabine	20	35803095	35803095	Gemcitabine	HemOnc	Component	243		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	platinum agent	20	35807315	35807315	Platinum agent	HemOnc	Component Class	45388		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	trastuzumab	20	35803361	35803361	Trastuzumab	HemOnc	Component	512		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	cyclophosphamide	19	35802975	35802975	Cyclophosphamide	HemOnc	Component	122		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	lenalidomide	19	35803149	35803149	Lenalidomide	HemOnc	Component	299		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	irinotecan-based regimen	18	42542415	42542415	Irinotecan-containing regimen	HemOnc	Regimen Class	51124		2099-12-31		exact	yes	HemOnc has X-containing concept only; no X-based concept found (exact+fulltext); containing concept used
+prior_therapy	anthracycline-based regimen	17	42542413	42542413	Anthracycline-containing regimen	HemOnc	Regimen Class	51063		2099-12-31		exact	yes	HemOnc has X-containing concept only; no X-based concept found (exact+fulltext); containing concept used
+prior_therapy	fluoropyrimidine-based regimen	17	37557866	37557866	Fluoropyrimidine-containing regimen	HemOnc	Regimen Class	122389		2099-12-31		exact	yes	HemOnc has X-containing concept only; no X-based concept found (exact+fulltext); containing concept used
+with_field	trametinib	17	35803357	35803357	Trametinib	HemOnc	Component	508		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	oxaliplatin-based regimen	16	37558071	37558071	Oxaliplatin-containing regimen	HemOnc	Regimen Class	124942		2099-12-31		exact	yes	HemOnc has X-containing concept only; no X-based concept found (exact+fulltext); containing concept used
+with_field	docetaxel	16	35803016	35803016	Docetaxel	HemOnc	Component	164		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	endocrine therapy	15	35803407	35803407	Endocrine therapy	HemOnc	Modality	691	S	2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	rituximab	15	35803296	35803296	Rituximab	HemOnc	Component	446		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	sorafenib	14	35803320	35803320	Sorafenib	HemOnc	Component	470		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	proteasome inhibitor	14	35807295	35807295	Proteasome inhibitor	HemOnc	Component Class	45299		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	crizotinib	13	35802972	35802972	Crizotinib	HemOnc	Component	119		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	taxane	13	35807304	35807304	Taxane	HemOnc	Component Class	45352		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	aromatase inhibitor	13	35807245	35807245	Aromatase inhibitor	HemOnc	Component Class	45079		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	platinum-based regimen	13	37558102	37558102	Platinum agent-containing regimen	HemOnc	Regimen Class	125164		2099-12-31		exact	yes	HemOnc has X-containing concept only; no X-based concept found (exact+fulltext); containing concept used
+with_field	bevacizumab	13	35802921	35802921	Bevacizumab	HemOnc	Component	68		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	bortezomib	13	35802928	35802928	Bortezomib	HemOnc	Component	75		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	autologous hsct	12	905826	905826	Autologous stem cell rescue	HemOnc	Procedure	103294		2099-12-31		exact	yes	exact search hits synonym of Autologous HSCT conditioning regimen (Regimen Class 42542140), a conditioning regimen not the transplant; Procedure kept
+prior_therapy	imatinib	12	35803119	35803119	Imatinib	HemOnc	Component	269		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	a proteasome inhibitor	12	35807295	35807295	Proteasome inhibitor	HemOnc	Component Class	45299		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	fulvestrant	12	35803089	35803089	Fulvestrant	HemOnc	Component	237		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	pemetrexed	12	35803245	35803245	Pemetrexed	HemOnc	Component	395		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	doxorubicin	12	35803022	35803022	Doxorubicin	HemOnc	Component	170		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	dabrafenib	11	35802984	35802984	Dabrafenib	HemOnc	Component	131		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	pembrolizumab	11	35803244	35803244	Pembrolizumab	HemOnc	Component	394		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	immunomodulator	10	35807403	35807403	Immunomodulatory drugs (IMiDs)	HemOnc	Component Class	45857		2099-12-31		narrower	yes	no HemOnc exact; IMiDs class is narrower than generic immunomodulator
+prior_therapy	anti-cd38 antibody	10	35807345	35807345	Anti-CD38 antibody	HemOnc	Component Class	45613		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	rituximab	10	35803296	35803296	Rituximab	HemOnc	Component	446		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	vegfr inhibitor therapy	10	35807257	35807257	VEGFR inhibitor	HemOnc	Component Class	45133		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	anthracycline	10	35807214	35807214	Anthracycline	HemOnc	Component Class	44985		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	fluoropyrimidine-	10	35807313	35807313	Fluoropyrimidine	HemOnc	Component Class	45369		2099-12-31		exact	yes	HemOnc has X-containing concept only; no X-based concept found (exact+fulltext); containing concept used
+with_field	etoposide	10	35803053	35803053	Etoposide	HemOnc	Component	201		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	endocrine-based regimen	9	37557822	37557822	Endocrine therapy-containing regimen	HemOnc	Regimen Class	122253		2099-12-31		exact	yes	HemOnc has X-containing concept only; no X-based concept found (exact+fulltext); containing concept used
+prior_therapy	tki	9	912198	912198	Tyrosine kinase inhibitor	HemOnc	Component Class	59504		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	fluoropyrimidine	9	35807313	35807313	Fluoropyrimidine	HemOnc	Component Class	45369		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	fludarabine	9	35803076	35803076	Fludarabine	HemOnc	Component	224		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	cytarabine	9	35802979	35802979	Cytarabine	HemOnc	Component	126		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	leucovorin	9	35803081	35803081	Leucovorin	HemOnc	Component	229		2099-12-31		exact	yes	HemOnc Brand Name Leucovorin 35100676 inactive and excluded; Component kept
+with_field	irinotecan	9	35803130	35803130	Irinotecan	HemOnc	Component	280		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	surgical resection	8	912095	35804762	Surgery	HemOnc	Procedure	14051		2099-12-31		broader	no	HemOnc Resection 912095 deprecated (D 2024-02-26); no exact valid HemOnc concept; Surgery used
+prior_therapy	an immunomodulatory agent	8	35807403	35807403	Immunomodulatory drugs (IMiDs)	HemOnc	Component Class	45857		2099-12-31		narrower	yes	no HemOnc exact; IMiDs class is narrower than generic immunomodulator
+prior_therapy	anti-pd-1 antibody	8	35807322	35807322	Anti-PD-1 antibody	HemOnc	Component Class	45446		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	lenvatinib	8	35803151	35803151	Lenvatinib	HemOnc	Component	301		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	multi-modality treatment	8										none	yes	no HemOnc concept (exact searches HemOnc and all vocabularies empty or non-HemOnc only: generic text)
+with_field	capecitabine	8	35802939	35802939	Capecitabine	HemOnc	Component	86		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	oxaliplatin	8	35803227	35803227	Oxaliplatin	HemOnc	Component	377		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	topotecan	8	35803352	35803352	Topotecan	HemOnc	Component	503		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	-fu-based regimen	7	37557866	37557868	Fluorouracil-containing regimen	HemOnc	Regimen Class	122391		2099-12-31		exact	no	HemOnc has Fluorouracil-containing regimen (and Fluoropyrimidine-containing), no -based; 5-FU wording maps to fluorouracil; prev chose broader class
+prior_therapy	docetaxel-containing regimen	7	37557797	37557797	Docetaxel-containing regimen	HemOnc	Regimen Class	122146		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	platinum-containing chemotherapy	7	37558102	37558102	Platinum agent-containing regimen	HemOnc	Regimen Class	125164		2099-12-31		exact	yes	HemOnc has X-containing concept only; no X-based concept found (exact+fulltext); containing concept used
+prior_therapy	trastuzumab	7	35803361	35803361	Trastuzumab	HemOnc	Component	512		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	chemotherapy-based regimen	7	35803401	37557736	Chemotherapy-containing regimen	HemOnc	Regimen Class	121636		2099-12-31		exact	no	HemOnc has Chemotherapy-containing regimen, no -based concept (exact+fulltext searches empty); prev chose Modality
+prior_therapy	tyrosine kinase inhibitor therapy	7	912198	912198	Tyrosine kinase inhibitor	HemOnc	Component Class	59504		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	irinotecan	7	35803130	35803130	Irinotecan	HemOnc	Component	280		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	nephrectomy	7	4027426	35804762	Surgery	HemOnc	Procedure	14051		2099-12-31		broader	no	no HemOnc nephrectomy concept (exact+fulltext empty); prev SNOMED Kidney excision is outside allowed vocabularies; HemOnc Surgery used
+prior_therapy	trastuzumab-based regimen	7	37558258	37558258	Trastuzumab-containing regimen	HemOnc	Regimen Class	125977		2099-12-31		exact	yes	HemOnc has X-containing concept only; no X-based concept found (exact+fulltext); containing concept used
+prior_therapy	lenalidomide	7	35803149	35803149	Lenalidomide	HemOnc	Component	299		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	anti-pd-l1 antibody	7	35807270	35807270	Anti-PD-L1 antibody	HemOnc	Component Class	45170		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	fluoropyrimidine-	7	35807313	35807313	Fluoropyrimidine	HemOnc	Component Class	45369		2099-12-31		exact	yes	HemOnc has X-containing concept only; no X-based concept found (exact+fulltext); containing concept used
+prior_therapy	anti-her2-based regimen	7	35807402	37557616	Anti-HER2 antibody-containing regimen	HemOnc	Regimen Class	121171		2099-12-31		narrower	no	prev Anti-HER2 medication 35807402 deprecated (D 2020-03-06); HemOnc has Anti-HER2 antibody-containing regimen only (no -based); narrower since HER2 TKIs excluded
+with_field	encorafenib	7	35803035	35803035	Encorafenib	HemOnc	Component	183		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	platinum	7	35807315	35807315	Platinum agent	HemOnc	Component Class	45388		2099-12-31		exact	yes	"no exact HemOnc ""platinum""; Platinum agent class"
+with_field	nab-paclitaxel	7	35803228	35803228	Paclitaxel nanoparticle albumin-bound	HemOnc	Component	378		2099-12-31		exact	yes	matched via synonym of Paclitaxel nanoparticle albumin-bound
+with_field	adt	7	37560922	37560922	Androgen-deprivation therapy	HemOnc	Component Class	139660		2099-12-31		exact	yes	exact name also hits Regimen ADT 35806821 (modality Endocrine therapy); Component Class preferred
+prior_therapy	breast irradiation	6	35803411	35803411	Radiotherapy	HemOnc	Modality	695	S	2099-12-31		broader	yes	no HemOnc exact; nearest valid HemOnc concept
+prior_therapy	axillary dissection	6	35806120	35806120	Lymphadenectomy	HemOnc	Procedure	25285		2099-12-31		broader	yes	no HemOnc exact; nearest valid HemOnc concept
+prior_therapy	segmental mastectomy	6	35804326	35804326	Lumpectomy	HemOnc	Procedure	9944		2099-12-31		broader	yes	no HemOnc exact; nearest valid HemOnc concept
+prior_therapy	standard therapies	6										none	yes	no HemOnc concept (exact searches HemOnc and all vocabularies empty or non-HemOnc only: generic text)
+prior_therapy	total mastectomy	6	35804229	35804229	Mastectomy	HemOnc	Procedure	6371		2099-12-31		broader	yes	no HemOnc exact; nearest valid HemOnc concept
+prior_therapy	oxaliplain	6	35803227	35803227	Oxaliplatin	HemOnc	Component	377		2099-12-31		exact	yes	misspelling of oxaliplatin; no direct hit
+prior_therapy	anti-cd20-based regimen	6	37557592	37557592	Anti-CD20 antibody-containing regimen	HemOnc	Regimen Class	121143		2099-12-31		exact	yes	HemOnc has X-containing concept only; no X-based concept found (exact+fulltext); containing concept used
+prior_therapy	bortezomib	6	35802928	35802928	Bortezomib	HemOnc	Component	75		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	anti-her2 therapy	6	35807402	35807222	Anti-HER2 antibody	HemOnc	Component Class	45001		2099-12-31		narrower	no	prev Anti-HER2 medication 35807402 deprecated (D 2020-03-06); no valid broader HER2 class; Anti-HER2 antibody is narrower
+prior_therapy	platinum-based chemotherapy	6	37558102	37558102	Platinum agent-containing regimen	HemOnc	Regimen Class	125164		2099-12-31		exact	yes	HemOnc has X-containing concept only; no X-based concept found (exact+fulltext); containing concept used
+prior_therapy	an imid	6	35807403	35807403	Immunomodulatory drugs (IMiDs)	HemOnc	Component Class	45857		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	iodine-131	6	35803127	35803127	Iodine-131	HemOnc	Component	277		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	anthracycline-based regimen	6	42542413	42542413	Anthracycline-containing regimen	HemOnc	Regimen Class	51063		2099-12-31		exact	yes	HemOnc has X-containing concept only; no X-based concept found (exact+fulltext); containing concept used
+with_field	axitinib	6	35802908	35802908	Axitinib	HemOnc	Component	55		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	azacitidine	6	35802909	35802909	Azacitidine	HemOnc	Component	56		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	pegylated liposomal doxorubicin	6	35803243	35803243	Pegylated liposomal doxorubicin	HemOnc	Component	393		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	no satisfactory standard therapy	5										none	yes	no HemOnc concept (exact searches HemOnc and all vocabularies empty or non-HemOnc only: generic text)
+prior_therapy	platinum-based chemoradiation	5	37558103	37558103	Platinum-containing chemoradiotherapy regimen	HemOnc	Regimen Class	125166		2099-12-31		exact	yes	HemOnc has X-containing concept only; no X-based concept found (exact+fulltext); containing concept used
+prior_therapy	steroids	5	35803578	35803578	Steroids	HemOnc	Component Class	2581		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	fludarabine	5	35803076	35803076	Fludarabine	HemOnc	Component	224		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	taxane-based regimen	5	37558217	37558217	Taxane-containing regimen	HemOnc	Regimen Class	125880		2099-12-31		exact	yes	HemOnc has X-containing concept only; no X-based concept found (exact+fulltext); containing concept used
+prior_therapy	irinotecan-based chemotherapy	5	42542415	42542415	Irinotecan-containing regimen	HemOnc	Regimen Class	51124		2099-12-31		exact	yes	HemOnc has X-containing concept only; no X-based concept found (exact+fulltext); containing concept used
+prior_therapy	bevacizumab	5	35802921	35802921	Bevacizumab	HemOnc	Component	68		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	chop	5	35803699	35803699	CHOP	HemOnc	Regimen	3469	S	2099-12-31		exact	yes	also CHOP (Prednisolone) 35102028; plain CHOP kept
+with_field	daunorubicin	5	35802996	35802996	Daunorubicin	HemOnc	Component	143		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	established combination therapy	5										none	yes	no HemOnc concept (exact searches HemOnc and all vocabularies empty or non-HemOnc only: generic text)
+with_field	other approved anticancer drugs	5	35807466									none	no	prev Antineoplastics by class effect is a root-like grouping class, not a meaningful match for generic phrase; unresolved in HemOnc
+with_field	other approved antileukemic drugs	5	35807466									none	no	prev Antineoplastics by class effect is a root-like grouping class, not a meaningful match for generic phrase; unresolved in HemOnc
+with_field	pomalidomide	5	35803260	35803260	Pomalidomide	HemOnc	Component	410		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	bendamustine	5	35802918	35802918	Bendamustine	HemOnc	Component	65		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	platinum-based chemotherapy	5	37558102	37558102	Platinum agent-containing regimen	HemOnc	Regimen Class	125164		2099-12-31		exact	yes	HemOnc has X-containing concept only; no X-based concept found (exact+fulltext); containing concept used
+prior_therapy	bevacizumab-containing regimen	4	42542414	42542414	Bevacizumab-containing regimen	HemOnc	Regimen Class	51072		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	cisplatin-ineligible	4										none	yes	no HemOnc concept (exact searches HemOnc and all vocabularies empty or non-HemOnc only: generic text)
+prior_therapy	egfr tki therapy	4	35807225	35807225	EGFR inhibitor	HemOnc	Component Class	45006		2099-12-31		broader	yes	no HemOnc EGFR TKI concept; EGFR inhibitor class broader
+prior_therapy	ipilimumab	4	35803129	35803129	Ipilimumab	HemOnc	Component	279		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	paclitaxel-containing regimen	4	37558073	37558073	Paclitaxel-containing regimen	HemOnc	Regimen Class	124947		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	egfr tki	4	35807225	35807225	EGFR inhibitor	HemOnc	Component Class	45006		2099-12-31		broader	yes	no HemOnc EGFR TKI concept; EGFR inhibitor class broader
+prior_therapy	sunitinib	4	35803323	35803323	Sunitinib	HemOnc	Component	473		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	an anti-cd38 monoclonal antibody	4	35807345	35807345	Anti-CD38 antibody	HemOnc	Component Class	45613		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	brentuximab vedotin	4	35802930	35802930	Brentuximab vedotin	HemOnc	Component	77		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	btk inhibitor	4	35807208	35807208	BTK inhibitor	HemOnc	Component Class	44976		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+prior_therapy	oxaliplatin-	4	37558071	37558071	Oxaliplatin-containing regimen	HemOnc	Regimen Class	124942		2099-12-31		exact	yes	HemOnc has X-containing concept only; no X-based concept found (exact+fulltext); containing concept used
+prior_therapy	resection	4	912095	35804762	Surgery	HemOnc	Procedure	14051		2099-12-31		broader	no	HemOnc Resection 912095 is deprecated (D 2024-02-26); only valid HemOnc alternatives are Surgery (broader) or total resection (narrower)
+prior_therapy	endocrine-based therapy	4	37557822	37557822	Endocrine therapy-containing regimen	HemOnc	Regimen Class	122253		2099-12-31		exact	yes	HemOnc has X-containing concept only; no X-based concept found (exact+fulltext); containing concept used
+with_field	chlorambucil	4	35802953	35802953	Chlorambucil	HemOnc	Component	100		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	decitabine	4	35802998	35802998	Decitabine	HemOnc	Component	145		2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent
+with_field	folfiri	4	35804761	35804761	FOLFIRI	HemOnc	Regimen	14013	S	2099-12-31		exact	yes	exact HemOnc search+concept_get+concept_by_code consistent

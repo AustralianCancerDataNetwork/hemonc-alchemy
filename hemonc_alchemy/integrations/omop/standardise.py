@@ -14,7 +14,8 @@ from typing import Any
 import sqlalchemy as sa
 from sqlalchemy.orm import aliased
 
-from .binding import load_omop_binding, omop_available
+from .binding import load_omop_binding
+from .schema import require_omop_available
 
 
 @dataclass(frozen=True)
@@ -36,8 +37,10 @@ def standardise_codes(
     """Map valid source codes to their standard condition leg; unknown or invalid codes are omitted."""
 
     values = tuple(dict.fromkeys(str(code) for code in codes))
+    if not values or not require_omop_available(session, require_relationships=True):
+        return {}
     binding = load_omop_binding()
-    if not values or binding is None or not omop_available(session):
+    if binding is None:
         return {}
     from omop_alchemy.toolkit.core.concepts import (  # type: ignore[import-not-found,import-untyped]  # optional extra
         StandardConceptMappingSpec,
@@ -94,8 +97,10 @@ def concept_labels(session: Any, concept_ids: Iterable[int]) -> dict[int, tuple[
     """Each concept's (concept_code, concept_name), for human-readable output."""
 
     values = tuple(dict.fromkeys(int(value) for value in concept_ids))
+    if not values or not require_omop_available(session):
+        return {}
     binding = load_omop_binding()
-    if not values or binding is None or not omop_available(session):
+    if binding is None:
         return {}
     concept = binding.concept
     rows = session.execute(
@@ -108,8 +113,10 @@ def subsumption_pairs(session: Any, concept_ids: Iterable[int]) -> set[tuple[int
     """Strict (ancestor, descendant) pairs among `concept_ids`."""
 
     values = tuple(dict.fromkeys(int(value) for value in concept_ids))
+    if not values or not require_omop_available(session):
+        return set()
     binding = load_omop_binding()
-    if not values or binding is None or not omop_available(session):
+    if binding is None:
         return set()
     ancestor = binding.concept_ancestor
     rows = session.execute(

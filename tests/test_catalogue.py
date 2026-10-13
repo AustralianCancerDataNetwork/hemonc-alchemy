@@ -1,6 +1,7 @@
 """Catalogue contracts on isolated tables; repeat with HEMONC_CATALOGUE_POSTGRES=1."""
 
 import os
+from dataclasses import replace
 
 import pytest
 import sqlalchemy as sa
@@ -105,6 +106,28 @@ def test_duplicate_study_name_preserves_both_conditions_without_fanout(
     combined = list_regimens(catalogue_session, CatalogueSpec(condition_cuis=(1, 2, 1)))
     assert combined.items[0].matching_variant_count == 3
     assert combined.items[0].study_count == 3
+
+
+def test_split_study_name_matches_only_its_substudy(catalogue_session):
+    catalogue_session.execute(
+        sa.text(
+            "INSERT INTO studies VALUES (5,'study-c',3,'part-2'),(6,'study-c',3,'part-3')"
+        )
+    )
+    catalogue_session.execute(
+        sa.text("INSERT INTO variants_study VALUES (3,'study-c--part-2')")
+    )
+    spec = CatalogueSpec(condition_cuis=(3,))
+    variants = list_variants(catalogue_session, spec)
+    assert [(v.variant_cui, v.version) for v in variants.items] == [(101, 1)]
+    rows = (
+        catalogue_session.execute(
+            condition_regimen_association_statement(replace(spec, basis="study"))
+        )
+        .mappings()
+        .all()
+    )
+    assert {(row["variant_cui"], row["evidence_id"]) for row in rows} == {(101, 5)}
 
 
 def test_component_and_context_match_same_variant(catalogue_session):

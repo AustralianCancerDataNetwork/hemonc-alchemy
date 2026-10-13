@@ -9,8 +9,9 @@ from typing import Any
 
 import sqlalchemy as sa
 
-from .binding import load_omop_binding, omop_available
+from .binding import load_omop_binding
 from .mapping import StandardConceptMapping, map_to_standard, resolve_hemonc_concepts
+from .schema import require_omop_available
 
 
 @dataclass(frozen=True)
@@ -41,8 +42,10 @@ def vocabulary_versions(
 ) -> list[VocabularyVersion]:
     """Return the database-declared versions for the requested vocabularies."""
 
+    if not require_omop_available(session):
+        return []
     binding = load_omop_binding()
-    if binding is None or not omop_available(session):
+    if binding is None:
         return []
     vocabulary = binding.vocabulary
     statement = sa.select(vocabulary)
@@ -150,6 +153,8 @@ def biomarker_qualifier_diagnostics(
     from hemonc_alchemy.model import Conditions
 
     values = tuple(dict.fromkeys(int(value) for value in condition_cuis))
+    if not values or not require_omop_available(session, require_relationships=True):
+        return []
     names = dict(
         session.execute(
             Conditions.__table__.select()
@@ -202,6 +207,8 @@ def suspicious_condition_mappings(
     from hemonc_alchemy.model import Conditions
 
     values = tuple(dict.fromkeys(int(value) for value in condition_cuis))
+    if not values or not require_omop_available(session, require_relationships=True):
+        return []
     names = dict(
         session.execute(
             Conditions.__table__.select()

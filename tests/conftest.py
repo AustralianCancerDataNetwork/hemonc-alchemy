@@ -1,65 +1,45 @@
-"""Shared pytest fixtures.
-
-Unmarked tests run on sqlite and need nothing external. Tests marked
-`@pytest.mark.postgres` need a real Postgres and are skipped otherwise --
-surrogate-key loading can't be exercised on sqlite.
-
-To run those too, bring up the test database and configure it once:
-
-    docker compose -p hemonc_alchemy_tests up -d   # from tests/, port 55433
-    omop-config configure hemonc_alchemy           # set test_hemonc_db
-
-The project name and port are deliberately distinct from orm-loader's own
-test stack, which otherwise collides with this one.
-"""
-
-import time
+"""Shared pytest fixtures for tests that need a real PostgreSQL database."""
 
 import pytest
 import sqlalchemy as sa
 
 
-@pytest.fixture(scope="session")
-def pg_engine():
-    from oa_configurator.pytest_plugin import (  # type: ignore[import-untyped]  # no py.typed marker upstream
-        ensure_test_db_exists,
-        resolve_test_database,
-    )
+@pytest.fixture
+def pg_db(request):
+    from oa_configurator import Resolver, load_stack_config
+    from oa_configurator.testing import isolated_test_database
 
     from hemonc_alchemy.config import HemOncAlchemyConfig
 
-    url = resolve_test_database(HemOncAlchemyConfig, "test_hemonc_db")
-
+    request.node.add_marker("db_dialect")
+    resolver = Resolver(load_stack_config())
+    package_config = resolver.resolve_package_config(HemOncAlchemyConfig)
+    if package_config.test_hemonc_db is None:
+        pytest.fail(
+            "HemOncAlchemyConfig.test_hemonc_db must reference a configured test database"
+        )
+    resolver.resolve_database(package_config.test_hemonc_db)
+    database_context = isolated_test_database(
+        HemOncAlchemyConfig,
+        "test_hemonc_db",
+        dialect="postgresql",
+        request=request,
+    )
     try:
-        ensure_test_db_exists(url)
-    except Exception as exc:  # noqa: BLE001 -- best-effort setup, real connection attempt follows
-        print(f"Could not ensure test DB exists, will try anyway: {exc}")
-
-    last_err = None
-    for i in range(20):
-        engine: sa.Engine | None = None
-        try:
-            engine = sa.create_engine(url, future=True)
-            with engine.connect() as conn:
-                conn.execute(sa.text("SELECT 1"))
-            yield engine
-            engine.dispose()
-            return
-        except Exception as exc:  # noqa: BLE001 -- retry loop, any connection failure should retry
-            if engine is not None:
-                engine.dispose()
-            last_err = exc
-            print(f"[{i}] Postgres not ready:", repr(exc))
-            time.sleep(1)
-
-    pytest.skip(f"PostgreSQL never became available: {last_err}")
+        database = database_context.__enter__()
+    except (OSError, sa.exc.SQLAlchemyError) as exc:
+        pytest.skip(f"PostgreSQL test database is unavailable: {exc}")
+    try:
+        yield database
+    finally:
+        database_context.__exit__(None, None, None)
 
 
 @pytest.fixture
-def pg_session(pg_engine):
-    import sqlalchemy.orm as so
+def pg_engine(pg_db):
+    return pg_db.committing_engine
 
-    Session = so.sessionmaker(pg_engine, future=True)
-    with Session() as session:
-        yield session
-        session.rollback()
+
+@pytest.fixture
+def pg_session(pg_db):
+    yield pg_db.session

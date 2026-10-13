@@ -1,0 +1,340 @@
+column	raw_value	n_indications	concept_id	concept_name	vocabulary_id	concept_class_id	domain_id	standard_concept	fit	note
+stage	Metastatic	197	32944	Metastatic Disease	Episode	Disease Extent	Episode	S	exact	MET is OMOP Episode Disease Extent; second is condition-domain
+stage	Metastatic	197	432851	Metastatic malignant neoplasm	SNOMED	Disorder	Condition	S	exact	(2nd candidate)
+stage	Advanced	191	4313265	Advanced	SNOMED	Qualifier Value	Meas Value	S	exact	SNOMED generic qualifier; Is a General adjectival modifier only
+stage	Locally advanced	171	37544940	LOCALLY ADVANCED	CDISC	Observable Entity	Observation		exact	LOC concept is CDISC non-standard; no SNOMED/CM locally advanced; no Is-a to Advanced
+stage	Locally advanced	171	4313265	Advanced	SNOMED	Qualifier Value	Meas Value	S	broader	(2nd candidate)
+stage	Early	28	4125638	Early stage	SNOMED	Qualifier Value	Observation	S	exact	
+stage	Early	28	4130705	Early	SNOMED	Qualifier Value	Meas Value	S	broader	(2nd candidate)
+stage	Node-positive	14							none	no node-positive/N+ value concept found (only Cancer Modifier node-extent histopattern concepts)
+stage	Early stage	11	4125638	Early stage	SNOMED	Qualifier Value	Observation	S	exact	
+stage	Inflammatory	10							none	no concept found
+stage	Extensive-stage	8	1635798	Extensive Stage	Cancer Modifier	Staging/Grading	Measurement	S	exact	SCLC extensive stage
+stage	Stage III	6	1633650	AJCC/UICC Stage 3	Cancer Modifier	Staging/Grading	Measurement	S	exact	AJCC/UICC Stage 3 (generic; FIGO Stage 3 1634024 also exists)
+stage	Localled advanced	5	37544940	LOCALLY ADVANCED	CDISC	Observable Entity	Observation		exact	typo of Locally advanced; CDISC non-standard
+stage	Localled advanced	5	4313265	Advanced	SNOMED	Qualifier Value	Meas Value	S	broader	(2nd candidate)
+stage	(Early greater than 2 cm in diameter or node positive)	4	4125638	Early stage	SNOMED	Qualifier Value	Observation	S	broader	size/node criteria lost
+stage	Extensive stage	4	1635798	Extensive Stage	Cancer Modifier	Staging/Grading	Measurement	S	exact	SCLC extensive stage
+stage	locally advanced	4	37544940	LOCALLY ADVANCED	CDISC	Observable Entity	Observation		exact	LOC concept is CDISC non-standard; no SNOMED/CM locally advanced; no Is-a to Advanced
+stage	locally advanced	4	4313265	Advanced	SNOMED	Qualifier Value	Meas Value	S	broader	(2nd candidate)
+stage	non-muscle invasive	4	42622644	Non-muscle invasive bladder cancer	MedDRA	LLT	Condition		broader	MedDRA LLT non-standard; grade not captured for low-grade
+stage	N+ or M+	4							none	no node-positive/N+ value concept found (only Cancer Modifier node-extent histopattern concepts)
+stage	Advanced (FIGO stages III and IV)	3	1634024	FIGO Stage 3	Cancer Modifier	Staging/Grading	Measurement	S	narrower	grouping; per-stage FIGO concepts exist
+stage	Advanced (FIGO stages III and IV)	3	1634306	FIGO Stage 4	Cancer Modifier	Staging/Grading	Measurement	S	narrower	(2nd candidate)
+stage	Axillary lymph node involvement	3							none	no node-positive/N+ value concept found (only Cancer Modifier node-extent histopattern concepts)
+stage	Dukes' stage C	3	1635190	Dukes' Stage C	Cancer Modifier	Staging/Grading	Measurement	S	exact	
+stage	FIGO stage III/IV	3	1634024	FIGO Stage 3	Cancer Modifier	Staging/Grading	Measurement	S	narrower	grouping; per-stage FIGO concepts exist
+stage	FIGO stage III/IV	3	1634306	FIGO Stage 4	Cancer Modifier	Staging/Grading	Measurement	S	narrower	(2nd candidate)
+stage	Muscle-invasive	3							none	no concept found
+stage	Stage IIB/C	3	1634028	AJCC/UICC Stage 2B	Cancer Modifier	Staging/Grading	Measurement	S	narrower	per-stage concepts exist
+stage	Stage IIB/C	3	1634903	AJCC/UICC Stage 2C	Cancer Modifier	Staging/Grading	Measurement	S	narrower	(2nd candidate)
+stage	stage III	3	1633650	AJCC/UICC Stage 3	Cancer Modifier	Staging/Grading	Measurement	S	exact	AJCC/UICC Stage 3 (generic; FIGO Stage 3 1634024 also exists)
+stage	Stage III or IV	3	1633650	AJCC/UICC Stage 3	Cancer Modifier	Staging/Grading	Measurement	S	narrower	grouping; per-stage AJCC concepts exist
+stage	Stage III or IV	3	1633308	AJCC/UICC Stage 4	Cancer Modifier	Staging/Grading	Measurement	S	narrower	(2nd candidate)
+stage	Stage III to IV	3	1633650	AJCC/UICC Stage 3	Cancer Modifier	Staging/Grading	Measurement	S	narrower	grouping; per-stage AJCC concepts exist
+stage	Stage III to IV	3	1633308	AJCC/UICC Stage 4	Cancer Modifier	Staging/Grading	Measurement	S	narrower	(2nd candidate)
+stage	cutaneous	2							none	no concept found
+stage	FIGO 2014 Stage III-IVA	2	1634024	FIGO Stage 3	Cancer Modifier	Staging/Grading	Measurement	S	narrower	FIGO 2014 Stage 3/4A not found (generic FIGO 3/4 used); 4A not found
+stage	FIGO 2014 Stage III-IVA	2	1634306	FIGO Stage 4	Cancer Modifier	Staging/Grading	Measurement	S	narrower	(2nd candidate)
+stage	Localized	2	4114652	Localized	SNOMED	Qualifier Value	Meas Value	S	exact	
+stage	node-positive early	2	4125638	Early stage	SNOMED	Qualifier Value	Observation	S	broader	
+stage	Regionally advanced	2	4313265	Advanced	SNOMED	Qualifier Value	Meas Value	S	broader	
+stage	Regionally advanced	2	4260906	Regional	SNOMED	Qualifier Value	Meas Value	S	broader	(2nd candidate)
+stage	Stage IB or Stage II or Stage IIIA	2	1634494	AJCC/UICC Stage 1B	Cancer Modifier	Staging/Grading	Measurement	S	narrower	also AJCC/UICC Stage 2 1634209
+stage	Stage IB or Stage II or Stage IIIA	2	1635855	AJCC/UICC Stage 3A	Cancer Modifier	Staging/Grading	Measurement	S	narrower	(2nd candidate)
+stage	Stage IIB or IIC	2	1634028	AJCC/UICC Stage 2B	Cancer Modifier	Staging/Grading	Measurement	S	narrower	per-stage concepts exist
+stage	Stage IIB or IIC	2	1634903	AJCC/UICC Stage 2C	Cancer Modifier	Staging/Grading	Measurement	S	narrower	(2nd candidate)
+stage	Stage III (Dukes' stage C)	2	1633650	AJCC/UICC Stage 3	Cancer Modifier	Staging/Grading	Measurement	S	exact	Stage III equals Dukes C for colon
+stage	Stage III (Dukes' stage C)	2	1635190	Dukes' Stage C	Cancer Modifier	Staging/Grading	Measurement	S	exact	(2nd candidate)
+stage	Stage II to IIIA	2	1634209	AJCC/UICC Stage 2	Cancer Modifier	Staging/Grading	Measurement	S	narrower	range; IIA/IIB/IIC members not enumerated
+stage	Stage II to IIIA	2	1635855	AJCC/UICC Stage 3A	Cancer Modifier	Staging/Grading	Measurement	S	narrower	(2nd candidate)
+stage	advanced	1	4313265	Advanced	SNOMED	Qualifier Value	Meas Value	S	exact	SNOMED generic qualifier; Is a General adjectival modifier only
+stage	Advanced (FIGO stages III B, III C and IV)	1	1635339	FIGO Stage 3B	Cancer Modifier	Staging/Grading	Measurement	S	narrower	grouping; also FIGO Stage 4 1634306 exists
+stage	Advanced (FIGO stages III B, III C and IV)	1	1633903	FIGO Stage 3C	Cancer Modifier	Staging/Grading	Measurement	S	narrower	(2nd candidate)
+stage	Bulky locally advanced Stage B2 and Stage C	1	37544940	LOCALLY ADVANCED	CDISC	Observable Entity	Observation		broader	Stage B2/C (prostate) not found
+stage	D2	1	1634022	Stage D2	Cancer Modifier	Staging/Grading	Measurement	S	exact	prostate ABCD stage D2
+stage	D2	1	4127606	Stage D2	SNOMED	Qualifier Value	Meas Value	S	exact	(2nd candidate)
+stage	extensive-stage	1	1635798	Extensive Stage	Cancer Modifier	Staging/Grading	Measurement	S	exact	SCLC extensive stage
+stage	Involvement of lymph nodes	1							none	no node-positive/N+ value concept found (only Cancer Modifier node-extent histopattern concepts)
+stage	Limited stage	1	1633518	Limited Stage	Cancer Modifier	Staging/Grading	Measurement	S	exact	SCLC limited stage
+stage	low-grade NMIBC	1	42622644	Non-muscle invasive bladder cancer	MedDRA	LLT	Condition		broader	MedDRA LLT non-standard; grade not captured for low-grade
+stage	Muscle invasive	1							none	no concept found
+stage	Operable node-negative	1	4294980	Operable	SNOMED	Qualifier Value	Meas Value	S	broader	node status lost
+stage	Operable node-positive	1	4294980	Operable	SNOMED	Qualifier Value	Meas Value	S	broader	node status lost
+stage	Pathologic involvement of regional lymph nodes of more than 1 mm	1							none	no node-positive/N+ value concept found (only Cancer Modifier node-extent histopattern concepts)
+stage	Stage D2	1	1634022	Stage D2	Cancer Modifier	Staging/Grading	Measurement	S	exact	prostate ABCD stage D2
+stage	Stage D2	1	4127606	Stage D2	SNOMED	Qualifier Value	Meas Value	S	exact	(2nd candidate)
+stage	Stage IIB or Stage IIC or Stage III	1	1634028	AJCC/UICC Stage 2B	Cancer Modifier	Staging/Grading	Measurement	S	narrower	also AJCC/UICC Stage 3 1633650
+stage	Stage IIB or Stage IIC or Stage III	1	1634903	AJCC/UICC Stage 2C	Cancer Modifier	Staging/Grading	Measurement	S	narrower	(2nd candidate)
+stage	Stage II bulky, Stage III, or Stage IV	1	1633650	AJCC/UICC Stage 3	Cancer Modifier	Staging/Grading	Measurement	S	narrower	also AJCC/UICC Stage 2 1634209; bulky lost
+stage	Stage II bulky, Stage III, or Stage IV	1	1633308	AJCC/UICC Stage 4	Cancer Modifier	Staging/Grading	Measurement	S	narrower	(2nd candidate)
+stage	Stage III and N+	1	1633650	AJCC/UICC Stage 3	Cancer Modifier	Staging/Grading	Measurement	S	broader	N+ lost
+stage	stage II or III early	1	4125638	Early stage	SNOMED	Qualifier Value	Observation	S	broader	
+stage	Stage IV	1	1633308	AJCC/UICC Stage 4	Cancer Modifier	Staging/Grading	Measurement	S	exact	
+stage	Superficial	1	4096030	Superficial	SNOMED	Qualifier Value	Meas Value	S	exact	
+stage	with skin lesions	1							none	no concept found
+status	Metastatic	461	32944	Metastatic Disease	Episode	Disease Extent	Episode	S	exact	MET is OMOP Episode Disease Extent; second is condition-domain
+status	Metastatic	461	432851	Metastatic malignant neoplasm	SNOMED	Disorder	Condition	S	exact	(2nd candidate)
+status	Relapsed or refractory	269	4136153	Relapse phase	SNOMED	Qualifier Value	Meas Value	S	narrower	disjunction
+status	Relapsed or refractory	269	4048615	Intractable	SNOMED	Qualifier Value	Meas Value	S	narrower	(2nd candidate)
+status	Unresectable	219	46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	Condition	S	exact	SNOMED Tumor surgically unresectable; no qualifier-value form
+status	chronic phase	44	4081357	Chronic phase	SNOMED	Qualifier Value	Meas Value	S	exact	CML
+status	Recurrent	44	4113136	Recurrent	SNOMED	Qualifier Value	Meas Value	S	exact	SNOMED Recurrent qualifier (Is a Courses; no Is-a to Advanced/Metastatic)
+status	accelerated phase	23	4175685	Accelerated phase	SNOMED	Qualifier Value	Meas Value	S	exact	CML
+status	unresectable	19	46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	Condition	S	exact	SNOMED Tumor surgically unresectable; no qualifier-value form
+status	Refractory	15	4048615	Intractable	SNOMED	Qualifier Value	Meas Value	S	exact	matched via synonym of Intractable (4048615); Nebraska/SNOMED Refractory 123119002 inactive non-standard
+status	recurrent	14	4113136	Recurrent	SNOMED	Qualifier Value	Meas Value	S	exact	SNOMED Recurrent qualifier (Is a Courses; no Is-a to Advanced/Metastatic)
+status	blast crisis	13	4081695	Blast crisis	SNOMED	Qualifier Value	Meas Value	S	exact	CML
+status	Relapsed	13	4136153	Relapse phase	SNOMED	Qualifier Value	Meas Value	S	exact	SNOMED Relapse phase (synonym Relapse)
+status	chronic	11	4236661	Chronic	SNOMED	Qualifier Value	Meas Value	S	exact	qualifier; ambiguous with chronic phase
+status	Non-metastatic	11							none	no non-metastatic/M0 value concept found
+status	Persistent	11							none	no concept found
+status	Resectable	11	4294980	Operable	SNOMED	Qualifier Value	Meas Value	S	exact	near-synonym (operable), not identical
+status	Progressive	6	4114504	Progressive	SNOMED	Qualifier Value	Meas Value	S	exact	SNOMED qualifier; also LOINC answer 36310490
+status	Progressive	6	1633294	Progressive disease	Cancer Modifier	Staging/Grading	Measurement	S	broader	(2nd candidate)
+status	surgical resection is likely to result in severe morbidity	6	46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	Condition	S	broader	paraphrase of unresectable plus morbidity
+status	progressive	5	4114504	Progressive	SNOMED	Qualifier Value	Meas Value	S	exact	SNOMED qualifier; also LOINC answer 36310490
+status	progressive	5	1633294	Progressive disease	Cancer Modifier	Staging/Grading	Measurement	S	broader	(2nd candidate)
+status	transfusion-dependent anemia	4	43562686	Transfusion dependent anemia	MedDRA	LLT	Condition		exact	MedDRA LLT non-standard
+status	transfusion-dependent anemia	4	439777	Anemia	SNOMED	Disorder	Condition	S	broader	(2nd candidate)
+status	Metastatic or Recurrent	3	32944	Metastatic Disease	Episode	Disease Extent	Episode	S	narrower	disjunction
+status	Metastatic or Recurrent	3	4113136	Recurrent	SNOMED	Qualifier Value	Meas Value	S	narrower	(2nd candidate)
+status	require systemic therapy	3							none	no concept found
+status	CR1	2	1633363	Complete response	Cancer Modifier	Staging/Grading	Measurement	S	broader	ordinal remission number not captured
+status	CR2	2	1633363	Complete response	Cancer Modifier	Staging/Grading	Measurement	S	broader	ordinal remission number not captured
+status	first or second complete remission with minimal residual disease (MRD) greater than or equal to 0.1%	2	1633488	Minimal residual disease	Cancer Modifier	Staging/Grading	Measurement	S	broader	MRD threshold and CR1/CR2 ordinal not captured
+status	first or second complete remission with minimal residual disease (MRD) greater than or equal to 0.1%	2	1633363	Complete response	Cancer Modifier	Staging/Grading	Measurement	S	broader	(2nd candidate)
+status	moderate to severe anemia	2	439777	Anemia	SNOMED	Disorder	Condition	S	broader	
+status	moderate to severe anemia	2	4155158	Moderate to severe	SNOMED	Qualifier Value	Observation	S	broader	(2nd candidate)
+status	Newly diagnosed	2							none	no concept found
+status	Relapsed or Metastatic	2	32944	Metastatic Disease	Episode	Disease Extent	Episode	S	narrower	disjunction
+status	Relapsed or Metastatic	2	4113136	Recurrent	SNOMED	Qualifier Value	Meas Value	S	narrower	(2nd candidate)
+status	Relapsed or progressive	2	4136153	Relapse phase	SNOMED	Qualifier Value	Meas Value	S	narrower	disjunction
+status	Relapsed or progressive	2	4114504	Progressive	SNOMED	Qualifier Value	Meas Value	S	narrower	(2nd candidate)
+status	require regular RBC transfusions	2							none	no concept found
+status	Require systemic therapy	2							none	no concept found
+status	Surgical resection likely to result in severe morbidity	2	46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	Condition	S	broader	paraphrase of unresectable plus morbidity
+status	symptomatic bone metastases and no known visceral metastatic disease	2	32944	Metastatic Disease	Episode	Disease Extent	Episode	S	broader	site/visceral qualifier lost
+status	chronic liver disease	1	4212540	Chronic liver disease	SNOMED	Disorder	Condition	S	exact	
+status	clinically aggressive	1							none	no concept found
+status	disease-related splenomegaly or symptoms in adult patients with moderate to severe anaemia	1	200527	Splenomegaly	SNOMED	Disorder	Condition	S	broader	compound
+status	disease-related splenomegaly or symptoms in adult patients with moderate to severe anaemia	1	439777	Anemia	SNOMED	Disorder	Condition	S	broader	(2nd candidate)
+status	extravascular hemolysis	1	4250490	Hemolysis	SNOMED	Clinical Finding	Condition	S	broader	extravascular qualifier lost
+status	First recurrence	1	4113136	Recurrent	SNOMED	Qualifier Value	Meas Value	S	broader	ordinal lost
+status	first relapse	1	4136153	Relapse phase	SNOMED	Qualifier Value	Meas Value	S	broader	ordinal lost
+status	First relapse	1	4136153	Relapse phase	SNOMED	Qualifier Value	Meas Value	S	broader	ordinal lost
+status	indolent	1							none	no concept found
+status	metastatic	1	32944	Metastatic Disease	Episode	Disease Extent	Episode	S	exact	MET is OMOP Episode Disease Extent; second is condition-domain
+status	metastatic	1	432851	Metastatic malignant neoplasm	SNOMED	Disorder	Condition	S	exact	(2nd candidate)
+status	Metastatic to bone	1	32944	Metastatic Disease	Episode	Disease Extent	Episode	S	broader	site/visceral qualifier lost
+status	Metastatic to liver AND Incurable by surgery or other means	1	32944	Metastatic Disease	Episode	Disease Extent	Episode	S	broader	
+status	Moderate to Severe	1	4155158	Moderate to severe	SNOMED	Qualifier Value	Observation	S	exact	
+status	Non-metastatic with biochemical recurrence	1							none	no non-metastatic/M0 value concept found
+status	non-transfusion dependent	1							none	no concept found
+status	Non-visceral metastatic	1	32944	Metastatic Disease	Episode	Disease Extent	Episode	S	broader	site/visceral qualifier lost
+status	Not severe	1							none	no concept found
+status	Palliative	1	4179711	Palliative intent	SNOMED	Qualifier Value	Meas Value	S	exact	Palliative intent
+status	Recurrent or refractory unresectable	1	4113136	Recurrent	SNOMED	Qualifier Value	Meas Value	S	broader	compound
+status	Recurrent or refractory unresectable	1	46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	Condition	S	broader	(2nd candidate)
+status	Recurrent unresectable	1	4113136	Recurrent	SNOMED	Qualifier Value	Meas Value	S	broader	compound
+status	Recurrent unresectable	1	46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	Condition	S	broader	(2nd candidate)
+status	recurrent vaso-occlusive crises	1							none	no concept found
+status	Refractory or in second or later relapse	1	4048615	Intractable	SNOMED	Qualifier Value	Meas Value	S	narrower	ordinal lost
+status	Refractory or in second or later relapse	1	4136153	Relapse phase	SNOMED	Qualifier Value	Meas Value	S	narrower	(2nd candidate)
+status	Relapsed or metastatic	1	32944	Metastatic Disease	Episode	Disease Extent	Episode	S	narrower	disjunction
+status	Relapsed or metastatic	1	4113136	Recurrent	SNOMED	Qualifier Value	Meas Value	S	narrower	(2nd candidate)
+status	Resistant	1	4148441	Resistant	SNOMED	Qualifier Value	Meas Value	S	exact	
+status	Sensitive disease defined as disease responding to chemotherapy but subsequently progressing at least 60 days (in the phase 3 study) or at least 90 days (in the phase 2 studies) after chemotherapy	1	4307105	Sensitive	SNOMED	Qualifier Value	Meas Value	S	broader	time-window definition lost
+status	severe	1	4087703	Severe	SNOMED	Qualifier Value	Observation	S	exact	
+status	symptomatic	1	4142947	Symptomatic	SNOMED	Qualifier Value	Meas Value	S	exact	
+status	Symptomatic	1	4142947	Symptomatic	SNOMED	Qualifier Value	Meas Value	S	exact	
+status	Symptomatic associated with severe morbidity or functional limitations	1	46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	Condition	S	broader	paraphrase of unresectable plus morbidity
+status	Symptomatic or progressive	1	4142947	Symptomatic	SNOMED	Qualifier Value	Meas Value	S	narrower	disjunction
+status	Symptomatic or progressive	1	4114504	Progressive	SNOMED	Qualifier Value	Meas Value	S	narrower	(2nd candidate)
+status	transfusion-dependent	1							none	no concept found
+status	Untreated	1							none	no concept found
+stage_or_status	Recurrent	134	4113136	Recurrent	SNOMED	Qualifier Value	Meas Value	S	exact	SNOMED Recurrent qualifier (Is a Courses; no Is-a to Advanced/Metastatic)
+stage_or_status	Metastatic	127	32944	Metastatic Disease	Episode	Disease Extent	Episode	S	exact	MET is OMOP Episode Disease Extent; second is condition-domain
+stage_or_status	Metastatic	127	432851	Metastatic malignant neoplasm	SNOMED	Disorder	Condition	S	exact	(2nd candidate)
+stage_or_status	Unresectable advanced	78	46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	Condition	S	broader	compound (AND)
+stage_or_status	Unresectable advanced	78	4313265	Advanced	SNOMED	Qualifier Value	Meas Value	S	broader	(2nd candidate)
+stage_or_status	not applicable	39	4294169	Not applicable	SNOMED	Qualifier Value	Meas Value	S	exact	placeholder
+stage_or_status	Locally advanced unresectable	30	37544940	LOCALLY ADVANCED	CDISC	Observable Entity	Observation		broader	compound (AND)
+stage_or_status	Locally advanced unresectable	30	46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	Condition	S	broader	(2nd candidate)
+stage_or_status	Advanced	29	4313265	Advanced	SNOMED	Qualifier Value	Meas Value	S	exact	SNOMED generic qualifier; Is a General adjectival modifier only
+stage_or_status	Unresectable locally advanced	28	37544940	LOCALLY ADVANCED	CDISC	Observable Entity	Observation		broader	compound (AND)
+stage_or_status	Unresectable locally advanced	28	46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	Condition	S	broader	(2nd candidate)
+stage_or_status	Unresectable	21	46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	Condition	S	exact	SNOMED Tumor surgically unresectable; no qualifier-value form
+stage_or_status	Advanced unresectable	18	46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	Condition	S	broader	compound (AND)
+stage_or_status	Advanced unresectable	18	4313265	Advanced	SNOMED	Qualifier Value	Meas Value	S	broader	(2nd candidate)
+stage_or_status	metastatic	18	32944	Metastatic Disease	Episode	Disease Extent	Episode	S	exact	MET is OMOP Episode Disease Extent; second is condition-domain
+stage_or_status	metastatic	18	432851	Metastatic malignant neoplasm	SNOMED	Disorder	Condition	S	exact	(2nd candidate)
+stage_or_status	Locally advanced	16	37544940	LOCALLY ADVANCED	CDISC	Observable Entity	Observation		exact	LOC concept is CDISC non-standard; no SNOMED/CM locally advanced; no Is-a to Advanced
+stage_or_status	Locally advanced	16	4313265	Advanced	SNOMED	Qualifier Value	Meas Value	S	broader	(2nd candidate)
+stage_or_status	Recurrent locally advanced	8	4113136	Recurrent	SNOMED	Qualifier Value	Meas Value	S	broader	compound
+stage_or_status	Recurrent locally advanced	8	37544940	LOCALLY ADVANCED	CDISC	Observable Entity	Observation		broader	(2nd candidate)
+stage_or_status	Primary advanced	6	4313265	Advanced	SNOMED	Qualifier Value	Meas Value	S	broader	
+stage_or_status	Locally recurrent	5	4113136	Recurrent	SNOMED	Qualifier Value	Meas Value	S	broader	locality lost; no local-recurrence concept
+stage_or_status	Locally recurrent unresectable	5	4113136	Recurrent	SNOMED	Qualifier Value	Meas Value	S	broader	compound
+stage_or_status	Locally recurrent unresectable	5	46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	Condition	S	broader	(2nd candidate)
+stage_or_status	anemia	3	439777	Anemia	SNOMED	Disorder	Condition	S	exact	
+stage_or_status	Surgical resection is likely to result in severe morbidity	3	46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	Condition	S	broader	paraphrase of unresectable plus morbidity
+stage_or_status	Inoperable locally advanced	2	4254665	Inoperable	SNOMED	Qualifier Value	Meas Value	S	broader	compound
+stage_or_status	Inoperable locally advanced	2	37544940	LOCALLY ADVANCED	CDISC	Observable Entity	Observation		broader	(2nd candidate)
+stage_or_status	locally advanced	2	37544940	LOCALLY ADVANCED	CDISC	Observable Entity	Observation		exact	LOC concept is CDISC non-standard; no SNOMED/CM locally advanced; no Is-a to Advanced
+stage_or_status	locally advanced	2	4313265	Advanced	SNOMED	Qualifier Value	Meas Value	S	broader	(2nd candidate)
+stage_or_status	Stage III who are not candidates for surgical resection or definitive chemoradiation	2	1633650	AJCC/UICC Stage 3	Cancer Modifier	Staging/Grading	Measurement	S	broader	
+stage_or_status	Stage III who are not candidates for surgical resection or definitive chemoradiation	2	4254665	Inoperable	SNOMED	Qualifier Value	Meas Value	S	broader	(2nd candidate)
+stage_or_status	unresectable	2	46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	Condition	S	exact	SNOMED Tumor surgically unresectable; no qualifier-value form
+stage_or_status	10-29% marrow blasts without myeloproliferative disorder	1							none	blast-percent thresholds not represented
+stage_or_status	20-30% marrow blasts	1							none	blast-percent thresholds not represented
+stage_or_status	>30% marrow blasts	1							none	blast-percent thresholds not represented
+stage_or_status	Active	1	9181	Active	SNOMED	Qualifier Value	Meas Value	S	exact	
+stage_or_status	acute	1	4156184	Acuteness	SNOMED	Qualifier Value	Meas Value	S	broader	plain Acute qualifier 40603124 is inactive non-standard
+stage_or_status	Distant metastasis	1	1620371	Distant metastasis	LOINC	Answer	Meas Value	S	exact	LOINC answer; Cancer Modifier Distant Metastasis 36768964 inactive non-standard
+stage_or_status	extrahepatic disease limited to the bone, lymph nodes, subcutaneous tissues, or lung that is amenable to resection or radiation	1							none	no concept found
+stage_or_status	Locally advanced unresectable (stage III)	1	46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	Condition	S	broader	compound
+stage_or_status	Locally advanced unresectable (stage III)	1	1633650	AJCC/UICC Stage 3	Cancer Modifier	Staging/Grading	Measurement	S	broader	(2nd candidate)
+stage_or_status	Locally unresectable or metastatic	1	46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	Condition	S	narrower	disjunction
+stage_or_status	Locally unresectable or metastatic	1	32944	Metastatic Disease	Episode	Disease Extent	Episode	S	narrower	(2nd candidate)
+stage_or_status	Locally unresectable recurrent	1	4113136	Recurrent	SNOMED	Qualifier Value	Meas Value	S	broader	compound
+stage_or_status	Locally unresectable recurrent	1	46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	Condition	S	broader	(2nd candidate)
+stage_or_status	Local relapse	1	4113136	Recurrent	SNOMED	Qualifier Value	Meas Value	S	broader	locality lost; no local-recurrence concept
+stage_or_status	Locoregional	1	4260906	Regional	SNOMED	Qualifier Value	Meas Value	S	broader	
+stage_or_status	not candidate for curative surgery	1	4254665	Inoperable	SNOMED	Qualifier Value	Meas Value	S	broader	
+stage_or_status	not candidate for curative surgery	1	46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	Condition	S	broader	(2nd candidate)
+stage_or_status	persistent	1							none	no concept found
+stage_or_status	prior to auto HSCT	1							none	no concept found
+stage_or_status	recurrent	1	4113136	Recurrent	SNOMED	Qualifier Value	Meas Value	S	exact	SNOMED Recurrent qualifier (Is a Courses; no Is-a to Advanced/Metastatic)
+stage_or_status	Recurrent locoregional	1	4113136	Recurrent	SNOMED	Qualifier Value	Meas Value	S	broader	
+stage_or_status	Recurrent locoregional	1	4260906	Regional	SNOMED	Qualifier Value	Meas Value	S	broader	(2nd candidate)
+stage_or_status	Stage IV-B	1	1633748	AJCC/UICC Stage 4B	Cancer Modifier	Staging/Grading	Measurement	S	exact	
+stage_or_status	surgical resection is likely to result in severe morbidity	1	46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	Condition	S	broader	paraphrase of unresectable plus morbidity
+stage_or_status	Tumors greater than 2cm in diameter	1							none	no concept found
+stage_or_status	unresectable hepatic metastases affecting less than 50% of the liver and no extrahepatic disease	1	46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	Condition	S	broader	compound
+stage_or_status	unresectable hepatic metastases affecting less than 50% of the liver and no extrahepatic disease	1	32944	Metastatic Disease	Episode	Disease Extent	Episode	S	broader	(2nd candidate)
+stage_or_status	Unresectable stage IIIb	1	46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	Condition	S	broader	compound
+stage_or_status	Unresectable stage IIIb	1	1634411	AJCC/UICC Stage 3B	Cancer Modifier	Staging/Grading	Measurement	S	broader	(2nd candidate)
+response_contingency	progression	229	32949	Progression	Episode	Disease Dynamic	Episode	S	exact	compound timing (during/last therapy) not captured
+response_contingency	progression	229	1633294	Progressive disease	Cancer Modifier	Staging/Grading	Measurement	S	exact	(2nd candidate)
+response_contingency	not applicable	39	4294169	Not applicable	SNOMED	Qualifier Value	Meas Value	S	exact	placeholder
+response_contingency	failure	30	4141764	Absent response to treatment	SNOMED	Context-dependent	Observation	S	exact	synonym match: Treatment failure
+response_contingency	recurrence	21	4078193	Recurrence	SNOMED	Qualifier Value	Meas Value	S	exact	
+response_contingency	refractory	18	4048615	Intractable	SNOMED	Qualifier Value	Meas Value	S	exact	matched via synonym of Intractable (4048615); Nebraska/SNOMED Refractory 123119002 inactive non-standard
+response_contingency	Resistance	18	4148441	Resistant	SNOMED	Qualifier Value	Meas Value	S	exact	
+response_contingency	complete resection	17	1634643	R0: No residual tumor	Cancer Modifier	Staging/Grading	Measurement	S	broader	R0 is resection margin status; approximate
+response_contingency	CR or PR	17	1633363	Complete response	Cancer Modifier	Staging/Grading	Measurement	S	narrower	disjunction; each concept narrower than the pair
+response_contingency	CR or PR	17	1635152	Partial response	Cancer Modifier	Staging/Grading	Measurement	S	narrower	(2nd candidate)
+response_contingency	intolerance	17	4105297	Intolerance	SNOMED	Observable Entity	Observation	S	exact	concept is an observable entity, not a value
+response_contingency	Intolerance	11	4105297	Intolerance	SNOMED	Observable Entity	Observation	S	exact	concept is an observable entity, not a value
+response_contingency	relapsed	9	4136153	Relapse phase	SNOMED	Qualifier Value	Meas Value	S	exact	SNOMED Relapse phase (synonym Relapse)
+response_contingency	no progression	8	1635506	Stable disease	Cancer Modifier	Staging/Grading	Measurement	S	broader	negation of progression; closest concept only
+response_contingency	Progression	8	32949	Progression	Episode	Disease Dynamic	Episode	S	exact	compound timing (during/last therapy) not captured
+response_contingency	Progression	8	1633294	Progressive disease	Cancer Modifier	Staging/Grading	Measurement	S	exact	(2nd candidate)
+response_contingency	PR or CR	6	1633363	Complete response	Cancer Modifier	Staging/Grading	Measurement	S	narrower	disjunction; each concept narrower than the pair
+response_contingency	PR or CR	6	1635152	Partial response	Cancer Modifier	Staging/Grading	Measurement	S	narrower	(2nd candidate)
+response_contingency	refractory or intolerant	6	4048615	Intractable	SNOMED	Qualifier Value	Meas Value	S	narrower	disjunction
+response_contingency	refractory or intolerant	6	4105297	Intolerance	SNOMED	Observable Entity	Observation	S	narrower	(2nd candidate)
+response_contingency	unresponsive	6	4309389	Unresponsive	SNOMED	Clinical Finding	Observation	S	exact	
+response_contingency	Inadequate response	5	4141764	Absent response to treatment	SNOMED	Context-dependent	Observation	S	broader	graded inadequate; closest is absent response
+response_contingency	Inadequate response	5	4309389	Unresponsive	SNOMED	Clinical Finding	Observation	S	broader	(2nd candidate)
+response_contingency	Failure	4	4141764	Absent response to treatment	SNOMED	Context-dependent	Observation	S	exact	synonym match: Treatment failure
+response_contingency	Not sufficiently effective	4	4141764	Absent response to treatment	SNOMED	Context-dependent	Observation	S	broader	graded inadequate; closest is absent response
+response_contingency	Not sufficiently effective	4	4309389	Unresponsive	SNOMED	Clinical Finding	Observation	S	broader	(2nd candidate)
+response_contingency	resistance	4	4148441	Resistant	SNOMED	Qualifier Value	Meas Value	S	exact	
+response_contingency	at least PR	3	1635152	Partial response	Cancer Modifier	Staging/Grading	Measurement	S	narrower	
+response_contingency	at least PR	3	1633363	Complete response	Cancer Modifier	Staging/Grading	Measurement	S	narrower	(2nd candidate)
+response_contingency	At least PR	3	1635152	Partial response	Cancer Modifier	Staging/Grading	Measurement	S	narrower	
+response_contingency	At least PR	3	1633363	Complete response	Cancer Modifier	Staging/Grading	Measurement	S	narrower	(2nd candidate)
+response_contingency	CR	3	1633363	Complete response	Cancer Modifier	Staging/Grading	Measurement	S	exact	
+response_contingency	hypersensitivity	3	43021226	Hypersensitivity condition	SNOMED	Clinical Finding	Condition	S	exact	
+response_contingency	Not progressed	3	1635506	Stable disease	Cancer Modifier	Staging/Grading	Measurement	S	broader	negation of progression; closest concept only
+response_contingency	persistence	3							none	no concept found
+response_contingency	relapse	3	4136153	Relapse phase	SNOMED	Qualifier Value	Meas Value	S	exact	SNOMED Relapse phase (synonym Relapse)
+response_contingency	residual pathologic disease	3	36769000	Residual Tumor	Cancer Modifier	Topography	Measurement	S	broader	generic residual tumor; pathologic/invasive and breast/node site not captured
+response_contingency	stable disease	3	1635506	Stable disease	Cancer Modifier	Staging/Grading	Measurement	S	exact	
+response_contingency	without progression	3	1635506	Stable disease	Cancer Modifier	Staging/Grading	Measurement	S	broader	negation of progression; closest concept only
+response_contingency	complete gross resection	2	1634643	R0: No residual tumor	Cancer Modifier	Staging/Grading	Measurement	S	broader	R0 is resection margin status; approximate
+response_contingency	Complete resection	2	1634643	R0: No residual tumor	Cancer Modifier	Staging/Grading	Measurement	S	broader	R0 is resection margin status; approximate
+response_contingency	CRi after induction	2	1633363	Complete response	Cancer Modifier	Staging/Grading	Measurement	S	broader	CRi (incomplete recovery) no dedicated concept
+response_contingency	CR or better for at least 6 months	2	1633363	Complete response	Cancer Modifier	Staging/Grading	Measurement	S	broader	duration qualifier lost
+response_contingency	double-refractory	2	4048615	Intractable	SNOMED	Qualifier Value	Meas Value	S	broader	Intractable only a SNOMED synonym of Refractory; HPO Refractory 37432233 non-standard
+response_contingency	intolerant	2	4105297	Intolerance	SNOMED	Observable Entity	Observation	S	exact	concept is an observable entity, not a value
+response_contingency	MRD greater than or equal to 0.1%	2	1633488	Minimal residual disease	Cancer Modifier	Staging/Grading	Measurement	S	broader	threshold not captured
+response_contingency	non-progressing	2	1635506	Stable disease	Cancer Modifier	Staging/Grading	Measurement	S	broader	near-synonym of stable disease
+response_contingency	partial response, minor response, or stable disease	2	1635152	Partial response	Cancer Modifier	Staging/Grading	Measurement	S	narrower	disjunction
+response_contingency	partial response, minor response, or stable disease	2	1635506	Stable disease	Cancer Modifier	Staging/Grading	Measurement	S	narrower	(2nd candidate)
+response_contingency	Platinum-resistant	2	4148441	Resistant	SNOMED	Qualifier Value	Meas Value	S	broader	no platinum-specific concept; qualifier only
+response_contingency	Platinum-sensitive	2	4307105	Sensitive	SNOMED	Qualifier Value	Meas Value	S	broader	no platinum-specific concept; qualifier only
+response_contingency	progressed during	2	32949	Progression	Episode	Disease Dynamic	Episode	S	exact	compound timing (during/last therapy) not captured
+response_contingency	progressed during	2	1633294	Progressive disease	Cancer Modifier	Staging/Grading	Measurement	S	exact	(2nd candidate)
+response_contingency	progression on the last therapy	2	32949	Progression	Episode	Disease Dynamic	Episode	S	exact	compound timing (during/last therapy) not captured
+response_contingency	progression on the last therapy	2	1633294	Progressive disease	Cancer Modifier	Staging/Grading	Measurement	S	exact	(2nd candidate)
+response_contingency	Refractory	2	4048615	Intractable	SNOMED	Qualifier Value	Meas Value	S	exact	matched via synonym of Intractable (4048615); Nebraska/SNOMED Refractory 123119002 inactive non-standard
+response_contingency	relapsed during	2	4136153	Relapse phase	SNOMED	Qualifier Value	Meas Value	S	exact	SNOMED Relapse phase (synonym Relapse)
+response_contingency	residual invasive disease	2	36769000	Residual Tumor	Cancer Modifier	Topography	Measurement	S	broader	generic residual tumor; pathologic/invasive and breast/node site not captured
+response_contingency	Unresponsive	2	4309389	Unresponsive	SNOMED	Clinical Finding	Observation	S	exact	
+response_contingency	complete resection AND no progression	1	1635506	Stable disease	Cancer Modifier	Staging/Grading	Measurement	S	broader	negation of progression; closest concept only
+response_contingency	CR1 or CR2 with MRD greater than or equal to 0.1%	1	1633488	Minimal residual disease	Cancer Modifier	Staging/Grading	Measurement	S	broader	MRD threshold and CR1/CR2 ordinal not captured
+response_contingency	CR1 or CR2 with MRD greater than or equal to 0.1%	1	1633363	Complete response	Cancer Modifier	Staging/Grading	Measurement	S	broader	(2nd candidate)
+response_contingency	CRi after induction +/- consolidation	1	1633363	Complete response	Cancer Modifier	Staging/Grading	Measurement	S	broader	CRi (incomplete recovery) no dedicated concept
+response_contingency	Exacerbated	1							none	no concept found
+response_contingency	failure or intolerance	1	4141764	Absent response to treatment	SNOMED	Context-dependent	Observation	S	narrower	disjunction
+response_contingency	failure or intolerance	1	4105297	Intolerance	SNOMED	Observable Entity	Observation	S	narrower	(2nd candidate)
+response_contingency	failure or progression	1	4141764	Absent response to treatment	SNOMED	Context-dependent	Observation	S	narrower	disjunction
+response_contingency	failure or progression	1	32949	Progression	Episode	Disease Dynamic	Episode	S	narrower	(2nd candidate)
+response_contingency	Inappropriate	1							none	no concept found
+response_contingency	insufficient response	1	4141764	Absent response to treatment	SNOMED	Context-dependent	Observation	S	broader	graded inadequate; closest is absent response
+response_contingency	insufficient response	1	4309389	Unresponsive	SNOMED	Clinical Finding	Observation	S	broader	(2nd candidate)
+response_contingency	invasive residual disease in the breast and/or lymph nodes	1	36769000	Residual Tumor	Cancer Modifier	Topography	Measurement	S	broader	generic residual tumor; pathologic/invasive and breast/node site not captured
+response_contingency	Microscopic or gross nodal involvement	1							none	no node-involvement-extent concept found
+response_contingency	moderate to severe symptoms inadequately controlled	1	4155158	Moderate to severe	SNOMED	Qualifier Value	Observation	S	broader	
+response_contingency	no response	1	45877597	No response	LOINC	Answer	Meas Value	S	exact	
+response_contingency	no response or progression	1	45877597	No response	LOINC	Answer	Meas Value	S	narrower	disjunction
+response_contingency	no response or progression	1	32949	Progression	Episode	Disease Dynamic	Episode	S	narrower	(2nd candidate)
+response_contingency	not progressed	1	1635506	Stable disease	Cancer Modifier	Staging/Grading	Measurement	S	broader	negation of progression; closest concept only
+response_contingency	not responsive	1	4309389	Unresponsive	SNOMED	Clinical Finding	Observation	S	exact	
+response_contingency	Platinum resistant	1	4148441	Resistant	SNOMED	Qualifier Value	Meas Value	S	broader	no platinum-specific concept; qualifier only
+response_contingency	progression-free	1	1635506	Stable disease	Cancer Modifier	Staging/Grading	Measurement	S	broader	negation of progression; closest concept only
+response_contingency	refractory to last therapy	1	4048615	Intractable	SNOMED	Qualifier Value	Meas Value	S	broader	Intractable only a SNOMED synonym of Refractory; HPO Refractory 37432233 non-standard
+response_contingency	remission	1	32945	Remission	Episode	Disease Dynamic	Episode	S	exact	
+response_contingency	resection	1							none	no concept for resection status as value
+response_contingency	resistant	1	4148441	Resistant	SNOMED	Qualifier Value	Meas Value	S	exact	
+response_contingency	Resistant	1	4148441	Resistant	SNOMED	Qualifier Value	Meas Value	S	exact	
+response_contingency	resistant or intolerant	1	4048615	Intractable	SNOMED	Qualifier Value	Meas Value	S	narrower	disjunction
+response_contingency	resistant or intolerant	1	4105297	Intolerance	SNOMED	Observable Entity	Observation	S	narrower	(2nd candidate)
+response_contingency	response	1							none	no generic response concept found
+response_contingency	stabilised	1	1635506	Stable disease	Cancer Modifier	Staging/Grading	Measurement	S	broader	near-synonym of stable disease
+response_contingency	unsatisfactory	1	4141764	Absent response to treatment	SNOMED	Context-dependent	Observation	S	broader	graded inadequate; closest is absent response
+response_contingency	unsatisfactory	1	4309389	Unresponsive	SNOMED	Clinical Finding	Observation	S	broader	(2nd candidate)
+time_contingency	not applicable	39	4294169	Not applicable	SNOMED	Qualifier Value	Meas Value	S	exact	placeholder
+time_contingency	within 12 months	8							none	time window; no concept for relative time-from-therapy windows
+time_contingency	during or within 6 months of completion	3							none	time window; no concept for relative time-from-therapy windows
+time_contingency	refractory	3	4048615	Intractable	SNOMED	Qualifier Value	Meas Value	S	exact	via synonym of Intractable
+time_contingency	within 12 months of completion	3							none	time window; no concept for relative time-from-therapy windows
+time_contingency	within 6 months of completion	3							none	time window; no concept for relative time-from-therapy windows
+time_contingency	12 months	2							none	time window; no concept for relative time-from-therapy windows
+time_contingency	56 days	2							none	time window; no concept for relative time-from-therapy windows
+time_contingency	6 months of completing therapy	2							none	time window; no concept for relative time-from-therapy windows
+time_contingency	At least 16 weeks	2							none	time window; no concept for relative time-from-therapy windows
+time_contingency	during or following	2							none	time window; no concept for relative time-from-therapy windows
+time_contingency	during or within 6 months	2							none	time window; no concept for relative time-from-therapy windows
+time_contingency	within 60 days of completion of last therapy	2							none	time window; no concept for relative time-from-therapy windows
+time_contingency	at least 6 months	1							none	time window; no concept for relative time-from-therapy windows
+time_contingency	For patients with a prior autologous stem cell transplantation, the time to progression should be at least 3 years from transplantation	1							none	time window; no concept for relative time-from-therapy windows
+time_contingency	immediately prior	1							none	time window; no concept for relative time-from-therapy windows
+time_contingency	Less than one year	1							none	time window; no concept for relative time-from-therapy windows
+time_contingency	No progression within 16 weeks of starting platinum-based regimen	1							none	time window; no concept for relative time-from-therapy windows
+time_contingency	on or within 12 months of completion	1							none	time window; no concept for relative time-from-therapy windows
+time_contingency	Up to 3 months	1							none	time window; no concept for relative time-from-therapy windows
+time_contingency	within 12 months of neoadjuvant or adjuvant treatment	1							none	time window; no concept for relative time-from-therapy windows
+time_contingency	within 60 days of completion of the last therapy	1							none	time window; no concept for relative time-from-therapy windows
+time_contingency	within 6 months	1							none	time window; no concept for relative time-from-therapy windows
+time_contingency	Within 84 days	1							none	time window; no concept for relative time-from-therapy windows
+exposure_phenotype	CASTRATE-RESISTANT	53	4141960	Hormone refractory prostate cancer	SNOMED	Disorder	Condition	S	exact	Hormone refractory = castrate-resistant (SNOMED synonym); metastatic CRPC 36684947 non-standard
+exposure_phenotype	CASTRATE-SENSITIVE	17	36716186	Hormone sensitive prostate cancer	SNOMED	Disorder	Condition	S	exact	Hormone sensitive prostate cancer
+exposure_phenotype	PLATINUM-SENSITIVE	7	4307105	Sensitive	SNOMED	Qualifier Value	Meas Value	S	broader	no platinum-specific concept
+exposure_phenotype	METASTATIC	2	32944	Metastatic Disease	Episode	Disease Extent	Episode	S	exact	
+exposure_phenotype	PLATINUM-RESISTANT	2	4148441	Resistant	SNOMED	Qualifier Value	Meas Value	S	broader	no platinum-specific concept
+exposure_phenotype	RECURRENT	1	4113136	Recurrent	SNOMED	Qualifier Value	Meas Value	S	exact	
+exposure_phenotype	CHEMOTHERAPY-SENSITIVE	1	4307105	Sensitive	SNOMED	Qualifier Value	Meas Value	S	broader	

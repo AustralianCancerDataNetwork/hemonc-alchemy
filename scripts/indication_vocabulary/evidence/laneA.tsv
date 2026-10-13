@@ -1,0 +1,100 @@
+column	raw_value	n_indications	concept_id	concept_name	vocabulary_id	concept_class_id	domain_id	standard_concept	fit	note
+biomarker	HER2	203	3019066	HER2 Ag [Presence] in Tissue by Immune stain	LOINC	Lab Test	Measurement	S	exact	IHC protein; use HER2 label
+biomarker	HER2	203	35955862	ERBB2 (erb-b2 receptor tyrosine kinase 2) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	narrower	gene-level only; HGNC 3430
+biomarker	BRAF	97	35948173	BRAF (B-Raf proto-oncogene, serine/threonine kinase) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	gene-level; no protein concept sought/found
+biomarker	EGFR	108	35962802	EGFR (epidermal growth factor receptor) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	gene-level; no EGFR IHC concept found
+biomarker	ALK	74	35963763	ALK (ALK receptor tyrosine kinase) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	gene-level; no ALK IHC concept found
+biomarker	PD-L1	71	718584	PD-L1 by Immune stain measurement	OMOP Extension	Lab Test	Measurement	S	exact	IHC; clone-specific children 718585-718589
+biomarker	PD-L1	71	1091989	Immune stain PD-L1 scoring method - Tissue	LOINC	Lab Test	Measurement	S	narrower	scoring method only
+biomarker	MMR	55	1617420	DNA mismatch repair in Cancer specimen by Immune stain Narrative	LOINC	Lab Test	Measurement	S	narrower	IHC MMR only
+biomarker	MMR	55	3180137	Interpretation of mismatch repair protein expression by immunohistochemistry of excised malignant neoplasm	Nebraska Lexicon	Observable Entity	Observation	S	narrower	IHC interpretation
+biomarker	MSI	54	21493972	Microsatellite instability [Interpretation] in Cancer specimen Qualitative	LOINC	Lab Test	Measurement	S	exact	
+biomarker	MSI	54	3047348	Microsatellite instability [Identifier] in Tissue by Molecular genetics method Nominal	LOINC	Lab Test	Measurement	S	exact	molecular method
+biomarker	HR	52	44791967	Tumour hormone receptor status	SNOMED	Observable Entity	Observation	S	exact	hormone receptor = ER/PR status
+biomarker	HR	52	3000481	Estrogen+Progesterone receptor Ag [Presence] in Tissue by Immune stain	LOINC	Lab Test	Measurement	S	narrower	IHC ER+PR
+biomarker	Bcr-Abl	47	36010086	ABL1:BCR-ABL1 Fusion	OncoKB	Variant	Measurement	N	exact	non-standard OncoKB variant
+biomarker	Bcr-Abl	47	35954826	ABL1 (ABL proto-oncogene 1, non-receptor tyrosine kinase) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	broader	partner gene only; LOINC e1a1/b2a2/b3a2 fusion tests (3033006, 3031317, 3032498) are narrower
+biomarker	BRCA	42	40762134	BRCA1+BRCA2 gene mutations tested for in Blood or Tissue by Molecular genetics method Nominal	LOINC	Lab Test	Measurement	S	exact	
+biomarker	BRCA	42	35950928	BRCA1 (BRCA1 DNA repair associated) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	narrower	BRCA2 is 35950178
+biomarker	ER	37	3041343	Estrogen receptor Ag [Presence] in Tissue by Immune stain	LOINC	Lab Test	Measurement	S	exact	IHC protein
+biomarker	ER	37	35948983	ESR1 (estrogen receptor 1) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	narrower	gene-level
+biomarker	CD20	34	3026213	CD20 Ag [Presence] in Tissue by Immune stain	LOINC	Lab Test	Measurement	S	exact	
+biomarker	CD20	34	35960550	MS4A1 (membrane spanning 4-domains A1) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	narrower	CD20 gene symbol MS4A1
+biomarker	RET	22	35952943	RET (ret proto-oncogene) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	
+biomarker	NTRK	18	35951557	NTRK1 (neurotrophic receptor tyrosine kinase 1) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	narrower	NTRK2 35949322, NTRK3 35951499 also exist; no family concept
+biomarker	NTRK	18	35949322	NTRK2 (neurotrophic receptor tyrosine kinase 2) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	narrower	
+biomarker	CD30	12	3015513	CD30 Ag [Presence] in Tissue by Immune stain	LOINC	Lab Test	Measurement	S	exact	
+biomarker	CD30	12	35946663	TNFRSF8 (TNF receptor superfamily member 8) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	narrower	CD30 gene symbol TNFRSF8
+biomarker	KRAS	13	35948791	KRAS (KRAS proto-oncogene, GTPase) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	
+biomarker	MET	12	35961878	MET (MET proto-oncogene, receptor tyrosine kinase) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	no MET protein concept found
+biomarker	FGFR2	11	35962606	FGFR2 (fibroblast growth factor receptor 2) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	
+biomarker	ROS1	14	35957723	ROS1 (ROS proto-oncogene 1, receptor tyrosine kinase) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	
+biomarker	CD33	9	3032702	CD33 Ag [Presence] in Tissue by Immune stain	LOINC	Lab Test	Measurement	S	exact	
+biomarker	CD33	9	35949007	CD33 (CD33 molecule) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	narrower	
+biomarker	FLT3	9	35956153	FLT3 (fms related receptor tyrosine kinase 3) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	
+biomarker	IDH1	9	35948329	IDH1 (isocitrate dehydrogenase (NADP(+)) 1) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	
+biomarker	HRD	8	1469934	Homologous recombination deficiency status analysis [Presence] in Tissue by Molecular genetics method	LOINC	Lab Test	Measurement	S	exact	
+biomarker	17p	6	19356799	Chromosome 17 deletion	MeSH	Suppl Concept	Observation	N	narrower	non-standard; 17p deletion only, not 17p generically
+biomarker	FIP1L1-PDGFRA	5	36015405	PDGFRA:FIP1L1-PDGFRA Fusion	OncoKB	Variant	Measurement	N	exact	non-standard OncoKB variant
+biomarker	FIP1L1-PDGFRA	5	40758222	PDGFRA gene rearrangements [Presence] in Blood or Tissue by Molecular genetics method	LOINC	Lab Test	Measurement	S	broader	synonym FIP1L1-PDGFRA
+biomarker	H3	5	35957234	H3-3A (H3.3 histone A) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	narrower	H3F3A/H3-3A only; no H3 family concept; H3-3B not searched
+biomarker	PR	22	3041608	Progesterone receptor Ag [Presence] in Tissue by Immune stain	LOINC	Lab Test	Measurement	S	exact	IHC protein
+biomarker	PR	22	35957667	PGR (progesterone receptor) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	narrower	gene-level
+biomarker	CCR4	4							none	only MeSH protein entries (non-standard); no OMOP Genomic/LOINC
+biomarker	CD117	4	3038382	CD117 Ag [Presence] in Tissue by Immune stain	LOINC	Lab Test	Measurement	S	exact	
+biomarker	CD117	4	35959513	KIT (KIT proto-oncogene, receptor tyrosine kinase) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	narrower	CD117 = KIT
+biomarker	FGFR3	4	35954995	FGFR3 (fibroblast growth factor receptor 3) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	
+biomarker	PML-RARA	4	36016334	RARA:PML-RARA Fusion	OncoKB	Variant	Measurement	N	exact	non-standard OncoKB variant
+biomarker	Somatostatin receptor	4	35945744	SSTR2 (somatostatin receptor 2) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	narrower	subtype 2 only; no family/imaging-level concept
+biomarker	t(15;17)	4	37034836	t(15;17)(q24.1;q21.1)(PML,RARA) fusion transcript | Blood or Tissue | Translocations	LOINC	LOINC Hierarchy	Measurement	N	exact	non-standard hierarchy; standard deprecated 3036973 inactive
+biomarker	CD19	7	3041283	CD19 Ag [Presence] in Tissue by Immune stain	LOINC	Lab Test	Measurement	S	exact	
+biomarker	CD19	7	35960932	CD19 (CD19 molecule) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	narrower	
+biomarker	CD22	3	3031050	CD22 Ag [Presence] in Tissue by Immune stain	LOINC	Lab Test	Measurement	S	exact	
+biomarker	CD22	3	35953981	CD22 (CD22 molecule) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	narrower	
+biomarker	HLA-A*02:01	3	19458214	HLA-A*02:01 antigen	MeSH	Suppl Concept	Observation	N	exact	non-standard
+biomarker	HLA-A*02:01	3	35962305	HLA-A (major histocompatibility complex, class I, A) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	broader	gene-level
+biomarker	IDH2	3	35953046	IDH2 (isocitrate dehydrogenase (NADP(+)) 2) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	
+biomarker	PSMA	3	35960115	FOLH1 (folate hydrolase 1) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	narrower	PSMA gene FOLH1; no PSMA protein/imaging measurement concept
+biomarker	TMB	3	1001563	Mutations/Megabase [# Ratio] in Tumor	LOINC	Lab Test	Measurement	S	exact	
+biomarker	TMB	3	1002393	Tumor mutation burden [Interpretation]	LOINC	Lab Test	Measurement	S	exact	
+biomarker	5q	2							none	no 5q deletion concept found
+biomarker	AFP	2	3009306	Alpha-1-Fetoprotein [Mass/volume] in Serum or Plasma	LOINC	Lab Test	Measurement	S	exact	serum protein
+biomarker	AFP	2	35948552	AFP (alpha fetoprotein) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	narrower	
+biomarker	CD25	2	3007421	CD25 Ag [Presence] in Tissue by Immune stain	LOINC	Lab Test	Measurement	S	exact	
+biomarker	CD25	2	35960573	IL2RA (interleukin 2 receptor subunit alpha) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	narrower	CD25 = IL2RA
+biomarker	EZH2	2	35964476	EZH2 (enhancer of zeste 2 polycomb repressive complex 2 subunit) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	
+biomarker	Folate receptor alpha	2	1091916	Folate receptor alpha [Interpretation] in Tissue by Immune stain Narrative	LOINC	Lab Test	Measurement	S	exact	IHC
+biomarker	Folate receptor alpha	2	35962723	FOLR1 (folate receptor alpha) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	narrower	
+biomarker	MIBG	2							none	only iobenguane drug/dm+d concepts; no scan/tracer measurement concept
+biomarker	NPM1	2	35948005	NPM1 (nucleophosmin 1) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	
+biomarker	NRG1	2	35951049	NRG1 (neuregulin 1) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	
+biomarker	PDGFR	2	35963556	PDGFRA (platelet derived growth factor receptor alpha) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	narrower	no PDGFR family concept
+biomarker	PDGFR	2	35955974	PDGFRB (platelet derived growth factor receptor beta) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	narrower	
+biomarker	PDGFRA	2	35963556	PDGFRA (platelet derived growth factor receptor alpha) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	
+biomarker	RAS	2	1314516	Ras (kras or nras) gene mutation	HCPCS	HCPCS	Observation	S	narrower	KRAS/NRAS only; HCPCS quality-measure code
+biomarker	RAS	2	35948791	KRAS (KRAS proto-oncogene, GTPase) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	narrower	NRAS 35950119
+biomarker	BRCA2	1	35950178	BRCA2 (BRCA2 DNA repair associated) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	
+biomarker	CLDN18.2	3	1091409	Claudin 18 [Interpretation] in Tissue by Immune stain Narrative	LOINC	Lab Test	Measurement	S	broader	isoform 2 not distinguished
+biomarker	CLDN18.2	3	35955255	CLDN18 (claudin 18) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	broader	
+biomarker	c-Met	1	35961878	MET (MET proto-oncogene, receptor tyrosine kinase) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	gene-level only
+biomarker	EBV	1	1001833	Epstein Barr virus DNA [Units/volume] (viral load) in Blood by NAA with probe detection	LOINC	Lab Test	Measurement	S	narrower	viral load assay; no tissue EBER/status concept found
+biomarker	EpCAM	1	35963234	EPCAM (epithelial cell adhesion molecule) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	no protein concept found
+biomarker	FGFR1	1	35956416	FGFR1 (fibroblast growth factor receptor 1) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	
+biomarker	HLA-A*02:02	1	35962305	HLA-A (major histocompatibility complex, class I, A) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	broader	no allele-level concept found
+biomarker	HLA-A*02:03	1	35962305	HLA-A (major histocompatibility complex, class I, A) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	broader	no allele-level concept found
+biomarker	HLA-A*02:06	1	19464048	HLA-A*02:06:01 antigen	MeSH	Suppl Concept	Observation	N	narrower	non-standard; 6-digit allele
+biomarker	HLA-A*02:06	1	35962305	HLA-A (major histocompatibility complex, class I, A) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	broader	
+biomarker	iobenguane scan	1							none	no scan/tracer measurement concept found
+biomarker	KIT	1	35959513	KIT (KIT proto-oncogene, receptor tyrosine kinase) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	
+biomarker	KMT2A	1	35960503	KMT2A (lysine methyltransferase 2A) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	
+biomarker	MYC	1	35952889	MYC (MYC proto-oncogene, bHLH transcription factor) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	
+biomarker	MYC	1	3011615	MYC gene rearrangements [Presence] in Blood or Tissue by Molecular genetics method	LOINC	Lab Test	Measurement	S	narrower	rearrangement only
+biomarker	NRAS	1	35950119	NRAS (NRAS proto-oncogene, GTPase) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	
+biomarker	BCL2	1	3046580	BCL2 Ag [Presence] in Tissue by Immune stain	LOINC	Lab Test	Measurement	S	exact	IHC
+biomarker	BCL2	1	35958594	BCL2 (BCL2 apoptosis regulator) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	gene-level
+biomarker	MAGE-A4 antigen	1	35951541	MAGEA4 (MAGE family member A4) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	narrower	gene-level; no protein measurement concept
+biomarker	PIK3CA	8	35953202	PIK3CA (phosphatidylinositol-4,5-bisphosphate 3-kinase catalytic subunit alpha) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	
+biomarker	AKT1	3	35956980	AKT1 (AKT serine/threonine kinase 1) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	
+biomarker	ESR1	3	35948983	ESR1 (estrogen receptor 1) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	
+biomarker	PTEN	3	35955125	PTEN (phosphatase and tensin homolog) gene variant measurement	OMOP Genomic	Genetic Variation	Measurement	S	exact	gene-level
+biomarker	PTEN	3	21493983	Phosphatase and tensin homolog (PTEN) protein [Presence] in Cancer specimen by Immune stain	LOINC	Lab Test	Measurement	S	exact	IHC

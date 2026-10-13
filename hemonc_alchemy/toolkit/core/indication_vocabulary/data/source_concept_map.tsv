@@ -1,0 +1,1226 @@
+source_column	raw_value	context	target_concept_id	target_kind	fit	status	provenance
+age	1 to 18	year		none	none	decomposed	age grammar
+age	1 to 21	year		none	none	decomposed	age grammar
+age	1 to NUBp	month		none	none	decomposed	age grammar
+age	1 to NUBp	year		none	none	decomposed	age grammar
+age	1 to NUBya	year		none	none	decomposed	age grammar
+age	1+	month		none	none	decomposed	age grammar
+age	1+	year		none	none	decomposed	age grammar
+age	12 to NUBp	year		none	none	decomposed	age grammar
+age	12+	year		none	none	decomposed	age grammar
+age	13+	year		none	none	decomposed	age grammar
+age	15+	year		none	none	decomposed	age grammar
+age	16+	year		none	none	decomposed	age grammar
+age	2 to NUBp	month		none	none	decomposed	age grammar
+age	2 to NUBp	year		none	none	decomposed	age grammar
+age	2+	year		none	none	decomposed	age grammar
+age	22+	year		none	none	decomposed	age grammar
+age	25-	year		none	none	decomposed	age grammar
+age	3+	year		none	none	decomposed	age grammar
+age	4 to 11	year		none	none	decomposed	age grammar
+age	6 to NUBp	month		none	none	decomposed	age grammar
+age	60+	year		none	none	decomposed	age grammar
+age	65+	year		none	none	decomposed	age grammar
+age	adult	unspecified	2040000127	local	none	proposed-new	age group
+age	pediatric	unspecified	2040000135	local	none	proposed-new	age group
+age	pediatric including adolescent	unspecified		none	none	decomposed	age grammar
+biomarker	17p			none	none	gap	no analyte concept found
+biomarker	5q			none	none	gap	no analyte concept found
+biomarker	AFP		35948552	existing	narrower	mapped-to-existing	gene or protein analyte
+biomarker	AKT1		35956980	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	ALK		35963763	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	bcl2		35958594	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	Bcr-Abl		35954826	existing	broader	mapped-to-existing	gene or protein analyte
+biomarker	BRAF		35948173	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	BRCA		35950928	existing	narrower	mapped-to-existing	gene or protein analyte
+biomarker	BRCA2		35950178	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	c-Met		35961878	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	CCR4			none	none	gap	no analyte concept found
+biomarker	CD117		35959513	existing	narrower	mapped-to-existing	gene or protein analyte
+biomarker	CD19		35960932	existing	narrower	mapped-to-existing	gene or protein analyte
+biomarker	CD20		35960550	existing	narrower	mapped-to-existing	gene or protein analyte
+biomarker	CD22		35953981	existing	narrower	mapped-to-existing	gene or protein analyte
+biomarker	CD25		35960573	existing	narrower	mapped-to-existing	gene or protein analyte
+biomarker	CD30		35946663	existing	narrower	mapped-to-existing	gene or protein analyte
+biomarker	CD33		35949007	existing	narrower	mapped-to-existing	gene or protein analyte
+biomarker	cldn18.2		35955255	existing	broader	mapped-to-existing	gene or protein analyte
+biomarker	EBV		1001833	existing	narrower	mapped-to-existing	gene or protein analyte
+biomarker	egfr		35962802	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	EpCAM		35963234	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	ER		35948983	existing	narrower	mapped-to-existing	gene or protein analyte
+biomarker	ESR1		35948983	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	EZH2		35964476	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	FGFR1		35956416	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	FGFR2		35962606	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	FGFR3		35954995	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	FIP1L1-PDGFRA		40758222	existing	broader	mapped-to-existing	gene or protein analyte
+biomarker	FLT3		35956153	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	Folate receptor alpha		35962723	existing	narrower	mapped-to-existing	gene or protein analyte
+biomarker	H3		35957234	existing	narrower	mapped-to-existing	gene or protein analyte
+biomarker	HER2		35955862	existing	narrower	mapped-to-existing	gene or protein analyte
+biomarker	HLA-A*02:01		35962305	existing	broader	mapped-to-existing	gene or protein analyte
+biomarker	HLA-A*02:02		35962305	existing	broader	mapped-to-existing	gene or protein analyte
+biomarker	HLA-A*02:03		35962305	existing	broader	mapped-to-existing	gene or protein analyte
+biomarker	HLA-A*02:06		35962305	existing	broader	mapped-to-existing	gene or protein analyte
+biomarker	HR		44791967	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	HRD		1469934	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	IDH1		35948329	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	IDH2		35953046	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	iobenguane scan			none	none	gap	no analyte concept found
+biomarker	KIT		35959513	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	KMT2A		35960503	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	KRAS		35948791	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	mage-a4 antigen		35951541	existing	narrower	mapped-to-existing	gene or protein analyte
+biomarker	MET		35961878	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	MIBG			none	none	gap	no analyte concept found
+biomarker	MMR		1617420	existing	narrower	mapped-to-existing	gene or protein analyte
+biomarker	MSI		700490	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	MYC		35952889	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	NPM1		35948005	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	NRAS		35950119	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	NRG1		35951049	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	NTRK		35949322	existing	narrower	mapped-to-existing	gene or protein analyte
+biomarker	PD-L1		718584	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	PDGFR		35955974	existing	narrower	mapped-to-existing	gene or protein analyte
+biomarker	PDGFRA		35963556	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	PIK3CA		35953202	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	PML-RARA			none	none	gap	no analyte concept found
+biomarker	pr		35957667	existing	narrower	mapped-to-existing	gene or protein analyte
+biomarker	PSMA		35960115	existing	narrower	mapped-to-existing	gene or protein analyte
+biomarker	PTEN		35955125	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	RAS		35948791	existing	narrower	mapped-to-existing	gene or protein analyte
+biomarker	RET		35952943	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	ROS1		35957723	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker	Somatostatin receptor		35945744	existing	narrower	mapped-to-existing	gene or protein analyte
+biomarker	t(15;17)			none	none	gap	no analyte concept found
+biomarker	TMB		1001563	existing	exact	mapped-to-existing	gene or protein analyte
+biomarker_finding	>50% of tumor cells with strong (3+ IHC) staining	c-Met	2020000163	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	>= 10 mutations/Mb	TMB	2020000161	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	activating mutation	EGFR	2020000011	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	activating mutation	ESR1	2020000066	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	at least 1%	PD-L1	2020000159	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	at least 400 ng/mL	AFP	2020000162	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	cps at least 1	PD-L1	2020000160	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	CPS at least 1%	PD-L1	2020000160	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	cps at least 10	PD-L1	2020000160	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	CPS at least 10%	PD-L1	2020000160	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	cps at least 5	PD-L1	2020000160	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	deficient	MMR	2020000063	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	deletion	17p	2020000079	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	deletion	5q	2020000092	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	exon 14 skipping alteration	MET	2020000051	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	exon 18 mutation	PDGFRA	2020000037	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	exon 19 deletion	EGFR	2020000009	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	exon 20 insertion	EGFR	2020000018	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	fusion	BRAF	2020000125	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	fusion	FGFR2	2020000075	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	fusion	FGFR3	2020000073	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	fusion	NRG1	2020000131	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	fusion	RET	2020000111	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	fusion	ROS1	2020000117	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	fusion without known acquired resistance mutation	NTRK	2020000091	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	germline mutation	BRCA	2020000104	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	greater than 400 ng/mL	AFP	2020000162	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	high	MSI	2020000064	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	high	PD-L1	2020000031	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	high	TMB	2020000109	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	ITD	FLT3	2020000113	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	low	HER2	2020000126	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	low (ihc 1+ or ihc 2+/ish-) or ultralow (ihc 0 with membrane staining)	HER2	2020000156	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	mutated	AKT1	2020000049	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	mutated	BRAF	2020000043	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	mutated	BRCA	2020000100	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	mutated	BRCA2	2020000101	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	mutated	EGFR	2020000012	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	mutated	ESR1	2020000065	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	mutated	EZH2	2020000122	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	mutated	FLT3	2020000077	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	mutated	HER2	2020000127	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	mutated	IDH1	2020000089	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	mutated	IDH2	2020000067	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	mutated	KRAS	2020000040	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	mutated	NRAS	2020000129	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	mutated	NTRK	2020000116	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	mutated	PIK3CA	2020000017	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	mutated	PTEN	2020000050	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	mutated	RET	2020000112	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	mutation	FGFR2	2020000070	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	mutation	FGFR3	2020000071	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	mutation	IDH1	2020000089	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	mutation	IDH2	2020000067	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	negative	ALK	2020000032	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	negative	Bcr-Abl	2020000044	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	negative	EGFR	2020000047	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	negative	ER	2020000027	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	negative	HER2	2020000002	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	negative	PR	2020000028	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	negative (ich 0, 1hc1+ or ihc2+/ish-)	HER2	2020000155	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	non-resistant mutation	EGFR	2020000013	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	not high	MSI	2020000094	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	p.D816V	KIT	2020000084	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	p.D842V	PDGFR	2020000039	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	p.D842V	PDGFRA	2020000038	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	p.G12C	KRAS	2020000003	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	p.K27M	H3	2020000062	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	p.L858R	EGFR	2020000010	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	p.R132	IDH1	2020000090	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	p.T315I	Bcr-Abl	2020000022	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	p.T790M	EGFR	2020000036	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	p.V600	BRAF	2020000033	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	p.V600E	BRAF	2020000041	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	p.V600K	BRAF	2020000042	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	ALK	2020000014	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	bcl2	2020000154	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	Bcr-Abl	2020000021	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	CCR4	2020000098	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	CD117	2020000080	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	CD19	2020000045	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	CD20	2020000078	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	CD22	2020000085	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	CD25	2020000061	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	CD30	2020000046	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	CD33	2020000076	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	CLDN18.2	2020000132	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	EBV	2020000121	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	EGFR	2020000054	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	EpCAM	2020000052	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	ER	2020000019	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	FIP1L1-PDGFRA	2020000081	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	Folate receptor alpha	2020000097	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	HER2	2020000048	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	HLA-A*02:01	2020000004	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	HLA-A*02:02	2020000005	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	HLA-A*02:03	2020000006	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	HLA-A*02:06	2020000007	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	HR	2020000001	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	HRD	2020000099	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	iobenguane scan	2020000086	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	MAGE-A4 antigen	2020000008	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	MIBG	2020000087	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	MYC	2020000057	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	PD-L1	2020000030	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	PML-RARA	2020000016	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	PR	2020000128	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	PSMA	2020000096	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	Somatostatin receptor	2020000095	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive	t(15;17)	2020000023	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	positive (IHC 3+)	HER2	2020000130	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	present	PML-RARA	2020000024	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	present	t(15;17)	2020000015	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	proficient	MMR	2020000093	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	rearrangement	FGFR1	2020000110	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	rearrangement	NTRK	2020000068	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	rearrangement	PDGFR	2020000083	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	rearrangement	ROS1	2020000059	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	rearrangement without a known acquired resistance mutation	NTRK	2020000069	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	sensitizing mutation	EGFR	2020000074	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	somatic mutation	BRCA	2020000105	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	susceptible mutation	FGFR3	2020000072	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	susceptible mutation	NPM1	2020000119	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	til at least 1%	PD-L1	2020000157	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	TIL at least 5%	PD-L1	2020000157	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	TKD activating mutation	HER2	2020000120	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	TPS at least 1%	PD-L1	2020000158	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	TPS at least 5%	PD-L1	2020000158	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	TPS at least 50%	PD-L1	2020000158	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	translocation	KMT2A	2020000118	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	unknown	ER	2020000124	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	unknown	FIP1L1-PDGFRA	2020000082	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	unknown	PR	2020000020	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	wild-type	ALK	2020000025	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	wild-type	BRAF	2020000102	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	wild-type	EGFR	2020000026	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	wild-type	KRAS	2020000055	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	wild-type	RAS	2020000056	local	none	proposed-new	pre-coordinated biomarker state
+biomarker_finding	wild-type	ROS1	2020000053	local	none	proposed-new	pre-coordinated biomarker state
+context	1L		35804409	existing	narrower	mapped-to-existing	HemOnc Context
+context	1L consolidation		35804597	existing	narrower	mapped-to-existing	HemOnc Context
+context	1L maintenance		35803496	existing	narrower	mapped-to-existing	HemOnc Context
+context	2L		35804785	existing	narrower	mapped-to-existing	HemOnc Context
+context	2L+		35803507	existing	narrower	mapped-to-existing	HemOnc Context
+context	3L		35804788	existing	narrower	mapped-to-existing	HemOnc Context
+context	3L+		35803507	existing	narrower	mapped-to-existing	HemOnc Context
+context	Adjuvant		35803584	existing	exact	mapped-to-existing	HemOnc Context
+context	Conditioning		37561086	existing	narrower	mapped-to-existing	HemOnc Context
+context	Consolidation		35803480	existing	narrower	mapped-to-existing	HemOnc Context
+context	Induction		35803433	existing	exact	mapped-to-existing	HemOnc Context
+context	Maintenance		35803514	existing	narrower	mapped-to-existing	HemOnc Context
+context	Neoadjuvant		35804141	existing	exact	mapped-to-existing	HemOnc Context
+context	Perioperative		1525179	existing	exact	mapped-to-existing	HemOnc Context
+context	platelet count less than 50k		2042000003	local	none	proposed-new	see concept_status
+context	Prevention		35805724	existing	exact	mapped-to-existing	HemOnc Context
+context	prevention of surgical bleeding		35805724	existing	narrower	mapped-to-existing	HemOnc Context
+context	Progressive		37561400	existing	broader	mapped-to-existing	HemOnc Context
+context	prophylaxis		35805724	existing	exact	mapped-to-existing	HemOnc Context
+context	scheduled to undergo an invasive procedure		2042000002	local	none	proposed-new	see concept_status
+context	Treatment		2042000001	local	none	proposed-new	see concept_status
+demographics	adult men		2040000055	local	broader	proposed-new	see concept_status
+demographics	adults 75 years or older		2040000071	local	broader	proposed-new	see concept_status
+demographics	adults and pediatric patients 40 kg or more		2040000009	local	narrower	proposed-new	see concept_status
+demographics	adults AND skeletally mature adolescents		2040000051	local	narrower	proposed-new	see concept_status
+demographics	Anemia		439777	existing	exact	mapped-to-existing	see concept_status
+demographics	asymptomatic or minimally symptomatic		2040000117	local	narrower	proposed-new	see concept_status
+demographics	ECOG PS 0-1		2040000018	local	none	proposed-new	see concept_status
+demographics	enlarged prostate gland		4093346	existing	exact	mapped-to-existing	see concept_status
+demographics	good performance status		2040000108	local	none	proposed-new	see concept_status
+demographics	have comorbidities that preclude intensive induction chemotherapy		2040000072	local	none	proposed-new	see concept_status
+demographics	high risk for breast cancer		763933	existing	exact	mapped-to-existing	see concept_status
+demographics	men		2040000006	local	broader	proposed-new	see concept_status
+demographics	minimally pretreated (within 1 year of diagnosis)		2040000075	local	none	proposed-new	see concept_status
+demographics	moderate disease with severe bleeding phenotype		2040000057	local	none	proposed-new	see concept_status
+demographics	no satisfactory treatment alternatives		2040000133	local	none	proposed-new	see concept_status
+demographics	postmenopausal		4295261	existing	exact	mapped-to-existing	see concept_status
+demographics	postmenopausal with osteoporosis at high risk for fracture		2040000050	local	broader	proposed-new	see concept_status
+demographics	postmenopausal without symptomatic visceral disease		2040000066	local	broader	proposed-new	see concept_status
+demographics	postmenopausal women		4295261	existing	exact	mapped-to-existing	see concept_status
+demographics	pre/perimenopausal		2040000114	local	none	proposed-new	see concept_status
+demographics	premenopausal		4331463	existing	exact	mapped-to-existing	see concept_status
+demographics	require systemic therapy		2040000042	local	none	proposed-new	see concept_status
+demographics	severe disease		2040000056	local	none	proposed-new	see concept_status
+demographics	symptomatic		4142947	existing	exact	mapped-to-existing	see concept_status
+demographics	Thrombocytopenia		2040000069	local	none	proposed-new	see concept_status
+demographics	transfusion-dependent anemia		2040000081	local	none	proposed-new	see concept_status
+exposure_phenotype	CASTRATE_TO_RESISTANT		4141960	existing	exact	mapped-to-existing	see concept_status
+exposure_phenotype	CASTRATE_TO_SENSITIVE		36716186	existing	exact	mapped-to-existing	see concept_status
+exposure_phenotype	CHEMOTHERAPY_TO_SENSITIVE		2036000151	local	broader	proposed-new	see concept_status
+exposure_phenotype	METASTATIC		32944	existing	exact	mapped-to-existing	see concept_status
+exposure_phenotype	PLATINUM_TO_RESISTANT		2036000031	local	broader	proposed-new	see concept_status
+exposure_phenotype	PLATINUM_TO_SENSITIVE		2036000032	local	broader	proposed-new	see concept_status
+exposure_phenotype	RECURRENT		4113136	existing	exact	mapped-to-existing	see concept_status
+ineligibility	alternative treatment		2040000019	local	none	proposed-new	see concept_status
+ineligibility	Anthracycline is not suitable		2040000126	local	none	proposed-new	see concept_status
+ineligibility	Anthracycline- or taxane-containing chemotherapy not indicated		2040000029	local	none	proposed-new	see concept_status
+ineligibility	ASCT or multi-agent chemotherapy is not a treatment option		2040000024	local	none	proposed-new	see concept_status
+ineligibility	asympotomatic or mildly symptomatic in whom chemotherapy is not yet clinically indicated		2040000003	local	none	proposed-new	see concept_status
+ineligibility	body weight < 40 kg		2040000040	local	none	proposed-new	see concept_status
+ineligibility	candidate for curative surgery or curative radiation		2040000032	local	none	proposed-new	see concept_status
+ineligibility	candidate for surgery or radiation		2040000131	local	none	proposed-new	see concept_status
+ineligibility	candidates for systemic therapy		2040000054	local	none	proposed-new	see concept_status
+ineligibility	chemotherapy is not clinically indicated		2040000091	local	none	proposed-new	see concept_status
+ineligibility	chemotherapy is not yet clinically indicated		2040000061	local	none	proposed-new	see concept_status
+ineligibility	choosing not to proceed with HSCT		2040000014	local	none	proposed-new	see concept_status
+ineligibility	cisplatin-ineligible		2040000097	local	none	proposed-new	see concept_status
+ineligibility	comorbidities making them unsuitable for full-dose fludarabine-based therapy		2040000088	local	none	proposed-new	see concept_status
+ineligibility	considered inappropriate to delay taxane-based chemotherapy		2040000085	local	none	proposed-new	see concept_status
+ineligibility	disease-related splenomegaly or symptoms		2040000086	local	none	proposed-new	see concept_status
+ineligibility	do not require systemic therapy		2040000125	local	none	proposed-new	see concept_status
+ineligibility	eligible for auto HSCT		2040000045	local	none	proposed-new	see concept_status
+ineligibility	eligible for autologous HSCT		2040000044	local	none	proposed-new	see concept_status
+ineligibility	eligible for high dose chemotherapy with haematopoietic stem cell transplantation		2040000020	local	none	proposed-new	see concept_status
+ineligibility	eligible to receive chemotherapy according to internationally established criteria for primary therapy of early breast cancer		2040000052	local	none	proposed-new	see concept_status
+ineligibility	fludarabine combination chemotherapy is not appropriate		2040000005	local	none	proposed-new	see concept_status
+ineligibility	Fludarabine-based therapy considered inappropriate		2040000089	local	none	proposed-new	see concept_status
+ineligibility	HIV-negative		2040000111	local	none	proposed-new	see concept_status
+ineligibility	HSCT not appropriate		2040000015	local	none	proposed-new	see concept_status
+ineligibility	HSCT-ineligible		2040000010	local	none	proposed-new	see concept_status
+ineligibility	hypersensitivity to the native forms of L-asparaginase		2040000095	local	none	proposed-new	see concept_status
+ineligibility	imatinib, nilotinib and dasatinib are not considered appropriate treatment options		2040000022	local	none	proposed-new	see concept_status
+ineligibility	ineligible for autologous hematopoietic stem cell transplantation (auto-HSCT) or CAR T-cell therapy		2040000027	local	none	proposed-new	see concept_status
+ineligibility	Ineligible for autologous HSCT		2040000043	local	none	proposed-new	see concept_status
+ineligibility	Ineligible for cisplatin		2040000107	local	none	proposed-new	see concept_status
+ineligibility	ineligible for cisplatin-containing chemotherapy		2040000059	local	none	proposed-new	see concept_status
+ineligibility	ineligible for fludarabine-based therapy		2040000090	local	none	proposed-new	see concept_status
+ineligibility	ineligible for platinum-containing chemotherapy		2040000101	local	none	proposed-new	see concept_status
+ineligibility	ineligible for standard induction chemotherapy		2040000049	local	none	proposed-new	see concept_status
+ineligibility	ineligible or have elected not to undergo cystectomy		2040000102	local	none	proposed-new	see concept_status
+ineligibility	no longer amenable to local treatments		2040000035	local	none	proposed-new	see concept_status
+ineligibility	no satisfactory alternative treatment options		2040000121	local	none	proposed-new	see concept_status
+ineligibility	No satisfactory treatment options		2040000080	local	none	proposed-new	see concept_status
+ineligibility	non-malignant disease		2040000128	local	none	proposed-new	see concept_status
+ineligibility	none		2040000134	local	none	proposed-new	see concept_status
+ineligibility	not able to complete intensive curative therapy		2040000013	local	none	proposed-new	see concept_status
+ineligibility	not amenable to curative surgery or radiation therapy		2040000119	local	none	proposed-new	see concept_status
+ineligibility	not amenable to curative treatment with radiotherapy or surgery and an anthracycline-containing regimen is appropriate		2040000092	local	none	proposed-new	see concept_status
+ineligibility	not amenable to curative treatment with surgery and/or radiation therapy		2040000123	local	none	proposed-new	see concept_status
+ineligibility	not amenable to curative treatment with surgery or radiotherapy		2040000093	local	none	proposed-new	see concept_status
+ineligibility	not candidate for autologous HSCT		2040000073	local	none	proposed-new	see concept_status
+ineligibility	not candidate for curative surgery or curative radiation		2040000031	local	none	proposed-new	see concept_status
+ineligibility	Not candidate for curative surgical resection		2040000064	local	none	proposed-new	see concept_status
+ineligibility	not candidate for curative surgical resection or radiation		2040000083	local	none	proposed-new	see concept_status
+ineligibility	not candidate for hematopoeitic SCT		2040000109	local	none	proposed-new	see concept_status
+ineligibility	Not candidate for potentially curative surgery and/or radiation therapy		2040000094	local	none	proposed-new	see concept_status
+ineligibility	not candidate for standard induction chemotherapy		2040000048	local	none	proposed-new	see concept_status
+ineligibility	not candidate for surgery or radiation therapy		2040000118	local	none	proposed-new	see concept_status
+ineligibility	Not candidate for surgical resection or definitive chemoradiation		2040000105	local	none	proposed-new	see concept_status
+ineligibility	not candidates for curative surgery or curative radiation		2040000039	local	none	proposed-new	see concept_status
+ineligibility	not candidates for curative surgery or radiation		2040000084	local	none	proposed-new	see concept_status
+ineligibility	not candidates for cytotoxic chemotherapy		2040000070	local	none	proposed-new	see concept_status
+ineligibility	not candidates for definitive chemoradiation		2040000033	local	none	proposed-new	see concept_status
+ineligibility	not candidates for multi-agent salvage chemotherapy and HSCT		2040000104	local	none	proposed-new	see concept_status
+ineligibility	not curable by surgery or radiation		2040000103	local	none	proposed-new	see concept_status
+ineligibility	not eligible for autologous HSCT		2040000021	local	none	proposed-new	see concept_status
+ineligibility	not eligible for cisplatin-based chemotherapy		2040000096	local	none	proposed-new	see concept_status
+ineligibility	not eligible for cisplatin-based regimen		2040000098	local	none	proposed-new	see concept_status
+ineligibility	not eligible for complete resection		2040000120	local	none	proposed-new	see concept_status
+ineligibility	not eligible for haematopoietic stem cell transplantation		2040000012	local	none	proposed-new	see concept_status
+ineligibility	not eligible for platinum-based regimen		2040000099	local	none	proposed-new	see concept_status
+ineligibility	not eligible for transplant		2040000115	local	none	proposed-new	see concept_status
+ineligibility	not eligible to receive standard induction chemotherapy		2040000077	local	none	proposed-new	see concept_status
+ineligibility	not suited for curative resection		2040000017	local	none	proposed-new	see concept_status
+ineligibility	other TKI is indicated		2040000112	local	none	proposed-new	see concept_status
+ineligibility	patients for whom immediate cystectomy would be associated with unacceptable morbidity or mortality		2040000129	local	none	proposed-new	see concept_status
+ineligibility	patients for whom rituximab alone would be considered appropriate therapy due to other co-morbidities		2040000074	local	none	proposed-new	see concept_status
+ineligibility	Refractory or intolerant to standard therapies		2040000100	local	none	proposed-new	see concept_status
+ineligibility	require systemic treatment		2040000087	local	none	proposed-new	see concept_status
+ineligibility	requiring immediate surgery		2040000016	local	none	proposed-new	see concept_status
+ineligibility	satisfactory alternative treatment options		2040000053	local	none	proposed-new	see concept_status
+ineligibility	satisfactory locoregional treatment options		2040000041	local	none	proposed-new	see concept_status
+ineligibility	satisfactory treatment options		2040000060	local	none	proposed-new	see concept_status
+ineligibility	standard therapy available or feasible		2040000030	local	none	proposed-new	see concept_status
+ineligibility	Subsequent treatment with imatinib, nilotinib, and dasatinib is clinically appropriate		2040000023	local	none	proposed-new	see concept_status
+ineligibility	suitable for endocrine therapy		2040000079	local	none	proposed-new	see concept_status
+ineligibility	transplant ineligible		2040000004	local	none	proposed-new	see concept_status
+ineligibility	transplant-ineligible		2040000004	local	none	proposed-new	see concept_status
+ineligibility	unable to tolerate further platinum chemotherapy		2040000116	local	none	proposed-new	see concept_status
+ineligibility	unsuitable for chemo-immunotherapy		2040000132	local	none	proposed-new	see concept_status
+prior_therapy	(Alectinib		35802870	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	(anti-PD-1 antibody		35807322	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	(Crizotinib AND One other ALK inhibitor)			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	(Interferon alfa		37557008	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	(Nephrectomy AND Metastatectomy)			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	(Paclitaxel AND Anthracycline-based regimen)			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	(Paclitaxel AND Contraindication to Anthracycline)			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	0			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	0 in the metastatic setting AND Anthracycline-based chemotherapy in the adjuvant setting, unless contraindicated			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	0 or 1			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	0 SACT			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	0-2 chemotherapy-based regimens			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	0-2 chemotherapy-based regimens AND (bevacizumab or other VEGF inhibitors or VEGF receptor-targeted agents)			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1 Chemothearpy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1 SACT			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1 to 3			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1 to 3 SACT			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1 VEGF inhibitor			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+ ALK TKI			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+ Alkylator-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+ anti-CD20-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+ anti-HER-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+ anti-HER2-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+ Chemotherapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+ Chemotherapy, including an anthracycline and a taxane			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+ EGFR TKI			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+ endocrine therapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+ Endocrine therapy AND CDK4/6 inhibitor			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+ including auto HSCT unless ineligible			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+ including lenalidomide			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+ Multi-agent chemotherapy regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+ radiation			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+ radiotherapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+ SACT			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+ systemic			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+ TKI			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+, including Cisplatin			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+, including Imatinib			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+, including Lenalidomide AND Proteasome inhibitor			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+, including Platinum-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	1+, not including bortezomib			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ anti-HER2-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ Anti-HER2-based regimen, 1+ of which was for metastatic disease			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ chemotherapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ Chemotherapy, including Fluoropyrimidine-based regimen AND Platinum-based regimen AND (Taxane			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ Chemotherapy-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ including a proteasome inhibitor and an immunomodulatory agent			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ Multi-agent chemotherapy regimens in non-transplant candidates			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ platinum-based chemotherapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ SACT			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ SACT, including 1+ in the advanced setting			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ SACT, including 1+ in the metastatic setting			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ SACT, including Anthracycline-based regimen AND Taxane-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ SACT, including Anthracycline-based regimen AND Taxane-based regimen unless unsuitable			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ SACT, including BTK inhibitor			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ SACT, including BTK inhibitor AND BCL-2 inhibitor			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ SACT, including BTKi			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ SACT, including Fluoropyrimidine-based regimen AND Platinum-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ SACT, including Purine analog			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ systemic treatments			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ TKI			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ TKIs			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ Tyrosine kinase inhibitor therapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+ when AHSCT is not a treatment option			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+, including 1+ in the metastatic setting			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+, including 1+ platinum-containing chemotherapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+, including Bortezomib			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+, including Bortezomib AND Immunomodulator			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+, including Bortezomib AND Lenalidomide			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+, including Lenalidomide AND Proteasome inhibitor			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+, including Platinum-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	2+, including Proteasome inhibitor AND Lenalidomide			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	3+			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	3+ Chemotherapy-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	3+ Chemotherapy-based regimen, with progression at least 6 months after a platinum-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	3+ SACT			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	3+ TKIs, including Imatinib			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	3+, including a proteasome inhibitor and an IMiD			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	3+, including a proteasome inhibitor and an IMiD and anti-CD38 antibody			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	3+, including an immunomodulatory agent, a proteasome inhibitor, and an anti-CD38 antibody			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	3+, including Proteasome inhibitor AND Immunomodulator AND anti-CD38 antibody			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	4+ including an anti-CD38 monoclonal antibody, a proteasome inhibitor, and an immunomodulatory agent			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	4+ SACT, including a proteasome inhibitor, an immunomodulatory agent, and an anti-CD38 monoclonal antibody			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	4+, including 2+ Proteasome inhibitor, 2+ Immunomodulators, and anti-CD38 antibody			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	4+, including Proteasome inhibitor AND Immunomodulator AND anti-CD38 antibody			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	5-FU-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Abiraterone		35802860	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Adjuvant or neoadjuvant platinum-containing chemotherapy		2036000100	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	ADT		37560922	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Alfa interferon		37557008	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	ALK inhibitor		35807229	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Alkylating agent AND Fludarabine			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Alkylating agent-based regimen		37557563	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	All other FDA-approved treatments		2036000128	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Allogeneic HSCT, with recurrence			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Amputation		4217482	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Anastrozole monotherapy		35802887	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Androgen deprivation therapy		37560922	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Androgen receptor-directed therapy		35807500	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Androgen receptor-directed therapy AND Taxane-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Androgren receptor pathway inhibitor		35807500	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Anthracycline		35807214	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Anthracycline AND Taxane			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Anthracycline AND Taxane AND Capecitabine			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Anthracycline AND Taxane AND Trastuzumab			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Anthracycline AND Taxane unless not suitable			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Anthracycline and Taxane-based chemotherapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	anthracycline and/or a taxane in the (neo)adjuvant, locally advanced or metastatic setting unless patients were not suitable for these treatments. Patients with hormone receptor (HR)-positive breast cancer should have been treated with a prior endocrine-based therapy, or be considered unsuitable for endocrine-based therapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Anthracycline-based regimen		42542413	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Anthracycline-based regimen, unless not clinically appropriate			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Anti-D therapy		2036000131	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	anti-HER2 therapy		2036000122	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	anti-HER2 therapy or chemotherapy		2036000123	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	anti-HER2-based regimen		2036000095	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Anti-PD-1 antibody		35807322	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	anti-PD-L1 antibody		35807270	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	anti-PD-L1 antibody)		35807270	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	anti-PD-L1 antibody) AND Platinum-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	anti-PD-L1 antibody) AND VEGF TKI			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Antiandrogen AND Taxane-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Anticoagulation		35803400	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Antiestrogen		911924	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Antiestrogen AND Chemotherapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Antiestrogen therapy		911924	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Appropriate endocrine surgery and hormonal therapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Approved surgery and/or radiotherapy		2036000050	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Asparaginase		35802898	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Autologous HSCT		905826	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Autologous HSCT AND Brentuximab vedotin			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Autologous HSCT, then Brentuximab vedotin			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	BCG		35802912	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	BCG vaccine		35802912	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	bevacizumab or other VEGF inhibitors or VEGF receptor-targeted agents		2036000030	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Bevacizumab-containing regimen		42542414	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Biopsy		4311405	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Bortezomib		35802928	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Brentuximab vedotin		35802930	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	BTK inhibitor		35807208	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Carboplatin AND Etoposide AND Atezolizumab			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Carboplatin AND Etoposide AND Atezolizumab and hyaluronidase			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Ceritinib)		35802949	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Chemoimmunotherapy		2036000092	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Chemoradiotherapy		2036000062	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Chemoradiotherapy-based regimen, then Surgery			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Chemotherapy		35803401	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	chemotherapy AND auto HSCT			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	chemotherapy AND bevacizumab			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	chemotherapy AND radiation			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Chemotherapy including anthracyclines unless clinically contraindicated		2036000110	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	chemotherapy including treatment with durvalumab		2036000106	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Cisplatin		35802958	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	cisplatin-ineligible		2036000015	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Combination chemotherapy for metastatic disease		2036000112	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Combination therapy including anthracyclines unless clinically contraindicated		2036000111	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	considered unsuitable for such therapy		2036000142	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	contraindication to Anthracycline		2036000012	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Contraindication to Cisplatin		2036000016	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Contraindication to Platinum-based regimen		2036000017	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Conventional treatment		2036000134	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Corticosteroids		2036000132	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Covalent BTKi		35807208	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Crizotinib		35802972	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	CVP		35804599	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	cytokine		35807228	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Cytokines		35807228	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	debulking surgery AND radiation			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Definitive surgical resection including complete lymphadenectomy		2036000115	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Docetaxel		35803016	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Docetaxel-containing regimen		37557797	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Doxorubicin		35803022	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Doxorubicin-based regimen		37557802	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	EGFR TKI		2036000009	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	EGFR TKI therapy		2036000108	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	EGFR-directed therapy AND Platinum-based therapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	EGFR-TKI therapy and platinum-based chemotherapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	endocrine		35803407	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Endocrine monotherapy		35803407	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Endocrine therapy		35803407	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Endocrine-based regimen		37557822	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	endocrine-based regimen AND 1+ taxane-based regimen AND 1+ chemotherapy-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Endocrine-based therapy AND 1+ Chemotherapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Endocrine-based therapy AND 2+ SACT			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Endocrine-based therapy AND 2+ SACT in the advanced setting			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Endocrine-based therapy AND Chemotherapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Enzalutamide		35803041	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	erythropoietin-based therapy		2036000094	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	First-generation TKI AND Second-generation TKI		912198	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	First-line chemoimmunotherapy		2036000090	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	First-line chemoimmunotherapy, not eligible for autologous HSCT			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Fludarabine AND Alemtuzumab			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Fluoropyrimidine AND (Oxaliplain			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Fluoropyrimidine AND Oxaliplain AND Irinotecan			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Fluoropyrimidine AND Oxaliplain AND Irinotecan AND Nivolumab			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Fluoropyrimidine AND Oxaliplatin AND Bevacizumab			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Fluoropyrimidine AND Platinum-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Fluoropyrimidine- and platinum-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	fluoropyrimidine-, oxaliplatin-, and irinotecan-based chemotherapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	fluoropyrimidine-, oxaliplatin-, and irinotecan-based chemotherapy AND an anti-VEGF therapy AND if RAS wild-type and medically appropriate, an anti-EGFR therapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Fluoropyrimidine-based chemotherapy AND oxaliplatin-based chemotherapy AND irinotecan-based chemotherapy AND anti-VEGF biological therapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Fluoropyrimidine-based combination chemotherapy		37557866	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Fluoropyrimidine-based combination therapy		37557866	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Fluoropyrimidine-based regimen		37557866	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Fluoropyrimidine-based regimen AND Oxaliplatin-based regimen AND Irinotecan-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Fluoropyrimidine-based regimen AND Oxaliplatin-based regimen AND Irinotecan-based regimen AND VEGFR inhibitor therapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	FOLFIRI		35804761	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Gemcitabine-based regimen		37557886	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	HAART		2036000126	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	High-dose chemotherapy		2036000058	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Hip or knee replacement surgery		2036000014	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Hydroxyurea		35803109	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	I-131 (if appropriate)		35803127	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Imatinib		35803119	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Imatinib AND Sunitinib			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Immunoglobulins		2036000130	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Immunotherapy		2036000044	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Interferon alfa		37557008	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Interferon alpha		37557008	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Interleukin-2)		35802869	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Iodine-131		35803127	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Iodine-131 AND 1+ SACT			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Iodine-131)		35803127	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Iodine-131, if appropriate			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Ipilimumab		35803129	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Irinotecan)		35803130	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Irinotecan) AND anti-HER2-based regimen, if appropriate			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Irinotecan-based regimen		42542415	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Irinotecan-based regimen AND Oxaliplatin-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	JAK inhibitor		35807404	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	L-asparaginase		35802898	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Lenvatinib		35803151	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Letrozole monotherapy		35803154	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Multi-agent cytotoxic chemotherapy		2036000116	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	multiagent, multimodality therapy including anti-GD2 immunotherapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Multiagent/multimodality therapy		2036000057	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Nephrectomy		2036000119	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Nephrectomy and resection of metastatic lesions			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	New hormonal agent		2036000105	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Nitrosourea AND Procarbazine			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	no satisfactory alternative therapy		2036000129	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	No satisfactory alternative treatment or 1+		2036000088	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	no satisfactory standard therapy		2036000069	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	no satisfactory treatment options		2036000140	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	non-steroidal aromatase inhibitor		2036000074	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	NTRK inhibitor		35807309	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Obinutuzumab AND Chemotherapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Optional ADT		37560922	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Other chemotherapy		2036000157	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	other suitable measures		2036000059	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Other systemic therapies		2036000135	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	other treatments		2036000019	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Oxaliplatin-based regimen		37558071	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Oxaliplatin-containing chemotherapy		37558071	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Pemetrexed-containing platinum doublet		42542417	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Platinum- and Bevacizumab-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Platinum-based chemoradiation		37558103	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Platinum-based chemoradiotherapy		37558103	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Platinum-based chemotherapy		2036000045	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Platinum-based regimen		37558102	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Platinum-based regimen AND (anti-PD-1 antibody			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Platinum-based regimen and 0 or 1 additional SACT			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Platinum-based regimen AND Bevacizumab			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Platinum-based regimen AND Docetaxel monotherapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Platinum-based regimen AND Paclitaxel-containing regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Platinum-based regimen x 4		2036000072	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Platinum-based regimen, completed at least 6 months prior			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Platinum-based regimen, with progression within 12 months			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Platinum-containing chemotherapy		37558102	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	platinum-containing regimen		37558102	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Platinum-doublet excluding pemetrexed x 4		2036000121	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Proteasome inhibitor and an IMiD			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Radical cystectomy		35804147	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Radical resection		2036000103	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Radioactive iodine		35803127	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Radioactive iodine if appropriate		35803127	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Radiotherapy		2036000052	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Refractory to first-line chemoimmunotherapy		2036000022	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	relapse within 12 months of first-line chemoimmunotherapy		2036000023	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	relapse within 6 months of adjuvant chemotherapy, including an anthracycline-based regimen unless clinically contraindicated			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	resection		2036000011	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Resection AND Platinum-based chemotherapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Retinoid AND Anthracycline			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Rituximab		35803296	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Rituximab AND Chemotherapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Rituximab-containing regimen		42542440	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	ROS1 inhibitor		35807300	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	ruxolitinib		35803305	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	SACT		2036000006	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	SACT that did not include a PD-(L)1 inhibitor		2036000150	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Segmental mastectomy, axillary dissection, and breast irradiation			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Sorafenib		35803320	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Sorafenib monotherapy		35803320	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Standard therapies		2036000068	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	standard therapy		2036000053	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Standard therapy including a taxane, unless therapy with a taxane is clinically contraindicated			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Standard therapy not including cisplatin		2036000051	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Steroids		35803578	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	sunitinib		35803323	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Sunitinib monotherapy		35803323	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Surgery		35804762	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Surgery AND 2 to 3 years of Tamoxifen monotherapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Surgery AND 5 years of Tamoxifen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Surgery AND Chemotherapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Surgery AND Platinum-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Surgery AND standard Tamoxifen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Surgery AND Trastuzumab-based regimen			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Surgery or Radiation therapy		2036000141	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Surgical resection		2036000097	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	symptomatic treatment		2036000018	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Tamoxifen		35803329	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Tamoxifen monotherapy		35803329	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Taxane and trastuzumab-based regimen AND Surgery			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Therapy		2036000043	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	TKI		912198	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Total mastectomy		2036000146	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Transurethral resection		2036000025	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Trastuzumab AND Taxane			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	Trastuzumab emtansine		35802866	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Trastuzumab-based regimen		37558258	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	Tumor resection		2036000109	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	Tyrosine kinase inhibitor therapy		912198	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	VEGF-targeted therapy		2036000073	local	none	proposed-new	decomposed therapy descriptors
+prior_therapy	VEGFR inhibitor AND mTOR pathway inhibitor AND cytokine therapy			none	none	decomposed	decomposed therapy descriptors
+prior_therapy	VEGFR inhibitor therapy		35807257	existing	none	mapped-to-existing	decomposed therapy descriptors
+prior_therapy	VEGFR inhibitor therapy AND (Contraindication to Iodine-131			none	none	decomposed	decomposed therapy descriptors
+prior_therapy_setting	(neo)adjuvant		2036000114	local	broader	proposed-new	see concept_status
+prior_therapy_setting	0			none	none	decomposed	prior therapy setting
+prior_therapy_setting	1 to 2			none	none	decomposed	prior therapy setting
+prior_therapy_setting	1+			none	none	decomposed	prior therapy setting
+prior_therapy_setting	1+ metastatic		2036000004	local	broader	proposed-new	see concept_status
+prior_therapy_setting	1L		2036000093	local	narrower	proposed-new	see concept_status
+prior_therapy_setting	Adjuvant		35803584	existing	exact	mapped-to-existing	see concept_status
+prior_therapy_setting	Advanced		4313265	existing	none	mapped-to-existing	prior therapy setting
+prior_therapy_setting	Advanced disease		2036000060	local	broader	proposed-new	see concept_status
+prior_therapy_setting	Advanced or metastatic		2036000071	local	broader	proposed-new	see concept_status
+prior_therapy_setting	Any		35803427	existing	exact	mapped-to-existing	see concept_status
+prior_therapy_setting	BCG		35802912	existing	exact	mapped-to-existing	see concept_status
+prior_therapy_setting	Definitive		35803670	existing	exact	mapped-to-existing	see concept_status
+prior_therapy_setting	EGFR TKI-naive		2036000008	local	none	proposed-new	see concept_status
+prior_therapy_setting	erythropoeisis-stimulating agents		2036000087	local	none	proposed-new	see concept_status
+prior_therapy_setting	First-line		2036000034	local	narrower	proposed-new	see concept_status
+prior_therapy_setting	fluoropyrimidine-, oxaliplatin-, and irinotecan-based chemotherapy		2036000007	local	none	proposed-new	see concept_status
+prior_therapy_setting	Immunotherapy		2036000044	local	none	proposed-new	see concept_status
+prior_therapy_setting	Induction		35803433	existing	exact	mapped-to-existing	see concept_status
+prior_therapy_setting	intolerance		2036000125	local	none	proposed-new	see concept_status
+prior_therapy_setting	Irinotecan-based regimen		42542415	existing	exact	mapped-to-existing	see concept_status
+prior_therapy_setting	Locally advanced		2030000001	local	none	proposed-new	prior therapy setting
+prior_therapy_setting	Metastatic		32944	existing	none	mapped-to-existing	prior therapy setting
+prior_therapy_setting	Neoadjuvant		35804141	existing	exact	mapped-to-existing	see concept_status
+prior_therapy_setting	Neoadjuvant or Adjuvant		2036000061	local	broader	proposed-new	see concept_status
+prior_therapy_setting	Other Irinotecan-based regimen		2036000049	local	none	proposed-new	see concept_status
+prior_therapy_setting	Platinum-based chemotherapy		2036000045	local	none	proposed-new	see concept_status
+prior_therapy_setting	Radiotherapy		2036000052	local	broader	proposed-new	see concept_status
+prior_therapy_setting	Refractory		4048615	existing	none	mapped-to-existing	prior therapy setting
+prior_therapy_setting	Relapsed		4136153	existing	none	mapped-to-existing	prior therapy setting
+prior_therapy_setting	Relapsed platinum-sensitive		2036000107	local	broader	proposed-new	see concept_status
+prior_therapy_setting	resistance		2036000124	local	none	proposed-new	see concept_status
+prior_therapy_setting	SD or better		2036000133	local	none	proposed-new	see concept_status
+prior_therapy_setting	Surgery		35804762	existing	exact	mapped-to-existing	see concept_status
+prior_therapy_setting	Surgery AND Radiotherapy		2036000048	local	broader	proposed-new	see concept_status
+prior_therapy_setting	Unresectable		46272912	existing	none	mapped-to-existing	prior therapy setting
+prior_therapy_setting	Untreated		2032000039	local	none	proposed-new	prior therapy setting
+response_contingency	At least PR		2034000017	local	narrower	proposed-new	see concept_status
+response_contingency	complete gross resection		2034000023	local	broader	proposed-new	see concept_status
+response_contingency	Complete resection		2034000014	local	broader	proposed-new	see concept_status
+response_contingency	complete resection AND no progression		2034000001	local	broader	proposed-new	see concept_status
+response_contingency	CR		1633363	existing	exact	mapped-to-existing	see concept_status
+response_contingency	CR or better for at least 6 months		2034000036	local	broader	proposed-new	see concept_status
+response_contingency	CR or PR			none	none	decomposed	decomposed alternatives
+response_contingency	CR1 or CR2 with MRD greater than or equal to 0.1%		2034000011	local	broader	proposed-new	see concept_status
+response_contingency	CRi after induction		2034000006	local	broader	proposed-new	see concept_status
+response_contingency	CRi after induction +/- consolidation		2034000007	local	broader	proposed-new	see concept_status
+response_contingency	double-refractory		2034000016	local	broader	proposed-new	see concept_status
+response_contingency	equal to 0.1%		2034000013	local	none	proposed-new	see concept_status
+response_contingency	Exacerbated		2034000020	local	none	proposed-new	see concept_status
+response_contingency	failure		4141764	existing	exact	mapped-to-existing	see concept_status
+response_contingency	failure or intolerance			none	none	decomposed	decomposed alternatives
+response_contingency	failure or progression			none	none	decomposed	decomposed alternatives
+response_contingency	gross nodal involvement		2034000030	local	none	proposed-new	see concept_status
+response_contingency	hypersensitivity		43021226	existing	exact	mapped-to-existing	see concept_status
+response_contingency	Inadequate response		2034000033	local	broader	proposed-new	see concept_status
+response_contingency	Inappropriate		2034000034	local	none	proposed-new	see concept_status
+response_contingency	insufficient response		2034000031	local	broader	proposed-new	see concept_status
+response_contingency	intolerance		4105297	existing	exact	mapped-to-existing	see concept_status
+response_contingency	intolerant		4105297	existing	exact	mapped-to-existing	see concept_status
+response_contingency	invasive residual disease in the breast and/or lymph nodes		2034000038	local	broader	proposed-new	see concept_status
+response_contingency	Microscopic		2034000029	local	none	proposed-new	see concept_status
+response_contingency	Microscopic or gross nodal involvement			none	none	decomposed	decomposed alternatives
+response_contingency	minor response		2034000026	local	none	proposed-new	see concept_status
+response_contingency	moderate to severe symptoms inadequately controlled		2034000002	local	broader	proposed-new	see concept_status
+response_contingency	MRD greater than		2034000012	local	none	proposed-new	see concept_status
+response_contingency	MRD greater than or equal to 0.1%			none	none	decomposed	decomposed alternatives
+response_contingency	no progression		2034000019	local	broader	proposed-new	see concept_status
+response_contingency	no response		45877597	existing	exact	mapped-to-existing	see concept_status
+response_contingency	no response or progression			none	none	decomposed	decomposed alternatives
+response_contingency	non-progressing		2034000032	local	broader	proposed-new	see concept_status
+response_contingency	Not progressed		2034000004	local	broader	proposed-new	see concept_status
+response_contingency	not responsive		4309389	existing	exact	mapped-to-existing	see concept_status
+response_contingency	Not sufficiently effective		2034000008	local	broader	proposed-new	see concept_status
+response_contingency	partial response		2034000025	local	none	proposed-new	see concept_status
+response_contingency	partial response, minor response, or stable disease			none	none	decomposed	decomposed alternatives
+response_contingency	persistence		2034000035	local	none	proposed-new	see concept_status
+response_contingency	Platinum resistant		2034000009	local	broader	proposed-new	see concept_status
+response_contingency	Platinum-resistant		2034000009	local	broader	proposed-new	see concept_status
+response_contingency	Platinum-sensitive		2034000010	local	broader	proposed-new	see concept_status
+response_contingency	PR		2034000021	local	none	proposed-new	see concept_status
+response_contingency	PR or CR			none	none	decomposed	decomposed alternatives
+response_contingency	progressed during		32949	existing	exact	mapped-to-existing	see concept_status
+response_contingency	progression		32949	existing	exact	mapped-to-existing	see concept_status
+response_contingency	progression on the last therapy		32949	existing	exact	mapped-to-existing	see concept_status
+response_contingency	progression-free		2034000005	local	broader	proposed-new	see concept_status
+response_contingency	recurrence		4078193	existing	exact	mapped-to-existing	see concept_status
+response_contingency	refractory		4048615	existing	exact	mapped-to-existing	see concept_status
+response_contingency	refractory or intolerant			none	none	decomposed	decomposed alternatives
+response_contingency	refractory to last therapy		2034000022	local	broader	proposed-new	see concept_status
+response_contingency	relapse		4136153	existing	exact	mapped-to-existing	see concept_status
+response_contingency	relapsed		4136153	existing	exact	mapped-to-existing	see concept_status
+response_contingency	relapsed during		4136153	existing	exact	mapped-to-existing	see concept_status
+response_contingency	remission		32945	existing	exact	mapped-to-existing	see concept_status
+response_contingency	resection		2034000015	local	none	proposed-new	see concept_status
+response_contingency	residual invasive disease		2034000037	local	broader	proposed-new	see concept_status
+response_contingency	residual pathologic disease		2034000027	local	broader	proposed-new	see concept_status
+response_contingency	resistance		4148441	existing	exact	mapped-to-existing	see concept_status
+response_contingency	Resistant		4148441	existing	exact	mapped-to-existing	see concept_status
+response_contingency	resistant or intolerant			none	none	decomposed	decomposed alternatives
+response_contingency	response		2034000028	local	none	proposed-new	see concept_status
+response_contingency	stabilised		2034000018	local	broader	proposed-new	see concept_status
+response_contingency	stable disease		1635506	existing	exact	mapped-to-existing	see concept_status
+response_contingency	Unresponsive		4309389	existing	exact	mapped-to-existing	see concept_status
+response_contingency	unsatisfactory		2034000024	local	broader	proposed-new	see concept_status
+response_contingency	without progression		2034000003	local	broader	proposed-new	see concept_status
+risk_stratification	asymptomatic or mildly symptomatic		2040000062	local	narrower	proposed-new	see concept_status
+risk_stratification	at least three of six prognostic risk factors		2040000122	local	none	proposed-new	see concept_status
+risk_stratification	at risk of developing metastatic disease		2040000046	local	broader	proposed-new	see concept_status
+risk_stratification	At-risk		45877868	existing	exact	mapped-to-existing	see concept_status
+risk_stratification	High risk for metastasis		2040000063	local	broader	proposed-new	see concept_status
+risk_stratification	high risk for recurrence		2040000002	local	broader	proposed-new	see concept_status
+risk_stratification	high risk for recurrence AND Ki-67 > 20%		2040000001	local	broader	proposed-new	see concept_status
+risk_stratification	High risk for systemic recurrence		2040000076	local	broader	proposed-new	see concept_status
+risk_stratification	high risk of recurrence after surgery and radiation		2040000034	local	broader	proposed-new	see concept_status
+risk_stratification	High risk of relapse or progression		2040000025	local	broader	proposed-new	see concept_status
+risk_stratification	high tumor burden		2040000113	local	none	proposed-new	see concept_status
+risk_stratification	High-risk		37109703	existing	exact	mapped-to-existing	see concept_status
+risk_stratification	High-risk of developing metastases		2040000007	local	broader	proposed-new	see concept_status
+risk_stratification	increased risk of recurrence		2040000106	local	none	proposed-new	see concept_status
+risk_stratification	increased risk of relapse or progression		2040000026	local	none	proposed-new	see concept_status
+risk_stratification	intermediate-2 and high-risk		2040000011	local	narrower	proposed-new	see concept_status
+risk_stratification	Intermediate-risk		46238024	existing	exact	mapped-to-existing	see concept_status
+risk_stratification	IPI 2+		2040000110	local	broader	proposed-new	see concept_status
+risk_stratification	low- or intermediate-1-risk		2040000082	local	none	proposed-new	see concept_status
+risk_stratification	Low-risk		37109700	existing	exact	mapped-to-existing	see concept_status
+risk_stratification	low-to-intermediate risk		2040000008	local	none	proposed-new	see concept_status
+risk_stratification	Medium-risk		2040000124	local	none	proposed-new	see concept_status
+risk_stratification	No inhibitors		2040000038	local	narrower	proposed-new	see concept_status
+risk_stratification	no other therapeutic option is expected to result in a durable response		2040000036	local	none	proposed-new	see concept_status
+risk_stratification	poor-risk		2040000028	local	broader	proposed-new	see concept_status
+risk_stratification	Risk of developing metastatic disease		2040000047	local	none	proposed-new	see concept_status
+risk_stratification	surgical resection will potentially cause worsening functional limitation or severe morbidity		2040000130	local	none	proposed-new	see concept_status
+risk_stratification	Very low risk		1177364	existing	exact	mapped-to-existing	see concept_status
+risk_stratification	Well or moderately differentiated		2040000078	local	broader	proposed-new	see concept_status
+risk_stratification	Well- or moderately-differentiated		2040000065	local	broader	proposed-new	see concept_status
+risk_stratification	well-differentiated		4137845	existing	exact	mapped-to-existing	see concept_status
+risk_stratification	Well-differentiated non-functional GI or lung origin		2040000067	local	broader	proposed-new	see concept_status
+risk_stratification	with factor VIII inhibitor		4125639	existing	exact	mapped-to-existing	see concept_status
+risk_stratification	with FVIII inhibitor		4125639	existing	exact	mapped-to-existing	see concept_status
+risk_stratification	with inhibitors		2040000037	local	narrower	proposed-new	see concept_status
+risk_stratification	without FVIII inhibitor		2040000058	local	none	proposed-new	see concept_status
+risk_stratification	without inhibitors		2040000068	local	narrower	proposed-new	see concept_status
+sex	FEMALE		8532	existing	exact	mapped-to-existing	OMOP Gender
+sex	MALE		8507	existing	exact	mapped-to-existing	OMOP Gender
+stage	(Early greater than 2 cm in diameter or node positive)		2030000028	local	broader	proposed-new	see concept_status
+stage	Advanced		4313265	existing	exact	mapped-to-existing	see concept_status
+stage	Advanced (FIGO stages III and IV)		4313265	existing	none	mapped-to-existing	decomposed disease phrase
+stage	Advanced (FIGO stages III B, III C and IV)		4313265	existing	none	mapped-to-existing	decomposed disease phrase
+stage	Axillary lymph node involvement		2030000011	local	none	proposed-new	see concept_status
+stage	Bulky locally advanced Stage B2 and Stage C		2030000013	local	none	proposed-new	see concept_status
+stage	cutaneous		2030000003	local	none	proposed-new	see concept_status
+stage	D2		1634022	existing	exact	mapped-to-existing	see concept_status
+stage	Dukes' stage C		1635190	existing	exact	mapped-to-existing	see concept_status
+stage	Early		4125638	existing	exact	mapped-to-existing	see concept_status
+stage	Early stage		4125638	existing	exact	mapped-to-existing	see concept_status
+stage	Extensive stage		1635798	existing	exact	mapped-to-existing	see concept_status
+stage	extensive-stage		1635798	existing	exact	mapped-to-existing	see concept_status
+stage	FIGO 2014 Stage III-IVA		2030000026	local	narrower	proposed-new	see concept_status
+stage	FIGO stage III/IV		2030000017	local	narrower	proposed-new	see concept_status
+stage	Inflammatory		2030000027	local	none	proposed-new	see concept_status
+stage	Involvement of lymph nodes		2030000008	local	none	proposed-new	see concept_status
+stage	Limited stage		1633518	existing	exact	mapped-to-existing	see concept_status
+stage	Localized		4114652	existing	exact	mapped-to-existing	see concept_status
+stage	Localled advanced		2030000001	local	none	proposed-new	decomposed disease phrase
+stage	Locally advanced		2030000001	local	none	proposed-new	decomposed disease phrase
+stage	low-grade NMIBC		2030000016	local	none	proposed-new	see concept_status
+stage	Metastatic		32944	existing	exact	mapped-to-existing	see concept_status
+stage	Muscle invasive		2030000012	local	none	proposed-new	see concept_status
+stage	Muscle-invasive		2030000012	local	none	proposed-new	see concept_status
+stage	N+ or M+		2030000018	local	none	proposed-new	see concept_status
+stage	Node-positive		2030000021	local	none	proposed-new	see concept_status
+stage	node-positive early		2030000002	local	broader	proposed-new	see concept_status
+stage	non-muscle invasive		2030000014	local	none	proposed-new	see concept_status
+stage	Operable node-negative		2030000010	local	broader	proposed-new	see concept_status
+stage	Operable node-positive		2030000009	local	broader	proposed-new	see concept_status
+stage	Pathologic involvement of regional lymph nodes of more than 1 mm		2030000015	local	none	proposed-new	see concept_status
+stage	Regionally advanced		2030000007	local	none	proposed-new	decomposed disease phrase
+stage	Stage D2		1634022	existing	exact	mapped-to-existing	see concept_status
+stage	Stage IB or Stage II or Stage IIIA		2030000024	local	narrower	proposed-new	see concept_status
+stage	Stage II bulky, Stage III, or Stage IV		2030000020	local	narrower	proposed-new	see concept_status
+stage	stage II or III early		2030000030	local	broader	proposed-new	see concept_status
+stage	Stage II to IIIA		2030000004	local	narrower	proposed-new	see concept_status
+stage	Stage IIB or IIC		2030000023	local	narrower	proposed-new	see concept_status
+stage	Stage IIB or Stage IIC or Stage III		2030000025	local	narrower	proposed-new	see concept_status
+stage	Stage IIB/C		2030000019	local	narrower	proposed-new	see concept_status
+stage	Stage III		1633650	existing	exact	mapped-to-existing	see concept_status
+stage	Stage III (Dukes' stage C)		1633650	existing	exact	mapped-to-existing	see concept_status
+stage	Stage III and N+		2030000022	local	broader	proposed-new	see concept_status
+stage	Stage III or IV		2030000029	local	narrower	proposed-new	see concept_status
+stage	Stage III to IV		2030000005	local	narrower	proposed-new	see concept_status
+stage	Stage IV		1633308	existing	exact	mapped-to-existing	see concept_status
+stage	Superficial		4096030	existing	exact	mapped-to-existing	see concept_status
+stage	with skin lesions		2030000006	local	none	proposed-new	see concept_status
+stage_or_status	10-29% marrow blasts without myeloproliferative disorder		2032000005	local	none	proposed-new	see concept_status
+stage_or_status	20-30% marrow blasts		2032000006	local	none	proposed-new	see concept_status
+stage_or_status	>30% marrow blasts		2032000007	local	none	proposed-new	see concept_status
+stage_or_status	Active		9181	existing	exact	mapped-to-existing	see concept_status
+stage_or_status	acute		2032000045	local	broader	proposed-new	see concept_status
+stage_or_status	Advanced		4313265	existing	exact	mapped-to-existing	see concept_status
+stage_or_status	Advanced unresectable			none	none	decomposed	decomposed disease phrase
+stage_or_status	anemia		439777	existing	exact	mapped-to-existing	see concept_status
+stage_or_status	Distant metastasis		1620371	existing	exact	mapped-to-existing	see concept_status
+stage_or_status	extrahepatic disease limited to the bone, lymph nodes, subcutaneous tissues, or lung that is amenable to resection or radiation		2032000035	local	none	proposed-new	see concept_status
+stage_or_status	Inoperable locally advanced			none	none	decomposed	decomposed disease phrase
+stage_or_status	Local relapse		2032000038	local	broader	proposed-new	see concept_status
+stage_or_status	Locally advanced		2030000001	local	none	proposed-new	decomposed disease phrase
+stage_or_status	Locally advanced unresectable			none	none	decomposed	decomposed disease phrase
+stage_or_status	Locally advanced unresectable (stage III)			none	none	decomposed	decomposed disease phrase
+stage_or_status	Locally recurrent		2032000019	local	none	proposed-new	decomposed disease phrase
+stage_or_status	Locally recurrent unresectable			none	none	decomposed	decomposed disease phrase
+stage_or_status	Locally unresectable or metastatic		2032000016	local	narrower	proposed-new	see concept_status
+stage_or_status	Locally unresectable recurrent		2032000014	local	broader	proposed-new	see concept_status
+stage_or_status	Locoregional		2032000020	local	broader	proposed-new	see concept_status
+stage_or_status	Metastatic		32944	existing	exact	mapped-to-existing	see concept_status
+stage_or_status	not candidate for curative surgery		2032000041	local	broader	proposed-new	see concept_status
+stage_or_status	persistent		2032000001	local	none	proposed-new	decomposed disease phrase
+stage_or_status	Primary advanced			none	none	decomposed	decomposed disease phrase
+stage_or_status	prior to auto HSCT		2032000047	local	none	proposed-new	see concept_status
+stage_or_status	Recurrent		4113136	existing	exact	mapped-to-existing	see concept_status
+stage_or_status	Recurrent locally advanced			none	none	decomposed	decomposed disease phrase
+stage_or_status	Recurrent locoregional		2032000017	local	broader	proposed-new	see concept_status
+stage_or_status	Stage III who are not candidates for surgical resection or definitive chemoradiation		2032000040	local	broader	proposed-new	see concept_status
+stage_or_status	Stage IV-B		1633748	existing	exact	mapped-to-existing	see concept_status
+stage_or_status	Surgical resection is likely to result in severe morbidity		2032000022	local	broader	proposed-new	see concept_status
+stage_or_status	Tumors greater than 2cm in diameter		2032000050	local	none	proposed-new	see concept_status
+stage_or_status	Unresectable		46272912	existing	exact	mapped-to-existing	see concept_status
+stage_or_status	Unresectable advanced			none	none	decomposed	decomposed disease phrase
+stage_or_status	unresectable hepatic metastases affecting less than 50% of the liver and no extrahepatic disease		2032000034	local	broader	proposed-new	see concept_status
+stage_or_status	Unresectable locally advanced			none	none	decomposed	decomposed disease phrase
+stage_or_status	Unresectable stage IIIb		2032000026	local	broader	proposed-new	see concept_status
+status	accelerated phase		4175685	existing	exact	mapped-to-existing	see concept_status
+status	blast crisis		4081695	existing	exact	mapped-to-existing	see concept_status
+status	chronic		4236661	existing	exact	mapped-to-existing	see concept_status
+status	chronic liver disease		4212540	existing	exact	mapped-to-existing	see concept_status
+status	chronic phase		4081357	existing	exact	mapped-to-existing	see concept_status
+status	clinically aggressive		2032000032	local	none	proposed-new	see concept_status
+status	CR1		2032000012	local	broader	proposed-new	see concept_status
+status	CR2		2032000013	local	broader	proposed-new	see concept_status
+status	disease-related splenomegaly or symptoms in adult patients with moderate to severe anaemia		2032000036	local	broader	proposed-new	see concept_status
+status	extravascular hemolysis		2032000021	local	broader	proposed-new	see concept_status
+status	first or second complete remission with minimal residual disease (MRD) greater than or equal to 0.1%		2032000010	local	broader	proposed-new	see concept_status
+status	First recurrence		2032000009	local	broader	proposed-new	see concept_status
+status	First relapse		2032000011	local	broader	proposed-new	see concept_status
+status	indolent		2032000004	local	none	proposed-new	see concept_status
+status	Metastatic		32944	existing	exact	mapped-to-existing	see concept_status
+status	Metastatic or Recurrent			none	none	decomposed	decomposed disease phrase
+status	Metastatic to bone		2032000044	local	broader	proposed-new	see concept_status
+status	Metastatic to liver AND Incurable by surgery or other means		2032000029	local	broader	proposed-new	see concept_status
+status	Moderate to Severe		4155158	existing	exact	mapped-to-existing	see concept_status
+status	moderate to severe anemia		2032000037	local	broader	proposed-new	see concept_status
+status	Newly diagnosed		2032000003	local	none	proposed-new	decomposed disease phrase
+status	Non-metastatic		2032000002	local	none	proposed-new	see concept_status
+status	Non-metastatic with biochemical recurrence		2032000025	local	none	proposed-new	see concept_status
+status	non-transfusion dependent		2032000033	local	none	proposed-new	see concept_status
+status	Non-visceral metastatic		2032000046	local	broader	proposed-new	see concept_status
+status	Not severe		2032000018	local	none	proposed-new	see concept_status
+status	Palliative		4179711	existing	exact	mapped-to-existing	see concept_status
+status	Persistent		2032000001	local	none	proposed-new	decomposed disease phrase
+status	Progressive		4114504	existing	exact	mapped-to-existing	see concept_status
+status	recurrent		4113136	existing	exact	mapped-to-existing	see concept_status
+status	Recurrent or refractory unresectable			none	none	decomposed	decomposed disease phrase
+status	Recurrent unresectable			none	none	decomposed	decomposed disease phrase
+status	recurrent vaso-occlusive crises		2032000027	local	none	proposed-new	see concept_status
+status	Refractory		4048615	existing	exact	mapped-to-existing	see concept_status
+status	Refractory or in second or later relapse		2032000048	local	narrower	proposed-new	see concept_status
+status	Relapsed		4136153	existing	exact	mapped-to-existing	see concept_status
+status	Relapsed or Metastatic			none	none	decomposed	decomposed disease phrase
+status	Relapsed or progressive			none	none	decomposed	decomposed disease phrase
+status	Relapsed or refractory			none	none	decomposed	decomposed disease phrase
+status	require regular RBC transfusions		2032000008	local	none	proposed-new	see concept_status
+status	Require systemic therapy		2032000015	local	none	proposed-new	see concept_status
+status	Resectable		4294980	existing	exact	mapped-to-existing	see concept_status
+status	Resistant		4148441	existing	exact	mapped-to-existing	see concept_status
+status	Sensitive disease defined as disease responding to chemotherapy but subsequently progressing at least 60 days (in the phase 3 study) or at least 90 days (in the phase 2 studies) after chemotherapy		2032000049	local	broader	proposed-new	see concept_status
+status	severe		4087703	existing	exact	mapped-to-existing	see concept_status
+status	surgical resection is likely to result in severe morbidity		2032000022	local	broader	proposed-new	see concept_status
+status	Surgical resection likely to result in severe morbidity		2032000024	local	broader	proposed-new	see concept_status
+status	symptomatic		4142947	existing	exact	mapped-to-existing	see concept_status
+status	Symptomatic associated with severe morbidity or functional limitations		2032000042	local	broader	proposed-new	see concept_status
+status	symptomatic bone metastases and no known visceral metastatic disease		2032000043	local	broader	proposed-new	see concept_status
+status	Symptomatic or progressive			none	none	decomposed	decomposed disease phrase
+status	transfusion-dependent		2032000028	local	none	proposed-new	see concept_status
+status	transfusion-dependent anemia		2032000031	local	broader	proposed-new	see concept_status
+status	Unresectable		46272912	existing	exact	mapped-to-existing	see concept_status
+status	Untreated		2032000039	local	none	proposed-new	decomposed disease phrase
+time_contingency	12 months			none	none	decomposed	time contingency
+time_contingency	56 days			none	none	decomposed	time contingency
+time_contingency	6 months of completing therapy			none	none	decomposed	time contingency
+time_contingency	At least 16 weeks			none	none	decomposed	time contingency
+time_contingency	at least 6 months			none	none	decomposed	time contingency
+time_contingency	during or following			none	none	decomposed	time contingency
+time_contingency	during or within 6 months			none	none	decomposed	time contingency
+time_contingency	during or within 6 months of completion			none	none	decomposed	time contingency
+time_contingency	For patients with a prior autologous stem cell transplantation, the time to progression should be at least 3 years from transplantation			none	none	decomposed	time contingency
+time_contingency	immediately prior			none	none	decomposed	time contingency
+time_contingency	Less than one year			none	none	decomposed	time contingency
+time_contingency	No progression within 16 weeks of starting platinum-based regimen			none	none	decomposed	time contingency
+time_contingency	on or within 12 months of completion			none	none	decomposed	time contingency
+time_contingency	refractory			none	none	decomposed	time contingency
+time_contingency	Up to 3 months			none	none	decomposed	time contingency
+time_contingency	within 12 months			none	none	decomposed	time contingency
+time_contingency	within 12 months of completion			none	none	decomposed	time contingency
+time_contingency	within 12 months of neoadjuvant or adjuvant treatment			none	none	decomposed	time contingency
+time_contingency	within 6 months			none	none	decomposed	time contingency
+time_contingency	within 6 months of completion			none	none	decomposed	time contingency
+time_contingency	within 60 days of completion of last therapy			none	none	decomposed	time contingency
+time_contingency	within 60 days of completion of the last therapy			none	none	decomposed	time contingency
+time_contingency	Within 84 days			none	none	decomposed	time contingency
+with_field	(ADT AND Androgen receptor inhibitor)			none	none	decomposed	decomposed therapy descriptors
+with_field	(Bortezomib AND Dexamethasone)			none	none	decomposed	decomposed therapy descriptors
+with_field	(Carboplatin		35802941	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	(Cisplatin AND Paclitaxel)			none	none	decomposed	decomposed therapy descriptors
+with_field	(Fluoropyrimidine AND Irinotecan)			none	none	decomposed	decomposed therapy descriptors
+with_field	(Fluoropyrimidine AND Oxaliplatin)			none	none	decomposed	decomposed therapy descriptors
+with_field	(Fluorouracil AND Leucovorin AND Irinotecan)			none	none	decomposed	decomposed therapy descriptors
+with_field	(Fluorouracil AND Leuvorin)			none	none	decomposed	decomposed therapy descriptors
+with_field	(Lenalidomide AND Dexamethasone)			none	none	decomposed	decomposed therapy descriptors
+with_field	(Paclitaxel AND Topotecan)			none	none	decomposed	decomposed therapy descriptors
+with_field	0		2037000029	local	none	proposed-new	decomposed therapy descriptors
+with_field	0 --> Radiation +/- Cisplatin --> 0		2037000023	local	none	proposed-new	decomposed therapy descriptors
+with_field	1+		2037000016	local	none	proposed-new	decomposed therapy descriptors
+with_field	5-FU AND Cisplatin			none	none	decomposed	decomposed therapy descriptors
+with_field	5-FU-based regimen		2037000003	local	none	proposed-new	decomposed therapy descriptors
+with_field	Abemaciclib		35802858	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Abiraterone		35802860	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	AC-D		905578	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	AC-T		35101507	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	ADT		37560922	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	ADT AND (Prednisone			none	none	decomposed	decomposed therapy descriptors
+with_field	ADT AND Prednisone			none	none	decomposed	decomposed therapy descriptors
+with_field	Amivantamab		905633	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Anthracycline-based regimen		42542413	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Antineoplastic agents		2037000015	local	none	proposed-new	decomposed therapy descriptors
+with_field	Aromatase inhibitor		35807245	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Atezolizumab		35802902	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Atezolizumab and hyaluronidase			none	none	decomposed	decomposed therapy descriptors
+with_field	ATRA		903643	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Avelumab		35802906	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Axitinib		35802908	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Azacitidine		35802909	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	BCG vacine		35802912	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Bendamustine		35802918	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Bendamustine AND Rituximab			none	none	decomposed	decomposed therapy descriptors
+with_field	Bevacizumab		35802921	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Bevacizumab AND Paclitaxel AND Carboplatin			none	none	decomposed	decomposed therapy descriptors
+with_field	Bevacizumab biosimilar		2037000025	local	none	proposed-new	decomposed therapy descriptors
+with_field	Binimetinib		35802924	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Bortezomib		35802928	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Bortezomib AND Cyclophosphamide AND Dexamethasone			none	none	decomposed	decomposed therapy descriptors
+with_field	Bortezomib AND Dexamethasone			none	none	decomposed	decomposed therapy descriptors
+with_field	Bortezomib AND Lenalidomide AND Dexamethasone			none	none	decomposed	decomposed therapy descriptors
+with_field	Bortezomib AND Melphalan AND Prednisone			none	none	decomposed	decomposed therapy descriptors
+with_field	Bortezomib AND Thalidomide AND Dexamethasone			none	none	decomposed	decomposed therapy descriptors
+with_field	Cabozantinib		35802935	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Capecitabine		35802939	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Capecitabine AND Bevacizumab			none	none	decomposed	decomposed therapy descriptors
+with_field	CapeOx		35804755	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Carboplatin		35802941	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Carboplatin AND (Paclitaxel			none	none	decomposed	decomposed therapy descriptors
+with_field	Carboplatin AND Etoposide			none	none	decomposed	decomposed therapy descriptors
+with_field	Carboplatin AND Gemcitabine			none	none	decomposed	decomposed therapy descriptors
+with_field	Carboplatin AND nab-Paclitaxel			none	none	decomposed	decomposed therapy descriptors
+with_field	Carboplatin AND Paclitaxel			none	none	decomposed	decomposed therapy descriptors
+with_field	Carboplatin AND Pembrolizumab			none	none	decomposed	decomposed therapy descriptors
+with_field	Carboplatin AND Pemetrexed			none	none	decomposed	decomposed therapy descriptors
+with_field	Carfilzomib AND Dexamethasone			none	none	decomposed	decomposed therapy descriptors
+with_field	Carpoplatin AND (Paclitaxel			none	none	decomposed	decomposed therapy descriptors
+with_field	Carpoplatin AND Paclitaxel			none	none	decomposed	decomposed therapy descriptors
+with_field	certain other approved antineoplastic agents		2037000019	local	none	proposed-new	decomposed therapy descriptors
+with_field	Cetuximab		35802951	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Cetuximab AND mFOLFOX6			none	none	decomposed	decomposed therapy descriptors
+with_field	Chemoradiation		2037000022	local	none	proposed-new	decomposed therapy descriptors
+with_field	Chemoradiotherapy		2037000008	local	none	proposed-new	decomposed therapy descriptors
+with_field	Chemoradiotherapy-based regimen		2037000017	local	none	proposed-new	decomposed therapy descriptors
+with_field	Chemotherapy		35803401	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Chemotherapy AND Optional Bevacizumab			none	none	decomposed	decomposed therapy descriptors
+with_field	Chemotherapy, then 0			none	none	decomposed	decomposed therapy descriptors
+with_field	Chlorambucil		35802953	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	CHOP		35803699	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Cisplatin		35802958	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Cisplatin AND Etoposide			none	none	decomposed	decomposed therapy descriptors
+with_field	Cisplatin AND Fluoropyrimidine			none	none	decomposed	decomposed therapy descriptors
+with_field	Cisplatin AND Fluorouracil			none	none	decomposed	decomposed therapy descriptors
+with_field	Cisplatin AND Gemcitabine			none	none	decomposed	decomposed therapy descriptors
+with_field	Cisplatin AND Paclitaxel			none	none	decomposed	decomposed therapy descriptors
+with_field	Cisplatin) AND Etoposide			none	none	decomposed	decomposed therapy descriptors
+with_field	Cisplatin) AND Gemcitabine			none	none	decomposed	decomposed therapy descriptors
+with_field	Cobimetinib AND Vemurafenib			none	none	decomposed	decomposed therapy descriptors
+with_field	Combination maintenance therapy		2037000020	local	none	proposed-new	decomposed therapy descriptors
+with_field	Cyclophosphamide		35802975	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Cyclophosphamide AND Doxorubicin			none	none	decomposed	decomposed therapy descriptors
+with_field	Cyclophosphamide AND Doxorubicin AND Prednisone			none	none	decomposed	decomposed therapy descriptors
+with_field	Cytarabine		35802979	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Cytarabine AND Anthracycline			none	none	decomposed	decomposed therapy descriptors
+with_field	Cytarabine AND Daunorubicin			none	none	decomposed	decomposed therapy descriptors
+with_field	Dabrafenib		35802984	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Daratumumab AND Dexamethasone			none	none	decomposed	decomposed therapy descriptors
+with_field	Decitabine		35802998	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Dexamethasone		35803008	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Dexamethasone AND Thalidomide			none	none	decomposed	decomposed therapy descriptors
+with_field	Dinutuximab		35803013	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Docetaxel		35803016	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Docetaxel AND ADT			none	none	decomposed	decomposed therapy descriptors
+with_field	Doxorubicin		35803022	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Doxorubicin AND Cyclophosphamide			none	none	decomposed	decomposed therapy descriptors
+with_field	Doxorubicin AND Cyclophosphamide AND Paclitaxel			none	none	decomposed	decomposed therapy descriptors
+with_field	Doxorubicin AND Vincristine AND Dacarbazine			none	none	decomposed	decomposed therapy descriptors
+with_field	Doxorubicin AND Vincristine AND Etoposide AND Prednisone AND Cyclophosphamide			none	none	decomposed	decomposed therapy descriptors
+with_field	Durvalumab		35803025	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Durvalumab AND Platinum agent			none	none	decomposed	decomposed therapy descriptors
+with_field	Durvalumab AND Platinum-based chemotherapy			none	none	decomposed	decomposed therapy descriptors
+with_field	Eculizumab		35803028	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Encorafenib		35803035	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Encorafenib AND mFOLFOX6			none	none	decomposed	decomposed therapy descriptors
+with_field	Endocrine therapy		35803407	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Enfortumab vedotin		42542257	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Enzalutamide		35803041	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Erlotinib		35803050	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	established combination therapy		2037000010	local	none	proposed-new	decomposed therapy descriptors
+with_field	Everolimus		35803054	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Exemestane		35803055	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	FLOT		35805341	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Fludarabine		35803076	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Fludarabine AND Cyclophosphamide			none	none	decomposed	decomposed therapy descriptors
+with_field	Fluoropyrimidine AND Irinotecan			none	none	decomposed	decomposed therapy descriptors
+with_field	Fluoropyrimidine AND Oxaliplatin			none	none	decomposed	decomposed therapy descriptors
+with_field	Fluoropyrimidine AND Platinum agent			none	none	decomposed	decomposed therapy descriptors
+with_field	Fluoropyrimidine- and platinum-based regimen			none	none	decomposed	decomposed therapy descriptors
+with_field	Fluorouracil		35803077	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Fluorouracil AND Leucovorin			none	none	decomposed	decomposed therapy descriptors
+with_field	Fluorouracil AND Leucovorin AND Oxaliplatin			none	none	decomposed	decomposed therapy descriptors
+with_field	Fluorouracil AND Platinum agent			none	none	decomposed	decomposed therapy descriptors
+with_field	Fluorouracil-based chemotherapy		2037000004	local	none	proposed-new	decomposed therapy descriptors
+with_field	FOLFIRI		35804761	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	FOLFOX		35806596	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Fruquintinib		35803088	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Fulvestrant		35803089	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Fulvestrant AND GnRH agonist, if premenopausal or perimenopausal			none	none	decomposed	decomposed therapy descriptors
+with_field	Fulvestrant AND Palbociclib			none	none	decomposed	decomposed therapy descriptors
+with_field	Gemcitabine		35803095	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Gemcitabine and Oxaliplatin			none	none	decomposed	decomposed therapy descriptors
+with_field	GnRH agonist		35807385	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Granulocyte macrophage colony-stimulating factor		35807436	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Hedgehog pathway inhibitor or Contraindication to Hedgehog pathway inhibitor		2037000012	local	none	proposed-new	decomposed therapy descriptors
+with_field	High-dose chemotherapy		2037000026	local	none	proposed-new	decomposed therapy descriptors
+with_field	Interferon alfa		37557008	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Interleukin-2		35802869	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Ipilimumab		35803129	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Ipilimumab AND Chemotherapy			none	none	decomposed	decomposed therapy descriptors
+with_field	Ipilimumab AND Platinum doublet			none	none	decomposed	decomposed therapy descriptors
+with_field	Irinotecan		35803130	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Lenalidomide		35803149	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Lenalidomide AND Dexamethasone			none	none	decomposed	decomposed therapy descriptors
+with_field	Lenalidomide AND Rituximab			none	none	decomposed	decomposed therapy descriptors
+with_field	Lenvatinib		35803151	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Letrozole		35803154	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	LHRH agonist		35807385	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	LHRH agonist AND external beam radiotherapy			none	none	decomposed	decomposed therapy descriptors
+with_field	LHRH analog		37557894	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	LoDAC		2037000028	local	none	proposed-new	decomposed therapy descriptors
+with_field	Melphalan AND Prednisone			none	none	decomposed	decomposed therapy descriptors
+with_field	Multi-agent chemotherapy		2037000006	local	none	proposed-new	decomposed therapy descriptors
+with_field	Multi-modality treatment		2037000014	local	none	proposed-new	decomposed therapy descriptors
+with_field	nab-Paclitaxel)		35803228	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Nitrogen mustard AND Vincristine AND Prednisone			none	none	decomposed	decomposed therapy descriptors
+with_field	Nivolumab		35803207	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Nivolumab AND Chemotherapy			none	none	decomposed	decomposed therapy descriptors
+with_field	Nivolumab AND Platinum doublet			none	none	decomposed	decomposed therapy descriptors
+with_field	Obinutuzumab		35803211	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	other approved anticancer drugs		2037000011	local	none	proposed-new	decomposed therapy descriptors
+with_field	Other approved antileukemic drugs		2037000018	local	none	proposed-new	decomposed therapy descriptors
+with_field	Other effective agents		2037000013	local	none	proposed-new	decomposed therapy descriptors
+with_field	Oxaliplatin		35803227	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Oxaliplatin AND Bevacizumab			none	none	decomposed	decomposed therapy descriptors
+with_field	Paclitaxel		35803229	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Paclitaxel +/- Bevacizumab		35803229	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Palbociclib		35803231	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Palictaxel AND Topotecan			none	none	decomposed	decomposed therapy descriptors
+with_field	Panitumumab		35803234	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Pegylated liposomal doxorubicin		35803243	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Pembrolizumab		35803244	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Pemetrexed AND Platinum agent			none	none	decomposed	decomposed therapy descriptors
+with_field	Pertuzumab		35803250	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Plasma exchange AND Immunosuppressive therapy			none	none	decomposed	decomposed therapy descriptors
+with_field	Platinum agent AND Fluoropyrimidine			none	none	decomposed	decomposed therapy descriptors
+with_field	Platinum agent AND Fluorouracil			none	none	decomposed	decomposed therapy descriptors
+with_field	Platinum AND Fluoropyrimidine			none	none	decomposed	decomposed therapy descriptors
+with_field	Platinum AND Fluorouracil			none	none	decomposed	decomposed therapy descriptors
+with_field	Platinum- and 5-FU			none	none	decomposed	decomposed therapy descriptors
+with_field	Platinum-based chemotherapy		37558102	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Platinum-based chemotherapy AND Tremelimumab			none	none	decomposed	decomposed therapy descriptors
+with_field	Platinum-based regimen		37558102	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Platinum-containing chemotherapy		37558102	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Platinum-doublet		42542417	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Pomalidomide AND Dexamethasone			none	none	decomposed	decomposed therapy descriptors
+with_field	Predisone		35803268	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Prednisolone		35803267	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Prednisolone)		35803267	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Prednisone		35803268	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	R-CHOP		35805028	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	R-CHP		2037000024	local	none	proposed-new	decomposed therapy descriptors
+with_field	Radiation therapy		35803411	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Radiotherapy		35803411	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Ravulizumab		35100362	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Ribociclib		35803291	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Rituximab		35803296	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Rituximab AND Cyclophosphamide AND Doxorubicin AND Prednisone			none	none	decomposed	decomposed therapy descriptors
+with_field	SACT		2037000007	local	none	proposed-new	decomposed therapy descriptors
+with_field	Sargramostim AND Aldesleukin AND Isotretinoin			none	none	decomposed	decomposed therapy descriptors
+with_field	Steroids		35803578	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Surgical castration		2037000005	local	none	proposed-new	decomposed therapy descriptors
+with_field	Tamoxifen		35803329	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	TC		2037000027	local	none	proposed-new	decomposed therapy descriptors
+with_field	Topotecan		35803352	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Trametinib		35803357	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Trastuzumab		35803361	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Trastuzumab AND Capecitabine			none	none	decomposed	decomposed therapy descriptors
+with_field	Trastuzumab AND Chemotherapy			none	none	decomposed	decomposed therapy descriptors
+with_field	Trastuzumab AND Docetaxel			none	none	decomposed	decomposed therapy descriptors
+with_field	Trastuzumab AND Platinum agent AND Fluoropyrimidine			none	none	decomposed	decomposed therapy descriptors
+with_field	Tremelimumab		35803363	existing	none	mapped-to-existing	decomposed therapy descriptors
+with_field	Vemurafenib		35803382	existing	none	mapped-to-existing	decomposed therapy descriptors

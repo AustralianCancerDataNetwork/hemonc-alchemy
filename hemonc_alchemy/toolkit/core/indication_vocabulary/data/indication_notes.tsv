@@ -1,0 +1,36 @@
+indication_id	source_column	raw_value	issue
+82	biomarker	t(15;17)|PML-RARA / present|positive	reading changed; old: PML-RARA: positive OR t(15;17): present; new: PML-RARA: positive OR PML-RARA: present OR t(15;17): positive OR t(15;17): present
+110	biomarker	ER|PR / positive|unknown	reading changed; old: ER: positive OR PR: unknown; new: ER: positive OR ER: unknown OR PR: positive OR PR: unknown
+111	biomarker	ER|PR / positive|unknown	reading changed; old: ER: positive OR PR: unknown; new: ER: positive OR ER: unknown OR PR: positive OR PR: unknown
+141	biomarker	t(15;17)|PML-RARA / present|positive	reading changed; old: PML-RARA: positive OR t(15;17): present; new: PML-RARA: positive OR PML-RARA: present OR t(15;17): positive OR t(15;17): present
+142	biomarker	t(15;17)|PML-RARA / present|positive	reading changed; old: PML-RARA: positive OR t(15;17): present; new: PML-RARA: positive OR PML-RARA: present OR t(15;17): positive OR t(15;17): present
+143	biomarker	t(15;17)|PML-RARA / present|positive	reading changed; old: PML-RARA: positive OR t(15;17): present; new: PML-RARA: positive OR PML-RARA: present OR t(15;17): positive OR t(15;17): present
+164	prior_biomarker	Patients with EGFR or ALK genomic tumor aberrations should have disease progression on FDA-approved therapy for these aberrations	free text kept as a note; no closed vocabulary
+167	prior_biomarker	Patients with EGFR activating mutations or ALK-positive tumour mutations should also have received targeted therapy	free text kept as a note; no closed vocabulary
+174	prior_biomarker	Patients with EGFR or ALK genomic tumor aberrations should have disease progression on a therapy for these aberrations	free text kept as a note; no closed vocabulary
+364	prior_therapy_negation	TRUE AND FALSE	mixed negation values; criterion kept as required
+1149	prior_therapy_negation	unless patients were not suitable for these treatments.	mixed negation values; criterion kept as required
+1150	prior_therapy_negation	unless unsuitable	mixed negation values; criterion kept as required
+1580	biomarker	MMR|MSI / proficient|not high	reading changed; old: MMR: proficient OR MSI: not high; new: MMR: proficient AND MSI: not high
+1581	biomarker	MMR|MSI / proficient|not high	reading changed; old: MMR: proficient OR MSI: not high; new: MMR: proficient AND MSI: not high
+1584	biomarker	MMR|MSI / proficient|not high	reading changed; old: MMR: proficient OR MSI: not high; new: MMR: proficient AND MSI: not high
+1597	biomarker	ER|PR / positive|unknown	reading changed; old: ER: positive OR PR: unknown; new: ER: positive OR ER: unknown OR PR: positive OR PR: unknown
+1598	biomarker	ER|PR / positive|unknown	reading changed; old: ER: positive OR PR: unknown; new: ER: positive OR ER: unknown OR PR: positive OR PR: unknown
+1599	biomarker	ER|PR / positive|unknown	reading changed; old: ER: positive OR PR: unknown; new: ER: positive OR ER: unknown OR PR: positive OR PR: unknown
+1618	prior_biomarker	BRAF V600: BRAFi +/- MEKi	free text kept as a note; no closed vocabulary
+1732	prior_therapy_negation	FALSE|TRUE	mixed negation values; criterion kept as required
+1733	prior_therapy_negation	FALSE|TRUE	mixed negation values; criterion kept as required
+1734	prior_therapy_negation	FALSE|TRUE	mixed negation values; criterion kept as required
+1954	prior_biomarker	HR-positive: endocrine therapy or be considered inappropriate for endocrine therapy	free text kept as a note; no closed vocabulary
+1959	prior_biomarker	HR-positive: endocrine therapy or be considered inappropriate for endocrine therapy	free text kept as a note; no closed vocabulary
+2170	biomarker	MMR|MSI / proficient|not high	reading changed; old: MMR: proficient OR MSI: not high; new: MMR: proficient AND MSI: not high
+2171	biomarker	MMR|MSI / proficient|not high	reading changed; old: MMR: proficient OR MSI: not high; new: MMR: proficient AND MSI: not high
+2196	biomarker	MMR|MSI / proficient|not high	reading changed; old: MMR: proficient OR MSI: not high; new: MMR: proficient AND MSI: not high
+2277	biomarker	MMR|MSI / proficient|not high	reading changed; old: MMR: proficient OR MSI: not high; new: MMR: proficient AND MSI: not high
+2456	prior_biomarker	If KRAS WT, EGFR TKI therapy	free text kept as a note; no closed vocabulary
+2458	prior_biomarker	If KRAS WT, EGFR TKI therapy	free text kept as a note; no closed vocabulary
+2467	prior_biomarker	If RAS WT, EGFR TKI therapy	free text kept as a note; no closed vocabulary
+2698	prior_biomarker	HR-positive: endocrine therapy or be considered unsuitable for endocrine-based therapy	free text kept as a note; no closed vocabulary
+2819	prior_therapy_negation	FALSE AND FALSE AND TRUE	mixed negation values; criterion kept as required
+2887	prior_biomarker	HR-positive: endocrine therapy or be considered unsuitable for endocrine-based therapy	free text kept as a note; no closed vocabulary
+2968	prior_biomarker	if RAS wild-type, an anti-EGFR therapy	free text kept as a note; no closed vocabulary

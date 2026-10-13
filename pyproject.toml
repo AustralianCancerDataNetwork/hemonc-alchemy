@@ -31,10 +31,11 @@ classifiers = [
 dependencies = [
   "sqlalchemy>=2.0.45",
   "pandas>=2.0",
-  "oa-configurator>=1.1.0,<2.0.0",
-  "orm-loader>=1.1.0,<2.0.0",
+  "oa-configurator>=2.0.0,<3.0.0",
+  "orm-loader>=2.0.0,<3.0.0",
   "typer>=0.12",
   "rich>=13.0",
+  "pyyaml>=6.0",
 ]
 
 [project.optional-dependencies]
@@ -45,11 +46,10 @@ author = [
   "linkml>=1.9.6",
   "linkml-runtime>=1.9.5",
   "openpyxl>=3.1.5",
-  "pyyaml>=6.0",
   "pyreadr>=0.5",
 ]
 omop = [
-  "omop-alchemy>=1.2.0,<2.0.0",
+  "omop-alchemy>=2.0.0,<3.0.0",
 ]
 exploration = [
   "hemonc-alchemy[postgres]",
@@ -58,7 +58,7 @@ exploration = [
   "matplotlib>=3.9",
 ]
 dev = [
-  "oa-configurator[dev,postgres]>=1.1.0,<2.0.0",
+  "oa-configurator[dev,postgres]>=2.0.0,<3.0.0",
   "hemonc-alchemy[author,postgres]",
   "pytest>=8.0",
   "pytest-cov>=4.0",
@@ -93,6 +93,9 @@ raw-options = { tag_regex = '^v?(?P<version>[0-9]+\.[0-9]+\.[0-9]+)$' }
 
 [tool.hatch.build.targets.wheel]
 packages = ["hemonc_alchemy"]
+include = [
+  "hemonc_alchemy/toolkit/core/indication_vocabulary/data/**",
+]
 
 [tool.uv]
 cache-keys = [{ file = "pyproject.toml" }, { git = { commit = true, tags = true } }]
@@ -106,6 +109,7 @@ extend-exclude = [
 ]
 
 [tool.pytest.ini_options]
+addopts = "-m 'not db_dialect'"
 markers = [
   "postgres: requires a running docker-compose Postgres instance",
 ]

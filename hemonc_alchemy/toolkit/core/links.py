@@ -46,7 +46,7 @@ def study_variant_objects(study):
             getattr(current, "version", -1),
             getattr(current, "id", -1),
         ) if current is not None else None
-        if current is None or candidate_key > current_key:
+        if current_key is None or candidate_key > current_key:
             latest[variant_cui] = variant
     return list(latest.values())
 

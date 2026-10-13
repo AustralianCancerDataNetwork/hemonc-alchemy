@@ -16,7 +16,7 @@ here rather than declared in entities.py, they only exist once
 
 from __future__ import annotations
 
-from sqlalchemy import or_
+from sqlalchemy import or_, select, union_all
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import foreign, relationship
 
@@ -89,7 +89,7 @@ variants_StudyMap.study_objects = relationship(
     Studies,
     # A map row's text is sometimes "study--substudy" (e.g. a trial-phase or
     # arm suffix). Resolve either the exact name or that split form against
-    # Studies' own study/substudy columns. Catalogue joins reuse this relationship.
+    # Studies' own study/substudy columns.
     primaryjoin=or_(
         foreign(Studies.study) == variants_StudyMap.study,
         foreign(Studies.study + "--" + Studies.substudy) == variants_StudyMap.study,
@@ -97,6 +97,24 @@ variants_StudyMap.study_objects = relationship(
     viewonly=True,
     lazy="selectin",
 )
+
+
+def join_mapped_studies(statement):
+    """Join `variants_StudyMap` to `Studies` as `study_objects` does, using equality joins.
+
+    The relationship's OR condition stops PostgreSQL hashing or indexing the
+    join, so it compares every map row with every study.
+    """
+    keys = union_all(
+        select(Studies.id.label("study_id"), Studies.study.label("study_key")),
+        select(Studies.id, Studies.study + "--" + Studies.substudy).where(
+            Studies.substudy.is_not(None)
+        ),
+    ).subquery("study_keys")
+    return statement.join(keys, keys.c.study_key == variants_StudyMap.study).join(
+        Studies, Studies.id == keys.c.study_id
+    )
+
 
 variants_StudyMap.variant_objects = relationship(
     Variants,

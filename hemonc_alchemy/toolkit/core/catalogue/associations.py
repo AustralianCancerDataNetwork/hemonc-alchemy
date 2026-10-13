@@ -14,23 +14,25 @@ from ....model import (
     indications_Regimen_cuiMap,
     variants_StudyMap,
 )
+from ....model.relationships import join_mapped_studies
 from .specs import DEFAULT_CATALOGUE_SPEC, CatalogueSpec
 from .variants import variant_identity_statement
 
 
 def study_association_statement(spec: CatalogueSpec):
     statement = (
-        select(
-            Studies.condition_cui,
-            Variants.regimen_cui,
-            Variants.variant_cui,
-            Variants.version,
-            Studies.id.label("evidence_id"),
-            literal("study").label("basis"),
+        join_mapped_studies(
+            select(
+                Studies.condition_cui,
+                Variants.regimen_cui,
+                Variants.variant_cui,
+                Variants.version,
+                Studies.id.label("evidence_id"),
+                literal("study").label("basis"),
+            )
+            .select_from(Variants)
+            .join(variants_StudyMap, variants_StudyMap.parent_id == Variants.id)
         )
-        .select_from(Variants)
-        .join(variants_StudyMap, variants_StudyMap.parent_id == Variants.id)
-        .join(variants_StudyMap.study_objects)  # type: ignore[attr-defined]
         .join(Conditions, Conditions.condition_cui == Studies.condition_cui)
         .join(
             Regimens,

@@ -6,6 +6,7 @@ import pytest
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 
+from hemonc_alchemy.integrations.omop.schema import schema_aware_bind
 from hemonc_alchemy.model import Variants
 from hemonc_alchemy.toolkit.analytics.treatment.scheduling import (
     cycle_block_templates,
@@ -21,10 +22,12 @@ _ELTROMBOPAG_MONOTHERAPY_CUI = 131885
 _ANASTROZOLE_MONOTHERAPY_CUI = 129670
 _A_CMF_CUI = 129540
 _DEVCONTAINER_URL = "postgresql+psycopg://hemonc:hemonc@localhost:5432/hemonc_alchemy"
+_DEV_SCHEMA_TRANSLATE_MAP = {"vocab": "omop"}
 
 
 def _load_latest_variant(cui: int):
     """The highest-`version` row for `cui`, or skip if postgres/the row is unavailable."""
+    engine = None
     try:
         engine = sa.create_engine(
             _DEVCONTAINER_URL, future=True,
@@ -33,16 +36,20 @@ def _load_latest_variant(cui: int):
         with engine.connect() as conn:
             conn.execute(sa.text("SELECT 1"))
     except Exception as exc:  # noqa: BLE001 -- any connection failure just skips
+        if engine is not None:
+            engine.dispose()
         pytest.skip(f"devcontainer PostgreSQL not reachable: {exc}")
 
-    with so.Session(engine) as session:
-        rows = session.execute(
-            sa.select(Variants).where(Variants.variant_cui == cui)
-        ).scalars().all()
-        if not rows:
-            pytest.skip(f"imported database has no variant_cui={cui}")
-        yield max(rows, key=lambda variant: variant.version)
-    engine.dispose()
+    try:
+        with so.Session(schema_aware_bind(engine, _DEV_SCHEMA_TRANSLATE_MAP)) as session:
+            rows = session.execute(
+                sa.select(Variants).where(Variants.variant_cui == cui)
+            ).scalars().all()
+            if not rows:
+                pytest.skip(f"imported database has no variant_cui={cui}")
+            yield max(rows, key=lambda variant: variant.version)
+    finally:
+        engine.dispose()
 
 
 @pytest.fixture

@@ -1,0 +1,210 @@
+column	raw_value	n_indications	concept_id	concept_name	vocabulary_id	concept_class_id	domain_id	standard_concept	fit	note
+context	Adjuvant	118	35803584	Adjuvant therapy	HemOnc	Context	Procedure		exact	
+context	1L	116	35804409	Upfront therapy	HemOnc	Context	Procedure		narrower	Upfront therapy is nearest; no pure 1L Context
+context	not applicable	40							none	placeholder, no setting
+context	Maintenance	38	35803514	Maintenance after upfront therapy	HemOnc	Context	Procedure		narrower	HemOnc splits upfront vs salvage maintenance
+context	Neoadjuvant	18	35804141	Neoadjuvant therapy	HemOnc	Context	Procedure		exact	
+context	1L maintenance	14	35803496	Non-curative first-line maintenance therapy	HemOnc	Context	Procedure		narrower	HemOnc has no curative-agnostic 1L maintenance; non-curative variant is narrower
+context	2L	14	35804785	Non-curative second-line therapy	HemOnc	Context	Procedure		narrower	non-curative qualifier added
+context	Perioperative	11	1525179	Perioperative therapy	HemOnc	Context	Procedure		exact	
+context	Induction	10	35803433	Induction therapy	HemOnc	Context	Procedure		exact	
+context	2L+	4	35803507	Non-curative subsequent-line therapy	HemOnc	Context	Procedure		narrower	subsequent-line non-curative
+context	Consolidation	4	35803480	Consolidation after upfront therapy	HemOnc	Context	Procedure		narrower	HemOnc splits upfront vs salvage consolidation
+context	Prevention	3	35805724	Prophylaxis	HemOnc	Context	Procedure		exact	
+context	Treatment	3							none	generic
+context	Induction & Consolidation	2	35803433	Induction therapy	HemOnc	Context	Procedure		broader	compound; split into Induction + Consolidation
+context	prophylaxis	2	35805724	Prophylaxis	HemOnc	Context	Procedure		exact	
+context	1L consolidation	1	35804597	Non-curative first-line consolidation therapy	HemOnc	Context	Procedure		narrower	non-curative qualifier added
+context	3L	1	35804788	Non-curative third-line therapy	HemOnc	Context	Procedure		narrower	non-curative qualifier added
+context	3L+	1	35803507	Non-curative subsequent-line therapy	HemOnc	Context	Procedure		narrower	subsequent-line non-curative
+context	Conditioning	1	37561086	Intensified conditioning regimens for cellular therapy	HemOnc	Context	Procedure		narrower	only intensified/low-dose conditioning Contexts exist
+context	Induction & Maintenance	1	35803433	Induction therapy	HemOnc	Context	Procedure		broader	compound; split into Induction + Maintenance
+context	platelet count less than 50k	1							none	prior therapy / drug / response descriptor or other; not a Context concept
+context	prevention	1	35805724	Prophylaxis	HemOnc	Context	Procedure		exact	
+context	prevention of surgical bleeding	1	35805724	Prophylaxis	HemOnc	Context	Procedure		narrower	prophylaxis of bleeding
+context	Progressive	1	37561400	Residual or recurrent	HemOnc	Context	Procedure		broader	relapsed/recurrent; deprecated 905725 replaced by 37561400
+context	scheduled to undergo an invasive procedure	1							none	prior therapy / drug / response descriptor or other; not a Context concept
+prior_therapy_setting	not applicable	39							none	placeholder, no setting
+prior_therapy_setting	Metastatic	37	35803588	Non-curative therapy	HemOnc	Context	Procedure		broader	disease extent not a Context; Non-curative therapy is nearest
+prior_therapy_setting	First-line	15	35804409	Upfront therapy	HemOnc	Context	Procedure		narrower	Upfront therapy is nearest; no pure 1L Context
+prior_therapy_setting	Adjuvant	10	35803584	Adjuvant therapy	HemOnc	Context	Procedure		exact	
+prior_therapy_setting	Any	9	35803427	All lines of therapy	HemOnc	Context	Procedure		exact	Any = all lines
+prior_therapy_setting	adjuvant	6	35803584	Adjuvant therapy	HemOnc	Context	Procedure		exact	
+prior_therapy_setting	neoadjuvant	5	35804141	Neoadjuvant therapy	HemOnc	Context	Procedure		exact	
+prior_therapy_setting	Neoadjuvant	3	35804141	Neoadjuvant therapy	HemOnc	Context	Procedure		exact	
+prior_therapy_setting	1+	2	35803427	All lines of therapy	HemOnc	Context	Procedure		broader	line range
+prior_therapy_setting	1 to 2	2	35803427	All lines of therapy	HemOnc	Context	Procedure		broader	line range
+prior_therapy_setting	Advanced disease	2	35803588	Non-curative therapy	HemOnc	Context	Procedure		broader	disease extent not a Context; Non-curative therapy is nearest
+prior_therapy_setting	(neo)adjuvant	2	1525179	Perioperative therapy	HemOnc	Context	Procedure		broader	neoadjuvant and/or adjuvant; Perioperative or two concepts
+prior_therapy_setting	neoadjuvant or adjuvant	2	1525179	Perioperative therapy	HemOnc	Context	Procedure		broader	neoadjuvant and/or adjuvant; Perioperative or two concepts
+prior_therapy_setting	Neoadjuvant or Adjuvant	2	1525179	Perioperative therapy	HemOnc	Context	Procedure		broader	neoadjuvant and/or adjuvant; Perioperative or two concepts
+prior_therapy_setting	Relapsed	2	37561400	Residual or recurrent	HemOnc	Context	Procedure		broader	relapsed/recurrent; deprecated 905725 replaced by 37561400
+prior_therapy_setting	Surgery	2	35804133	Local therapy	HemOnc	Context	Procedure		broader	prior local therapy, not a setting
+prior_therapy_setting	0	1							none	prior therapy / drug / response descriptor or other; not a Context concept
+prior_therapy_setting	1L	1	35804409	Upfront therapy	HemOnc	Context	Procedure		narrower	Upfront therapy is nearest; no pure 1L Context
+prior_therapy_setting	1+ metastatic	1	35803427	All lines of therapy	HemOnc	Context	Procedure		broader	line range
+prior_therapy_setting	Advanced	1	35803588	Non-curative therapy	HemOnc	Context	Procedure		broader	disease extent not a Context; Non-curative therapy is nearest
+prior_therapy_setting	advanced disease	1	35803588	Non-curative therapy	HemOnc	Context	Procedure		broader	disease extent not a Context; Non-curative therapy is nearest
+prior_therapy_setting	Advanced or metastatic	1	35803588	Non-curative therapy	HemOnc	Context	Procedure		broader	disease extent not a Context; Non-curative therapy is nearest
+prior_therapy_setting	any	1	35803427	All lines of therapy	HemOnc	Context	Procedure		exact	Any = all lines
+prior_therapy_setting	BCG	1							none	prior therapy / drug / response descriptor or other; not a Context concept
+prior_therapy_setting	Definitive	1	35803670	Definitive therapy	HemOnc	Context	Procedure		exact	
+prior_therapy_setting	EGFR TKI-naive	1							none	prior therapy / drug / response descriptor or other; not a Context concept
+prior_therapy_setting	erythropoeisis-stimulating agents	1							none	prior therapy / drug / response descriptor or other; not a Context concept
+prior_therapy_setting	fluoropyrimidine-, oxaliplatin-, and irinotecan-based chemotherapy	1							none	prior therapy / drug / response descriptor or other; not a Context concept
+prior_therapy_setting	Immunotherapy	1							none	prior therapy / drug / response descriptor or other; not a Context concept
+prior_therapy_setting	Induction	1	35803433	Induction therapy	HemOnc	Context	Procedure		exact	
+prior_therapy_setting	intolerance	1							none	prior therapy / drug / response descriptor or other; not a Context concept
+prior_therapy_setting	Irinotecan-based regimen	1							none	prior therapy / drug / response descriptor or other; not a Context concept
+prior_therapy_setting	Locally advanced	1	35803588	Non-curative therapy	HemOnc	Context	Procedure		broader	disease extent not a Context; Non-curative therapy is nearest
+prior_therapy_setting	metastatic	1	35803588	Non-curative therapy	HemOnc	Context	Procedure		broader	disease extent not a Context; Non-curative therapy is nearest
+prior_therapy_setting	Other Irinotecan-based regimen	1							none	prior therapy / drug / response descriptor or other; not a Context concept
+prior_therapy_setting	Platinum-based chemotherapy	1							none	prior therapy / drug / response descriptor or other; not a Context concept
+prior_therapy_setting	Radiotherapy	1	35804133	Local therapy	HemOnc	Context	Procedure		broader	prior local therapy, not a setting
+prior_therapy_setting	Refractory	1	37561400	Residual or recurrent	HemOnc	Context	Procedure		broader	relapsed/recurrent; deprecated 905725 replaced by 37561400
+prior_therapy_setting	Relapsed platinum-sensitive	1	37561400	Residual or recurrent	HemOnc	Context	Procedure		broader	relapsed/recurrent; deprecated 905725 replaced by 37561400
+prior_therapy_setting	resistance	1							none	prior therapy / drug / response descriptor or other; not a Context concept
+prior_therapy_setting	SD or better	1							none	prior therapy / drug / response descriptor or other; not a Context concept
+prior_therapy_setting	Surgery AND Radiotherapy	1	35804133	Local therapy	HemOnc	Context	Procedure		broader	prior local therapy, not a setting
+prior_therapy_setting	Unresectable	1	35803588	Non-curative therapy	HemOnc	Context	Procedure		broader	disease extent not a Context; Non-curative therapy is nearest
+prior_therapy_setting	Untreated	1	35804409	Upfront therapy	HemOnc	Context	Procedure		narrower	treatment-naive ~ upfront
+demographics	postmenopausal	43	4295261	Postmenopausal state	SNOMED	Clinical Finding	Observation	S	exact	compound with other qualifiers (osteoporosis/visceral disease) lost
+demographics	not applicable	39							none	placeholder
+demographics	adults 75 years or older	7	4046779	Adult	SNOMED	Social Context	Observation		narrower	age/sex group; SNOMED Adult is non-standard social context
+demographics	have comorbidities that preclude intensive induction chemotherapy	7							none	clinical descriptor, no concept
+demographics	premenopausal	6	37538150	PREMENOPAUSAL	CDISC	Observable Entity	Observation		exact	CDISC non-standard; no SNOMED standard premenopausal state found
+demographics	postmenopausal women	5	4295261	Postmenopausal state	SNOMED	Clinical Finding	Observation	S	exact	compound with other qualifiers (osteoporosis/visceral disease) lost
+demographics	men	4	4046779	Adult	SNOMED	Social Context	Observation		broader	age/sex group; SNOMED Adult is non-standard social context
+demographics	asymptomatic or minimally symptomatic	3							none	clinical descriptor, no concept
+demographics	adults AND skeletally mature adolescents	2	4046779	Adult	SNOMED	Social Context	Observation		broader	age/sex group; SNOMED Adult is non-standard social context
+demographics	good performance status	2							none	clinical descriptor, no concept
+demographics	minimally pretreated (within 1 year of diagnosis)	2							none	clinical descriptor, no concept
+demographics	require systemic therapy	2							none	clinical descriptor, no concept
+demographics	symptomatic	2							none	clinical descriptor, no concept
+demographics	adult men	1	4046779	Adult	SNOMED	Social Context	Observation		narrower	age/sex group; SNOMED Adult is non-standard social context
+demographics	adults and pediatric patients 40 kg or more	1	4046779	Adult	SNOMED	Social Context	Observation		broader	age/sex group; SNOMED Adult is non-standard social context
+demographics	Anemia	1							none	clinical descriptor, no concept
+demographics	ECOG PS 0-1	1	4308014	ECOG performance status	SNOMED	Observable Entity	Observation		broader	observable only; value 0-1 has no standard concept
+demographics	enlarged prostate gland	1							none	clinical descriptor, no concept
+demographics	high risk for breast cancer	1							none	clinical descriptor, no concept
+demographics	moderate disease with severe bleeding phenotype	1							none	clinical descriptor, no concept
+demographics	no satisfactory treatment alternatives	1							none	clinical descriptor, no concept
+demographics	postmenopausal with osteoporosis at high risk for fracture	1	4295261	Postmenopausal state	SNOMED	Clinical Finding	Observation	S	broader	compound with other qualifiers (osteoporosis/visceral disease) lost
+demographics	postmenopausal without symptomatic visceral disease	1	4295261	Postmenopausal state	SNOMED	Clinical Finding	Observation	S	broader	compound with other qualifiers (osteoporosis/visceral disease) lost
+demographics	pre/perimenopausal	1	37538150	PREMENOPAUSAL	CDISC	Observable Entity	Observation		narrower	CDISC non-standard; no SNOMED standard premenopausal state found
+demographics	severe disease	1							none	clinical descriptor, no concept
+demographics	Thrombocytopenia	1							none	clinical descriptor, no concept
+demographics	transfusion-dependent anemia	1							none	clinical descriptor, no concept
+risk_stratification	not applicable	39							none	placeholder
+risk_stratification	high-risk	34	37109703	High risk	SNOMED	Qualifier Value	Meas Value	S	exact	
+risk_stratification	high risk for recurrence	21	37109703	High risk	SNOMED	Qualifier Value	Meas Value	S	broader	risk qualified by outcome (recurrence/metastasis/relapse)
+risk_stratification	Intermediate-risk	17	46238024	Intermediate risk	LOINC	Answer	Meas Value	S	exact	LOINC answer; SNOMED standard not found
+risk_stratification	poor-risk	7	37109703	High risk	SNOMED	Qualifier Value	Meas Value	S	broader	risk qualified by outcome (recurrence/metastasis/relapse)
+risk_stratification	IPI 2+	4	37396673	International Prognostic Index	SNOMED	Staging / Scales	Measurement	S	broader	IPI scale; score 2+ not a concept
+risk_stratification	intermediate-2 and high-risk	3	37109703	High risk	SNOMED	Qualifier Value	Meas Value	S	broader	risk qualified by outcome (recurrence/metastasis/relapse)
+risk_stratification	Low-risk	3							none	no matching risk concept
+risk_stratification	Very low risk	3							none	no matching risk concept
+risk_stratification	well-differentiated	3	4137845	Well differentiated	SNOMED	Qualifier Value	Observation	S	exact	histologic grade qualifier; mixed/NET qualifiers lost
+risk_stratification	with inhibitors	3	4125639	Hereditary factor VIII deficiency disease with inhibitor	SNOMED	Disorder	Condition	S	exact	
+risk_stratification	High risk for systemic recurrence	2	37109703	High risk	SNOMED	Qualifier Value	Meas Value	S	broader	risk qualified by outcome (recurrence/metastasis/relapse)
+risk_stratification	High-risk of developing metastases	2	37109703	High risk	SNOMED	Qualifier Value	Meas Value	S	broader	risk qualified by outcome (recurrence/metastasis/relapse)
+risk_stratification	low-to-intermediate risk	2							none	no matching risk concept
+risk_stratification	No inhibitors	2	4125639	Hereditary factor VIII deficiency disease with inhibitor	SNOMED	Disorder	Condition	S	none	absence of inhibitor has no concept
+risk_stratification	with factor VIII inhibitor	2	4125639	Hereditary factor VIII deficiency disease with inhibitor	SNOMED	Disorder	Condition	S	exact	
+risk_stratification	without inhibitors	2	4125639	Hereditary factor VIII deficiency disease with inhibitor	SNOMED	Disorder	Condition	S	none	absence of inhibitor has no concept
+risk_stratification	asymptomatic or mildly symptomatic	1							none	no matching risk concept
+risk_stratification	at least three of six prognostic risk factors	1							none	no matching risk concept
+risk_stratification	At-risk	1							none	no matching risk concept
+risk_stratification	at risk of developing metastatic disease	1							none	no matching risk concept
+risk_stratification	High-risk	1	37109703	High risk	SNOMED	Qualifier Value	Meas Value	S	exact	
+risk_stratification	High risk for metastasis	1	37109703	High risk	SNOMED	Qualifier Value	Meas Value	S	broader	risk qualified by outcome (recurrence/metastasis/relapse)
+risk_stratification	high risk for recurrence AND Ki-67 > 20%	1	37109703	High risk	SNOMED	Qualifier Value	Meas Value	S	broader	risk qualified by outcome (recurrence/metastasis/relapse)
+risk_stratification	high risk of recurrence after surgery and radiation	1	37109703	High risk	SNOMED	Qualifier Value	Meas Value	S	broader	risk qualified by outcome (recurrence/metastasis/relapse)
+risk_stratification	High risk of relapse or progression	1	37109703	High risk	SNOMED	Qualifier Value	Meas Value	S	broader	risk qualified by outcome (recurrence/metastasis/relapse)
+risk_stratification	high tumor burden	1							none	no matching risk concept
+risk_stratification	increased risk of recurrence	1							none	no matching risk concept
+risk_stratification	increased risk of relapse or progression	1							none	no matching risk concept
+risk_stratification	intermediate-risk	1	46238024	Intermediate risk	LOINC	Answer	Meas Value	S	exact	LOINC answer; SNOMED standard not found
+risk_stratification	low- or intermediate-1-risk	1							none	no matching risk concept
+risk_stratification	low-risk	1							none	no matching risk concept
+risk_stratification	Medium-risk	1							none	no matching risk concept
+risk_stratification	no other therapeutic option is expected to result in a durable response	1							none	no matching risk concept
+risk_stratification	Risk of developing metastatic disease	1							none	no matching risk concept
+risk_stratification	surgical resection will potentially cause worsening functional limitation or severe morbidity	1							none	no matching risk concept
+risk_stratification	Well-differentiated non-functional GI or lung origin	1	4137845	Well differentiated	SNOMED	Qualifier Value	Observation	S	broader	histologic grade qualifier; mixed/NET qualifiers lost
+risk_stratification	Well or moderately differentiated	1	4137845	Well differentiated	SNOMED	Qualifier Value	Observation	S	broader	histologic grade qualifier; mixed/NET qualifiers lost
+risk_stratification	Well- or moderately-differentiated	1	4137845	Well differentiated	SNOMED	Qualifier Value	Observation	S	broader	histologic grade qualifier; mixed/NET qualifiers lost
+risk_stratification	with FVIII inhibitor	1	4125639	Hereditary factor VIII deficiency disease with inhibitor	SNOMED	Disorder	Condition	S	exact	
+risk_stratification	with Inhibitors	1	4125639	Hereditary factor VIII deficiency disease with inhibitor	SNOMED	Disorder	Condition	S	exact	
+risk_stratification	without FVIII inhibitor	1	4125639	Hereditary factor VIII deficiency disease with inhibitor	SNOMED	Disorder	Condition	S	none	absence of inhibitor has no concept
+ineligibility	satisfactory alternative treatment options	19							none	free-text eligibility criterion; no OMOP concept
+ineligibility	Not candidate for potentially curative surgery and/or radiation therapy	7							none	free-text eligibility criterion; no OMOP concept
+ineligibility	not eligible for autologous HSCT	6							none	free-text eligibility criterion; no OMOP concept
+ineligibility	eligible for high dose chemotherapy with haematopoietic stem cell transplantation	4							none	free-text eligibility criterion; no OMOP concept
+ineligibility	not candidates for curative surgery or radiation	4							none	free-text eligibility criterion; no OMOP concept
+ineligibility	candidate for surgery or radiation	3							none	free-text eligibility criterion; no OMOP concept
+ineligibility	HSCT-ineligible	3							none	free-text eligibility criterion; no OMOP concept
+ineligibility	ineligible for autologous hematopoietic stem cell transplantation (auto-HSCT) or CAR T-cell therapy	3							none	free-text eligibility criterion; no OMOP concept
+ineligibility	not candidate for curative surgical resection or radiation	3							none	free-text eligibility criterion; no OMOP concept
+ineligibility	not candidates for cytotoxic chemotherapy	3							none	free-text eligibility criterion; no OMOP concept
+ineligibility	transplant-ineligible	3							none	free-text eligibility criterion; no OMOP concept
+ineligibility	candidate for curative surgery or curative radiation	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	chemotherapy is not clinically indicated	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	chemotherapy is not yet clinically indicated	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	cisplatin-ineligible	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	Ineligible for autologous HSCT	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	Ineligible for cisplatin	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	ineligible for cisplatin-containing chemotherapy	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	ineligible or have elected not to undergo cystectomy	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	No satisfactory treatment options	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	not candidate for curative surgery or curative radiation	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	Not candidate for curative surgical resection	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	not candidate for standard induction chemotherapy	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	Not candidate for surgical resection or definitive chemoradiation	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	not curable by surgery or radiation	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	not eligible for cisplatin-based chemotherapy	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	not eligible for cisplatin-based regimen	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	not eligible for platinum-based regimen	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	Not suited for curative resection	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	other TKI is indicated	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	Refractory or intolerant to standard therapies	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	require systemic treatment	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	requiring immediate surgery	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	satisfactory locoregional treatment options	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	unable to tolerate further platinum chemotherapy	2							none	free-text eligibility criterion; no OMOP concept
+ineligibility	alternative treatment	1							none	free-text eligibility criterion; no OMOP concept
+ineligibility	Anthracycline is not suitable	1							none	free-text eligibility criterion; no OMOP concept
+ineligibility	Anthracycline- or taxane-containing chemotherapy not indicated	1							none	free-text eligibility criterion; no OMOP concept
+ineligibility	ASCT or multi-agent chemotherapy is not a treatment option	1							none	free-text eligibility criterion; no OMOP concept
+ineligibility	asympotomatic or mildly symptomatic in whom chemotherapy is not yet clinically indicated	1							none	free-text eligibility criterion; no OMOP concept
+ineligibility	[remaining 48 values clustered]	48							none	themes: other 17; HSCT/transplant 10; curative surgery/radiation/resection 10; fludarabine/anthracycline/TKI/asparaginase agent 9; cisplatin/platinum 2
+sex	FEMALE	64	8532	FEMALE	Gender	Gender	Gender	S	exact	OMOP Gender
+sex	MALE	15	8507	MALE	Gender	Gender	Gender	S	exact	OMOP Gender
+age_unit	YEAR	112							none	unit, not concept; UCUM year not searched
+age_unit	MONTH	12							none	unit
+age_unit	UNSPECIFIED	816							none	unit
+note	TO_BE_DISSECTED	275							none	pipeline flag
+note	NO_LINKED_CONDITION	60							none	pipeline flag
+age	adult	752	4046779	Adult	SNOMED	Social Context	Observation		exact	SNOMED Adult is non-standard Social Context
+age	12+	53	44804452	Age group	SNOMED	Qualifier Value	Observation	S	broader	numeric age bound; only generic Age group qualifier exists, no numeric ranges
+age	any	48							none	no age restriction
+age	1+	18	44804452	Age group	SNOMED	Qualifier Value	Observation	S	broader	numeric age bound; only generic Age group qualifier exists, no numeric ranges
+age	1 to NUBp	18	44804452	Age group	SNOMED	Qualifier Value	Observation	S	broader	numeric age bound; only generic Age group qualifier exists, no numeric ranges
+age	pediatric	15	45880636	Pediatric	LOINC	Answer	Meas Value	S	exact	LOINC answer Pediatric (standard); SNOMED Child is Relationship domain
+age	2+	6	44804452	Age group	SNOMED	Qualifier Value	Observation	S	broader	numeric age bound; only generic Age group qualifier exists, no numeric ranges
+age	2 to NUBp	5	44804452	Age group	SNOMED	Qualifier Value	Observation	S	broader	numeric age bound; only generic Age group qualifier exists, no numeric ranges
+age	16+	3	44804452	Age group	SNOMED	Qualifier Value	Observation	S	broader	numeric age bound; only generic Age group qualifier exists, no numeric ranges
+age	1 to 21	3	44804452	Age group	SNOMED	Qualifier Value	Observation	S	broader	numeric age bound; only generic Age group qualifier exists, no numeric ranges
+age	60+	3	44804452	Age group	SNOMED	Qualifier Value	Observation	S	broader	numeric age bound; only generic Age group qualifier exists, no numeric ranges
+age	12 to NUBp	2	44804452	Age group	SNOMED	Qualifier Value	Observation	S	broader	numeric age bound; only generic Age group qualifier exists, no numeric ranges
+age	1 to 18	2	44804452	Age group	SNOMED	Qualifier Value	Observation	S	broader	numeric age bound; only generic Age group qualifier exists, no numeric ranges
+age	65+	2	44804452	Age group	SNOMED	Qualifier Value	Observation	S	broader	numeric age bound; only generic Age group qualifier exists, no numeric ranges
+age	6 to NUBp	2	44804452	Age group	SNOMED	Qualifier Value	Observation	S	broader	numeric age bound; only generic Age group qualifier exists, no numeric ranges
+age	13+	1	44804452	Age group	SNOMED	Qualifier Value	Observation	S	broader	numeric age bound; only generic Age group qualifier exists, no numeric ranges
+age	15+	1	44804452	Age group	SNOMED	Qualifier Value	Observation	S	broader	numeric age bound; only generic Age group qualifier exists, no numeric ranges
+age	1 to NUBya	1	44804452	Age group	SNOMED	Qualifier Value	Observation	S	broader	numeric age bound; only generic Age group qualifier exists, no numeric ranges
+age	22+	1	44804452	Age group	SNOMED	Qualifier Value	Observation	S	broader	numeric age bound; only generic Age group qualifier exists, no numeric ranges
+age	25-	1	44804452	Age group	SNOMED	Qualifier Value	Observation	S	broader	numeric age bound; only generic Age group qualifier exists, no numeric ranges
+age	3+	1	44804452	Age group	SNOMED	Qualifier Value	Observation	S	broader	numeric age bound; only generic Age group qualifier exists, no numeric ranges
+age	4 to 11	1	44804452	Age group	SNOMED	Qualifier Value	Observation	S	broader	numeric age bound; only generic Age group qualifier exists, no numeric ranges
+age	pediatric including adolescent	1	45880636	Pediatric	LOINC	Answer	Meas Value	S	broader	LOINC answer Pediatric (standard); SNOMED Child is Relationship domain

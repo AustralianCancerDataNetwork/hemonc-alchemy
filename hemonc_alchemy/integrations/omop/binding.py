@@ -1,11 +1,9 @@
 """Lazy access to ``omop-alchemy``'s public CDM models.
 
 The optional dependency is imported only when a caller enters this bridge.
-Normal HemOnc imports therefore remain valid in installations without the
-``omop`` extra. The current development configuration loads the HemOnc and
-OMOP tables into the same database schema, so the public schema-neutral OMOP
-models can be used directly on the caller's session. Future schema resolution
-belongs in oa-configurator rather than in this bridge.
+Normal HemOnc imports therefore remain valid without the ``omop`` extra. OMOP
+models use logical schema tags; ``schema.py`` resolves them through explicit
+maps or oa-configurator and reports unavailable tables with the SQL error.
 
 The package's own queries are limited to HemOnc-specific joins that
 ``omop-alchemy`` cannot know about. OMOP model classes and their public
@@ -18,7 +16,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-import sqlalchemy as sa
+from .schema import OmopAvailability, omop_availability
 
 
 @dataclass(frozen=True)
@@ -61,31 +59,13 @@ def omop_available(
 ) -> bool:
     """Return whether the optional extra and configured concept table work.
 
-    Missing extras, missing schemas, permissions, connection failures, and
-    incompatible OMOP installations all return ``False``.  This deliberately
-    performs a harmless model query rather than reflecting database metadata.
-    An ancestry resolver can also require the relationship table.
+    This preserves the boolean API while the detailed availability helper
+    carries a failure reason. An ancestry resolver can also require relations.
     """
 
-    binding = load_omop_binding()
-    if binding is None:
-        return False
-    try:
-        # Use a separate connection so a failed probe cannot leave the
-        # caller's Session transaction in an aborted state.
-        bind = session.get_bind()
-        engine = getattr(bind, "engine", bind)
-        with engine.connect() as connection:
-            connection.execute(
-                sa.select(binding.concept.concept_id).limit(1)
-            ).first()
-            if require_relationships:
-                connection.execute(
-                    sa.select(binding.concept_relationship.concept_id_1).limit(1)
-                ).first()
-        return True
-    except Exception:  # noqa: BLE001 - availability must never break callers
-        return False
+    return omop_availability(
+        session, require_relationships=require_relationships
+    ).available
 
 
-__all__ = ["OmopBinding", "load_omop_binding", "omop_available"]
+__all__ = ["OmopAvailability", "OmopBinding", "load_omop_binding", "omop_available"]

@@ -1,0 +1,25 @@
+relationship_id	relationship_name	is_hierarchical	defines_ancestry	reverse_relationship_id	relationship_concept_id
+Ind has component	Indication has component	0	0	Component of ind	2090000001
+Component of ind	Component of indication	0	0	Ind has component	2090000002
+Ind has condition	Indication has condition	0	0	Condition of ind	2090000003
+Condition of ind	Condition of indication	0	0	Ind has condition	2090000004
+Ind has regimen	Indication has regimen	0	0	Regimen of ind	2090000005
+Regimen of ind	Regimen of indication	0	0	Ind has regimen	2090000006
+Ind has regulator	Indication has regulator	0	0	Regulator of ind	2090000007
+Regulator of ind	Regulator of indication	0	0	Ind has regulator	2090000008
+Ind has approval path	Indication has approval path	0	0	Approval path of ind	2090000009
+Approval path of ind	Approval path of indication	0	0	Ind has approval path	2090000010
+Ind has context	Indication has context	0	0	Context of ind	2090000011
+Context of ind	Context of indication	0	0	Ind has context	2090000012
+State has analyte	Biomarker state has analyte	0	0	Analyte of state	2090000013
+Analyte of state	Analyte of biomarker state	0	0	State has analyte	2090000014
+State has result	Biomarker state has result	0	0	Result of state	2090000015
+Result of state	Result of biomarker state	0	0	State has result	2090000016
+State has variant	Biomarker state has variant	0	0	Variant of state	2090000017
+Variant of state	Variant of biomarker state	0	0	State has variant	2090000018
+Clinically implies	Clinically implies	0	0	Clinically implied by	2090000019
+Clinically implied by	Clinically implied by	0	0	Clinically implies	2090000020
+Equiv in indic	Equivalent in indication context	0	0	Equiv in indic	2090000021
+Opposite of	Opposite polarity	0	0	Opposite of	2090000022
+Is a	Is a	0	0	Subsumes	44818821
+Subsumes	Subsumes	1	1	Is a	44818723

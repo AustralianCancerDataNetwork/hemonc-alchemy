@@ -1,0 +1,619 @@
+source_column	raw_value	context	concept_id	concept_name	vocabulary_id	concept_class_id	standard_concept	fit	used_as	status	verified_on
+biomarker	AFP		35948552	AFP (alpha fetoprotein) gene variant measurement	OMOP Genomic	Genetic Variation	S	narrower	target	mapped-to-existing	2026-10-13
+biomarker	AKT1		35956980	AKT1 (AKT serine/threonine kinase 1) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	ALK		35963763	ALK (ALK receptor tyrosine kinase) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	bcl2		35958594	BCL2 (BCL2 apoptosis regulator) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	Bcr-Abl		35954826	ABL1 (ABL proto-oncogene 1, non-receptor tyrosine kinase) gene variant measurement	OMOP Genomic	Genetic Variation	S	broader	target	mapped-to-existing	2026-10-13
+biomarker	BRAF		35948173	BRAF (B-Raf proto-oncogene, serine/threonine kinase) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	BRCA		35950928	BRCA1 (BRCA1 DNA repair associated) gene variant measurement	OMOP Genomic	Genetic Variation	S	narrower	target	mapped-to-existing	2026-10-13
+biomarker	BRCA2		35950178	BRCA2 (BRCA2 DNA repair associated) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	c-Met		35961878	MET (MET proto-oncogene, receptor tyrosine kinase) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	CD117		35959513	KIT (KIT proto-oncogene, receptor tyrosine kinase) gene variant measurement	OMOP Genomic	Genetic Variation	S	narrower	target	mapped-to-existing	2026-10-13
+biomarker	CD19		35960932	CD19 (CD19 molecule) gene variant measurement	OMOP Genomic	Genetic Variation	S	narrower	target	mapped-to-existing	2026-10-13
+biomarker	CD20		35960550	MS4A1 (membrane spanning 4-domains A1) gene variant measurement	OMOP Genomic	Genetic Variation	S	narrower	target	mapped-to-existing	2026-10-13
+biomarker	CD22		35953981	CD22 (CD22 molecule) gene variant measurement	OMOP Genomic	Genetic Variation	S	narrower	target	mapped-to-existing	2026-10-13
+biomarker	CD25		35960573	IL2RA (interleukin 2 receptor subunit alpha) gene variant measurement	OMOP Genomic	Genetic Variation	S	narrower	target	mapped-to-existing	2026-10-13
+biomarker	CD30		35946663	TNFRSF8 (TNF receptor superfamily member 8) gene variant measurement	OMOP Genomic	Genetic Variation	S	narrower	target	mapped-to-existing	2026-10-13
+biomarker	CD33		35949007	CD33 (CD33 molecule) gene variant measurement	OMOP Genomic	Genetic Variation	S	narrower	target	mapped-to-existing	2026-10-13
+biomarker	cldn18.2		35955255	CLDN18 (claudin 18) gene variant measurement	OMOP Genomic	Genetic Variation	S	broader	target	mapped-to-existing	2026-10-13
+biomarker	EBV		1001833	Epstein Barr virus DNA [Units/volume] (viral load) in Blood by NAA with probe detection	LOINC	Lab Test	S	narrower	target	mapped-to-existing	2026-10-13
+biomarker	egfr		35962802	EGFR (epidermal growth factor receptor) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	EpCAM		35963234	EPCAM (epithelial cell adhesion molecule) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	ER		35948983	ESR1 (estrogen receptor 1) gene variant measurement	OMOP Genomic	Genetic Variation	S	narrower	target	mapped-to-existing	2026-10-13
+biomarker	ESR1		35948983	ESR1 (estrogen receptor 1) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	EZH2		35964476	EZH2 (enhancer of zeste 2 polycomb repressive complex 2 subunit) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	FGFR1		35956416	FGFR1 (fibroblast growth factor receptor 1) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	FGFR2		35962606	FGFR2 (fibroblast growth factor receptor 2) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	FGFR3		35954995	FGFR3 (fibroblast growth factor receptor 3) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	FIP1L1-PDGFRA		40758222	PDGFRA gene rearrangements [Presence] in Blood or Tissue by Molecular genetics method	LOINC	Lab Test	S	broader	target	mapped-to-existing	2026-10-13
+biomarker	FLT3		35956153	FLT3 (fms related receptor tyrosine kinase 3) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	Folate receptor alpha		35962723	FOLR1 (folate receptor alpha) gene variant measurement	OMOP Genomic	Genetic Variation	S	narrower	target	mapped-to-existing	2026-10-13
+biomarker	H3		35957234	H3-3A (H3.3 histone A) gene variant measurement	OMOP Genomic	Genetic Variation	S	narrower	target	mapped-to-existing	2026-10-13
+biomarker	HER2		35955862	ERBB2 (erb-b2 receptor tyrosine kinase 2) gene variant measurement	OMOP Genomic	Genetic Variation	S	narrower	target	mapped-to-existing	2026-10-13
+biomarker	HLA-A*02:01		35962305	HLA-A (major histocompatibility complex, class I, A) gene variant measurement	OMOP Genomic	Genetic Variation	S	broader	target	mapped-to-existing	2026-10-13
+biomarker	HLA-A*02:02		35962305	HLA-A (major histocompatibility complex, class I, A) gene variant measurement	OMOP Genomic	Genetic Variation	S	broader	target	mapped-to-existing	2026-10-13
+biomarker	HLA-A*02:03		35962305	HLA-A (major histocompatibility complex, class I, A) gene variant measurement	OMOP Genomic	Genetic Variation	S	broader	target	mapped-to-existing	2026-10-13
+biomarker	HLA-A*02:06		35962305	HLA-A (major histocompatibility complex, class I, A) gene variant measurement	OMOP Genomic	Genetic Variation	S	broader	target	mapped-to-existing	2026-10-13
+biomarker	HR		44791967	Tumour hormone receptor status	SNOMED	Observable Entity	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	HRD		1469934	Homologous recombination deficiency status analysis [Presence] in Tissue by Molecular genetics method	LOINC	Lab Test	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	IDH1		35948329	IDH1 (isocitrate dehydrogenase (NADP(+)) 1) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	IDH2		35953046	IDH2 (isocitrate dehydrogenase (NADP(+)) 2) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	KIT		35959513	KIT (KIT proto-oncogene, receptor tyrosine kinase) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	KMT2A		35960503	KMT2A (lysine methyltransferase 2A) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	KRAS		35948791	KRAS (KRAS proto-oncogene, GTPase) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	mage-a4 antigen		35951541	MAGEA4 (MAGE family member A4) gene variant measurement	OMOP Genomic	Genetic Variation	S	narrower	target	mapped-to-existing	2026-10-13
+biomarker	MET		35961878	MET (MET proto-oncogene, receptor tyrosine kinase) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	MMR		1617420	DNA mismatch repair in Cancer specimen by Immune stain Narrative	LOINC	Lab Test	S	narrower	target	mapped-to-existing	2026-10-13
+biomarker	MSI		700490	Microsatellite stability measurement	OMOP Genomic	Structural Variant	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	MYC		35952889	MYC (MYC proto-oncogene, bHLH transcription factor) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	NPM1		35948005	NPM1 (nucleophosmin 1) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	NRAS		35950119	NRAS (NRAS proto-oncogene, GTPase) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	NRG1		35951049	NRG1 (neuregulin 1) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	NTRK		35949322	NTRK2 (neurotrophic receptor tyrosine kinase 2) gene variant measurement	OMOP Genomic	Genetic Variation	S	narrower	target	mapped-to-existing	2026-10-13
+biomarker	PD-L1		718584	PD-L1 by Immune stain measurement	OMOP Extension	Lab Test	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	PDGFR		35955974	PDGFRB (platelet derived growth factor receptor beta) gene variant measurement	OMOP Genomic	Genetic Variation	S	narrower	target	mapped-to-existing	2026-10-13
+biomarker	PDGFRA		35963556	PDGFRA (platelet derived growth factor receptor alpha) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	PIK3CA		35953202	PIK3CA (phosphatidylinositol-4,5-bisphosphate 3-kinase catalytic subunit alpha) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	pr		35957667	PGR (progesterone receptor) gene variant measurement	OMOP Genomic	Genetic Variation	S	narrower	target	mapped-to-existing	2026-10-13
+biomarker	PSMA		35960115	FOLH1 (folate hydrolase 1) gene variant measurement	OMOP Genomic	Genetic Variation	S	narrower	target	mapped-to-existing	2026-10-13
+biomarker	PTEN		35955125	PTEN (phosphatase and tensin homolog) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	RAS		35948791	KRAS (KRAS proto-oncogene, GTPase) gene variant measurement	OMOP Genomic	Genetic Variation	S	narrower	target	mapped-to-existing	2026-10-13
+biomarker	RET		35952943	RET (ret proto-oncogene) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	ROS1		35957723	ROS1 (ROS proto-oncogene 1, receptor tyrosine kinase) gene variant measurement	OMOP Genomic	Genetic Variation	S	exact	target	mapped-to-existing	2026-10-13
+biomarker	Somatostatin receptor		35945744	SSTR2 (somatostatin receptor 2) gene variant measurement	OMOP Genomic	Genetic Variation	S	narrower	target	mapped-to-existing	2026-10-13
+biomarker	TMB		1001563	Mutations/Megabase [# Ratio] in Tumor	LOINC	Lab Test	S	exact	target	mapped-to-existing	2026-10-13
+context	1L		35804409	Upfront therapy	HemOnc	Context		narrower	target	mapped-to-existing	2026-10-13
+context	1L consolidation		35804597	Non-curative first-line consolidation therapy	HemOnc	Context		narrower	target	mapped-to-existing	2026-10-13
+context	1L maintenance		35803496	Non-curative first-line maintenance therapy	HemOnc	Context		narrower	target	mapped-to-existing	2026-10-13
+context	2L		35804785	Non-curative second-line therapy	HemOnc	Context		narrower	target	mapped-to-existing	2026-10-13
+context	2L+		35803507	Non-curative subsequent-line therapy	HemOnc	Context		narrower	target	mapped-to-existing	2026-10-13
+context	3L		35804788	Non-curative third-line therapy	HemOnc	Context		narrower	target	mapped-to-existing	2026-10-13
+context	3L+		35803507	Non-curative subsequent-line therapy	HemOnc	Context		narrower	target	mapped-to-existing	2026-10-13
+context	Adjuvant		35803584	Adjuvant therapy	HemOnc	Context		exact	target	mapped-to-existing	2026-10-13
+context	Conditioning		37561086	Intensified conditioning regimens for cellular therapy	HemOnc	Context		narrower	target	mapped-to-existing	2026-10-13
+context	Consolidation		35803480	Consolidation after upfront therapy	HemOnc	Context		narrower	target	mapped-to-existing	2026-10-13
+context	Induction		35803433	Induction therapy	HemOnc	Context		exact	target	mapped-to-existing	2026-10-13
+context	Maintenance		35803514	Maintenance after upfront therapy	HemOnc	Context		narrower	target	mapped-to-existing	2026-10-13
+context	Neoadjuvant		35804141	Neoadjuvant therapy	HemOnc	Context		exact	target	mapped-to-existing	2026-10-13
+context	Perioperative		1525179	Perioperative therapy	HemOnc	Context		exact	target	mapped-to-existing	2026-10-13
+context	Prevention		35805724	Prophylaxis	HemOnc	Context		exact	target	mapped-to-existing	2026-10-13
+context	prevention of surgical bleeding		35805724	Prophylaxis	HemOnc	Context		narrower	target	mapped-to-existing	2026-10-13
+context	Progressive		37561400	Residual or recurrent	HemOnc	Context		broader	target	mapped-to-existing	2026-10-13
+context	prophylaxis		35805724	Prophylaxis	HemOnc	Context		exact	target	mapped-to-existing	2026-10-13
+demographics	adult men		8507	MALE	Gender	Gender	S	broader	candidate	mapped-to-existing	2026-10-13
+demographics	adults 75 years or older		45878201	Adult	LOINC	Answer	S	broader	candidate	mapped-to-existing	2026-10-13
+demographics	adults and pediatric patients 40 kg or more		45878201	Adult	LOINC	Answer	S	narrower	candidate	mapped-to-existing	2026-10-13
+demographics	adults AND skeletally mature adolescents		45878201	Adult	LOINC	Answer	S	narrower	candidate	mapped-to-existing	2026-10-13
+demographics	Anemia		439777	Anemia	SNOMED	Disorder	S	exact	target	mapped-to-existing	2026-10-13
+demographics	asymptomatic or minimally symptomatic		4284245	Asymptomatic	SNOMED	Qualifier Value	S	narrower	candidate	mapped-to-existing	2026-10-13
+demographics	ECOG PS 0-1		4308014	ECOG performance status	SNOMED	Observable Entity		broader	candidate, non-standard	mapped-to-existing	2026-10-13
+demographics	enlarged prostate gland		4093346	Large prostate	SNOMED	Clinical Finding	S	exact	target	mapped-to-existing	2026-10-13
+demographics	high risk for breast cancer		763933	At high risk for malignant neoplasm of breast	SNOMED	Clinical Finding	S	exact	target	mapped-to-existing	2026-10-13
+demographics	men		8507	MALE	Gender	Gender	S	broader	candidate	mapped-to-existing	2026-10-13
+demographics	postmenopausal		4295261	Postmenopausal state	SNOMED	Clinical Finding	S	exact	target	mapped-to-existing	2026-10-13
+demographics	postmenopausal with osteoporosis at high risk for fracture		4295261	Postmenopausal state	SNOMED	Clinical Finding	S	broader	candidate	mapped-to-existing	2026-10-13
+demographics	postmenopausal without symptomatic visceral disease		4295261	Postmenopausal state	SNOMED	Clinical Finding	S	broader	candidate	mapped-to-existing	2026-10-13
+demographics	postmenopausal women		4295261	Postmenopausal state	SNOMED	Clinical Finding	S	exact	target	mapped-to-existing	2026-10-13
+demographics	pre/perimenopausal		37538150	PREMENOPAUSAL	CDISC	Observable Entity		narrower	candidate, non-standard	mapped-to-existing	2026-10-13
+demographics	premenopausal		4331463	Premenopausal state	SNOMED	Clinical Finding	S	exact	target	mapped-to-existing	2026-10-13
+demographics	symptomatic		4142947	Symptomatic	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+exposure_phenotype	CASTRATE_TO_RESISTANT		4141960	Hormone refractory prostate cancer	SNOMED	Disorder	S	exact	target	mapped-to-existing	2026-10-13
+exposure_phenotype	CASTRATE_TO_SENSITIVE		36716186	Hormone sensitive prostate cancer	SNOMED	Disorder	S	exact	target	mapped-to-existing	2026-10-13
+exposure_phenotype	CHEMOTHERAPY_TO_SENSITIVE		4307105	Sensitive	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+exposure_phenotype	METASTATIC		32944	Metastatic Disease	Episode	Disease Extent	S	exact	target	mapped-to-existing	2026-10-13
+exposure_phenotype	PLATINUM_TO_RESISTANT		4148441	Resistant	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+exposure_phenotype	PLATINUM_TO_SENSITIVE		4307105	Sensitive	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+exposure_phenotype	RECURRENT		4113136	Recurrent	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+prior_therapy	-FU-based regimen		37557868	Fluorouracil-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	1+ platinum-containing chemotherapy		37558102	Platinum agent-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	2 to 3 years of Tamoxifen monotherapy		35803329	Tamoxifen	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	2+ Immunomodulators		35807403	Immunomodulatory drugs (IMiDs)	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	2+ Proteasome inhibitor		35807295	Proteasome inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	5 years of Tamoxifen		35803329	Tamoxifen	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	a proteasome inhibitor		35807295	Proteasome inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Abiraterone		35802860	Abiraterone	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	ADT		37560922	Androgen-deprivation therapy	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Alectinib		35802870	Alectinib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Alemtuzumab		35802871	Alemtuzumab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Alfa interferon		37557008	Interferon alfa	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	ALK inhibitor		35807229	ALK inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	ALK TKI		35807229	ALK inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Alkylating agent		35807238	Alkylating agent	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Alkylating agent-based regimen		37557563	Alkylating agent-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Alkylator-based regimen		37557563	Alkylating agent-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Allogeneic HSCT		42542298	Allogeneic stem cells	HemOnc	Component		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	Amputation		4217482	Amputation	SNOMED	Procedure	S	exact	target	mapped-to-existing	2026-10-13
+prior_therapy	an anthracycline		35807214	Anthracycline	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	an anthracycline-based regimen unless clinically contraindicated		42542413	Anthracycline-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	an anti-CD38 monoclonal antibody		35807345	Anti-CD38 antibody	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	an immunomodulatory agent		35807403	Immunomodulatory drugs (IMiDs)	HemOnc	Component Class		narrower	candidate	mapped-to-existing	2026-10-13
+prior_therapy	Anastrozole monotherapy		35802887	Anastrozole	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Androgen deprivation therapy		37560922	Androgen-deprivation therapy	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Androgen receptor-directed therapy		35807500	Androgen receptor inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Androgren receptor pathway inhibitor		35807500	Androgen receptor inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Anthracycline		35807214	Anthracycline	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Anthracycline-based chemotherapy in the adjuvant setting		42542413	Anthracycline-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Anthracycline-based regimen		42542413	Anthracycline-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	anti-CD20-based regimen		37557592	Anti-CD20 antibody-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	anti-CD38 antibody		35807345	Anti-CD38 antibody	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	anti-HER2 therapy		35807222	Anti-HER2 antibody	HemOnc	Component Class		narrower	candidate	mapped-to-existing	2026-10-13
+prior_therapy	Anti-HER2-based regimen		37557616	Anti-HER2 antibody-containing regimen	HemOnc	Regimen Class		narrower	candidate	mapped-to-existing	2026-10-13
+prior_therapy	anti-PD-1 antibody		35807322	Anti-PD-1 antibody	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	anti-PD-L1 antibody		35807270	Anti-PD-L1 antibody	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	anti-VEGF biological therapy		1524885	Anti-VEGF antibody	HemOnc	Component Class		narrower	candidate	mapped-to-existing	2026-10-13
+prior_therapy	Antiandrogen		35807206	Antiandrogen	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Anticoagulation		35803400	Anticoagulation	HemOnc	Modality	S	exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Antiestrogen		911924	Antiestrogen	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Antiestrogen therapy		911924	Antiestrogen	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Asparaginase		35802898	Asparaginase	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Atezolizumab		35802902	Atezolizumab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	auto HSCT		905826	Autologous stem cell rescue	HemOnc	Procedure		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Autologous HSCT		905826	Autologous stem cell rescue	HemOnc	Procedure		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	axillary dissection		35806120	Lymphadenectomy	HemOnc	Procedure		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	BCG		35802912	BCG vaccine	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	BCG vaccine		35802912	BCG vaccine	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	BCL-2 inhibitor		35807456	Bcl-2 inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Bevacizumab		35802921	Bevacizumab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Bevacizumab-based regimen		42542414	Bevacizumab-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Bevacizumab-containing regimen		42542414	Bevacizumab-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Biopsy		4311405	Biopsy	SNOMED	Procedure	S	exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Bortezomib		35802928	Bortezomib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	breast irradiation		35803411	Radiotherapy	HemOnc	Modality	S	broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	Brentuximab vedotin		35802930	Brentuximab vedotin	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	BTK inhibitor		35807208	BTK inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	BTKi		35807208	BTK inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Capecitabine		35802939	Capecitabine	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Carboplatin		35802941	Carboplatin	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	CDK4/6 inhibitor		35807203	CDK inhibitor	HemOnc	Component Class		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	Ceritinib		35802949	Ceritinib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Chemothearpy		35803401	Chemotherapy	HemOnc	Modality	S	exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Chemotherapy		35803401	Chemotherapy	HemOnc	Modality	S	exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Chemotherapy-based regimen		37557736	Chemotherapy-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	chemotherapy-based regimens		35803401	Chemotherapy	HemOnc	Modality	S	broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	Cisplatin		35802958	Cisplatin	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Combination chemotherapy for metastatic disease		35803401	Chemotherapy	HemOnc	Modality	S	broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	Corticosteroids		35803578	Steroids	HemOnc	Component Class		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	Covalent BTKi		35807208	BTK inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Crizotinib		35802972	Crizotinib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	CVP		35804599	CVP	HemOnc	Regimen	S	exact	target	mapped-to-existing	2026-10-13
+prior_therapy	cytokine		35807228	Cytokine	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	cytokine therapy		35807228	Cytokine	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Cytokines		35807228	Cytokine	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Docetaxel		35803016	Docetaxel	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Docetaxel monotherapy		35803016	Docetaxel	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Docetaxel-containing regimen		37557797	Docetaxel-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Doxorubicin		35803022	Doxorubicin	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Doxorubicin-based regimen		37557802	Doxorubicin-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	EGFR TKI		35807225	EGFR inhibitor	HemOnc	Component Class		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	EGFR TKI therapy		35807225	EGFR inhibitor	HemOnc	Component Class		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	EGFR-directed therapy		35807225	EGFR inhibitor	HemOnc	Component Class		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	EGFR-TKI therapy		35807225	EGFR inhibitor	HemOnc	Component Class		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	endocrine		35803407	Endocrine therapy	HemOnc	Modality	S	exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Endocrine monotherapy		35803407	Endocrine therapy	HemOnc	Modality	S	exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Endocrine therapy		35803407	Endocrine therapy	HemOnc	Modality	S	exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Endocrine-based regimen		37557822	Endocrine therapy-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Endocrine-based therapy		37557822	Endocrine therapy-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Enzalutamide		35803041	Enzalutamide	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	erythropoietin-based therapy		35807346	Erythrocyte growth factor	HemOnc	Component Class		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	Etoposide		35803053	Etoposide	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	First-generation TKI		912198	Tyrosine kinase inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Fludarabine		35803076	Fludarabine	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Fluoropyrimidine		35807313	Fluoropyrimidine	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	fluoropyrimidine-		35807313	Fluoropyrimidine	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Fluoropyrimidine-based chemotherapy		37557866	Fluoropyrimidine-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Fluoropyrimidine-based combination chemotherapy		37557866	Fluoropyrimidine-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Fluoropyrimidine-based combination therapy		37557866	Fluoropyrimidine-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Fluoropyrimidine-based regimen		37557866	Fluoropyrimidine-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	FOLFIRI		35804761	FOLFIRI	HemOnc	Regimen	S	exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Gemcitabine-based regimen		37557886	Gemcitabine-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	High-dose chemotherapy		35803401	Chemotherapy	HemOnc	Modality	S	broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	hormonal therapy		35803407	Endocrine therapy	HemOnc	Modality	S	exact	target	mapped-to-existing	2026-10-13
+prior_therapy	hyaluronidase		19073699	hyaluronidase	RxNorm	Ingredient	S	exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Hydroxyurea		35803109	Hydroxyurea	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	I-131 (if appropriate		35803127	Iodine-131	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Imatinib		35803119	Imatinib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Immunomodulator		35807403	Immunomodulatory drugs (IMiDs)	HemOnc	Component Class		narrower	candidate	mapped-to-existing	2026-10-13
+prior_therapy	Interferon alfa		37557008	Interferon alfa	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Interferon alpha		37557008	Interferon alfa	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Interleukin-2		35802869	Aldesleukin	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Iodine-131		35803127	Iodine-131	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Ipilimumab		35803129	Ipilimumab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Irinotecan		35803130	Irinotecan	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	irinotecan-based chemotherapy		42542415	Irinotecan-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Irinotecan-based regimen		42542415	Irinotecan-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	JAK inhibitor		35807404	JAK inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	L-asparaginase		35802898	Asparaginase	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	lenalidomide		35803149	Lenalidomide	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Lenvatinib		35803151	Lenvatinib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Letrozole monotherapy		35803154	Letrozole	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Metastatectomy		35804760	Metastasectomy	HemOnc	Procedure		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	mTOR pathway inhibitor		35807369	MTOR inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Multi-agent chemotherapy regimen		35803401	Chemotherapy	HemOnc	Modality	S	broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	Multi-agent chemotherapy regimens in non-transplant candidates		35803401	Chemotherapy	HemOnc	Modality	S	broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	Multi-agent cytotoxic chemotherapy		35803401	Chemotherapy	HemOnc	Modality	S	broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	multiagent		35803401	Chemotherapy	HemOnc	Modality	S	broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	Nephrectomy		35804762	Surgery	HemOnc	Procedure		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	New hormonal agent		35803407	Endocrine therapy	HemOnc	Modality	S	broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	Nitrosourea		35807317	Nitrosourea	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Nivolumab		35803207	Nivolumab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	non-steroidal aromatase inhibitor		35807245	Aromatase inhibitor	HemOnc	Component Class		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	NTRK inhibitor		35807309	TRK inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Obinutuzumab		35803211	Obinutuzumab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	One other ALK inhibitor		35807229	ALK inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Optional ADT		37560922	Androgen-deprivation therapy	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Other chemotherapy		35803401	Chemotherapy	HemOnc	Modality	S	broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	Oxaliplain		35803227	Oxaliplatin	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Oxaliplatin		35803227	Oxaliplatin	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	oxaliplatin-		37558071	Oxaliplatin-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	oxaliplatin-based chemotherapy		37558071	Oxaliplatin-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Oxaliplatin-based regimen		37558071	Oxaliplatin-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Oxaliplatin-containing chemotherapy		37558071	Oxaliplatin-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Paclitaxel		35803229	Paclitaxel	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Paclitaxel-containing regimen		37558073	Paclitaxel-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Pemetrexed-containing platinum doublet		42542417	Platinum doublet	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Platinum-		37558102	Platinum agent-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Platinum-based chemoradiation		37558103	Platinum-containing chemoradiotherapy regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Platinum-based chemoradiotherapy		37558103	Platinum-containing chemoradiotherapy regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Platinum-based regimen		37558102	Platinum agent-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Platinum-based regimen x 4		37558102	Platinum agent-containing regimen	HemOnc	Regimen Class		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	Platinum-based therapy		37558102	Platinum agent-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Platinum-containing chemotherapy		37558102	Platinum agent-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	platinum-containing regimen		37558102	Platinum agent-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Platinum-doublet excluding pemetrexed x 4		42542417	Platinum doublet	HemOnc	Regimen Class		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	Procarbazine		35803269	Procarbazine	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	proteasome inhibitor		35807295	Proteasome inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Purine analog		35807327	Purine analog	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	radiation		35803411	Radiotherapy	HemOnc	Modality	S	exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Radical cystectomy		35804147	Radical cystectomy	HemOnc	Procedure		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Radical resection		1525207	Radical surgery	HemOnc	Procedure		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	Radioactive iodine		35803127	Iodine-131	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Radioactive iodine if appropriate		35803127	Iodine-131	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	resection		35804762	Surgery	HemOnc	Procedure		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	resection of metastatic lesions		35804760	Metastasectomy	HemOnc	Procedure		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Retinoid		35807234	Retinoid	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Rituximab		35803296	Rituximab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Rituximab-containing regimen		42542440	Rituximab-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	ROS1 inhibitor		35807300	ROS1 inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	ruxolitinib		35803305	Ruxolitinib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Second-generation TKI		912198	Tyrosine kinase inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Segmental mastectomy		35804326	Lumpectomy	HemOnc	Procedure		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	Sorafenib		35803320	Sorafenib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Sorafenib monotherapy		35803320	Sorafenib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	standard Tamoxifen		35803329	Tamoxifen	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Steroids		35803578	Steroids	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	sunitinib		35803323	Sunitinib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Sunitinib monotherapy		35803323	Sunitinib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Surgery		35804762	Surgery	HemOnc	Procedure		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Surgical resection		35804762	Surgery	HemOnc	Procedure		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	Tamoxifen		35803329	Tamoxifen	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Tamoxifen monotherapy		35803329	Tamoxifen	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	taxane		35807304	Taxane	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Taxane-based chemotherapy		37558217	Taxane-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Taxane-based regimen		37558217	Taxane-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	TKI		912198	Tyrosine kinase inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	TKIs		912198	Tyrosine kinase inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Total mastectomy		35804229	Mastectomy	HemOnc	Procedure		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy	Trastuzumab		35803361	Trastuzumab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Trastuzumab emtansine		35802866	Trastuzumab emtansine	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Trastuzumab-based regimen		37558258	Trastuzumab-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	Tyrosine kinase inhibitor therapy		912198	Tyrosine kinase inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	VEGF inhibitor		1524885	Anti-VEGF antibody	HemOnc	Component Class		narrower	candidate	mapped-to-existing	2026-10-13
+prior_therapy	VEGF TKI		35807257	VEGFR inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	VEGF-targeted therapy		1524885	Anti-VEGF antibody	HemOnc	Component Class		narrower	candidate	mapped-to-existing	2026-10-13
+prior_therapy	VEGFR inhibitor		35807257	VEGFR inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy	VEGFR inhibitor therapy		35807257	VEGFR inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+prior_therapy_setting	(neo)adjuvant		1525179	Perioperative therapy	HemOnc	Context		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy_setting	1+ metastatic		35803427	All lines of therapy	HemOnc	Context		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy_setting	1L		35804409	Upfront therapy	HemOnc	Context		narrower	candidate	mapped-to-existing	2026-10-13
+prior_therapy_setting	Adjuvant		35803584	Adjuvant therapy	HemOnc	Context		exact	target	mapped-to-existing	2026-10-13
+prior_therapy_setting	Advanced disease		35803588	Non-curative therapy	HemOnc	Context		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy_setting	Advanced or metastatic		35803588	Non-curative therapy	HemOnc	Context		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy_setting	Any		35803427	All lines of therapy	HemOnc	Context		exact	target	mapped-to-existing	2026-10-13
+prior_therapy_setting	Definitive		35803670	Definitive therapy	HemOnc	Context		exact	target	mapped-to-existing	2026-10-13
+prior_therapy_setting	First-line		35804409	Upfront therapy	HemOnc	Context		narrower	candidate	mapped-to-existing	2026-10-13
+prior_therapy_setting	Induction		35803433	Induction therapy	HemOnc	Context		exact	target	mapped-to-existing	2026-10-13
+prior_therapy_setting	neoadjuvant		35804141	Neoadjuvant therapy	HemOnc	Context		exact	target	mapped-to-existing	2026-10-13
+prior_therapy_setting	neoadjuvant or adjuvant		1525179	Perioperative therapy	HemOnc	Context		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy_setting	Radiotherapy		35804133	Local therapy	HemOnc	Context		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy_setting	Relapsed platinum-sensitive		37561400	Residual or recurrent	HemOnc	Context		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy_setting	Surgery AND Radiotherapy		35804133	Local therapy	HemOnc	Context		broader	candidate	mapped-to-existing	2026-10-13
+prior_therapy_setting	untreated		35804409	Upfront therapy	HemOnc	Context		narrower	candidate	mapped-to-existing	2026-10-13
+response_contingency	at least PR		1635152	Partial response	Cancer Modifier	Staging/Grading	S	narrower	candidate	mapped-to-existing	2026-10-13
+response_contingency	complete gross resection		1634643	R0: No residual tumor	Cancer Modifier	Staging/Grading	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	complete resection		1634643	R0: No residual tumor	Cancer Modifier	Staging/Grading	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	complete resection AND no progression		1635506	Stable disease	Cancer Modifier	Staging/Grading	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	CR		1633363	Complete response	Cancer Modifier	Staging/Grading	S	exact	target	mapped-to-existing	2026-10-13
+response_contingency	CR or better for at least 6 months		1633363	Complete response	Cancer Modifier	Staging/Grading	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	CR1 or CR2 with MRD greater than or equal to 0.1%		1633488	Minimal residual disease	Cancer Modifier	Staging/Grading	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	CRi after induction		1633363	Complete response	Cancer Modifier	Staging/Grading	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	CRi after induction +/- consolidation		1633363	Complete response	Cancer Modifier	Staging/Grading	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	double-refractory		4048615	Intractable	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	Failure		4141764	Absent response to treatment	SNOMED	Context-dependent	S	exact	target	mapped-to-existing	2026-10-13
+response_contingency	hypersensitivity		43021226	Hypersensitivity condition	SNOMED	Clinical Finding	S	exact	target	mapped-to-existing	2026-10-13
+response_contingency	Inadequate response		4141764	Absent response to treatment	SNOMED	Context-dependent	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	insufficient response		4141764	Absent response to treatment	SNOMED	Context-dependent	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	Intolerance		4105297	Intolerance	SNOMED	Observable Entity	S	exact	target	mapped-to-existing	2026-10-13
+response_contingency	intolerant		4105297	Intolerance	SNOMED	Observable Entity	S	exact	target	mapped-to-existing	2026-10-13
+response_contingency	invasive residual disease in the breast and/or lymph nodes		36769000	Residual Tumor	Cancer Modifier	Topography	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	moderate to severe symptoms inadequately controlled		4155158	Moderate to severe	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	no progression		1635506	Stable disease	Cancer Modifier	Staging/Grading	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	no response		45877597	No response	LOINC	Answer	S	exact	target	mapped-to-existing	2026-10-13
+response_contingency	non-progressing		1635506	Stable disease	Cancer Modifier	Staging/Grading	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	not progressed		1635506	Stable disease	Cancer Modifier	Staging/Grading	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	not responsive		4309389	Unresponsive	SNOMED	Clinical Finding	S	exact	target	mapped-to-existing	2026-10-13
+response_contingency	Not sufficiently effective		4141764	Absent response to treatment	SNOMED	Context-dependent	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	Platinum resistant		4148441	Resistant	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	Platinum-resistant		4148441	Resistant	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	Platinum-sensitive		4307105	Sensitive	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	progressed during		32949	Progression	Episode	Disease Dynamic	S	exact	target	mapped-to-existing	2026-10-13
+response_contingency	progression		32949	Progression	Episode	Disease Dynamic	S	exact	target	mapped-to-existing	2026-10-13
+response_contingency	progression on the last therapy		32949	Progression	Episode	Disease Dynamic	S	exact	target	mapped-to-existing	2026-10-13
+response_contingency	progression-free		1635506	Stable disease	Cancer Modifier	Staging/Grading	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	recurrence		4078193	Recurrence	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+response_contingency	refractory		4048615	Intractable	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+response_contingency	refractory to last therapy		4048615	Intractable	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	relapse		4136153	Relapse phase	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+response_contingency	relapsed		4136153	Relapse phase	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+response_contingency	relapsed during		4136153	Relapse phase	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+response_contingency	remission		32945	Remission	Episode	Disease Dynamic	S	exact	target	mapped-to-existing	2026-10-13
+response_contingency	residual invasive disease		36769000	Residual Tumor	Cancer Modifier	Topography	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	residual pathologic disease		36769000	Residual Tumor	Cancer Modifier	Topography	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	Resistance		4148441	Resistant	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+response_contingency	resistant		4148441	Resistant	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+response_contingency	stabilised		1635506	Stable disease	Cancer Modifier	Staging/Grading	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	stable disease		1635506	Stable disease	Cancer Modifier	Staging/Grading	S	exact	target	mapped-to-existing	2026-10-13
+response_contingency	unresponsive		4309389	Unresponsive	SNOMED	Clinical Finding	S	exact	target	mapped-to-existing	2026-10-13
+response_contingency	unsatisfactory		4141764	Absent response to treatment	SNOMED	Context-dependent	S	broader	candidate	mapped-to-existing	2026-10-13
+response_contingency	without progression		1635506	Stable disease	Cancer Modifier	Staging/Grading	S	broader	candidate	mapped-to-existing	2026-10-13
+risk_stratification	asymptomatic or mildly symptomatic		4284245	Asymptomatic	SNOMED	Qualifier Value	S	narrower	candidate	mapped-to-existing	2026-10-13
+risk_stratification	at risk of developing metastatic disease		45877868	At risk	LOINC	Answer	S	broader	candidate	mapped-to-existing	2026-10-13
+risk_stratification	At-risk		45877868	At risk	LOINC	Answer	S	exact	target	mapped-to-existing	2026-10-13
+risk_stratification	High risk for metastasis		37109703	High risk	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+risk_stratification	high risk for recurrence		37109703	High risk	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+risk_stratification	high risk for recurrence AND Ki-67 > 20%		37109703	High risk	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+risk_stratification	High risk for systemic recurrence		37109703	High risk	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+risk_stratification	high risk of recurrence after surgery and radiation		37109703	High risk	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+risk_stratification	High risk of relapse or progression		37109703	High risk	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+risk_stratification	high-risk		37109703	High risk	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+risk_stratification	High-risk of developing metastases		37109703	High risk	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+risk_stratification	intermediate-2 and high-risk		37109703	High risk	SNOMED	Qualifier Value	S	narrower	candidate	mapped-to-existing	2026-10-13
+risk_stratification	Intermediate-risk		46238024	Intermediate risk	LOINC	Answer	S	exact	target	mapped-to-existing	2026-10-13
+risk_stratification	IPI 2+		37396673	International Prognostic Index	SNOMED	Staging / Scales	S	broader	candidate	mapped-to-existing	2026-10-13
+risk_stratification	low-risk		37109700	Low risk	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+risk_stratification	No inhibitors		4207272	Hereditary factor VIII deficiency disease without inhibitor	SNOMED	Disorder	S	narrower	candidate	mapped-to-existing	2026-10-13
+risk_stratification	poor-risk		37109703	High risk	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+risk_stratification	Very low risk		1177364	Very low risk	LOINC	Answer	S	exact	target	mapped-to-existing	2026-10-13
+risk_stratification	Well or moderately differentiated		4137845	Well differentiated	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+risk_stratification	Well- or moderately-differentiated		4137845	Well differentiated	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+risk_stratification	well-differentiated		4137845	Well differentiated	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+risk_stratification	Well-differentiated non-functional GI or lung origin		4137845	Well differentiated	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+risk_stratification	with factor VIII inhibitor		4125639	Hereditary factor VIII deficiency disease with inhibitor	SNOMED	Disorder	S	exact	target	mapped-to-existing	2026-10-13
+risk_stratification	with FVIII inhibitor		4125639	Hereditary factor VIII deficiency disease with inhibitor	SNOMED	Disorder	S	exact	target	mapped-to-existing	2026-10-13
+risk_stratification	with Inhibitors		4125639	Hereditary factor VIII deficiency disease with inhibitor	SNOMED	Disorder	S	narrower	candidate	mapped-to-existing	2026-10-13
+risk_stratification	without FVIII inhibitor		4125639	Hereditary factor VIII deficiency disease with inhibitor	SNOMED	Disorder	S	none	candidate	mapped-to-existing	2026-10-13
+risk_stratification	without inhibitors		4207272	Hereditary factor VIII deficiency disease without inhibitor	SNOMED	Disorder	S	narrower	candidate	mapped-to-existing	2026-10-13
+sex	FEMALE		8532	FEMALE	Gender	Gender	S	exact	target	mapped-to-existing	2026-10-13
+sex	MALE		8507	MALE	Gender	Gender	S	exact	target	mapped-to-existing	2026-10-13
+stage	(Early greater than 2 cm in diameter or node positive)		4125638	Early stage	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+stage	Advanced		4313265	Advanced	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+stage	Bulky locally advanced Stage B2 and Stage C		37544940	LOCALLY ADVANCED	CDISC	Observable Entity		broader	candidate, non-standard	mapped-to-existing	2026-10-13
+stage	D2		1634022	Stage D2	Cancer Modifier	Staging/Grading	S	exact	target	mapped-to-existing	2026-10-13
+stage	Dukes' stage C		1635190	Dukes' Stage C	Cancer Modifier	Staging/Grading	S	exact	target	mapped-to-existing	2026-10-13
+stage	Early		4125638	Early stage	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+stage	Early stage		4125638	Early stage	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+stage	Extensive stage		1635798	Extensive Stage	Cancer Modifier	Staging/Grading	S	exact	target	mapped-to-existing	2026-10-13
+stage	Extensive-stage		1635798	Extensive Stage	Cancer Modifier	Staging/Grading	S	exact	target	mapped-to-existing	2026-10-13
+stage	FIGO 2014 Stage III-IVA		1634024	FIGO Stage 3	Cancer Modifier	Staging/Grading	S	narrower	candidate	mapped-to-existing	2026-10-13
+stage	FIGO stage III/IV		1634024	FIGO Stage 3	Cancer Modifier	Staging/Grading	S	narrower	candidate	mapped-to-existing	2026-10-13
+stage	Limited stage		1633518	Limited Stage	Cancer Modifier	Staging/Grading	S	exact	target	mapped-to-existing	2026-10-13
+stage	Localized		4114652	Localized	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+stage	locally advanced		4313265	Advanced	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+stage	low-grade NMIBC		42622644	Non-muscle invasive bladder cancer	MedDRA	LLT		broader	candidate, non-standard	mapped-to-existing	2026-10-13
+stage	Metastatic		32944	Metastatic Disease	Episode	Disease Extent	S	exact	target	mapped-to-existing	2026-10-13
+stage	node-positive early		4125638	Early stage	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+stage	non-muscle invasive		42622644	Non-muscle invasive bladder cancer	MedDRA	LLT		broader	candidate, non-standard	mapped-to-existing	2026-10-13
+stage	Operable node-negative		4294980	Operable	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+stage	Operable node-positive		4294980	Operable	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+stage	regionally advanced		4313265	Advanced	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+stage	Stage D2		1634022	Stage D2	Cancer Modifier	Staging/Grading	S	exact	target	mapped-to-existing	2026-10-13
+stage	Stage IB or Stage II or Stage IIIA		1634494	AJCC/UICC Stage 1B	Cancer Modifier	Staging/Grading	S	narrower	candidate	mapped-to-existing	2026-10-13
+stage	Stage II bulky, Stage III, or Stage IV		1633650	AJCC/UICC Stage 3	Cancer Modifier	Staging/Grading	S	narrower	candidate	mapped-to-existing	2026-10-13
+stage	stage II or III early		4125638	Early stage	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+stage	Stage II to IIIA		1634209	AJCC/UICC Stage 2	Cancer Modifier	Staging/Grading	S	narrower	candidate	mapped-to-existing	2026-10-13
+stage	Stage IIB or IIC		1634028	AJCC/UICC Stage 2B	Cancer Modifier	Staging/Grading	S	narrower	candidate	mapped-to-existing	2026-10-13
+stage	Stage IIB or Stage IIC or Stage III		1634028	AJCC/UICC Stage 2B	Cancer Modifier	Staging/Grading	S	narrower	candidate	mapped-to-existing	2026-10-13
+stage	Stage IIB/C		1634028	AJCC/UICC Stage 2B	Cancer Modifier	Staging/Grading	S	narrower	candidate	mapped-to-existing	2026-10-13
+stage	Stage III		1633650	AJCC/UICC Stage 3	Cancer Modifier	Staging/Grading	S	exact	target	mapped-to-existing	2026-10-13
+stage	Stage III (Dukes' stage C)		1633650	AJCC/UICC Stage 3	Cancer Modifier	Staging/Grading	S	exact	target	mapped-to-existing	2026-10-13
+stage	Stage III and N+		1633650	AJCC/UICC Stage 3	Cancer Modifier	Staging/Grading	S	broader	candidate	mapped-to-existing	2026-10-13
+stage	Stage III or IV		1633650	AJCC/UICC Stage 3	Cancer Modifier	Staging/Grading	S	narrower	candidate	mapped-to-existing	2026-10-13
+stage	Stage III to IV		1633650	AJCC/UICC Stage 3	Cancer Modifier	Staging/Grading	S	narrower	candidate	mapped-to-existing	2026-10-13
+stage	Stage IV		1633308	AJCC/UICC Stage 4	Cancer Modifier	Staging/Grading	S	exact	target	mapped-to-existing	2026-10-13
+stage	Superficial		4096030	Superficial	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+stage_or_status	Active		9181	Active	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+stage_or_status	acute		4156184	Acuteness	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+stage_or_status	advanced		4313265	Advanced	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+stage_or_status	anemia		439777	Anemia	SNOMED	Disorder	S	exact	target	mapped-to-existing	2026-10-13
+stage_or_status	Distant metastasis		1620371	Distant metastasis	LOINC	Answer	S	exact	target	mapped-to-existing	2026-10-13
+stage_or_status	Local relapse		4113136	Recurrent	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+stage_or_status	locally recurrent		4113136	Recurrent	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+stage_or_status	Locally unresectable or metastatic		46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	S	narrower	candidate	mapped-to-existing	2026-10-13
+stage_or_status	Locally unresectable recurrent		4113136	Recurrent	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+stage_or_status	Locoregional		4260906	Regional	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+stage_or_status	not candidate for curative surgery		4254665	Inoperable	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+stage_or_status	Recurrent locoregional		4113136	Recurrent	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+stage_or_status	Stage III who are not candidates for surgical resection or definitive chemoradiation		1633650	AJCC/UICC Stage 3	Cancer Modifier	Staging/Grading	S	broader	candidate	mapped-to-existing	2026-10-13
+stage_or_status	Stage IV-B		1633748	AJCC/UICC Stage 4B	Cancer Modifier	Staging/Grading	S	exact	target	mapped-to-existing	2026-10-13
+stage_or_status	Surgical resection is likely to result in severe morbidity		46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	S	broader	candidate	mapped-to-existing	2026-10-13
+stage_or_status	unresectable		46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	S	exact	target	mapped-to-existing	2026-10-13
+stage_or_status	unresectable hepatic metastases affecting less than 50% of the liver and no extrahepatic disease		46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	S	broader	candidate	mapped-to-existing	2026-10-13
+stage_or_status	Unresectable stage IIIb		46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	S	broader	candidate	mapped-to-existing	2026-10-13
+status	accelerated phase		4175685	Accelerated phase	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+status	blast crisis		4081695	Blast crisis	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+status	chronic		4236661	Chronic	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+status	chronic liver disease		4212540	Chronic liver disease	SNOMED	Disorder	S	exact	target	mapped-to-existing	2026-10-13
+status	chronic phase		4081357	Chronic phase	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+status	CR1		1633363	Complete response	Cancer Modifier	Staging/Grading	S	broader	candidate	mapped-to-existing	2026-10-13
+status	CR2		1633363	Complete response	Cancer Modifier	Staging/Grading	S	broader	candidate	mapped-to-existing	2026-10-13
+status	disease-related splenomegaly or symptoms in adult patients with moderate to severe anaemia		200527	Splenomegaly	SNOMED	Disorder	S	broader	candidate	mapped-to-existing	2026-10-13
+status	extravascular hemolysis		4250490	Hemolysis	SNOMED	Clinical Finding	S	broader	candidate	mapped-to-existing	2026-10-13
+status	first or second complete remission with minimal residual disease (MRD) greater than or equal to 0.1%		1633488	Minimal residual disease	Cancer Modifier	Staging/Grading	S	broader	candidate	mapped-to-existing	2026-10-13
+status	First recurrence		4113136	Recurrent	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+status	first relapse		4136153	Relapse phase	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+status	metastatic		32944	Metastatic Disease	Episode	Disease Extent	S	exact	target	mapped-to-existing	2026-10-13
+status	Metastatic to bone		32944	Metastatic Disease	Episode	Disease Extent	S	broader	candidate	mapped-to-existing	2026-10-13
+status	Metastatic to liver AND Incurable by surgery or other means		32944	Metastatic Disease	Episode	Disease Extent	S	broader	candidate	mapped-to-existing	2026-10-13
+status	Moderate to Severe		4155158	Moderate to severe	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+status	moderate to severe anemia		439777	Anemia	SNOMED	Disorder	S	broader	candidate	mapped-to-existing	2026-10-13
+status	Non-visceral metastatic		32944	Metastatic Disease	Episode	Disease Extent	S	broader	candidate	mapped-to-existing	2026-10-13
+status	Palliative		4179711	Palliative intent	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+status	progressive		4114504	Progressive	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+status	recurrent		4113136	Recurrent	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+status	Refractory		4048615	Intractable	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+status	Refractory or in second or later relapse		4048615	Intractable	SNOMED	Qualifier Value	S	narrower	candidate	mapped-to-existing	2026-10-13
+status	Relapsed		4136153	Relapse phase	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+status	Resectable		4294980	Operable	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+status	Resistant		4148441	Resistant	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+status	Sensitive disease defined as disease responding to chemotherapy but subsequently progressing at least 60 days (in the phase 3 study) or at least 90 days (in the phase 2 studies) after chemotherapy		4307105	Sensitive	SNOMED	Qualifier Value	S	broader	candidate	mapped-to-existing	2026-10-13
+status	severe		4087703	Severe	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+status	Surgical resection likely to result in severe morbidity		46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	S	broader	candidate	mapped-to-existing	2026-10-13
+status	symptomatic		4142947	Symptomatic	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
+status	Symptomatic associated with severe morbidity or functional limitations		46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	S	broader	candidate	mapped-to-existing	2026-10-13
+status	symptomatic bone metastases and no known visceral metastatic disease		32944	Metastatic Disease	Episode	Disease Extent	S	broader	candidate	mapped-to-existing	2026-10-13
+status	transfusion-dependent anemia		439777	Anemia	SNOMED	Disorder	S	broader	candidate	mapped-to-existing	2026-10-13
+status	unresectable		46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	S	exact	target	mapped-to-existing	2026-10-13
+with_field	5-FU		35803077	Fluorouracil	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Abemaciclib		35802858	Abemaciclib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Abiraterone		35802860	Abiraterone	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	AC-D		905578	AC-D	HemOnc	Regimen	S	exact	target	mapped-to-existing	2026-10-13
+with_field	AC-T		35101507	AC-T	HemOnc	Regimen	S	exact	target	mapped-to-existing	2026-10-13
+with_field	ADT		37560922	Androgen-deprivation therapy	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+with_field	Aldesleukin		35802869	Aldesleukin	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Amivantamab		905633	Amivantamab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Androgen receptor inhibitor		35807500	Androgen receptor inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+with_field	Anthracycline		35807214	Anthracycline	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+with_field	Anthracycline-based regimen		42542413	Anthracycline-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+with_field	Antineoplastic agents		35807466	Antineoplastics by class effect	HemOnc	Component Class		broader	candidate	mapped-to-existing	2026-10-13
+with_field	Aromatase inhibitor		35807245	Aromatase inhibitor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+with_field	Atezolizumab		35802902	Atezolizumab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	ATRA		903643	tretinoin	RxNorm	Ingredient	S	exact	target	mapped-to-existing	2026-10-13
+with_field	Avelumab		35802906	Avelumab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Axitinib		35802908	Axitinib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Azacitidine		35802909	Azacitidine	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	BCG vacine		35802912	BCG vaccine	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Bendamustine		35802918	Bendamustine	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Bevacizumab		35802921	Bevacizumab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Bevacizumab biosimilar		35807290	Biosimilar	HemOnc	Component Class		broader	candidate	mapped-to-existing	2026-10-13
+with_field	Binimetinib		35802924	Binimetinib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Bortezomib		35802928	Bortezomib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Cabozantinib		35802935	Cabozantinib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Capecitabine		35802939	Capecitabine	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	CapeOx		35804755	CapeOx	HemOnc	Regimen	S	exact	target	mapped-to-existing	2026-10-13
+with_field	Carboplatin		35802941	Carboplatin	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Carfilzomib		35802942	Carfilzomib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Carpoplatin		35802941	Carboplatin	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	certain other approved antineoplastic agents		35807466	Antineoplastics by class effect	HemOnc	Component Class		broader	candidate	mapped-to-existing	2026-10-13
+with_field	Cetuximab		35802951	Cetuximab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Chemotherapy		35803401	Chemotherapy	HemOnc	Modality	S	exact	target	mapped-to-existing	2026-10-13
+with_field	Chlorambucil		35802953	Chlorambucil	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	CHOP		35803699	CHOP	HemOnc	Regimen	S	exact	target	mapped-to-existing	2026-10-13
+with_field	Cisplatin		35802958	Cisplatin	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Cobimetinib		35802966	Cobimetinib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Cyclophosphamide		35802975	Cyclophosphamide	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Cytarabine		35802979	Cytarabine	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Dabrafenib		35802984	Dabrafenib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Dacarbazine		35802985	Dacarbazine	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Daratumumab		35802992	Daratumumab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Daunorubicin		35802996	Daunorubicin	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Decitabine		35802998	Decitabine	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Dexamethasone		35803008	Dexamethasone	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Dinutuximab		35803013	Dinutuximab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Docetaxel		35803016	Docetaxel	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Doxorubicin		35803022	Doxorubicin	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Durvalumab		35803025	Durvalumab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Eculizumab		35803028	Eculizumab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Encorafenib		35803035	Encorafenib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Endocrine therapy		35803407	Endocrine therapy	HemOnc	Modality	S	exact	target	mapped-to-existing	2026-10-13
+with_field	Enfortumab vedotin		42542257	Enfortumab vedotin	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Enzalutamide		35803041	Enzalutamide	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Erlotinib		35803050	Erlotinib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Etoposide		35803053	Etoposide	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Everolimus		35803054	Everolimus	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Exemestane		35803055	Exemestane	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	external beam radiotherapy		35803411	Radiotherapy	HemOnc	Modality	S	exact	target	mapped-to-existing	2026-10-13
+with_field	FLOT		35805341	FLOT	HemOnc	Regimen	S	exact	target	mapped-to-existing	2026-10-13
+with_field	Fludarabine		35803076	Fludarabine	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Fluoropyrimidine		35807313	Fluoropyrimidine	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+with_field	Fluoropyrimidine-		35807313	Fluoropyrimidine	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+with_field	Fluorouracil		35803077	Fluorouracil	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Fluorouracil-based chemotherapy		37557866	Fluoropyrimidine-containing regimen	HemOnc	Regimen Class		broader	candidate	mapped-to-existing	2026-10-13
+with_field	FOLFIRI		35804761	FOLFIRI	HemOnc	Regimen	S	exact	target	mapped-to-existing	2026-10-13
+with_field	FOLFOX		35806596	FOLFOX	HemOnc	Regimen	S	exact	target	mapped-to-existing	2026-10-13
+with_field	Fruquintinib		35803088	Fruquintinib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Fulvestrant		35803089	Fulvestrant	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Gemcitabine		35803095	Gemcitabine	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	GnRH agonist		35807385	GnRH agonist	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+with_field	Granulocyte macrophage colony-stimulating factor		35807436	Granulocyte macrophage colony-stimulating factor	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+with_field	High-dose chemotherapy		35803401	Chemotherapy	HemOnc	Modality	S	broader	candidate	mapped-to-existing	2026-10-13
+with_field	hyaluronidase		19073699	hyaluronidase	RxNorm	Ingredient	S	exact	target	mapped-to-existing	2026-10-13
+with_field	Immunosuppressive therapy		35803409	Immunosuppressive therapy	HemOnc	Modality	S	exact	target	mapped-to-existing	2026-10-13
+with_field	Interferon alfa		37557008	Interferon alfa	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+with_field	Interleukin-2		35802869	Aldesleukin	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Ipilimumab		35803129	Ipilimumab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Irinotecan		35803130	Irinotecan	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Isotretinoin		35803135	Isotretinoin	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Lenalidomide		35803149	Lenalidomide	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Lenvatinib		35803151	Lenvatinib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Letrozole		35803154	Letrozole	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Leucovorin		35803081	Leucovorin	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Leuvorin		35803081	Leucovorin	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	LHRH agonist		35807385	GnRH agonist	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+with_field	LHRH analog		37557894	GnRH analog	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+with_field	Melphalan		35803175	Melphalan	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	mFOLFOX6		35804758	mFOLFOX6	HemOnc	Regimen	S	exact	target	mapped-to-existing	2026-10-13
+with_field	Multi-agent chemotherapy		35803401	Chemotherapy	HemOnc	Modality	S	broader	candidate	mapped-to-existing	2026-10-13
+with_field	nab-Paclitaxel		35803228	Paclitaxel nanoparticle albumin-bound	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Nitrogen mustard		35807288	Nitrogen mustard	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+with_field	Nivolumab		35803207	Nivolumab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Obinutuzumab		35803211	Obinutuzumab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Optional Bevacizumab		42542414	Bevacizumab-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+with_field	Other effective agents		35807466	Antineoplastics by class effect	HemOnc	Component Class		broader	candidate	mapped-to-existing	2026-10-13
+with_field	Oxaliplatin		35803227	Oxaliplatin	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Paclitaxel		35803229	Paclitaxel	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Paclitaxel +/- Bevacizumab		35803229	Paclitaxel	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Palbociclib		35803231	Palbociclib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Palictaxel		35803229	Paclitaxel	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Panitumumab		35803234	Panitumumab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Pegylated liposomal doxorubicin		35803243	Pegylated liposomal doxorubicin	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Pembrolizumab		35803244	Pembrolizumab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Pemetrexed		35803245	Pemetrexed	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Pertuzumab		35803250	Pertuzumab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Plasma exchange		4049372	Plasmapheresis	SNOMED	Procedure	S	broader	candidate	mapped-to-existing	2026-10-13
+with_field	Platinum		35807315	Platinum agent	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+with_field	Platinum agent		35807315	Platinum agent	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+with_field	Platinum doublet		42542417	Platinum doublet	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+with_field	Platinum-		37558102	Platinum agent-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+with_field	Platinum-based chemotherapy		37558102	Platinum agent-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+with_field	Platinum-based regimen		37558102	Platinum agent-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+with_field	Platinum-containing chemotherapy		37558102	Platinum agent-containing regimen	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+with_field	Platinum-doublet		42542417	Platinum doublet	HemOnc	Regimen Class		exact	target	mapped-to-existing	2026-10-13
+with_field	Pomalidomide		35803260	Pomalidomide	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Predisone		35803268	Prednisone	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Prednisolone		35803267	Prednisolone	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Prednisone		35803268	Prednisone	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	R-CHOP		35805028	R-CHOP	HemOnc	Regimen	S	exact	target	mapped-to-existing	2026-10-13
+with_field	Radiation therapy		35803411	Radiotherapy	HemOnc	Modality	S	exact	target	mapped-to-existing	2026-10-13
+with_field	Radiotherapy		35803411	Radiotherapy	HemOnc	Modality	S	exact	target	mapped-to-existing	2026-10-13
+with_field	Ravulizumab		35100362	Ravulizumab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Ribociclib		35803291	Ribociclib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Rituximab		35803296	Rituximab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Sargramostim		35803309	Sargramostim	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Steroids		35803578	Steroids	HemOnc	Component Class		exact	target	mapped-to-existing	2026-10-13
+with_field	Tamoxifen		35803329	Tamoxifen	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Thalidomide		35803338	Thalidomide	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Topotecan		35803352	Topotecan	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Trametinib		35803357	Trametinib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Trastuzumab		35803361	Trastuzumab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Tremelimumab		35803363	Tremelimumab	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Vemurafenib		35803382	Vemurafenib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
+with_field	Vincristine		35803385	Vincristine	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13

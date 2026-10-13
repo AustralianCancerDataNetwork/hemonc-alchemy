@@ -3,6 +3,7 @@
 from sqlalchemy import exists, func, or_, select
 
 from ....model import Sigs, Studies, StudyResults, Variants, variants_StudyMap
+from ....model.relationships import join_mapped_studies
 from ._queries import paginate, search_predicate
 from .read_models import VariantRecord
 from .specs import DEFAULT_CATALOGUE_SPEC, DEFAULT_PAGINATION, CatalogueSpec, Pagination
@@ -45,11 +46,8 @@ def variant_identity_statement(spec: CatalogueSpec):
             )
         )
     if spec.condition_cuis is not None or spec.study_context is not None:
-        evidence = (
-            select(1)
-            .select_from(variants_StudyMap)
-            .join(variants_StudyMap.study_objects)  # type: ignore[attr-defined]
-            .where(variants_StudyMap.parent_id == Variants.id)
+        evidence = join_mapped_studies(select(1).select_from(variants_StudyMap)).where(
+            variants_StudyMap.parent_id == Variants.id
         )
         if spec.condition_cuis is not None:
             evidence = evidence.where(Studies.condition_cui.in_(spec.condition_cuis))

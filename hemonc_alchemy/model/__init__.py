@@ -17,4 +17,4 @@ __all__ = ["Base", "EntityBase", *_entity_names]  # noqa: PLE0604
 # sorter can't move it: relationships are assigned onto the entity classes,
 # which have to exist first. Importing `hemonc_alchemy.model` is what puts
 # them there -- importing `hemonc_alchemy.model.entities` directly does not.
-from . import relationships  # noqa: F401
+from . import indexes, relationships  # noqa: F401
