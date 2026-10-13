@@ -27,6 +27,7 @@ TABLES = (
     "source_concept_map",
     "mapping_to_existing",
     "existing_concepts",
+    "existing_relationships",
     "indication_notes",
     "unanchored_indications",
     "gap_register",
@@ -182,6 +183,13 @@ def _check_existing(vocab, tables, failures, warnings, local_ids) -> set[int]:
     for row in tables["source_concept_map"]:
         if row["target_concept_id"] and int(row["target_concept_id"]) not in local_ids:
             cited.add(int(row["target_concept_id"]))
+    for row in tables["existing_relationships"]:
+        for key in ("concept_id_1", "concept_id_2"):
+            if int(row[key]) in local_ids:
+                failures.append(
+                    f"existing_relationships row {row['concept_id_1']} {row['relationship_id']} {row['concept_id_2']} touches a local concept"
+                )
+            cited.add(int(row[key]))
     for row in tables["mapping_to_existing"]:
         cid = int(row["concept_id"])
         cited.add(cid)
@@ -211,9 +219,13 @@ def _check_relationships(vocab, tables, failures, local_ids, known_ids) -> None:
             )
         elif types[info.reverse_relationship_id].reverse_relationship_id != rid:
             failures.append(f"relationship {rid} reverse does not point back")
-    present = {
+    local_rows = {
         (r.concept_id_1, r.concept_id_2, r.relationship_id)
         for r in vocab.relationship_rows
+    }
+    present = local_rows | {
+        (r.concept_id_1, r.concept_id_2, r.relationship_id)
+        for r in vocab.existing_relationship_rows
     }
     valid_ids = known_ids | local_ids
     for a, b, rid in present:
@@ -240,7 +252,7 @@ def _check_relationships(vocab, tables, failures, local_ids, known_ids) -> None:
     for key in reviews:
         if key not in present:
             failures.append(f"relationship_review row for a missing relationship {key}")
-    for a, b, rid in present:
+    for a, b, rid in local_rows:
         if rid not in types:
             continue
         forward = types[rid].is_hierarchical is False and rid in REVIEWED_RELATIONSHIPS

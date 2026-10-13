@@ -1,0 +1,709 @@
+concept_id_1	concept_id_2	relationship_id	source	verified_on
+905580	42542296	Is a	HemOnc vocabulary	2026-10-13
+42542296	905580	Subsumes	HemOnc vocabulary	2026-10-13
+905610	42542165	Is a	HemOnc vocabulary	2026-10-13
+42542165	905610	Subsumes	HemOnc vocabulary	2026-10-13
+905610	42542296	Is a	HemOnc vocabulary	2026-10-13
+42542296	905610	Subsumes	HemOnc vocabulary	2026-10-13
+905619	42542340	Is a	HemOnc vocabulary	2026-10-13
+42542340	905619	Subsumes	HemOnc vocabulary	2026-10-13
+905620	905778	Is a	HemOnc vocabulary	2026-10-13
+905778	905620	Subsumes	HemOnc vocabulary	2026-10-13
+905620	42542307	Is a	HemOnc vocabulary	2026-10-13
+42542307	905620	Subsumes	HemOnc vocabulary	2026-10-13
+905641	905778	Is a	HemOnc vocabulary	2026-10-13
+905778	905641	Subsumes	HemOnc vocabulary	2026-10-13
+905641	42542305	Is a	HemOnc vocabulary	2026-10-13
+42542305	905641	Subsumes	HemOnc vocabulary	2026-10-13
+905651	905778	Is a	HemOnc vocabulary	2026-10-13
+905778	905651	Subsumes	HemOnc vocabulary	2026-10-13
+905651	42542277	Is a	HemOnc vocabulary	2026-10-13
+42542277	905651	Subsumes	HemOnc vocabulary	2026-10-13
+905654	42542227	Is a	HemOnc vocabulary	2026-10-13
+42542227	905654	Subsumes	HemOnc vocabulary	2026-10-13
+905661	905778	Is a	HemOnc vocabulary	2026-10-13
+905778	905661	Subsumes	HemOnc vocabulary	2026-10-13
+905661	42542323	Is a	HemOnc vocabulary	2026-10-13
+42542323	905661	Subsumes	HemOnc vocabulary	2026-10-13
+905676	905779	Is a	HemOnc vocabulary	2026-10-13
+905779	905676	Subsumes	HemOnc vocabulary	2026-10-13
+905676	42542309	Is a	HemOnc vocabulary	2026-10-13
+42542309	905676	Subsumes	HemOnc vocabulary	2026-10-13
+905680	905778	Is a	HemOnc vocabulary	2026-10-13
+905778	905680	Subsumes	HemOnc vocabulary	2026-10-13
+905680	42542316	Is a	HemOnc vocabulary	2026-10-13
+42542316	905680	Subsumes	HemOnc vocabulary	2026-10-13
+905713	42542145	Is a	HemOnc vocabulary	2026-10-13
+42542145	905713	Subsumes	HemOnc vocabulary	2026-10-13
+905720	42542320	Is a	HemOnc vocabulary	2026-10-13
+42542320	905720	Subsumes	HemOnc vocabulary	2026-10-13
+905723	42542229	Is a	HemOnc vocabulary	2026-10-13
+42542229	905723	Subsumes	HemOnc vocabulary	2026-10-13
+905726	42542229	Is a	HemOnc vocabulary	2026-10-13
+42542229	905726	Subsumes	HemOnc vocabulary	2026-10-13
+905755	905779	Is a	HemOnc vocabulary	2026-10-13
+905779	905755	Subsumes	HemOnc vocabulary	2026-10-13
+905755	42542193	Is a	HemOnc vocabulary	2026-10-13
+42542193	905755	Subsumes	HemOnc vocabulary	2026-10-13
+905758	905778	Is a	HemOnc vocabulary	2026-10-13
+905778	905758	Subsumes	HemOnc vocabulary	2026-10-13
+905758	42542277	Is a	HemOnc vocabulary	2026-10-13
+42542277	905758	Subsumes	HemOnc vocabulary	2026-10-13
+905758	42542334	Is a	HemOnc vocabulary	2026-10-13
+42542334	905758	Subsumes	HemOnc vocabulary	2026-10-13
+905773	42542324	Is a	HemOnc vocabulary	2026-10-13
+42542324	905773	Subsumes	HemOnc vocabulary	2026-10-13
+905778	42542314	Is a	HemOnc vocabulary	2026-10-13
+42542314	905778	Subsumes	HemOnc vocabulary	2026-10-13
+905779	42542314	Is a	HemOnc vocabulary	2026-10-13
+42542314	905779	Subsumes	HemOnc vocabulary	2026-10-13
+905780	42542314	Is a	HemOnc vocabulary	2026-10-13
+42542314	905780	Subsumes	HemOnc vocabulary	2026-10-13
+905788	42542229	Is a	HemOnc vocabulary	2026-10-13
+42542229	905788	Subsumes	HemOnc vocabulary	2026-10-13
+912012	42542211	Is a	HemOnc vocabulary	2026-10-13
+42542211	912012	Subsumes	HemOnc vocabulary	2026-10-13
+912027	37557370	Is a	HemOnc vocabulary	2026-10-13
+37557370	912027	Subsumes	HemOnc vocabulary	2026-10-13
+912027	42542196	Is a	HemOnc vocabulary	2026-10-13
+42542196	912027	Subsumes	HemOnc vocabulary	2026-10-13
+912059	42542211	Is a	HemOnc vocabulary	2026-10-13
+42542211	912059	Subsumes	HemOnc vocabulary	2026-10-13
+912060	42542243	Is a	HemOnc vocabulary	2026-10-13
+42542243	912060	Subsumes	HemOnc vocabulary	2026-10-13
+912068	42542302	Is a	HemOnc vocabulary	2026-10-13
+42542302	912068	Subsumes	HemOnc vocabulary	2026-10-13
+912088	42542211	Is a	HemOnc vocabulary	2026-10-13
+42542211	912088	Subsumes	HemOnc vocabulary	2026-10-13
+912089	42542211	Is a	HemOnc vocabulary	2026-10-13
+42542211	912089	Subsumes	HemOnc vocabulary	2026-10-13
+912089	42542332	Is a	HemOnc vocabulary	2026-10-13
+42542332	912089	Subsumes	HemOnc vocabulary	2026-10-13
+912115	37558276	Is a	HemOnc vocabulary	2026-10-13
+37558276	912115	Subsumes	HemOnc vocabulary	2026-10-13
+912153	42542171	Is a	HemOnc vocabulary	2026-10-13
+42542171	912153	Subsumes	HemOnc vocabulary	2026-10-13
+912162	42542126	Is a	HemOnc vocabulary	2026-10-13
+42542126	912162	Subsumes	HemOnc vocabulary	2026-10-13
+1524970	42542158	Is a	HemOnc vocabulary	2026-10-13
+42542158	1524970	Subsumes	HemOnc vocabulary	2026-10-13
+1524978	42542235	Is a	HemOnc vocabulary	2026-10-13
+42542235	1524978	Subsumes	HemOnc vocabulary	2026-10-13
+1525006	42542308	Is a	HemOnc vocabulary	2026-10-13
+42542308	1525006	Subsumes	HemOnc vocabulary	2026-10-13
+1525008	42542193	Is a	HemOnc vocabulary	2026-10-13
+42542193	1525008	Subsumes	HemOnc vocabulary	2026-10-13
+1525018	42542235	Is a	HemOnc vocabulary	2026-10-13
+42542235	1525018	Subsumes	HemOnc vocabulary	2026-10-13
+1525049	42542211	Is a	HemOnc vocabulary	2026-10-13
+42542211	1525049	Subsumes	HemOnc vocabulary	2026-10-13
+1525061	905780	Is a	HemOnc vocabulary	2026-10-13
+905780	1525061	Subsumes	HemOnc vocabulary	2026-10-13
+1525061	42542144	Is a	HemOnc vocabulary	2026-10-13
+42542144	1525061	Subsumes	HemOnc vocabulary	2026-10-13
+1525065	905780	Is a	HemOnc vocabulary	2026-10-13
+905780	1525065	Subsumes	HemOnc vocabulary	2026-10-13
+1525065	42542144	Is a	HemOnc vocabulary	2026-10-13
+42542144	1525065	Subsumes	HemOnc vocabulary	2026-10-13
+1525079	42542229	Is a	HemOnc vocabulary	2026-10-13
+42542229	1525079	Subsumes	HemOnc vocabulary	2026-10-13
+1525122	42542235	Is a	HemOnc vocabulary	2026-10-13
+42542235	1525122	Subsumes	HemOnc vocabulary	2026-10-13
+1525125	42542178	Is a	HemOnc vocabulary	2026-10-13
+42542178	1525125	Subsumes	HemOnc vocabulary	2026-10-13
+1525125	42542306	Is a	HemOnc vocabulary	2026-10-13
+42542306	1525125	Subsumes	HemOnc vocabulary	2026-10-13
+1525135	905778	Is a	HemOnc vocabulary	2026-10-13
+905778	1525135	Subsumes	HemOnc vocabulary	2026-10-13
+1525135	42542323	Is a	HemOnc vocabulary	2026-10-13
+42542323	1525135	Subsumes	HemOnc vocabulary	2026-10-13
+1525152	42542202	Is a	HemOnc vocabulary	2026-10-13
+42542202	1525152	Subsumes	HemOnc vocabulary	2026-10-13
+1525152	42542308	Is a	HemOnc vocabulary	2026-10-13
+42542308	1525152	Subsumes	HemOnc vocabulary	2026-10-13
+1525153	42542202	Is a	HemOnc vocabulary	2026-10-13
+42542202	1525153	Subsumes	HemOnc vocabulary	2026-10-13
+1525153	42542331	Is a	HemOnc vocabulary	2026-10-13
+42542331	1525153	Subsumes	HemOnc vocabulary	2026-10-13
+1525154	42542178	Is a	HemOnc vocabulary	2026-10-13
+42542178	1525154	Subsumes	HemOnc vocabulary	2026-10-13
+1525154	42542306	Is a	HemOnc vocabulary	2026-10-13
+42542306	1525154	Subsumes	HemOnc vocabulary	2026-10-13
+1525161	905778	Is a	HemOnc vocabulary	2026-10-13
+905778	1525161	Subsumes	HemOnc vocabulary	2026-10-13
+1525161	42542337	Is a	HemOnc vocabulary	2026-10-13
+42542337	1525161	Subsumes	HemOnc vocabulary	2026-10-13
+1525169	42542229	Is a	HemOnc vocabulary	2026-10-13
+42542229	1525169	Subsumes	HemOnc vocabulary	2026-10-13
+1525181	905780	Is a	HemOnc vocabulary	2026-10-13
+905780	1525181	Subsumes	HemOnc vocabulary	2026-10-13
+1525181	42542144	Is a	HemOnc vocabulary	2026-10-13
+42542144	1525181	Subsumes	HemOnc vocabulary	2026-10-13
+1525204	905651	Is a	HemOnc vocabulary	2026-10-13
+905651	1525204	Subsumes	HemOnc vocabulary	2026-10-13
+37557215	37557338	Is a	HemOnc vocabulary	2026-10-13
+37557338	37557215	Subsumes	HemOnc vocabulary	2026-10-13
+37557215	37557370	Is a	HemOnc vocabulary	2026-10-13
+37557370	37557215	Subsumes	HemOnc vocabulary	2026-10-13
+37557222	42542302	Is a	HemOnc vocabulary	2026-10-13
+42542302	37557222	Subsumes	HemOnc vocabulary	2026-10-13
+37557257	42542310	Is a	HemOnc vocabulary	2026-10-13
+42542310	37557257	Subsumes	HemOnc vocabulary	2026-10-13
+37557265	42542246	Is a	HemOnc vocabulary	2026-10-13
+42542246	37557265	Subsumes	HemOnc vocabulary	2026-10-13
+37557292	42542235	Is a	HemOnc vocabulary	2026-10-13
+42542235	37557292	Subsumes	HemOnc vocabulary	2026-10-13
+37557338	42542316	Is a	HemOnc vocabulary	2026-10-13
+42542316	37557338	Subsumes	HemOnc vocabulary	2026-10-13
+37557340	42542235	Is a	HemOnc vocabulary	2026-10-13
+42542235	37557340	Subsumes	HemOnc vocabulary	2026-10-13
+37557370	42542317	Is a	HemOnc vocabulary	2026-10-13
+42542317	37557370	Subsumes	HemOnc vocabulary	2026-10-13
+37557379	42542321	Is a	HemOnc vocabulary	2026-10-13
+42542321	37557379	Subsumes	HemOnc vocabulary	2026-10-13
+37557414	42542318	Is a	HemOnc vocabulary	2026-10-13
+42542318	37557414	Subsumes	HemOnc vocabulary	2026-10-13
+37557460	42542235	Is a	HemOnc vocabulary	2026-10-13
+42542235	37557460	Subsumes	HemOnc vocabulary	2026-10-13
+37557471	42542318	Is a	HemOnc vocabulary	2026-10-13
+42542318	37557471	Subsumes	HemOnc vocabulary	2026-10-13
+37557478	42542210	Is a	HemOnc vocabulary	2026-10-13
+42542210	37557478	Subsumes	HemOnc vocabulary	2026-10-13
+37557545	905778	Is a	HemOnc vocabulary	2026-10-13
+905778	37557545	Subsumes	HemOnc vocabulary	2026-10-13
+37557545	42542277	Is a	HemOnc vocabulary	2026-10-13
+42542277	37557545	Subsumes	HemOnc vocabulary	2026-10-13
+37557922	42542204	Is a	HemOnc vocabulary	2026-10-13
+42542204	37557922	Subsumes	HemOnc vocabulary	2026-10-13
+37557960	37557545	Is a	HemOnc vocabulary	2026-10-13
+37557545	37557960	Subsumes	HemOnc vocabulary	2026-10-13
+37557961	42542324	Is a	HemOnc vocabulary	2026-10-13
+42542324	37557961	Subsumes	HemOnc vocabulary	2026-10-13
+37557994	42542287	Is a	HemOnc vocabulary	2026-10-13
+42542287	37557994	Subsumes	HemOnc vocabulary	2026-10-13
+37558184	42542308	Is a	HemOnc vocabulary	2026-10-13
+42542308	37558184	Subsumes	HemOnc vocabulary	2026-10-13
+37558276	42542315	Is a	HemOnc vocabulary	2026-10-13
+42542315	37558276	Subsumes	HemOnc vocabulary	2026-10-13
+37561027	42542310	Is a	HemOnc vocabulary	2026-10-13
+42542310	37561027	Subsumes	HemOnc vocabulary	2026-10-13
+37561027	42542312	Is a	HemOnc vocabulary	2026-10-13
+42542312	37561027	Subsumes	HemOnc vocabulary	2026-10-13
+37561117	42542315	Is a	HemOnc vocabulary	2026-10-13
+42542315	37561117	Subsumes	HemOnc vocabulary	2026-10-13
+37561151	42542336	Is a	HemOnc vocabulary	2026-10-13
+42542336	37561151	Subsumes	HemOnc vocabulary	2026-10-13
+37561167	42542262	Is a	HemOnc vocabulary	2026-10-13
+42542262	37561167	Subsumes	HemOnc vocabulary	2026-10-13
+37561189	42542329	Is a	HemOnc vocabulary	2026-10-13
+42542329	37561189	Subsumes	HemOnc vocabulary	2026-10-13
+37561995	905780	Is a	HemOnc vocabulary	2026-10-13
+905780	37561995	Subsumes	HemOnc vocabulary	2026-10-13
+37562031	42542235	Is a	HemOnc vocabulary	2026-10-13
+42542235	37562031	Subsumes	HemOnc vocabulary	2026-10-13
+42542125	42542303	Is a	HemOnc vocabulary	2026-10-13
+42542303	42542125	Subsumes	HemOnc vocabulary	2026-10-13
+42542125	42542304	Is a	HemOnc vocabulary	2026-10-13
+42542304	42542125	Subsumes	HemOnc vocabulary	2026-10-13
+42542126	37561151	Is a	HemOnc vocabulary	2026-10-13
+37561151	42542126	Subsumes	HemOnc vocabulary	2026-10-13
+42542126	42542305	Is a	HemOnc vocabulary	2026-10-13
+42542305	42542126	Subsumes	HemOnc vocabulary	2026-10-13
+42542127	37561151	Is a	HemOnc vocabulary	2026-10-13
+37561151	42542127	Subsumes	HemOnc vocabulary	2026-10-13
+42542127	42542305	Is a	HemOnc vocabulary	2026-10-13
+42542305	42542127	Subsumes	HemOnc vocabulary	2026-10-13
+42542128	42542302	Is a	HemOnc vocabulary	2026-10-13
+42542302	42542128	Subsumes	HemOnc vocabulary	2026-10-13
+42542129	42542306	Is a	HemOnc vocabulary	2026-10-13
+42542306	42542129	Subsumes	HemOnc vocabulary	2026-10-13
+42542130	42542305	Is a	HemOnc vocabulary	2026-10-13
+42542305	42542130	Subsumes	HemOnc vocabulary	2026-10-13
+42542130	42542307	Is a	HemOnc vocabulary	2026-10-13
+42542307	42542130	Subsumes	HemOnc vocabulary	2026-10-13
+42542130	42542334	Is a	HemOnc vocabulary	2026-10-13
+42542334	42542130	Subsumes	HemOnc vocabulary	2026-10-13
+42542132	42542308	Is a	HemOnc vocabulary	2026-10-13
+42542308	42542132	Subsumes	HemOnc vocabulary	2026-10-13
+42542133	42542309	Is a	HemOnc vocabulary	2026-10-13
+42542309	42542133	Subsumes	HemOnc vocabulary	2026-10-13
+42542134	42542307	Is a	HemOnc vocabulary	2026-10-13
+42542307	42542134	Subsumes	HemOnc vocabulary	2026-10-13
+42542135	42542303	Is a	HemOnc vocabulary	2026-10-13
+42542303	42542135	Subsumes	HemOnc vocabulary	2026-10-13
+42542135	42542310	Is a	HemOnc vocabulary	2026-10-13
+42542310	42542135	Subsumes	HemOnc vocabulary	2026-10-13
+42542136	42542311	Is a	HemOnc vocabulary	2026-10-13
+42542311	42542136	Subsumes	HemOnc vocabulary	2026-10-13
+42542136	42542312	Is a	HemOnc vocabulary	2026-10-13
+42542312	42542136	Subsumes	HemOnc vocabulary	2026-10-13
+42542137	42542262	Is a	HemOnc vocabulary	2026-10-13
+42542262	42542137	Subsumes	HemOnc vocabulary	2026-10-13
+42542137	42542313	Is a	HemOnc vocabulary	2026-10-13
+42542313	42542137	Subsumes	HemOnc vocabulary	2026-10-13
+42542138	42542262	Is a	HemOnc vocabulary	2026-10-13
+42542262	42542138	Subsumes	HemOnc vocabulary	2026-10-13
+42542138	42542303	Is a	HemOnc vocabulary	2026-10-13
+42542303	42542138	Subsumes	HemOnc vocabulary	2026-10-13
+42542138	42542312	Is a	HemOnc vocabulary	2026-10-13
+42542312	42542138	Subsumes	HemOnc vocabulary	2026-10-13
+42542139	42542262	Is a	HemOnc vocabulary	2026-10-13
+42542262	42542139	Subsumes	HemOnc vocabulary	2026-10-13
+42542139	42542303	Is a	HemOnc vocabulary	2026-10-13
+42542303	42542139	Subsumes	HemOnc vocabulary	2026-10-13
+42542141	905778	Is a	HemOnc vocabulary	2026-10-13
+905778	42542141	Subsumes	HemOnc vocabulary	2026-10-13
+42542141	42542277	Is a	HemOnc vocabulary	2026-10-13
+42542277	42542141	Subsumes	HemOnc vocabulary	2026-10-13
+42542142	37558276	Is a	HemOnc vocabulary	2026-10-13
+37558276	42542142	Subsumes	HemOnc vocabulary	2026-10-13
+42542143	37561151	Is a	HemOnc vocabulary	2026-10-13
+37561151	42542143	Subsumes	HemOnc vocabulary	2026-10-13
+42542143	42542305	Is a	HemOnc vocabulary	2026-10-13
+42542305	42542143	Subsumes	HemOnc vocabulary	2026-10-13
+42542144	42542342	Is a	HemOnc vocabulary	2026-10-13
+42542342	42542144	Subsumes	HemOnc vocabulary	2026-10-13
+42542145	42542301	Is a	HemOnc vocabulary	2026-10-13
+42542301	42542145	Subsumes	HemOnc vocabulary	2026-10-13
+42542146	37557338	Is a	HemOnc vocabulary	2026-10-13
+37557338	42542146	Subsumes	HemOnc vocabulary	2026-10-13
+42542146	37557370	Is a	HemOnc vocabulary	2026-10-13
+37557370	42542146	Subsumes	HemOnc vocabulary	2026-10-13
+42542147	42542318	Is a	HemOnc vocabulary	2026-10-13
+42542318	42542147	Subsumes	HemOnc vocabulary	2026-10-13
+42542148	42542305	Is a	HemOnc vocabulary	2026-10-13
+42542305	42542148	Subsumes	HemOnc vocabulary	2026-10-13
+42542148	42542318	Is a	HemOnc vocabulary	2026-10-13
+42542318	42542148	Subsumes	HemOnc vocabulary	2026-10-13
+42542149	42542318	Is a	HemOnc vocabulary	2026-10-13
+42542318	42542149	Subsumes	HemOnc vocabulary	2026-10-13
+42542150	42542318	Is a	HemOnc vocabulary	2026-10-13
+42542318	42542150	Subsumes	HemOnc vocabulary	2026-10-13
+42542151	42542319	Is a	HemOnc vocabulary	2026-10-13
+42542319	42542151	Subsumes	HemOnc vocabulary	2026-10-13
+42542152	42542320	Is a	HemOnc vocabulary	2026-10-13
+42542320	42542152	Subsumes	HemOnc vocabulary	2026-10-13
+42542153	37557379	Is a	HemOnc vocabulary	2026-10-13
+37557379	42542153	Subsumes	HemOnc vocabulary	2026-10-13
+42542154	42542322	Is a	HemOnc vocabulary	2026-10-13
+42542322	42542154	Subsumes	HemOnc vocabulary	2026-10-13
+42542155	42542323	Is a	HemOnc vocabulary	2026-10-13
+42542323	42542155	Subsumes	HemOnc vocabulary	2026-10-13
+42542156	42542323	Is a	HemOnc vocabulary	2026-10-13
+42542323	42542156	Subsumes	HemOnc vocabulary	2026-10-13
+42542157	42542262	Is a	HemOnc vocabulary	2026-10-13
+42542262	42542157	Subsumes	HemOnc vocabulary	2026-10-13
+42542157	42542313	Is a	HemOnc vocabulary	2026-10-13
+42542313	42542157	Subsumes	HemOnc vocabulary	2026-10-13
+42542158	42542324	Is a	HemOnc vocabulary	2026-10-13
+42542324	42542158	Subsumes	HemOnc vocabulary	2026-10-13
+42542159	42542307	Is a	HemOnc vocabulary	2026-10-13
+42542307	42542159	Subsumes	HemOnc vocabulary	2026-10-13
+42542159	42542325	Is a	HemOnc vocabulary	2026-10-13
+42542325	42542159	Subsumes	HemOnc vocabulary	2026-10-13
+42542160	42542326	Is a	HemOnc vocabulary	2026-10-13
+42542326	42542160	Subsumes	HemOnc vocabulary	2026-10-13
+42542161	42542326	Is a	HemOnc vocabulary	2026-10-13
+42542326	42542161	Subsumes	HemOnc vocabulary	2026-10-13
+42542162	37557338	Is a	HemOnc vocabulary	2026-10-13
+37557338	42542162	Subsumes	HemOnc vocabulary	2026-10-13
+42542162	37557370	Is a	HemOnc vocabulary	2026-10-13
+37557370	42542162	Subsumes	HemOnc vocabulary	2026-10-13
+42542163	42542320	Is a	HemOnc vocabulary	2026-10-13
+42542320	42542163	Subsumes	HemOnc vocabulary	2026-10-13
+42542164	42542327	Is a	HemOnc vocabulary	2026-10-13
+42542327	42542164	Subsumes	HemOnc vocabulary	2026-10-13
+42542165	42542296	Is a	HemOnc vocabulary	2026-10-13
+42542296	42542165	Subsumes	HemOnc vocabulary	2026-10-13
+42542166	42542323	Is a	HemOnc vocabulary	2026-10-13
+42542323	42542166	Subsumes	HemOnc vocabulary	2026-10-13
+42542167	905780	Is a	HemOnc vocabulary	2026-10-13
+905780	42542167	Subsumes	HemOnc vocabulary	2026-10-13
+42542167	42542144	Is a	HemOnc vocabulary	2026-10-13
+42542144	42542167	Subsumes	HemOnc vocabulary	2026-10-13
+42542168	42542307	Is a	HemOnc vocabulary	2026-10-13
+42542307	42542168	Subsumes	HemOnc vocabulary	2026-10-13
+42542169	37557370	Is a	HemOnc vocabulary	2026-10-13
+37557370	42542169	Subsumes	HemOnc vocabulary	2026-10-13
+42542169	42542322	Is a	HemOnc vocabulary	2026-10-13
+42542322	42542169	Subsumes	HemOnc vocabulary	2026-10-13
+42542170	37557379	Is a	HemOnc vocabulary	2026-10-13
+37557379	42542170	Subsumes	HemOnc vocabulary	2026-10-13
+42542171	42542296	Is a	HemOnc vocabulary	2026-10-13
+42542296	42542171	Subsumes	HemOnc vocabulary	2026-10-13
+42542172	42542235	Is a	HemOnc vocabulary	2026-10-13
+42542235	42542172	Subsumes	HemOnc vocabulary	2026-10-13
+42542172	42542308	Is a	HemOnc vocabulary	2026-10-13
+42542308	42542172	Subsumes	HemOnc vocabulary	2026-10-13
+42542173	42542320	Is a	HemOnc vocabulary	2026-10-13
+42542320	42542173	Subsumes	HemOnc vocabulary	2026-10-13
+42542174	42542309	Is a	HemOnc vocabulary	2026-10-13
+42542309	42542174	Subsumes	HemOnc vocabulary	2026-10-13
+42542175	42542328	Is a	HemOnc vocabulary	2026-10-13
+42542328	42542175	Subsumes	HemOnc vocabulary	2026-10-13
+42542176	42542316	Is a	HemOnc vocabulary	2026-10-13
+42542316	42542176	Subsumes	HemOnc vocabulary	2026-10-13
+42542177	42542322	Is a	HemOnc vocabulary	2026-10-13
+42542322	42542177	Subsumes	HemOnc vocabulary	2026-10-13
+42542178	42542302	Is a	HemOnc vocabulary	2026-10-13
+42542302	42542178	Subsumes	HemOnc vocabulary	2026-10-13
+42542179	42542327	Is a	HemOnc vocabulary	2026-10-13
+42542327	42542179	Subsumes	HemOnc vocabulary	2026-10-13
+42542180	42542303	Is a	HemOnc vocabulary	2026-10-13
+42542303	42542180	Subsumes	HemOnc vocabulary	2026-10-13
+42542180	42542310	Is a	HemOnc vocabulary	2026-10-13
+42542310	42542180	Subsumes	HemOnc vocabulary	2026-10-13
+42542181	905780	Is a	HemOnc vocabulary	2026-10-13
+905780	42542181	Subsumes	HemOnc vocabulary	2026-10-13
+42542182	42542321	Is a	HemOnc vocabulary	2026-10-13
+42542321	42542182	Subsumes	HemOnc vocabulary	2026-10-13
+42542183	42542262	Is a	HemOnc vocabulary	2026-10-13
+42542262	42542183	Subsumes	HemOnc vocabulary	2026-10-13
+42542184	42542316	Is a	HemOnc vocabulary	2026-10-13
+42542316	42542184	Subsumes	HemOnc vocabulary	2026-10-13
+42542185	42542322	Is a	HemOnc vocabulary	2026-10-13
+42542322	42542185	Subsumes	HemOnc vocabulary	2026-10-13
+42542186	42542323	Is a	HemOnc vocabulary	2026-10-13
+42542323	42542186	Subsumes	HemOnc vocabulary	2026-10-13
+42542187	42542303	Is a	HemOnc vocabulary	2026-10-13
+42542303	42542187	Subsumes	HemOnc vocabulary	2026-10-13
+42542187	42542304	Is a	HemOnc vocabulary	2026-10-13
+42542304	42542187	Subsumes	HemOnc vocabulary	2026-10-13
+42542187	42542312	Is a	HemOnc vocabulary	2026-10-13
+42542312	42542187	Subsumes	HemOnc vocabulary	2026-10-13
+42542188	42542304	Is a	HemOnc vocabulary	2026-10-13
+42542304	42542188	Subsumes	HemOnc vocabulary	2026-10-13
+42542189	42542310	Is a	HemOnc vocabulary	2026-10-13
+42542310	42542189	Subsumes	HemOnc vocabulary	2026-10-13
+42542190	42542327	Is a	HemOnc vocabulary	2026-10-13
+42542327	42542190	Subsumes	HemOnc vocabulary	2026-10-13
+42542191	42542307	Is a	HemOnc vocabulary	2026-10-13
+42542307	42542191	Subsumes	HemOnc vocabulary	2026-10-13
+42542192	42542329	Is a	HemOnc vocabulary	2026-10-13
+42542329	42542192	Subsumes	HemOnc vocabulary	2026-10-13
+42542193	905779	Is a	HemOnc vocabulary	2026-10-13
+905779	42542193	Subsumes	HemOnc vocabulary	2026-10-13
+42542193	37557471	Is a	HemOnc vocabulary	2026-10-13
+37557471	42542193	Subsumes	HemOnc vocabulary	2026-10-13
+42542194	42542302	Is a	HemOnc vocabulary	2026-10-13
+42542302	42542194	Subsumes	HemOnc vocabulary	2026-10-13
+42542195	37557338	Is a	HemOnc vocabulary	2026-10-13
+37557338	42542195	Subsumes	HemOnc vocabulary	2026-10-13
+42542195	37557370	Is a	HemOnc vocabulary	2026-10-13
+37557370	42542195	Subsumes	HemOnc vocabulary	2026-10-13
+42542196	37557370	Is a	HemOnc vocabulary	2026-10-13
+37557370	42542196	Subsumes	HemOnc vocabulary	2026-10-13
+42542196	42542322	Is a	HemOnc vocabulary	2026-10-13
+42542322	42542196	Subsumes	HemOnc vocabulary	2026-10-13
+42542197	37557338	Is a	HemOnc vocabulary	2026-10-13
+37557338	42542197	Subsumes	HemOnc vocabulary	2026-10-13
+42542197	37557370	Is a	HemOnc vocabulary	2026-10-13
+37557370	42542197	Subsumes	HemOnc vocabulary	2026-10-13
+42542198	905779	Is a	HemOnc vocabulary	2026-10-13
+905779	42542198	Subsumes	HemOnc vocabulary	2026-10-13
+42542199	42542330	Is a	HemOnc vocabulary	2026-10-13
+42542330	42542199	Subsumes	HemOnc vocabulary	2026-10-13
+42542200	42542318	Is a	HemOnc vocabulary	2026-10-13
+42542318	42542200	Subsumes	HemOnc vocabulary	2026-10-13
+42542201	42542326	Is a	HemOnc vocabulary	2026-10-13
+42542326	42542201	Subsumes	HemOnc vocabulary	2026-10-13
+42542202	42542302	Is a	HemOnc vocabulary	2026-10-13
+42542302	42542202	Subsumes	HemOnc vocabulary	2026-10-13
+42542203	42542329	Is a	HemOnc vocabulary	2026-10-13
+42542329	42542203	Subsumes	HemOnc vocabulary	2026-10-13
+42542204	37561151	Is a	HemOnc vocabulary	2026-10-13
+37561151	42542204	Subsumes	HemOnc vocabulary	2026-10-13
+42542204	42542311	Is a	HemOnc vocabulary	2026-10-13
+42542311	42542204	Subsumes	HemOnc vocabulary	2026-10-13
+42542205	42542323	Is a	HemOnc vocabulary	2026-10-13
+42542323	42542205	Subsumes	HemOnc vocabulary	2026-10-13
+42542206	42542302	Is a	HemOnc vocabulary	2026-10-13
+42542302	42542206	Subsumes	HemOnc vocabulary	2026-10-13
+42542207	42542307	Is a	HemOnc vocabulary	2026-10-13
+42542307	42542207	Subsumes	HemOnc vocabulary	2026-10-13
+42542208	42542178	Is a	HemOnc vocabulary	2026-10-13
+42542178	42542208	Subsumes	HemOnc vocabulary	2026-10-13
+42542209	905780	Is a	HemOnc vocabulary	2026-10-13
+905780	42542209	Subsumes	HemOnc vocabulary	2026-10-13
+42542210	42542306	Is a	HemOnc vocabulary	2026-10-13
+42542306	42542210	Subsumes	HemOnc vocabulary	2026-10-13
+42542211	42542332	Is a	HemOnc vocabulary	2026-10-13
+42542332	42542211	Subsumes	HemOnc vocabulary	2026-10-13
+42542212	42542178	Is a	HemOnc vocabulary	2026-10-13
+42542178	42542212	Subsumes	HemOnc vocabulary	2026-10-13
+42542213	905780	Is a	HemOnc vocabulary	2026-10-13
+905780	42542213	Subsumes	HemOnc vocabulary	2026-10-13
+42542213	42542144	Is a	HemOnc vocabulary	2026-10-13
+42542144	42542213	Subsumes	HemOnc vocabulary	2026-10-13
+42542214	42542320	Is a	HemOnc vocabulary	2026-10-13
+42542320	42542214	Subsumes	HemOnc vocabulary	2026-10-13
+42542215	42542329	Is a	HemOnc vocabulary	2026-10-13
+42542329	42542215	Subsumes	HemOnc vocabulary	2026-10-13
+42542216	42542306	Is a	HemOnc vocabulary	2026-10-13
+42542306	42542216	Subsumes	HemOnc vocabulary	2026-10-13
+42542216	42542308	Is a	HemOnc vocabulary	2026-10-13
+42542308	42542216	Subsumes	HemOnc vocabulary	2026-10-13
+42542217	42542308	Is a	HemOnc vocabulary	2026-10-13
+42542308	42542217	Subsumes	HemOnc vocabulary	2026-10-13
+42542218	42542262	Is a	HemOnc vocabulary	2026-10-13
+42542262	42542218	Subsumes	HemOnc vocabulary	2026-10-13
+42542218	42542311	Is a	HemOnc vocabulary	2026-10-13
+42542311	42542218	Subsumes	HemOnc vocabulary	2026-10-13
+42542218	42542313	Is a	HemOnc vocabulary	2026-10-13
+42542313	42542218	Subsumes	HemOnc vocabulary	2026-10-13
+42542219	37561117	Is a	HemOnc vocabulary	2026-10-13
+37561117	42542219	Subsumes	HemOnc vocabulary	2026-10-13
+42542219	42542315	Is a	HemOnc vocabulary	2026-10-13
+42542315	42542219	Subsumes	HemOnc vocabulary	2026-10-13
+42542220	37557379	Is a	HemOnc vocabulary	2026-10-13
+37557379	42542220	Subsumes	HemOnc vocabulary	2026-10-13
+42542221	42542307	Is a	HemOnc vocabulary	2026-10-13
+42542307	42542221	Subsumes	HemOnc vocabulary	2026-10-13
+42542222	42542306	Is a	HemOnc vocabulary	2026-10-13
+42542306	42542222	Subsumes	HemOnc vocabulary	2026-10-13
+42542223	42542329	Is a	HemOnc vocabulary	2026-10-13
+42542329	42542223	Subsumes	HemOnc vocabulary	2026-10-13
+42542224	42542323	Is a	HemOnc vocabulary	2026-10-13
+42542323	42542224	Subsumes	HemOnc vocabulary	2026-10-13
+42542225	42542319	Is a	HemOnc vocabulary	2026-10-13
+42542319	42542225	Subsumes	HemOnc vocabulary	2026-10-13
+42542226	37557338	Is a	HemOnc vocabulary	2026-10-13
+37557338	42542226	Subsumes	HemOnc vocabulary	2026-10-13
+42542226	37557370	Is a	HemOnc vocabulary	2026-10-13
+37557370	42542226	Subsumes	HemOnc vocabulary	2026-10-13
+42542227	37561117	Is a	HemOnc vocabulary	2026-10-13
+37561117	42542227	Subsumes	HemOnc vocabulary	2026-10-13
+42542227	42542315	Is a	HemOnc vocabulary	2026-10-13
+42542315	42542227	Subsumes	HemOnc vocabulary	2026-10-13
+42542228	42542324	Is a	HemOnc vocabulary	2026-10-13
+42542324	42542228	Subsumes	HemOnc vocabulary	2026-10-13
+42542229	42542315	Is a	HemOnc vocabulary	2026-10-13
+42542315	42542229	Subsumes	HemOnc vocabulary	2026-10-13
+42542230	905780	Is a	HemOnc vocabulary	2026-10-13
+905780	42542230	Subsumes	HemOnc vocabulary	2026-10-13
+42542230	42542144	Is a	HemOnc vocabulary	2026-10-13
+42542144	42542230	Subsumes	HemOnc vocabulary	2026-10-13
+42542230	42542235	Is a	HemOnc vocabulary	2026-10-13
+42542235	42542230	Subsumes	HemOnc vocabulary	2026-10-13
+42542231	42542327	Is a	HemOnc vocabulary	2026-10-13
+42542327	42542231	Subsumes	HemOnc vocabulary	2026-10-13
+42542233	42542262	Is a	HemOnc vocabulary	2026-10-13
+42542262	42542233	Subsumes	HemOnc vocabulary	2026-10-13
+42542233	42542333	Is a	HemOnc vocabulary	2026-10-13
+42542333	42542233	Subsumes	HemOnc vocabulary	2026-10-13
+42542234	42542332	Is a	HemOnc vocabulary	2026-10-13
+42542332	42542234	Subsumes	HemOnc vocabulary	2026-10-13
+42542235	42542342	Is a	HemOnc vocabulary	2026-10-13
+42542342	42542235	Subsumes	HemOnc vocabulary	2026-10-13
+42542237	42542323	Is a	HemOnc vocabulary	2026-10-13
+42542323	42542237	Subsumes	HemOnc vocabulary	2026-10-13
+42542238	42542277	Is a	HemOnc vocabulary	2026-10-13
+42542277	42542238	Subsumes	HemOnc vocabulary	2026-10-13
+42542238	42542334	Is a	HemOnc vocabulary	2026-10-13
+42542334	42542238	Subsumes	HemOnc vocabulary	2026-10-13
+42542239	37561117	Is a	HemOnc vocabulary	2026-10-13
+37561117	42542239	Subsumes	HemOnc vocabulary	2026-10-13
+42542239	42542315	Is a	HemOnc vocabulary	2026-10-13
+42542315	42542239	Subsumes	HemOnc vocabulary	2026-10-13
+42542240	42542312	Is a	HemOnc vocabulary	2026-10-13
+42542312	42542240	Subsumes	HemOnc vocabulary	2026-10-13
+42542241	42542303	Is a	HemOnc vocabulary	2026-10-13
+42542303	42542241	Subsumes	HemOnc vocabulary	2026-10-13
+42542241	42542310	Is a	HemOnc vocabulary	2026-10-13
+42542310	42542241	Subsumes	HemOnc vocabulary	2026-10-13
+42542241	42542312	Is a	HemOnc vocabulary	2026-10-13
+42542312	42542241	Subsumes	HemOnc vocabulary	2026-10-13
+42542242	42542331	Is a	HemOnc vocabulary	2026-10-13
+42542331	42542242	Subsumes	HemOnc vocabulary	2026-10-13
+42542243	42542178	Is a	HemOnc vocabulary	2026-10-13
+42542178	42542243	Subsumes	HemOnc vocabulary	2026-10-13
+42542243	42542306	Is a	HemOnc vocabulary	2026-10-13
+42542306	42542243	Subsumes	HemOnc vocabulary	2026-10-13
+42542244	37557338	Is a	HemOnc vocabulary	2026-10-13
+37557338	42542244	Subsumes	HemOnc vocabulary	2026-10-13
+42542244	42542317	Is a	HemOnc vocabulary	2026-10-13
+42542317	42542244	Subsumes	HemOnc vocabulary	2026-10-13
+42542245	42542330	Is a	HemOnc vocabulary	2026-10-13
+42542330	42542245	Subsumes	HemOnc vocabulary	2026-10-13
+42542246	42542235	Is a	HemOnc vocabulary	2026-10-13
+42542235	42542246	Subsumes	HemOnc vocabulary	2026-10-13
+42542247	42542310	Is a	HemOnc vocabulary	2026-10-13
+42542310	42542247	Subsumes	HemOnc vocabulary	2026-10-13
+42542248	42542320	Is a	HemOnc vocabulary	2026-10-13
+42542320	42542248	Subsumes	HemOnc vocabulary	2026-10-13
+42542249	42542312	Is a	HemOnc vocabulary	2026-10-13
+42542312	42542249	Subsumes	HemOnc vocabulary	2026-10-13
+42542250	42542322	Is a	HemOnc vocabulary	2026-10-13
+42542322	42542250	Subsumes	HemOnc vocabulary	2026-10-13
+42542251	905780	Is a	HemOnc vocabulary	2026-10-13
+905780	42542251	Subsumes	HemOnc vocabulary	2026-10-13
+42542255	42542126	Is a	HemOnc vocabulary	2026-10-13
+42542126	42542255	Subsumes	HemOnc vocabulary	2026-10-13
+42542256	42542126	Is a	HemOnc vocabulary	2026-10-13
+42542126	42542256	Subsumes	HemOnc vocabulary	2026-10-13
+42542262	42542335	Is a	HemOnc vocabulary	2026-10-13
+42542335	42542262	Subsumes	HemOnc vocabulary	2026-10-13
+42542263	42542141	Is a	HemOnc vocabulary	2026-10-13
+42542141	42542263	Subsumes	HemOnc vocabulary	2026-10-13
+42542264	42542302	Is a	HemOnc vocabulary	2026-10-13
+42542302	42542264	Subsumes	HemOnc vocabulary	2026-10-13
+42542265	42542145	Is a	HemOnc vocabulary	2026-10-13
+42542145	42542265	Subsumes	HemOnc vocabulary	2026-10-13
+42542266	42542145	Is a	HemOnc vocabulary	2026-10-13
+42542145	42542266	Subsumes	HemOnc vocabulary	2026-10-13
+42542268	42542145	Is a	HemOnc vocabulary	2026-10-13
+42542145	42542268	Subsumes	HemOnc vocabulary	2026-10-13
+42542269	42542145	Is a	HemOnc vocabulary	2026-10-13
+42542145	42542269	Subsumes	HemOnc vocabulary	2026-10-13
+42542272	42542324	Is a	HemOnc vocabulary	2026-10-13
+42542324	42542272	Subsumes	HemOnc vocabulary	2026-10-13
+42542274	42542302	Is a	HemOnc vocabulary	2026-10-13
+42542302	42542274	Subsumes	HemOnc vocabulary	2026-10-13
+42542275	42542302	Is a	HemOnc vocabulary	2026-10-13
+42542302	42542275	Subsumes	HemOnc vocabulary	2026-10-13
+42542276	42542302	Is a	HemOnc vocabulary	2026-10-13
+42542302	42542276	Subsumes	HemOnc vocabulary	2026-10-13
+42542277	42542305	Is a	HemOnc vocabulary	2026-10-13
+42542305	42542277	Subsumes	HemOnc vocabulary	2026-10-13
+42542283	42542199	Is a	HemOnc vocabulary	2026-10-13
+42542199	42542283	Subsumes	HemOnc vocabulary	2026-10-13
+42542284	42542199	Is a	HemOnc vocabulary	2026-10-13
+42542199	42542284	Subsumes	HemOnc vocabulary	2026-10-13
+42542285	42542302	Is a	HemOnc vocabulary	2026-10-13
+42542302	42542285	Subsumes	HemOnc vocabulary	2026-10-13
+42542288	42542211	Is a	HemOnc vocabulary	2026-10-13
+42542211	42542288	Subsumes	HemOnc vocabulary	2026-10-13
+42542289	42542211	Is a	HemOnc vocabulary	2026-10-13
+42542211	42542289	Subsumes	HemOnc vocabulary	2026-10-13
+42542290	42542211	Is a	HemOnc vocabulary	2026-10-13
+42542211	42542290	Subsumes	HemOnc vocabulary	2026-10-13
+42542291	42542211	Is a	HemOnc vocabulary	2026-10-13
+42542211	42542291	Subsumes	HemOnc vocabulary	2026-10-13
+42542293	42542302	Is a	HemOnc vocabulary	2026-10-13
+42542302	42542293	Subsumes	HemOnc vocabulary	2026-10-13
+42542295	42542243	Is a	HemOnc vocabulary	2026-10-13
+42542243	42542295	Subsumes	HemOnc vocabulary	2026-10-13
+42542296	42542308	Is a	HemOnc vocabulary	2026-10-13
+42542308	42542296	Subsumes	HemOnc vocabulary	2026-10-13
+42542301	42542302	Is a	HemOnc vocabulary	2026-10-13
+42542302	42542301	Subsumes	HemOnc vocabulary	2026-10-13
+42542302	37557994	Is a	HemOnc vocabulary	2026-10-13
+37557994	42542302	Subsumes	HemOnc vocabulary	2026-10-13
+42542303	42542335	Is a	HemOnc vocabulary	2026-10-13
+42542335	42542303	Subsumes	HemOnc vocabulary	2026-10-13
+42542304	42542335	Is a	HemOnc vocabulary	2026-10-13
+42542335	42542304	Subsumes	HemOnc vocabulary	2026-10-13
+42542305	42542341	Is a	HemOnc vocabulary	2026-10-13
+42542341	42542305	Subsumes	HemOnc vocabulary	2026-10-13
+42542306	42542302	Is a	HemOnc vocabulary	2026-10-13
+42542302	42542306	Subsumes	HemOnc vocabulary	2026-10-13
+42542307	42542317	Is a	HemOnc vocabulary	2026-10-13
+42542317	42542307	Subsumes	HemOnc vocabulary	2026-10-13
+42542307	42542338	Is a	HemOnc vocabulary	2026-10-13
+42542338	42542307	Subsumes	HemOnc vocabulary	2026-10-13
+42542308	42542302	Is a	HemOnc vocabulary	2026-10-13
+42542302	42542308	Subsumes	HemOnc vocabulary	2026-10-13
+42542309	37557471	Is a	HemOnc vocabulary	2026-10-13
+37557471	42542309	Subsumes	HemOnc vocabulary	2026-10-13
+42542310	42542335	Is a	HemOnc vocabulary	2026-10-13
+42542335	42542310	Subsumes	HemOnc vocabulary	2026-10-13
+42542311	42542339	Is a	HemOnc vocabulary	2026-10-13
+42542339	42542311	Subsumes	HemOnc vocabulary	2026-10-13
+42542312	42542335	Is a	HemOnc vocabulary	2026-10-13
+42542335	42542312	Subsumes	HemOnc vocabulary	2026-10-13
+42542313	42542335	Is a	HemOnc vocabulary	2026-10-13
+42542335	42542313	Subsumes	HemOnc vocabulary	2026-10-13
+42542314	37557994	Is a	HemOnc vocabulary	2026-10-13
+37557994	42542314	Subsumes	HemOnc vocabulary	2026-10-13
+42542315	42542302	Is a	HemOnc vocabulary	2026-10-13
+42542302	42542315	Subsumes	HemOnc vocabulary	2026-10-13
+42542316	42542337	Is a	HemOnc vocabulary	2026-10-13
+42542337	42542316	Subsumes	HemOnc vocabulary	2026-10-13
+42542317	42542337	Is a	HemOnc vocabulary	2026-10-13
+42542337	42542317	Subsumes	HemOnc vocabulary	2026-10-13
+42542318	42542339	Is a	HemOnc vocabulary	2026-10-13
+42542339	42542318	Subsumes	HemOnc vocabulary	2026-10-13
+42542319	42542336	Is a	HemOnc vocabulary	2026-10-13
+42542336	42542319	Subsumes	HemOnc vocabulary	2026-10-13
+42542320	42542302	Is a	HemOnc vocabulary	2026-10-13
+42542302	42542320	Subsumes	HemOnc vocabulary	2026-10-13
+42542321	42542308	Is a	HemOnc vocabulary	2026-10-13
+42542308	42542321	Subsumes	HemOnc vocabulary	2026-10-13
+42542322	37557370	Is a	HemOnc vocabulary	2026-10-13
+37557370	42542322	Subsumes	HemOnc vocabulary	2026-10-13
+42542322	42542337	Is a	HemOnc vocabulary	2026-10-13
+42542337	42542322	Subsumes	HemOnc vocabulary	2026-10-13
+42542323	37561151	Is a	HemOnc vocabulary	2026-10-13
+37561151	42542323	Subsumes	HemOnc vocabulary	2026-10-13
+42542323	42542336	Is a	HemOnc vocabulary	2026-10-13
+42542336	42542323	Subsumes	HemOnc vocabulary	2026-10-13
+42542324	42542308	Is a	HemOnc vocabulary	2026-10-13
+42542308	42542324	Subsumes	HemOnc vocabulary	2026-10-13
+42542325	42542317	Is a	HemOnc vocabulary	2026-10-13
+42542317	42542325	Subsumes	HemOnc vocabulary	2026-10-13
+42542325	42542330	Is a	HemOnc vocabulary	2026-10-13
+42542330	42542325	Subsumes	HemOnc vocabulary	2026-10-13
+42542326	42542330	Is a	HemOnc vocabulary	2026-10-13
+42542330	42542326	Subsumes	HemOnc vocabulary	2026-10-13
+42542327	42542336	Is a	HemOnc vocabulary	2026-10-13
+42542336	42542327	Subsumes	HemOnc vocabulary	2026-10-13
+42542328	42542339	Is a	HemOnc vocabulary	2026-10-13
+42542339	42542328	Subsumes	HemOnc vocabulary	2026-10-13
+42542329	42542336	Is a	HemOnc vocabulary	2026-10-13
+42542336	42542329	Subsumes	HemOnc vocabulary	2026-10-13
+42542330	42542339	Is a	HemOnc vocabulary	2026-10-13
+42542339	42542330	Subsumes	HemOnc vocabulary	2026-10-13
+42542331	42542302	Is a	HemOnc vocabulary	2026-10-13
+42542302	42542331	Subsumes	HemOnc vocabulary	2026-10-13
+42542332	42542331	Is a	HemOnc vocabulary	2026-10-13
+42542331	42542332	Subsumes	HemOnc vocabulary	2026-10-13
+42542333	42542340	Is a	HemOnc vocabulary	2026-10-13
+42542340	42542333	Subsumes	HemOnc vocabulary	2026-10-13
+42542334	42542338	Is a	HemOnc vocabulary	2026-10-13
+42542338	42542334	Subsumes	HemOnc vocabulary	2026-10-13
+42542335	42542287	Is a	HemOnc vocabulary	2026-10-13
+42542287	42542335	Subsumes	HemOnc vocabulary	2026-10-13
+42542336	37557994	Is a	HemOnc vocabulary	2026-10-13
+37557994	42542336	Subsumes	HemOnc vocabulary	2026-10-13
+42542337	42542336	Is a	HemOnc vocabulary	2026-10-13
+42542336	42542337	Subsumes	HemOnc vocabulary	2026-10-13
+42542338	42542336	Is a	HemOnc vocabulary	2026-10-13
+42542336	42542338	Subsumes	HemOnc vocabulary	2026-10-13
+42542339	42542287	Is a	HemOnc vocabulary	2026-10-13
+42542287	42542339	Subsumes	HemOnc vocabulary	2026-10-13
+42542340	42542335	Is a	HemOnc vocabulary	2026-10-13
+42542335	42542340	Subsumes	HemOnc vocabulary	2026-10-13
+42542341	42542336	Is a	HemOnc vocabulary	2026-10-13
+42542336	42542341	Subsumes	HemOnc vocabulary	2026-10-13
+42542342	42542302	Is a	HemOnc vocabulary	2026-10-13
+42542302	42542342	Subsumes	HemOnc vocabulary	2026-10-13
+42542395	42542324	Is a	HemOnc vocabulary	2026-10-13
+42542324	42542395	Subsumes	HemOnc vocabulary	2026-10-13
+42542409	42542334	Is a	HemOnc vocabulary	2026-10-13
+42542334	42542409	Subsumes	HemOnc vocabulary	2026-10-13
+42542421	42542214	Is a	HemOnc vocabulary	2026-10-13
+42542214	42542421	Subsumes	HemOnc vocabulary	2026-10-13
+42542422	42542217	Is a	HemOnc vocabulary	2026-10-13
+42542217	42542422	Subsumes	HemOnc vocabulary	2026-10-13
+42542423	905780	Is a	HemOnc vocabulary	2026-10-13
+905780	42542423	Subsumes	HemOnc vocabulary	2026-10-13
+42542423	42542235	Is a	HemOnc vocabulary	2026-10-13
+42542235	42542423	Subsumes	HemOnc vocabulary	2026-10-13
+42542427	42542144	Is a	HemOnc vocabulary	2026-10-13
+42542144	42542427	Subsumes	HemOnc vocabulary	2026-10-13
+42542429	42542324	Is a	HemOnc vocabulary	2026-10-13
+42542324	42542429	Subsumes	HemOnc vocabulary	2026-10-13
+42542431	42542246	Is a	HemOnc vocabulary	2026-10-13
+42542246	42542431	Subsumes	HemOnc vocabulary	2026-10-13
+42542432	42542199	Is a	HemOnc vocabulary	2026-10-13
+42542199	42542432	Subsumes	HemOnc vocabulary	2026-10-13
+42542433	42542211	Is a	HemOnc vocabulary	2026-10-13
+42542211	42542433	Subsumes	HemOnc vocabulary	2026-10-13
+42542434	42542235	Is a	HemOnc vocabulary	2026-10-13
+42542235	42542434	Subsumes	HemOnc vocabulary	2026-10-13
+42542435	42542235	Is a	HemOnc vocabulary	2026-10-13
+42542235	42542435	Subsumes	HemOnc vocabulary	2026-10-13
+42542448	42542212	Is a	HemOnc vocabulary	2026-10-13
+42542212	42542448	Subsumes	HemOnc vocabulary	2026-10-13
+42542449	42542145	Is a	HemOnc vocabulary	2026-10-13
+42542145	42542449	Subsumes	HemOnc vocabulary	2026-10-13

@@ -28,7 +28,9 @@ concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	st
 905633	Amivantamab	HemOnc	Drug	Component	29753			2099-12-31		groundworkers concept_by_code	2026-10-13
 905634	Amivantamab monotherapy	HemOnc	Regimen	Regimen	29758	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 905636	Azacitidine oral	HemOnc	Drug	Component	29973			2099-12-31		groundworkers concept_by_code	2026-10-13
+905641	Acute myeloid leukemia pediatric	HemOnc	Condition	Condition	31848		2021-05-13	2099-12-31		groundworkers concept_get	2026-10-13
 905651	B-cell acute lymphoblastic leukemia pediatric	HemOnc	Condition	Condition	32320			2099-12-31		groundworkers concept_by_code	2026-10-13
+905654	BRCA Prostate cancer	HemOnc	Condition	Condition	32699		2021-05-13	2099-12-31		groundworkers concept_get	2026-10-13
 905661	Chronic myeloid leukemia pediatric	HemOnc	Condition	Condition	33893			2099-12-31		groundworkers concept_by_code	2026-10-13
 905668	Dostarlimab	HemOnc	Drug	Component	34976			2099-12-31		groundworkers concept_by_code	2026-10-13
 905669	Dostarlimab monotherapy	HemOnc	Regimen	Regimen	34981	S		2099-12-31		groundworkers concept_by_code	2026-10-13
@@ -39,6 +41,10 @@ concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	st
 905701	Loncastuximab tesirine monotherapy	HemOnc	Regimen	Regimen	53914	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 905708	Cisplatin and Gemcitabine (GC) and Camrelizumab	HemOnc	Regimen	Regimen	59045	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 905710	Dalpiciclib	HemOnc	Drug	Component	59131			2099-12-31		groundworkers concept_by_code	2026-10-13
+905713	ER|ERBB2 Breast cancer	HemOnc	Condition	Condition	60431		2021-02-24	2099-12-31		groundworkers concept_get	2026-10-13
+905720	Low-grade serous ovarian cancer	HemOnc	Condition	Condition	60907			2099-12-31		groundworkers concept_by_code	2026-10-13
+905723	Papillary renal cell carcinoma	HemOnc	Condition	Condition	61065		2021-02-24	2099-12-31		groundworkers concept_get	2026-10-13
+905726	Sarcomatoid renal cell carcinoma	HemOnc	Condition	Condition	61114		2021-02-24	2099-12-31		groundworkers concept_get	2026-10-13
 905727	Sintilimab	HemOnc	Drug	Component	61131			2099-12-31		groundworkers concept_by_code	2026-10-13
 905731	Tepotinib monotherapy	HemOnc	Regimen	Regimen	61163	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 905738	Iptacopan	HemOnc	Drug	Component	61269			2099-12-31		groundworkers concept_by_code	2026-10-13
@@ -47,10 +53,16 @@ concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	st
 905743	Pirtobrutinib	HemOnc	Drug	Component	61419			2099-12-31		groundworkers concept_by_code	2026-10-13
 905755	Low-grade glioma pediatric	HemOnc	Condition	Condition	61937			2099-12-31		groundworkers concept_by_code	2026-10-13
 905757	Sutimlimab	HemOnc	Drug	Component	61962			2099-12-31		groundworkers concept_by_code	2026-10-13
+905758	T-cell acute lymphoblastic leukemia pediatric	HemOnc	Condition	Condition	61964		2021-05-13	2099-12-31		groundworkers concept_get	2026-10-13
 905768	SVd	HemOnc	Regimen	Regimen	62486	S		2099-12-31		groundworkers concept_by_code	2026-10-13
+905773	MSI-H Colorectal cancer	HemOnc	Condition	Condition	63797		2021-06-11	2099-12-31		groundworkers concept_get	2026-10-13
 905776	Tislelizumab	HemOnc	Drug	Component	64463			2099-12-31		groundworkers concept_by_code	2026-10-13
 905777	Toripalimab	HemOnc	Drug	Component	64471			2099-12-31		groundworkers concept_by_code	2026-10-13
+905778	Pediatric hematologic neoplasm	HemOnc	Condition	Condition	65051		2021-09-06	2099-12-31		groundworkers concept_get	2026-10-13
+905779	Pediatric neurologic neoplasm	HemOnc	Condition	Condition	65052		2021-09-06	2099-12-31		groundworkers concept_get	2026-10-13
+905780	Pediatric solid tumor	HemOnc	Condition	Condition	65053		2021-09-06	2099-12-31		groundworkers concept_get	2026-10-13
 905786	Teclistamab	HemOnc	Drug	Component	65150			2099-12-31		groundworkers concept_by_code	2026-10-13
+905788	VHL Renal cell carcinoma	HemOnc	Condition	Condition	65176		2021-09-06	2099-12-31		groundworkers concept_get	2026-10-13
 905826	Autologous stem cell rescue	HemOnc	Procedure	Procedure	103294		2021-03-12	2099-12-31		groundworkers concept_get	2026-10-13
 905828	Cisplatin and Gemcitabine (GC) and Pembrolizumab	HemOnc	Regimen	Regimen	60461	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 911920	Capmatinib	HemOnc	Drug	Component	3231			2099-12-31		groundworkers concept_by_code	2026-10-13
@@ -68,18 +80,23 @@ concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	st
 911994	Dara-Kd	HemOnc	Regimen	Regimen	6547	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 911995	Durvalumab and Tremelimumab	HemOnc	Regimen	Regimen	7161	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 911998	Encorafenib and Cetuximab	HemOnc	Regimen	Regimen	7741	S		2099-12-31		groundworkers concept_by_code	2026-10-13
+912012	MET Non-small cell lung cancer	HemOnc	Condition	Condition	13094		2020-05-31	2099-12-31		groundworkers concept_get	2026-10-13
 912013	Olaparib and Bevacizumab	HemOnc	Regimen	Regimen	13258	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 912017	Pemigatinib	HemOnc	Drug	Component	13351			2099-12-31		groundworkers concept_by_code	2026-10-13
 912021	Ripretinib	HemOnc	Drug	Component	13651			2099-12-31		groundworkers concept_by_code	2026-10-13
 912024	Sacituzumab govitecan monotherapy	HemOnc	Regimen	Regimen	13710	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 912026	Selpercatinib	HemOnc	Drug	Component	13759			2099-12-31		groundworkers concept_by_code	2026-10-13
+912027	MALT lymphoma	HemOnc	Condition	Condition	13940		2020-12-07	2099-12-31		groundworkers concept_get	2026-10-13
 912033	Decitabine and cedazuridine	HemOnc	Drug	Component	14235			2099-12-31		groundworkers concept_by_code	2026-10-13
 912034	Decitabine and cedazuridine monotherapy	HemOnc	Regimen	Regimen	14236	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 912041	Camrelizumab	HemOnc	Drug	Component	14742			2099-12-31		groundworkers concept_by_code	2026-10-13
 912042	Lenalidomide and Tafasitamab	HemOnc	Regimen	Regimen	14816	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 912057	Relugolix	HemOnc	Drug	Component	18352			2099-12-31		groundworkers concept_by_code	2026-10-13
 912058	Dara-CyBorD	HemOnc	Regimen	Regimen	18361	S		2099-12-31		groundworkers concept_by_code	2026-10-13
+912059	RET Non-small cell lung cancer	HemOnc	Condition	Condition	18383		2020-09-04	2099-12-31		groundworkers concept_get	2026-10-13
+912060	RET Thyroid cancer	HemOnc	Condition	Condition	18389		2020-09-04	2099-12-31		groundworkers concept_get	2026-10-13
 912062	Selpercatinib monotherapy	HemOnc	Regimen	Regimen	18504	S		2099-12-31		groundworkers concept_by_code	2026-10-13
+912068	High tumor mutation burden malignancy	HemOnc	Condition	Condition	18799		2020-09-04	2099-12-31		groundworkers concept_get	2026-10-13
 912070	Trifluridine and tipiracil and Bevacizumab	HemOnc	Regimen	Regimen	18840	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 912075	Tepotinib	HemOnc	Drug	Component	19782			2099-12-31		groundworkers concept_by_code	2026-10-13
 912085	Lisocabtagene maraleucel	HemOnc	Drug	Component	21215			2099-12-31		groundworkers concept_by_code	2026-10-13
@@ -92,6 +109,8 @@ concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	st
 912115	Upper tract urothelial carcinoma	HemOnc	Condition	Condition	28039			2099-12-31		groundworkers concept_by_code	2026-10-13
 912132	Cabozantinib and Nivolumab	HemOnc	Regimen	Regimen	32918	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 912148	Flumatinib	HemOnc	Drug	Component	38662			2099-12-31		groundworkers concept_by_code	2026-10-13
+912153	ERBB2 Gastric cancer	HemOnc	Condition	Condition	43987		2021-01-24	2099-12-31		groundworkers concept_get	2026-10-13
+912162	NPM1 Acute myeloid leukemia	HemOnc	Condition	Condition	58170		2020-02-28	2099-12-31		groundworkers concept_get	2026-10-13
 912179	Margetuximab	HemOnc	Drug	Component	59291			2099-12-31		groundworkers concept_by_code	2026-10-13
 912193	Sotorasib	HemOnc	Drug	Component	59461			2099-12-31		groundworkers concept_by_code	2026-10-13
 912198	Tyrosine kinase inhibitor	HemOnc	Drug	Component Class	59504		2021-01-24	2099-12-31		groundworkers concept_get	2026-10-13
@@ -116,10 +135,12 @@ concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	st
 1524945	Serplulimab	HemOnc	Drug	Component	35064			2099-12-31		groundworkers concept_by_code	2026-10-13
 1524954	Sugemalimab	HemOnc	Drug	Component	36080			2099-12-31		groundworkers concept_by_code	2026-10-13
 1524963	AC-TH (Docetaxel)	HemOnc	Regimen	Regimen	37198	S		2099-12-31		groundworkers concept_by_code	2026-10-13
+1524970	RAS Colon cancer	HemOnc	Condition	Condition	37262		2022-06-29	2099-12-31		groundworkers concept_get	2026-10-13
 1524972	AC-TH (Paclitaxel)	HemOnc	Regimen	Regimen	37298	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 1524978	PEComa	HemOnc	Condition	Condition	37829			2099-12-31		groundworkers concept_by_code	2026-10-13
 1524994	ADT, Darolutamide, Docetaxel	HemOnc	Regimen	Regimen	39183	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 1525003	Sirolimus protein-bound particles	HemOnc	Drug	Component	43485			2099-12-31		groundworkers concept_by_code	2026-10-13
+1525006	Appendiceal tumor	HemOnc	Condition	Condition	43755		2022-06-26	2099-12-31		groundworkers concept_get	2026-10-13
 1525008	Subependymal giant cell astrocytoma	HemOnc	Condition	Condition	45070			2099-12-31		groundworkers concept_by_code	2026-10-13
 1525012	Adagrasib	HemOnc	Drug	Component	45753			2099-12-31		groundworkers concept_by_code	2026-10-13
 1525015	Tebentafusp	HemOnc	Drug	Component	47700			2099-12-31		groundworkers concept_by_code	2026-10-13
@@ -128,9 +149,12 @@ concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	st
 1525023	Zimberelimab	HemOnc	Drug	Component	48632			2099-12-31		groundworkers concept_by_code	2026-10-13
 1525033	Azacitidine and Ivosidenib	HemOnc	Regimen	Regimen	49832	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 1525037	Ciltacabtagene autoleucel	HemOnc	Drug	Component	51229			2099-12-31		groundworkers concept_by_code	2026-10-13
+1525049	ERBB2 Non-small cell lung cancer	HemOnc	Condition	Condition	52958			2099-12-31		groundworkers concept_by_code	2026-10-13
 1525057	Mitapivat	HemOnc	Drug	Component	58331			2099-12-31		groundworkers concept_by_code	2026-10-13
+1525061	Osteosarcoma pediatric	HemOnc	Condition	Condition	58969		2022-03-28	2099-12-31		groundworkers concept_get	2026-10-13
 1525062	Pola-R-CHP	HemOnc	Regimen	Regimen	59028	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 1525063	Nivolumab and relatlimab	HemOnc	Drug	Component	59120			2099-12-31		groundworkers concept_by_code	2026-10-13
+1525065	Ewing sarcoma pediatric	HemOnc	Condition	Condition	59193		2022-09-08	2099-12-31		groundworkers concept_get	2026-10-13
 1525074	Cisplatin and Gemcitabine (GC) and Nivolumab	HemOnc	Regimen	Regimen	59984	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 1525079	Clear cell renal cell carcinoma	HemOnc	Condition	Condition	60013			2099-12-31		groundworkers concept_by_code	2026-10-13
 1525118	Cisplatin and Gemcitabine (GC) and Toripalimab	HemOnc	Regimen	Regimen	65364	S		2099-12-31		groundworkers concept_by_code	2026-10-13
@@ -139,13 +163,16 @@ concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	st
 1525130	Epcoritamab	HemOnc	Drug	Component	66092			2099-12-31		groundworkers concept_by_code	2026-10-13
 1525135	Juvenile myelomonocytic leukemia	HemOnc	Condition	Condition	66360			2099-12-31		groundworkers concept_by_code	2026-10-13
 1525149	Lutetium Lu 177 vipivotide tetraxetan	HemOnc	Drug	Component	68645			2099-12-31		groundworkers concept_by_code	2026-10-13
+1525152	Malignant peritoneal mesothelioma	HemOnc	Condition	Condition	68878		2022-06-26	2099-12-31		groundworkers concept_get	2026-10-13
 1525153	Malignant pleural mesothelioma	HemOnc	Condition	Condition	68879			2099-12-31		groundworkers concept_by_code	2026-10-13
 1525154	Thyroid cancer medullary	HemOnc	Condition	Condition	68942			2099-12-31		groundworkers concept_by_code	2026-10-13
 1525161	Non-Hodgkin lymphoma pediatric	HemOnc	Condition	Condition	69527			2099-12-31		groundworkers concept_by_code	2026-10-13
 1525167	Rituximab-arrx	HemOnc	Drug	Component	70306			2099-12-31		groundworkers concept_by_code	2026-10-13
+1525169	Non-clear cell renal cell carcinoma	HemOnc	Condition	Condition	71028		2022-06-26	2099-12-31		groundworkers concept_get	2026-10-13
 1525170	Tisotumab vedotin	HemOnc	Drug	Component	71307			2099-12-31		groundworkers concept_by_code	2026-10-13
 1525171	Tisotumab vedotin monotherapy	HemOnc	Regimen	Regimen	71308	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 1525179	Perioperative therapy	HemOnc	Procedure	Context	72377		2022-06-26	2099-12-31		groundworkers concept_get	2026-10-13
+1525181	Rhabdomyosarcoma pediatric	HemOnc	Condition	Condition	72551		2022-06-26	2099-12-31		groundworkers concept_get	2026-10-13
 1525182	Rilzabrutinib	HemOnc	Drug	Component	72560			2099-12-31		groundworkers concept_by_code	2026-10-13
 1525201	Lanreotide LAR	HemOnc	Drug	Component	75279			2099-12-31		groundworkers concept_by_code	2026-10-13
 1525204	BCR::ABL1 B-cell acute lymphoblastic leukemia pediatric	HemOnc	Condition	Condition	75336			2099-12-31		groundworkers concept_by_code	2026-10-13
@@ -838,6 +865,7 @@ concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	st
 37557191	Abiraterone and Olaparib	HemOnc	Regimen	Regimen	112451	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 37557215	High-grade B-cell lymphoma	HemOnc	Condition	Condition	112856			2099-12-31		groundworkers concept_by_code	2026-10-13
 37557220	Penpulimab monotherapy	HemOnc	Regimen	Regimen	113976	S		2099-12-31		groundworkers concept_by_code	2026-10-13
+37557222	Malignant solid neoplasm RET-mutated	HemOnc	Condition	Condition	114055		2023-03-24	2099-12-31		groundworkers concept_get	2026-10-13
 37557224	Toripalimab monotherapy	HemOnc	Regimen	Regimen	114203	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 37557225	Tucatinib and Trastuzumab	HemOnc	Regimen	Regimen	114220	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 37557233	Lifileuecel	HemOnc	Drug	Component	114432			2099-12-31		groundworkers concept_by_code	2026-10-13
@@ -846,14 +874,19 @@ concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	st
 37557237	Tabelecleucel	HemOnc	Drug	Component	114494			2099-12-31		groundworkers concept_by_code	2026-10-13
 37557238	Tabelecleucel monotherapy	HemOnc	Regimen	Regimen	114495	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 37557250	Iobenguane I 131	HemOnc	Drug	Component	115124			2099-12-31		groundworkers concept_by_code	2026-10-13
+37557257	Thrombotic microangiopathy	HemOnc	Condition	Condition	115502		2023-04-12	2099-12-31		groundworkers concept_get	2026-10-13
 37557264	Adagrasib and Cetuximab	HemOnc	Regimen	Regimen	116565	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 37557265	Angiosarcoma	HemOnc	Condition	Condition	116594			2099-12-31		groundworkers concept_by_code	2026-10-13
 37557271	Carboplatin and Paclitaxel (CP) and Dostarlimab	HemOnc	Regimen	Regimen	116702	S		2099-12-31		groundworkers concept_by_code	2026-10-13
+37557292	Dermatofibrosarcoma protuberans	HemOnc	Condition	Condition	116871		2023-05-25	2099-12-31		groundworkers concept_get	2026-10-13
 37557299	Epcoritamab monotherapy	HemOnc	Regimen	Regimen	117017	S		2099-12-31		groundworkers concept_by_code	2026-10-13
+37557338	Aggressive non-Hodgkin lymphoma	HemOnc	Condition	Condition	119858		2023-08-19	2099-12-31		groundworkers concept_get	2026-10-13
 37557340	Alveolar soft part sarcoma	HemOnc	Condition	Condition	119873			2099-12-31		groundworkers concept_by_code	2026-10-13
+37557370	B-cell lymphoma	HemOnc	Condition	Condition	119932		2023-08-19	2099-12-31		groundworkers concept_get	2026-10-13
 37557374	Bevacizumab-maly	HemOnc	Drug	Component	119949			2099-12-31		groundworkers concept_by_code	2026-10-13
 37557379	Biliary tract cancer	HemOnc	Condition	Condition	119957			2099-12-31		groundworkers concept_by_code	2026-10-13
 37557382	Borofalan-10B	HemOnc	Drug	Component	119973			2099-12-31		groundworkers concept_by_code	2026-10-13
+37557414	Craniopharyngioma	HemOnc	Condition	Condition	120073		2023-08-19	2099-12-31		groundworkers concept_get	2026-10-13
 37557418	Daratumumab and vorhyaluronidase	HemOnc	Drug	Component	120089			2099-12-31		groundworkers concept_by_code	2026-10-13
 37557419	Darinaparsin	HemOnc	Drug	Component	120090			2099-12-31		groundworkers concept_by_code	2026-10-13
 37557427	Donafenib	HemOnc	Drug	Component	120118			2099-12-31		groundworkers concept_by_code	2026-10-13
@@ -865,6 +898,7 @@ concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	st
 37557471	Malignant glioma	HemOnc	Condition	Condition	120508			2099-12-31		groundworkers concept_by_code	2026-10-13
 37557475	Mifamurtide	HemOnc	Drug	Component	120531			2099-12-31		groundworkers concept_by_code	2026-10-13
 37557477	Miriplatin	HemOnc	Drug	Component	120535			2099-12-31		groundworkers concept_by_code	2026-10-13
+37557478	Neuroendocrine carcinoma	HemOnc	Condition	Condition	120584		2023-08-19	2099-12-31		groundworkers concept_get	2026-10-13
 37557479	Niraparib and abiraterone	HemOnc	Drug	Component	120586			2099-12-31		groundworkers concept_by_code	2026-10-13
 37557480	Nirogacestat	HemOnc	Drug	Component	120587			2099-12-31		groundworkers concept_by_code	2026-10-13
 37557483	Olverembatinib	HemOnc	Drug	Component	120610			2099-12-31		groundworkers concept_by_code	2026-10-13
@@ -872,6 +906,7 @@ concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	st
 37557521	Tirabrutinib	HemOnc	Drug	Component	120817			2099-12-31		groundworkers concept_by_code	2026-10-13
 37557528	Valemetostat	HemOnc	Drug	Component	120865			2099-12-31		groundworkers concept_by_code	2026-10-13
 37557533	Vorasidenib	HemOnc	Drug	Component	120883			2099-12-31		groundworkers concept_by_code	2026-10-13
+37557545	Acute lymphoblastic leukemia infant	HemOnc	Condition	Condition	121032		2023-11-17	2099-12-31		groundworkers concept_get	2026-10-13
 37557563	Alkylating agent-containing regimen	HemOnc	Drug	Regimen Class	121087		2023-11-17	2099-12-31		groundworkers concept_get	2026-10-13
 37557580	Anlotinib	HemOnc	Drug	Component	121127			2099-12-31		groundworkers concept_by_code	2026-10-13
 37557592	Anti-CD20 antibody-containing regimen	HemOnc	Drug	Regimen Class	121143		2023-11-17	2099-12-31		groundworkers concept_get	2026-10-13
@@ -892,7 +927,9 @@ concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	st
 37557886	Gemcitabine-containing regimen	HemOnc	Drug	Regimen Class	122505		2023-11-17	2099-12-31		groundworkers concept_get	2026-10-13
 37557894	GnRH analog	HemOnc	Drug	Component Class	122542		2023-11-17	2099-12-31		groundworkers concept_get	2026-10-13
 37557905	Hepatic veno-occlusive disease	HemOnc	Condition	Condition	122736			2099-12-31		groundworkers concept_by_code	2026-10-13
+37557922	IDH Myelodysplastic syndrome	HemOnc	Condition	Condition	123215		2023-11-17	2099-12-31		groundworkers concept_get	2026-10-13
 37557960	KMT2A Acute lymphoblastic leukemia infant	HemOnc	Condition	Condition	123646			2099-12-31		groundworkers concept_by_code	2026-10-13
+37557961	KRAS Colorectal cancer	HemOnc	Condition	Condition	123676		2023-11-17	2099-12-31		groundworkers concept_get	2026-10-13
 37557968	Lazertinib	HemOnc	Drug	Component	123749			2099-12-31		groundworkers concept_by_code	2026-10-13
 37557994	Malignant neoplasm	HemOnc	Condition	Condition	124482			2099-12-31		groundworkers concept_by_code	2026-10-13
 37558002	Melphalan for Injection-Hepatic Delivery System	HemOnc	Drug	Component	124558			2099-12-31		groundworkers concept_by_code	2026-10-13
@@ -931,6 +968,8 @@ concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	st
 37561027	Congenital thrombotic thrombocytopenic purpura	HemOnc	Condition	Condition	139953			2099-12-31		groundworkers concept_by_code	2026-10-13
 37561055	Exagamglogene autotemcel	HemOnc	Drug	Component	140113			2099-12-31		groundworkers concept_by_code	2026-10-13
 37561086	Intensified conditioning regimens for cellular therapy	HemOnc	Procedure	Context	140708		2024-06-14	2099-12-31		groundworkers concept_get	2026-10-13
+37561117	Male genital cancer	HemOnc	Condition	Condition	140909		2024-06-14	2099-12-31		groundworkers concept_get	2026-10-13
+37561151	Myeloid neoplasm	HemOnc	Condition	Condition	141020		2024-06-14	2099-12-31		groundworkers concept_get	2026-10-13
 37561155	Nogapendekin alfa inbakicept	HemOnc	Drug	Component	141155			2099-12-31		groundworkers concept_by_code	2026-10-13
 37561167	Pyruvate kinase deficiency	HemOnc	Condition	Condition	141252			2099-12-31		groundworkers concept_by_code	2026-10-13
 37561189	Smoldering multiple myeloma	HemOnc	Condition	Condition	141403			2099-12-31		groundworkers concept_by_code	2026-10-13
@@ -969,8 +1008,10 @@ concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	st
 42542132	Anal cancer	HemOnc	Condition	Condition	558			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542133	Anaplastic glioma	HemOnc	Condition	Condition	559			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542134	Anaplastic large cell lymphoma	HemOnc	Condition	Condition	560			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542135	Antiphospholipid antibody syndrome	HemOnc	Condition	Condition	561		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542136	Aplastic anemia	HemOnc	Condition	Condition	562			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542137	Atypical hemolytic uremic syndrome	HemOnc	Condition	Condition	563			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542138	Autoimmune cytopenia	HemOnc	Condition	Condition	564		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542139	Warm autoimmune hemolytic anemia	HemOnc	Condition	Condition	565			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542141	B-cell acute lymphoblastic leukemia	HemOnc	Condition	Condition	567			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542142	Bladder cancer	HemOnc	Condition	Condition	569			2099-12-31		groundworkers concept_by_code	2026-10-13
@@ -981,6 +1022,7 @@ concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	st
 42542147	CNS carcinoma	HemOnc	Condition	Condition	574			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542148	CNS leukemia	HemOnc	Condition	Condition	575			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542149	CNS lymphoma	HemOnc	Condition	Condition	576			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542150	CNS melanoma	HemOnc	Condition	Condition	577		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542151	Castleman disease	HemOnc	Condition	Condition	578			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542152	Cervical cancer	HemOnc	Condition	Condition	579			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542153	Cholangiocarcinoma	HemOnc	Condition	Condition	580			2099-12-31		groundworkers concept_by_code	2026-10-13
@@ -998,36 +1040,51 @@ concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	st
 42542165	Esophageal cancer	HemOnc	Condition	Condition	595			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542166	Essential thrombocythemia	HemOnc	Condition	Condition	596			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542167	Ewing sarcoma	HemOnc	Condition	Condition	597			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542168	Extranodal NK- and T-cell lymphoma nasal type	HemOnc	Condition	Condition	598		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542169	Follicular lymphoma	HemOnc	Condition	Condition	599			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542170	Gallbladder cancer	HemOnc	Condition	Condition	600		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542171	Gastric cancer	HemOnc	Condition	Condition	601			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542172	Gastrointestinal stromal tumor	HemOnc	Condition	Condition	602			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542173	Gestational trophoblastic neoplasia	HemOnc	Condition	Condition	603			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542174	Glioblastoma	HemOnc	Condition	Condition	604			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542175	Graft versus host disease	HemOnc	Condition	Condition	605			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542176	HIV-associated lymphoma	HemOnc	Condition	Condition	606		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542177	Hairy cell leukemia	HemOnc	Condition	Condition	607			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542178	Head and neck cancer	HemOnc	Condition	Condition	608			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542179	Hemophagocytic lymphohistiocytosis	HemOnc	Condition	Condition	609			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542180	Heparin-induced thrombocytopenia	HemOnc	Condition	Condition	610			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542181	Hepatoblastoma	HemOnc	Condition	Condition	611		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542182	Hepatocellular carcinoma	HemOnc	Condition	Condition	612			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542183	Hereditary hemorrhagic telangiectasia	HemOnc	Condition	Condition	613		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542184	Classical Hodgkin lymphoma	HemOnc	Condition	Condition	614			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542185	Hodgkin lymphoma nodular lymphocyte-predominant	HemOnc	Condition	Condition	615		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542186	Hypereosinophilic syndrome	HemOnc	Condition	Condition	616			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542187	Immune thrombocytopenia	HemOnc	Condition	Condition	617			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542188	Inherited coagulopathy	HemOnc	Condition	Condition	618		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542189	Inherited thrombophilia	HemOnc	Condition	Condition	619		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542190	Langerhans cell histiocytosis	HemOnc	Condition	Condition	620			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542191	Large granular lymphocytic leukemia	HemOnc	Condition	Condition	621		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542192	Light-chain (AL) amyloidosis	HemOnc	Condition	Condition	622			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542193	Low-grade glioma	HemOnc	Condition	Condition	623			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542194	Mismatch repair deficient malignancy	HemOnc	Condition	Condition	624		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542195	Mantle cell lymphoma	HemOnc	Condition	Condition	625			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542196	Marginal zone lymphoma	HemOnc	Condition	Condition	626			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542197	Mediastinal gray-zone lymphoma	HemOnc	Condition	Condition	627		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542198	Medulloblastoma	HemOnc	Condition	Condition	628			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542199	Melanoma	HemOnc	Condition	Condition	629			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542200	Meningioma	HemOnc	Condition	Condition	630		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542201	Merkel cell carcinoma	HemOnc	Condition	Condition	631			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542202	Mesothelioma	HemOnc	Condition	Condition	632			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542203	Multiple myeloma	HemOnc	Condition	Condition	633			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542204	Myelodysplastic syndrome	HemOnc	Condition	Condition	634			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542205	Myelofibrosis	HemOnc	Condition	Condition	635			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542206	NET of unknown primary	HemOnc	Condition	Condition	636		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542207	NK- and T-cell lymphoma	HemOnc	Condition	Condition	637		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542208	Nasopharyngeal carcinoma	HemOnc	Condition	Condition	639			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542209	Neuroblastoma	HemOnc	Condition	Condition	640			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542210	Neuroendocrine tumor	HemOnc	Condition	Condition	641			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542211	Non-small cell lung cancer	HemOnc	Condition	Condition	642			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542212	Oropharyngeal cancer	HemOnc	Condition	Condition	643		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542213	Osteosarcoma	HemOnc	Condition	Condition	644			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542214	Ovarian cancer	HemOnc	Condition	Condition	645			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542215	POEMS syndrome	HemOnc	Condition	Condition	646			2099-12-31		groundworkers concept_by_code	2026-10-13
@@ -1035,8 +1092,10 @@ concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	st
 42542217	Pancreatic cancer	HemOnc	Condition	Condition	648			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542218	Paroxysmal nocturnal hemoglobinuria	HemOnc	Condition	Condition	649			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542219	Penile cancer	HemOnc	Condition	Condition	650			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542220	Periampullary adenocarcinoma	HemOnc	Condition	Condition	651		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542221	Peripheral T-cell lymphoma	HemOnc	Condition	Condition	652			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542222	Pheochromocytoma	HemOnc	Condition	Condition	653			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542223	Plasma cell leukemia	HemOnc	Condition	Condition	654		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542224	Polycythemia vera	HemOnc	Condition	Condition	655			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542225	Post-transplant lymphoproliferative disorder	HemOnc	Condition	Condition	656			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542226	Primary mediastinal B-cell lymphoma	HemOnc	Condition	Condition	657			2099-12-31		groundworkers concept_by_code	2026-10-13
@@ -1057,35 +1116,86 @@ concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	st
 42542243	Thyroid cancer	HemOnc	Condition	Condition	675			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542244	Transformed lymphoma	HemOnc	Condition	Condition	676			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542245	Uveal melanoma	HemOnc	Condition	Condition	677			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542246	Vascular sarcoma	HemOnc	Condition	Condition	678		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542247	Venous thromboembolism	HemOnc	Condition	Condition	679			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542248	Vulvar cancer	HemOnc	Condition	Condition	680			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542249	WHIM syndrome	HemOnc	Condition	Condition	681			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542250	Waldenstroem macroglobulinemia	HemOnc	Condition	Condition	682			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542251	Wilms tumor	HemOnc	Condition	Condition	683			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542255	FLT3 Acute myeloid leukemia	HemOnc	Condition	Condition	1891		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542256	IDH Acute myeloid leukemia	HemOnc	Condition	Condition	1919		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542257	Enfortumab vedotin	HemOnc	Drug	Component	3563			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542258	Enfortumab vedotin monotherapy	HemOnc	Regimen	Regimen	3566	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 42542260	Trastuzumab deruxtecan	HemOnc	Drug	Component	3590			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542261	Trastuzumab deruxtecan monotherapy	HemOnc	Regimen	Regimen	3594	S		2099-12-31		groundworkers concept_by_code	2026-10-13
+42542262	Hemolytic process	HemOnc	Condition	Condition	3931		2019-12-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542263	BCR::ABL1 B-cell acute lymphoblastic leukemia	HemOnc	Condition	Condition	4770			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542264	Malignant solid neoplasm BRAF-mutated	HemOnc	Condition	Condition	5136		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542265	BRCA Breast cancer	HemOnc	Condition	Condition	8259		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542266	ER Breast cancer	HemOnc	Condition	Condition	8281		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542268	ERBB2 Breast cancer	HemOnc	Condition	Condition	9391		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542269	TNBC Breast cancer	HemOnc	Condition	Condition	9786		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542272	RAS Colorectal cancer	HemOnc	Condition	Condition	15186		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542274	Malignant solid neoplasm EGFR-mutated	HemOnc	Condition	Condition	17427		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542275	Malignant solid neoplasm ERBB2-mutated	HemOnc	Condition	Condition	17430		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542276	Malignant solid neoplasm ERBB3-mutated	HemOnc	Condition	Condition	17442		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542277	Acute lymphoblastic leukemia	HemOnc	Condition	Condition	24309			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542280	Avapritinib	HemOnc	Drug	Component	25334			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542281	Avapritinib monotherapy	HemOnc	Regimen	Regimen	25348	S		2099-12-31		groundworkers concept_by_code	2026-10-13
+42542283	BRAF Melanoma	HemOnc	Condition	Condition	25811		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542284	NRAS Melanoma	HemOnc	Condition	Condition	25913		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542285	Malignant solid neoplasm NTRK-mutated	HemOnc	Condition	Condition	28569		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542287	Condition	HemOnc	Condition	Condition	30789		2020-01-21	2099-12-31		groundworkers concept_get	2026-10-13
 42542288	ALK Non-small cell lung cancer	HemOnc	Condition	Condition	30824			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542289	BRAF Non-small cell lung cancer	HemOnc	Condition	Condition	30898		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542290	EGFR Non-small cell lung cancer	HemOnc	Condition	Condition	30910		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542291	ROS1 Non-small cell lung cancer	HemOnc	Condition	Condition	30982			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542293	Malignant solid neoplasm SMO-mutated or PTCH-1-mutated (Hedgehog)	HemOnc	Condition	Condition	35988		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542295	BRAF Thyroid cancer	HemOnc	Condition	Condition	37885		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542296	Gastroesophageal cancer	HemOnc	Condition	Condition	38787		2020-01-21	2099-12-31		groundworkers concept_get	2026-10-13
 42542298	Allogeneic stem cells	HemOnc	Drug	Component	38881		2019-09-05	2099-12-31		groundworkers concept_get	2026-10-13
+42542301	Malignant breast neoplasm	HemOnc	Condition	Condition	44309		2020-01-21	2099-12-31		groundworkers concept_get	2026-10-13
 42542302	Malignant solid neoplasm	HemOnc	Condition	Condition	44382			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542303	Autoimmune hematologic condition	HemOnc	Condition	Condition	46070		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542304	Bleeding disorder	HemOnc	Condition	Condition	46071		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542305	Acute leukemia	HemOnc	Condition	Condition	46072			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542306	Endocrine cancer	HemOnc	Condition	Condition	46073		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542307	T-cell lymphoma	HemOnc	Condition	Condition	46075		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542308	Gastrointestinal cancer	HemOnc	Condition	Condition	46076			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542309	High-grade glioma	HemOnc	Condition	Condition	46077			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542310	Thrombotic disorder	HemOnc	Condition	Condition	46079		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542311	Bone marrow failure syndrome	HemOnc	Condition	Condition	46080		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542312	Cytopenia	HemOnc	Condition	Condition	46081		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542313	Complementopathy	HemOnc	Condition	Condition	46082		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542314	Pediatric cancer	HemOnc	Condition	Condition	46085		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542315	Genitourinary cancer	HemOnc	Condition	Condition	46086		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542316	Aggressive lymphoma	HemOnc	Condition	Condition	46088		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542317	Non-Hodgkin lymphoma	HemOnc	Condition	Condition	46089			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542318	CNS cancer	HemOnc	Condition	Condition	46090			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542319	Lymphoproliferative disorder	HemOnc	Condition	Condition	46091		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542320	Gynecologic cancer	HemOnc	Condition	Condition	46092		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542321	Hepatobiliary cancer	HemOnc	Condition	Condition	46093		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542322	Indolent lymphoma	HemOnc	Condition	Condition	46094			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542323	Myeloproliferative neoplasm	HemOnc	Condition	Condition	46095		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542324	Colorectal cancer	HemOnc	Condition	Condition	46096			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542325	Cutaneous lymphoma	HemOnc	Condition	Condition	46097		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542326	Non-melanoma skin cancer	HemOnc	Condition	Condition	46098			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542327	Histiocytosis	HemOnc	Condition	Condition	46099		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542328	Alloimmune hematologic condition	HemOnc	Condition	Condition	46100		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542329	Plasma cell dyscrasia	HemOnc	Condition	Condition	46101		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542330	Skin cancer	HemOnc	Condition	Condition	46102		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542331	Thoracic cancer	HemOnc	Condition	Condition	46103		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542332	Lung cancer	HemOnc	Condition	Condition	46104		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542333	Inherited hemoglobinopathy	HemOnc	Condition	Condition	46106			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542334	T-cell leukemia	HemOnc	Condition	Condition	46108		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542335	Classical hematologic condition	HemOnc	Condition	Condition	46208		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542336	Malignant hematologic neoplasm	HemOnc	Condition	Condition	46212			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542337	Lymphoma	HemOnc	Condition	Condition	46214			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542338	T-cell neoplasm	HemOnc	Condition	Condition	46216		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542339	Cross-disciplinary condition	HemOnc	Condition	Condition	46218		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
+42542340	Hemoglobinopathy	HemOnc	Condition	Condition	46220		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542341	Leukemia	HemOnc	Condition	Condition	46221			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542342	Sarcoma	HemOnc	Condition	Condition	46222		2019-05-27	2099-12-31		groundworkers concept_get	2026-10-13
 42542355	Docetaxel and Nintedanib	HemOnc	Regimen	Regimen	47638	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 42542359	FCR (SC Rituximab)	HemOnc	Regimen	Regimen	47670	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 42542361	FULV and Bevacizumab	HemOnc	Regimen	Regimen	47679	S		2099-12-31		groundworkers concept_by_code	2026-10-13
@@ -1095,10 +1205,12 @@ concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	st
 42542388	Trastuzumab-anns	HemOnc	Drug	Component	48338			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542389	Trastuzumab-dttb	HemOnc	Drug	Component	48339			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542390	Trastuzumab-qyyp	HemOnc	Drug	Component	48340			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542395	BRAF Colorectal cancer	HemOnc	Condition	Condition	49837		2019-12-22	2099-12-31		groundworkers concept_get	2026-10-13
 42542396	Carboplatin and Etoposide (CE) and Durvalumab	HemOnc	Regimen	Regimen	49859	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 42542398	Cisplatin and Etoposide (EP) and Durvalumab	HemOnc	Regimen	Regimen	49885	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 42542404	Erlotinib and Ramucirumab	HemOnc	Regimen	Regimen	49968	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 42542407	Pomalidomide and Dexamethasone (Pd)	HemOnc	Regimen	Regimen	50298	S		2099-12-31		groundworkers concept_by_code	2026-10-13
+42542409	T-cell prolymphocytic leukemia	HemOnc	Condition	Condition	50421		2019-12-22	2099-12-31		groundworkers concept_get	2026-10-13
 42542411	Zanubrutinib	HemOnc	Drug	Component	50482			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542412	Zanubrutinib monotherapy	HemOnc	Regimen	Regimen	50483	S		2099-12-31		groundworkers concept_by_code	2026-10-13
 42542413	Anthracycline-containing regimen	HemOnc	Drug	Regimen Class	51063		2020-01-25	2099-12-31		groundworkers concept_get	2026-10-13
@@ -1106,14 +1218,21 @@ concept_id	concept_name	vocabulary_id	domain_id	concept_class_id	concept_code	st
 42542415	Irinotecan-containing regimen	HemOnc	Drug	Regimen Class	51124		2020-01-25	2099-12-31		groundworkers concept_get	2026-10-13
 42542417	Platinum doublet	HemOnc	Drug	Regimen Class	51164		2020-01-25	2099-12-31		groundworkers concept_get	2026-10-13
 42542420	Asciminib	HemOnc	Drug	Component	53780			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542421	HRD Ovarian cancer	HemOnc	Condition	Condition	53793		2020-02-16	2099-12-31		groundworkers concept_get	2026-10-13
+42542422	BRCA Pancreatic cancer	HemOnc	Condition	Condition	53794		2020-02-16	2099-12-31		groundworkers concept_get	2026-10-13
 42542423	Epithelioid sarcoma	HemOnc	Condition	Condition	53861			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542427	Giant-cell tumor of bone	HemOnc	Condition	Condition	53894			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542429	ERBB2 Colorectal cancer	HemOnc	Condition	Condition	53910		2020-02-16	2099-12-31		groundworkers concept_get	2026-10-13
 42542431	Kaposi sarcoma	HemOnc	Condition	Condition	54036			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542432	KIT Melanoma	HemOnc	Condition	Condition	54039		2020-02-16	2099-12-31		groundworkers concept_get	2026-10-13
+42542433	KRAS Non-small cell lung cancer	HemOnc	Condition	Condition	54044		2020-02-16	2099-12-31		groundworkers concept_get	2026-10-13
 42542434	Leiomyosarcoma	HemOnc	Condition	Condition	54053			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542435	Liposarcoma	HemOnc	Condition	Condition	54056			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542436	Luspatercept	HemOnc	Drug	Component	54062			2099-12-31		groundworkers concept_by_code	2026-10-13
 42542440	Rituximab-containing regimen	HemOnc	Drug	Regimen Class	54181		2020-02-16	2099-12-31		groundworkers concept_get	2026-10-13
 42542441	Tazemetostat	HemOnc	Drug	Component	54224			2099-12-31		groundworkers concept_by_code	2026-10-13
+42542448	HPV Oropharyngeal cancer	HemOnc	Condition	Condition	83479		2019-07-22	2099-12-31		groundworkers concept_get	2026-10-13
+42542449	PIK3CA Breast cancer	HemOnc	Condition	Condition	93630		2019-07-22	2099-12-31		groundworkers concept_get	2026-10-13
 42622644	Non-muscle invasive bladder cancer	MedDRA	Condition	LLT	10087211		2022-03-01	2099-12-31		groundworkers concept_get	2026-10-13
 43021226	Hypersensitivity condition	SNOMED	Condition	Clinical Finding	473010000	S	2013-01-31	2099-12-31		groundworkers concept_get	2026-10-13
 44791967	Tumour hormone receptor status	SNOMED	Observation	Observable Entity	310871000000100	S	2008-04-01	2099-12-31		groundworkers concept_get	2026-10-13

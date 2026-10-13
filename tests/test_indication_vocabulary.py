@@ -442,3 +442,44 @@ def test_lint_reports_a_scalar_term_without_a_unit_and_a_term_with_nothing(copy)
 
     rewrite(copy, "criterion_term", empty)
     assert any("no concept, number or text" in f for f in lint_failures(copy))
+
+
+NSCLC = 42542211
+EGFR_NSCLC = 42542290
+
+
+def test_hemonc_condition_hierarchy_rolls_up_through_existing_relationships(vocab):
+    assert EGFR_NSCLC in vocab.descendants(NSCLC)
+    assert NSCLC in vocab.ancestors(EGFR_NSCLC)
+    rows = vocab.table("existing_relationships")
+    assert rows and {r["relationship_id"] for r in rows} == {"Is a", "Subsumes"}
+    assert {r["source"] for r in rows} == {"HemOnc vocabulary"}
+    assert all(
+        vocab.concept(int(r["concept_id_1"])).concept_class_id == "Condition"
+        for r in rows
+    )
+
+
+def test_lint_reports_an_existing_relationship_with_a_missing_reverse_or_endpoint(copy):
+    rewrite(copy, "existing_relationships", lambda rows: rows[1:])
+    assert any("no reverse row" in f for f in lint_failures(copy))
+
+    shutil.rmtree(copy)
+    shutil.copytree(data_directory(), copy)
+    rewrite(
+        copy,
+        "existing_relationships",
+        lambda rows: (
+            rows
+            + [
+                {
+                    "concept_id_1": "2000000001",
+                    "concept_id_2": "42542211",
+                    "relationship_id": "Is a",
+                    "source": "x",
+                    "verified_on": "",
+                }
+            ]
+        ),
+    )
+    assert any("touches a local concept" in f for f in lint_failures(copy))

@@ -1,6 +1,6 @@
 """Generate the local indication vocabulary tables from the live indications and the verified evidence.
 
-    HEMONC_INDICATIONS_DATABASE_URL=postgresql+psycopg://hemonc:hemonc@localhost:5432/hemonc_alchemy?options=-csearch_path%3Dpublic,omop \
+    HEMONC_VOCAB_SCHEMA=omop HEMONC_INDICATIONS_DATABASE_URL=postgresql+psycopg://hemonc:hemonc@localhost:5432/hemonc_alchemy?options=-csearch_path%3Dpublic,omop \
         uv run python scripts/indication_vocabulary/build.py
 
 Reads evidence/*.tsv (existing-concept lookups, each id re-checked through groundworkers) and writes
@@ -18,8 +18,11 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from sqlalchemy import create_engine, text
+from sqlalchemy.orm import Session
 
+from hemonc_alchemy.integrations.omop.schema import schema_aware_bind
 from hemonc_alchemy.model import enums as model_enums
+from hemonc_alchemy.toolkit.core.condition_targets import condition_parents
 from hemonc_alchemy.toolkit.core.indication_vocabulary.loader import (
     normalise_source_value,
 )
@@ -568,6 +571,22 @@ def fetch(
     return rows, children, codes
 
 
+def condition_hierarchy(
+    engine, conditions: dict[str, tuple[int, str, str]]
+) -> list[tuple[int, int]]:
+    """Every HemOnc Condition Is a edge as concept ids, so a patient condition rolls up to broader indications."""
+    schema = os.environ.get("HEMONC_VOCAB_SCHEMA")
+    bind = schema_aware_bind(engine, {"vocab": schema} if schema else None)
+    with Session(bind) as session:
+        parents = condition_parents(session)
+    return sorted(
+        (conditions[str(child)][0], conditions[str(parent)][0])
+        for child, found in parents.items()
+        for parent in found
+        if str(child) in conditions and str(parent) in conditions
+    )
+
+
 def split_pipe(value: str | None) -> list[str]:
     return [p.strip() for p in (value or "").split("|") if p.strip()]
 
@@ -751,6 +770,8 @@ class Vocabulary(Builder):
         self.state_meta: dict[int, dict[str, object]] = {}
         self.mapping_rows: dict[tuple[str, str, str], dict[str, object]] = {}
         self.gene_case: dict[str, str] = {}
+        self.condition_edges: list[tuple[int, int]] = []
+        self.skipped_condition_edges = 0
         self.static()
 
     # ---- static concepts
@@ -1906,6 +1927,13 @@ def main() -> None:
     rows, ch, anchors = fetch(engine)
     ex = Existing()
     vocab = Vocabulary(ex, anchors)
+    edges = condition_hierarchy(engine, anchors["Condition"])
+    vocab.condition_edges = [
+        (child, parent)
+        for child, parent in edges
+        if ex.usable(child) and ex.usable(parent)
+    ]
+    vocab.skipped_condition_edges = len(edges) - len(vocab.condition_edges)
     for r in rows:
         for name in split_pipe(str(r["biomarker"] or "")):
             vocab.gene_case.setdefault(norm(name), name)
@@ -2063,6 +2091,18 @@ def write_all(
                 VERIFIED_ON,
                 LOCAL_BASE + 90_000_001,
             ]
+        ],
+    )
+    write_tsv(
+        OUT / "existing_relationships.tsv",
+        ["concept_id_1", "concept_id_2", "relationship_id", "source", "verified_on"],
+        [
+            row
+            for child, parent in vocab.condition_edges
+            for row in (
+                [child, parent, "Is a", "HemOnc vocabulary", VERIFIED_ON],
+                [parent, child, "Subsumes", "HemOnc vocabulary", VERIFIED_ON],
+            )
         ],
     )
     write_tsv(
@@ -2240,7 +2280,8 @@ def write_all(
         for term in alt
         if term.concept_id is not None and term.concept_id < LOCAL_BASE
     }
-    cited_all = cited | term_ids | {int(m["concept_id"]) for m in mapped}
+    edge_ids = {cid for pair in vocab.condition_edges for cid in pair}
+    cited_all = cited | term_ids | edge_ids | {int(m["concept_id"]) for m in mapped}
     write_tsv(
         OUT / "existing_concepts.tsv",
         [
@@ -2312,6 +2353,11 @@ def write_all(
         GAP_HEADER,
         gap_rows(rows, ch, vocab, anchored, unanchored),
     )
+    if vocab.skipped_condition_edges:
+        print(
+            "condition edges skipped (endpoint not verified):",
+            vocab.skipped_condition_edges,
+        )
     print(
         {
             "concepts": len(concept_rows),

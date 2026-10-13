@@ -121,7 +121,17 @@ class LocalTsvVocabulary:
             )
             for r in read_table(directory, "concept_relationship")
         ]
-        for rel in self.relationship_rows:
+        self.existing_relationship_rows = [
+            Relationship(
+                int(r["concept_id_1"]),
+                int(r["concept_id_2"]),
+                r["relationship_id"],
+                "",
+                "",
+            )
+            for r in read_table(directory, "existing_relationships")
+        ]
+        for rel in (*self.relationship_rows, *self.existing_relationship_rows):
             self._out.setdefault(rel.concept_id_1, []).append(rel)
             self._in.setdefault(rel.concept_id_2, []).append(rel)
         self.relationship_types = {
