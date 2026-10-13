@@ -16,12 +16,60 @@ from hemonc_alchemy.toolkit.core.indication_vocabulary import load_vocabulary
 from hemonc_alchemy.toolkit.core.indication_vocabulary.loader import (
     normalise_source_value,
 )
-from hemonc_alchemy.toolkit.core.indications import (
-    implied_findings,
-    load_indication_sources,
-)
+from hemonc_alchemy.toolkit.core.indications import load_indication_sources
 
 GAP_ANALYTES = {"17p", "5q", "CCR4", "iobenguane scan", "MIBG", "PML-RARA", "t(15;17)"}
+
+
+# TPS 60% is a numeric threshold case, not a vocabulary-closure golden.
+M2_CLOSURE_GOLDENS = {
+    ("ALK", "negative"): ("negative",),
+    ("ALK", "positive"): ("positive",),
+    ("ALK", "wild-type"): ("wild-type",),
+    ("BRAF", "mutated"): ("mutated",),
+    ("BRAF", "p.V600"): ("mutated", "p.V600"),
+    ("BRAF", "p.V600E"): ("mutated", "p.V600", "p.V600E"),
+    ("EGFR", "exon 19 deletion"): (
+        "activating mutation",
+        "exon 19 deletion",
+        "mutated",
+        "sensitizing mutation",
+    ),
+    ("EGFR", "exon 20 insertion"): ("exon 20 insertion", "mutated"),
+    ("EGFR", "mutated"): ("mutated",),
+    ("EGFR", "negative"): ("negative",),
+    ("EGFR", "non-resistant mutation"): ("mutated", "non-resistant mutation"),
+    ("EGFR", "p.L858R"): (
+        "activating mutation",
+        "mutated",
+        "p.L858",
+        "p.L858R",
+        "sensitizing mutation",
+    ),
+    ("EGFR", "p.T790M"): ("mutated", "p.T790", "p.T790M"),
+    ("EGFR", "wild-type"): ("wild-type",),
+    ("HER2", "TKD activating mutation"): ("TKD activating mutation", "mutated"),
+    ("HER2", "mutated"): ("mutated",),
+    ("HER2", "positive"): ("positive",),
+    ("KRAS", "p.G12C"): ("mutated", "p.G12", "p.G12C"),
+    ("MET", "exon 14 skipping alteration"): (
+        "exon 14 skipping alteration",
+        "mutated",
+    ),
+    ("NRG1", "fusion"): ("fusion",),
+    ("PD-L1", "TPS at least 1%"): ("TPS at least 1%",),
+    ("PD-L1", "TPS at least 50%"): ("TPS at least 1%", "TPS at least 50%"),
+    ("PD-L1", "at least 1%"): ("at least 1%",),
+    ("PD-L1", "high"): ("high",),
+    ("PD-L1", "positive"): ("positive",),
+    ("RET", "fusion"): ("fusion",),
+    ("ROS1", "fusion"): ("fusion", "rearrangement"),
+    ("ROS1", "rearrangement"): ("fusion", "rearrangement"),
+    ("ROS1", "wild-type"): ("wild-type",),
+    ("c-Met", ">50% of tumor cells with strong (3+ IHC) staining"): (
+        ">50% of tumor cells with strong (3+ IHC) staining",
+    ),
+}
 
 
 @pytest.fixture(scope="module")
@@ -55,6 +103,34 @@ def sources(live_session):
 @pytest.fixture(scope="module")
 def vocab():
     return load_vocabulary()
+
+
+def _observed_findings(sources):
+    observed = {}
+    for source in sources:
+        for slot in source.biomarkers:
+            for gene in slot.biomarkers:
+                observed.setdefault(gene, set()).update(
+                    normalise_source_value(finding) for finding in slot.findings
+                )
+    return observed
+
+
+def _missing_golden_targets(observed, vocab):
+    missing = []
+    for (gene, finding), expected in M2_CLOSURE_GOLDENS.items():
+        state = vocab.concept_for("biomarker_finding", finding, gene)
+        if state is None:
+            continue
+        reached = {state, *vocab.implied(state)}
+        for token in expected:
+            normalized = normalise_source_value(token)
+            if normalized not in observed.get(gene, set()):
+                continue
+            target = vocab.concept_for("biomarker_finding", token, gene)
+            if target is not None and target not in reached:
+                missing.append((gene, finding, token))
+    return missing
 
 
 @pytest.mark.postgres
@@ -98,28 +174,5 @@ def test_anchored_biomarker_indications_carry_biomarker_criteria(sources, vocab)
 
 
 @pytest.mark.postgres
-def test_vocabulary_closure_covers_the_earlier_implication_closure(sources, vocab):
-    observed: dict[str, set[str]] = {}
-    for source in sources:
-        for slot in source.biomarkers:
-            for gene in slot.biomarkers:
-                observed.setdefault(gene, set()).update(
-                    normalise_source_value(f) for f in slot.findings
-                )
-    missing = []
-    for gene, findings in observed.items():
-        for finding in findings:
-            state = vocab.concept_for("biomarker_finding", finding, gene)
-            if state is None:
-                continue
-            reached = {state, *vocab.implied(state)}
-            expected = {
-                normalise_source_value(f.raw)
-                for f in implied_findings(gene, finding)
-                if f.parsed
-            }
-            for token in expected & findings:
-                target = vocab.concept_for("biomarker_finding", token, gene)
-                if target not in reached:
-                    missing.append((gene, finding, token))
-    assert missing == []
+def test_vocabulary_closure_covers_static_m2_goldens(sources, vocab):
+    assert _missing_golden_targets(_observed_findings(sources), vocab) == []

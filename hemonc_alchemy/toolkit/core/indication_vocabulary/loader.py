@@ -2,13 +2,31 @@
 
 import csv
 import re
-from collections import deque
 from collections.abc import Iterable
 from dataclasses import dataclass
 from functools import lru_cache
 from importlib import resources
 from pathlib import Path
 from typing import Protocol
+
+from .interface import (
+    ConceptBounds as Bounds,
+)
+from .interface import (
+    CriterionTerm,
+    VocabularyCriterion,
+    VocabularyVersion,
+    hierarchy_for,
+)
+from .interface import (
+    SourceConceptMatch as SourceMatch,
+)
+from .interface import (
+    VocabularyConcept as Concept,
+)
+from .interface import (
+    VocabularyRelationship as Relationship,
+)
 
 LOCAL_CONCEPT_BASE = 2_000_000_000
 HIERARCHY = ("Is a",)
@@ -21,58 +39,7 @@ def normalise_source_value(value: str) -> str:
     return re.sub(r"\s+", " ", text)
 
 
-@dataclass(frozen=True)
-class Concept:
-    concept_id: int
-    concept_name: str
-    domain_id: str
-    vocabulary_id: str
-    concept_class_id: str
-    standard_concept: str
-    concept_code: str
-    valid_start_date: str
-    valid_end_date: str
-    invalid_reason: str
-
-    @property
-    def is_local(self) -> bool:
-        return self.concept_id >= LOCAL_CONCEPT_BASE
-
-
-@dataclass(frozen=True)
-class Relationship:
-    concept_id_1: int
-    concept_id_2: int
-    relationship_id: str
-
-
-@dataclass(frozen=True)
-class SourceMatch:
-    target_concept_id: int | None
-    target_kind: str
-    fit: str
-    status: str
-    provenance: str
-
-
-@dataclass(frozen=True)
-class Bounds:
-    qualifier: str
-    comparator_low: str
-    value_low: float | None
-    comparator_high: str
-    value_high: float | None
-    unit: str
-
-
-@dataclass(frozen=True)
-class Criterion:
-    """One AND-ed requirement of an indication; the alternatives are ORed."""
-
-    indication_id: int
-    dimension: str
-    polarity: str
-    alternatives: tuple[tuple[int, ...], ...]
+Criterion = VocabularyCriterion
 
 
 @dataclass(frozen=True)
@@ -114,12 +81,13 @@ def _number(value: str) -> float | None:
     return float(value) if value.strip() else None
 
 
-class IndicationVocabulary:
+class LocalTsvVocabulary:
     """Local concepts, relationships and source-value maps for HemOnc indications."""
 
     def __init__(self, directory: Path) -> None:
         self.directory = directory
         self._concepts: dict[int, Concept] = {}
+        self._concepts_by_vocabulary_code: dict[tuple[str, str], Concept] = {}
         for name in ("concept", "existing_concepts"):
             for row in read_table(directory, name):
                 concept = Concept(
@@ -135,18 +103,27 @@ class IndicationVocabulary:
                     row.get("invalid_reason", ""),
                 )
                 self._concepts[concept.concept_id] = concept
+                self._concepts_by_vocabulary_code[
+                    (concept.vocabulary_id, concept.concept_code)
+                ] = concept
         self._by_code = {
             c.concept_code: c for c in self._concepts.values() if c.is_local
         }
         self._out: dict[int, list[Relationship]] = {}
+        self._in: dict[int, list[Relationship]] = {}
         self.relationship_rows = [
             Relationship(
-                int(r["concept_id_1"]), int(r["concept_id_2"]), r["relationship_id"]
+                int(r["concept_id_1"]),
+                int(r["concept_id_2"]),
+                r["relationship_id"],
+                r["valid_start_date"],
+                r["valid_end_date"],
             )
             for r in read_table(directory, "concept_relationship")
         ]
         for rel in self.relationship_rows:
             self._out.setdefault(rel.concept_id_1, []).append(rel)
+            self._in.setdefault(rel.concept_id_2, []).append(rel)
         self.relationship_types = {
             r["relationship_id"]: RelationshipType(
                 r["relationship_id"],
@@ -169,23 +146,95 @@ class IndicationVocabulary:
             self._source[key] = SourceMatch(
                 target, row["target_kind"], row["fit"], row["status"], row["provenance"]
             )
-        self._bounds = {
-            int(r["concept_id"]): Bounds(
-                r["qualifier"],
-                r["comparator_low"],
-                _number(r["value_low"]),
-                r["comparator_high"],
-                _number(r["value_high"]),
-                r["unit"],
-            )
-            for r in read_table(directory, "concept_bounds")
+        self._criteria: dict[int, list[VocabularyCriterion]] = {}
+        self._load_criteria(directory)
+        self._source_terms: dict[
+            tuple[str, str, str], tuple[tuple[CriterionTerm, ...], ...]
+        ] = {}
+        self._load_source_terms(directory)
+        self._concept_status = {
+            int(r["concept_id"]): r["review_status"]
+            for r in read_table(directory, "concept_status")
         }
+        self._edge_status = {
+            (int(r["concept_id_1"]), int(r["concept_id_2"]), r["relationship_id"]): r[
+                "status"
+            ]
+            for r in read_table(directory, "relationship_review")
+        }
+        self.has_bounds = True
+        self.has_source_map = True
+        self.has_review_status = True
+        release_dates = [
+            row.get("source_date", "")
+            for row in read_table(directory, "existing_concepts")
+            if row.get("source_date")
+        ]
+        self._release = max(release_dates, default="2026-10-13")
+
+    @staticmethod
+    def _term(row: dict[str, str]) -> CriterionTerm:
+        bounds = None
+        if row["value_low"].strip() or row["value_high"].strip():
+            bounds = Bounds(
+                row["qualifier"],
+                row["comparator_low"],
+                _number(row["value_low"]),
+                row["comparator_high"],
+                _number(row["value_high"]),
+                row["unit"],
+            )
+        concept_id = int(row["concept_id"]) if row["concept_id"].strip() else None
+        return CriterionTerm(concept_id, bounds, row["text"])
+
+    def _load_criteria(self, directory: Path) -> None:
+        terms: dict[int, dict[int, list[tuple[int, CriterionTerm]]]] = {}
+        for row in read_table(directory, "criterion_term"):
+            terms.setdefault(int(row["criterion_id"]), {}).setdefault(
+                int(row["alternative_no"]), []
+            ).append((int(row["term_no"]), self._term(row)))
+        for row in read_table(directory, "indication_criterion"):
+            by_alternative = terms.get(int(row["criterion_id"]), {})
+            alternatives = tuple(
+                tuple(term for _, term in sorted(by_alternative[number]))
+                for number in sorted(by_alternative)
+            )
+            criterion = VocabularyCriterion(
+                int(row["indication_id"]),
+                row["dimension"],
+                row["polarity"],
+                alternatives,
+            )
+            self._criteria.setdefault(criterion.indication_id, []).append(criterion)
+
+    def _load_source_terms(self, directory: Path) -> None:
+        grouped: dict[
+            tuple[str, str, str], dict[int, list[tuple[int, CriterionTerm]]]
+        ] = {}
+        for row in read_table(directory, "source_value_terms"):
+            key = (
+                row["source_column"],
+                normalise_source_value(row["raw_value"]),
+                normalise_source_value(row["context"]),
+            )
+            grouped.setdefault(key, {}).setdefault(
+                int(row["alternative_no"]), []
+            ).append((int(row["term_no"]), self._term(row)))
+        for key, by_alternative in grouped.items():
+            self._source_terms[key] = tuple(
+                tuple(term for _, term in sorted(by_alternative[number]))
+                for number in sorted(by_alternative)
+            )
 
     def concept(self, concept_id: int) -> Concept | None:
         return self._concepts.get(concept_id)
 
-    def concept_by_code(self, concept_code: str) -> Concept | None:
-        return self._by_code.get(concept_code)
+    def concept_by_code(
+        self, vocabulary_id: str, code: str | None = None
+    ) -> Concept | None:
+        if code is None:
+            return self._by_code.get(vocabulary_id)
+        return self._concepts_by_vocabulary_code.get((vocabulary_id, code))
 
     def concepts(self, concept_class_id: str | None = None) -> tuple[Concept, ...]:
         return tuple(
@@ -193,6 +242,18 @@ class IndicationVocabulary:
             for c in self._concepts.values()
             if c.is_local
             and (concept_class_id is None or c.concept_class_id == concept_class_id)
+        )
+
+    def concepts_of_class(self, concept_class_id: str) -> tuple[Concept, ...]:
+        return tuple(
+            sorted(
+                (
+                    c
+                    for c in self._concepts.values()
+                    if c.concept_class_id == concept_class_id
+                ),
+                key=lambda c: c.concept_id,
+            )
         )
 
     def lookup(
@@ -210,14 +271,40 @@ class IndicationVocabulary:
         match = self.lookup(source_column, raw_value, context)
         return match.target_concept_id if match else None
 
+    def concept_for_source(
+        self, source_column: str, raw_value: str, context: str | None = None
+    ) -> SourceMatch | None:
+        return self.lookup(source_column, raw_value, context or "")
+
     def relationships(
-        self, concept_id: int, relationship_id: str | None = None
+        self,
+        concept_id: int,
+        relationship_ids: str | Iterable[str] | None = None,
+        direction: str = "out",
     ) -> tuple[Relationship, ...]:
-        rels = self._out.get(concept_id, ())
+        if direction not in {"out", "in"}:
+            raise ValueError("direction must be 'out' or 'in'")
+        rels = (self._out if direction == "out" else self._in).get(concept_id, ())
+        identifiers = (
+            None
+            if relationship_ids is None
+            else {relationship_ids}
+            if isinstance(relationship_ids, str)
+            else set(relationship_ids)
+        )
         return tuple(
             r
+            if direction == "out"
+            else Relationship(
+                r.concept_id_1,
+                r.concept_id_2,
+                r.relationship_id,
+                r.valid_start_date,
+                r.valid_end_date,
+                "in",
+            )
             for r in rels
-            if relationship_id is None or r.relationship_id == relationship_id
+            if identifiers is None or r.relationship_id in identifiers
         )
 
     def related(self, concept_id: int, relationship_id: str) -> tuple[int, ...]:
@@ -226,18 +313,7 @@ class IndicationVocabulary:
         )
 
     def _walk(self, start: int, relationship_ids: Iterable[str]) -> tuple[int, ...]:
-        ids = tuple(relationship_ids)
-        seen = {start}
-        order: list[int] = []
-        queue = deque((start,))
-        while queue:
-            node = queue.popleft()
-            for rel in self.relationships(node):
-                if rel.relationship_id in ids and rel.concept_id_2 not in seen:
-                    seen.add(rel.concept_id_2)
-                    order.append(rel.concept_id_2)
-                    queue.append(rel.concept_id_2)
-        return tuple(order)
+        return hierarchy_for(self).walk(start, tuple(relationship_ids))
 
     def ancestors(self, concept_id: int) -> tuple[int, ...]:
         """Concepts above this one through Is a, nearest first."""
@@ -251,63 +327,37 @@ class IndicationVocabulary:
         """Concepts a result also satisfies: Is a ancestors, clinical implications and equivalents."""
         return self._walk(concept_id, IMPLICATION)
 
-    def bounds(self, concept_id: int) -> Bounds | None:
-        return self._bounds.get(concept_id)
+    def version(self) -> VocabularyVersion:
+        return VocabularyVersion("HemOnc Local", self._release, len(self._concepts))
 
-    def threshold_states(
-        self, analyte_id: int, qualifier: str, value: float, unit: str
-    ) -> tuple[int, ...]:
-        """Biomarker states on an analyte whose threshold a measured value meets."""
-        met = []
-        for state in self.concepts("Biomarker State"):
-            if analyte_id not in self.related(state.concept_id, "State has analyte"):
-                continue
-            for threshold in self.related(state.concept_id, "State has threshold"):
-                bounds = self._bounds.get(threshold)
-                if (
-                    bounds
-                    and bounds.qualifier == qualifier
-                    and bounds.unit == unit
-                    and _meets(bounds, value)
-                ):
-                    met.append(state.concept_id)
-        return tuple(sorted(met))
+    def review_status(self, concept_id: int) -> str | None:
+        return self._concept_status.get(concept_id)
 
-    def criteria(self, indication_id: int) -> tuple[Criterion, ...]:
-        """Criteria of an indication as ORed alternatives of ANDed concepts."""
-        out = []
-        for rel in self.relationships(indication_id):
-            if rel.relationship_id not in {"Ind requires", "Ind excludes"}:
-                continue
-            dimension = next(
-                iter(self.related(rel.concept_id_2, "Set has dimension")), None
-            )
-            out.append(
-                Criterion(
-                    indication_id,
-                    self._dimension_name(dimension),
-                    "requires" if rel.relationship_id == "Ind requires" else "excludes",
-                    self._alternatives(rel.concept_id_2),
-                )
-            )
-        return tuple(out)
+    def edge_review_status(
+        self, concept_id_1: int, concept_id_2: int, relationship_id: str
+    ) -> str | None:
+        status = self._edge_status.get((concept_id_1, concept_id_2, relationship_id))
+        if status is not None:
+            return status
+        reverse = self.relationship_types.get(relationship_id)
+        if reverse is None:
+            return None
+        return self._edge_status.get(
+            (concept_id_2, concept_id_1, reverse.reverse_relationship_id)
+        )
 
-    def _dimension_name(self, dimension_id: int | None) -> str:
-        concept = self._concepts.get(dimension_id) if dimension_id is not None else None
-        return concept.concept_code.removeprefix("HOL-DIM-") if concept else ""
+    def criteria(self, indication_id: int) -> tuple[VocabularyCriterion, ...]:
+        """Criteria of an indication as ORed alternatives of ANDed terms."""
+        return tuple(self._criteria.get(indication_id, ()))
 
-    def _alternatives(self, set_id: int) -> tuple[tuple[int, ...], ...]:
-        all_members = self.related(set_id, "Set has all")
-        if all_members:
-            return (tuple(sorted(all_members)),)
-        out: list[tuple[int, ...]] = []
-        for member in self.related(set_id, "Set has any"):
-            concept = self._concepts.get(member)
-            if concept is not None and concept.concept_class_id == "Criterion Set":
-                out.extend(self._alternatives(member))
-            else:
-                out.append((member,))
-        return tuple(sorted(out))
+    def terms_for_source(
+        self, source_column: str, raw_value: str, context: str = ""
+    ) -> tuple[tuple[CriterionTerm, ...], ...] | None:
+        """How a raw value reads as ORed alternatives of ANDed terms, when it is not a single concept."""
+        value = normalise_source_value(raw_value)
+        return self._source_terms.get(
+            (source_column, value, normalise_source_value(context))
+        ) or self._source_terms.get((source_column, value, ""))
 
     def indication_ids(self) -> tuple[int, ...]:
         return tuple(sorted(c.concept_id for c in self.concepts("Indication")))
@@ -316,28 +366,13 @@ class IndicationVocabulary:
         return read_table(self.directory, name)
 
 
-def _meets(bounds: Bounds, value: float) -> bool:
-    if bounds.value_low is not None:
-        low = bounds.value_low
-        if (bounds.comparator_low == ">=" and value < low) or (
-            bounds.comparator_low == ">" and value <= low
-        ):
-            return False
-        if bounds.comparator_low == "=" and value != low:
-            return False
-    if bounds.value_high is not None:
-        high = bounds.value_high
-        if (bounds.comparator_high == "<=" and value > high) or (
-            bounds.comparator_high == "<" and value >= high
-        ):
-            return False
-    return True
+IndicationVocabulary = LocalTsvVocabulary
 
 
 @lru_cache(maxsize=1)
-def load_vocabulary() -> IndicationVocabulary:
+def load_vocabulary() -> LocalTsvVocabulary:
     """Read the packaged tables once per process."""
-    return IndicationVocabulary(data_directory())
+    return LocalTsvVocabulary(data_directory())
 
 
 __all__ = [
@@ -345,7 +380,9 @@ __all__ = [
     "Concept",
     "ConceptSource",
     "Criterion",
+    "CriterionTerm",
     "IndicationVocabulary",
+    "LocalTsvVocabulary",
     "Relationship",
     "RelationshipType",
     "SourceMatch",

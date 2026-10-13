@@ -11,27 +11,15 @@ Ind has approval path	Indication has approval path	0	0	Approval path of ind	2090
 Approval path of ind	Approval path of indication	0	0	Ind has approval path	2090000010
 Ind has context	Indication has context	0	0	Context of ind	2090000011
 Context of ind	Context of indication	0	0	Ind has context	2090000012
-Ind requires	Indication requires criterion	0	0	Required by ind	2090000013
-Required by ind	Criterion required by indication	0	0	Ind requires	2090000014
-Ind excludes	Indication excludes criterion	0	0	Excluded by ind	2090000015
-Excluded by ind	Criterion excluded by indication	0	0	Ind excludes	2090000016
-Set has any	Criterion set has any member	0	0	Any member of set	2090000017
-Any member of set	Alternative member of criterion set	0	0	Set has any	2090000018
-Set has all	Criterion set has all members	0	0	All member of set	2090000019
-All member of set	Conjunctive member of criterion set	0	0	Set has all	2090000020
-Set has dimension	Criterion set has dimension	0	0	Dimension of set	2090000021
-Dimension of set	Dimension of criterion set	0	0	Set has dimension	2090000022
-State has analyte	Biomarker state has analyte	0	0	Analyte of state	2090000023
-Analyte of state	Analyte of biomarker state	0	0	State has analyte	2090000024
-State has result	Biomarker state has result	0	0	Result of state	2090000025
-Result of state	Result of biomarker state	0	0	State has result	2090000026
-State has variant	Biomarker state has variant	0	0	Variant of state	2090000027
-Variant of state	Variant of biomarker state	0	0	State has variant	2090000028
-State has threshold	Biomarker state has threshold	0	0	Threshold of state	2090000029
-Threshold of state	Threshold of biomarker state	0	0	State has threshold	2090000030
-Clinically implies	Clinically implies	0	0	Clinically implied by	2090000031
-Clinically implied by	Clinically implied by	0	0	Clinically implies	2090000032
-Equiv in indic	Equivalent in indication context	0	0	Equiv in indic	2090000033
-Opposite of	Opposite polarity	0	0	Opposite of	2090000034
+State has analyte	Biomarker state has analyte	0	0	Analyte of state	2090000013
+Analyte of state	Analyte of biomarker state	0	0	State has analyte	2090000014
+State has result	Biomarker state has result	0	0	Result of state	2090000015
+Result of state	Result of biomarker state	0	0	State has result	2090000016
+State has variant	Biomarker state has variant	0	0	Variant of state	2090000017
+Variant of state	Variant of biomarker state	0	0	State has variant	2090000018
+Clinically implies	Clinically implies	0	0	Clinically implied by	2090000019
+Clinically implied by	Clinically implied by	0	0	Clinically implies	2090000020
+Equiv in indic	Equivalent in indication context	0	0	Equiv in indic	2090000021
+Opposite of	Opposite polarity	0	0	Opposite of	2090000022
 Is a	Is a	0	0	Subsumes	44818821
 Subsumes	Subsumes	1	1	Is a	44818723

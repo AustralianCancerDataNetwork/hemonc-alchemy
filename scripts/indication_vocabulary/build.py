@@ -14,7 +14,7 @@ import os
 import re
 import sys
 from collections import Counter, defaultdict
-from itertools import pairwise
+from dataclasses import dataclass
 from pathlib import Path
 
 from sqlalchemy import create_engine, text
@@ -40,17 +40,12 @@ VERIFIED_ON = "2026-10-13"
 
 BLOCKS = {
     "Indication": 0,
-    "Criterion Set": 10_000_000,
-    "Criterion Dimension": 15_000_000,
     "Biomarker State": 20_000_000,
-    "Biomarker Threshold": 25_000_000,
     "Disease Extent": 30_000_000,
     "Disease Status": 32_000_000,
     "Response Contingency": 34_000_000,
     "Prior Therapy Requirement": 36_000_000,
     "Co-therapy Requirement": 37_000_000,
-    "Time Window": 38_000_000,
-    "Age Band": 39_000_000,
     "Population Qualifier": 40_000_000,
     "Treatment Context": 42_000_000,
     "Regulator": 50_000_000,
@@ -58,17 +53,12 @@ BLOCKS = {
 }
 CLASS_CODE = {
     "Indication": "IND",
-    "Criterion Set": "SET",
-    "Criterion Dimension": "DIM",
     "Biomarker State": "BST",
-    "Biomarker Threshold": "THR",
     "Disease Extent": "EXT",
     "Disease Status": "STA",
     "Response Contingency": "RSP",
     "Prior Therapy Requirement": "PTR",
     "Co-therapy Requirement": "COT",
-    "Time Window": "WIN",
-    "Age Band": "AGE",
     "Population Qualifier": "POP",
     "Treatment Context": "CTX",
     "Regulator": "REG",
@@ -76,17 +66,12 @@ CLASS_CODE = {
 }
 CLASS_NAME = {
     "Indication": "Regulatory indication (one source row)",
-    "Criterion Set": "AND or OR grouping of indication criteria",
-    "Criterion Dimension": "Kind of criterion held by a criterion set",
     "Biomarker State": "Pre-coordinated biomarker analyte with result, variant or threshold",
-    "Biomarker Threshold": "Closed-set biomarker cut-off with numeric bounds",
     "Disease Extent": "Stage or extent of disease",
     "Disease Status": "Disease status, course or phase",
     "Response Contingency": "Event required before the indication applies",
     "Prior Therapy Requirement": "Prior treatment requirement or count band",
     "Co-therapy Requirement": "Required co-administered therapy not resolved to a HemOnc concept",
-    "Time Window": "Time contingency window",
-    "Age Band": "Age restriction band",
     "Population Qualifier": "Population restriction (menopausal status, risk, performance, ineligibility)",
     "Treatment Context": "Treatment setting not present in HemOnc Context",
     "Regulator": "Regulatory body issuing the approval",
@@ -96,8 +81,6 @@ DOMAIN_OF = {
     c: "Indication"
     for c in (
         "Indication",
-        "Criterion Set",
-        "Criterion Dimension",
         "Regulator",
         "Approval Path",
     )
@@ -118,19 +101,34 @@ COMPOSITES = {
     ),
 }
 PLACEHOLDER_NAMES = {"0", "none", "not applicable", "true", "false"}
+
+
+@dataclass(frozen=True)
+class Term:
+    """One ANDed element of a criterion alternative: a concept, a scalar, or both."""
+
+    concept_id: int | None = None
+    qualifier: str = ""
+    cl: str = ""
+    vl: str = ""
+    ch: str = ""
+    vh: str = ""
+    unit: str = ""
+    text: str = ""
+
+    @property
+    def has_scalar(self) -> bool:
+        return bool(self.vl or self.vh)
+
+
 CLASS_OWNER = {
     "Indication": "HemOnc",
-    "Criterion Set": "HemOnc",
-    "Criterion Dimension": "HemOnc",
     "Biomarker State": "OMOP Genomic",
-    "Biomarker Threshold": "OMOP Genomic and LOINC",
     "Disease Extent": "OMOP Cancer Modifier",
     "Disease Status": "OMOP Cancer Modifier",
     "Response Contingency": "HemOnc",
     "Prior Therapy Requirement": "HemOnc",
     "Co-therapy Requirement": "HemOnc",
-    "Time Window": "HemOnc",
-    "Age Band": "HemOnc",
     "Population Qualifier": "OMOP vocabulary (SNOMED, CDISC)",
     "Treatment Context": "HemOnc",
     "Regulator": "HemOnc",
@@ -187,46 +185,6 @@ RELATIONSHIPS = [
         0,
     ),
     (
-        "Ind requires",
-        "Indication requires criterion",
-        "Required by ind",
-        "Criterion required by indication",
-        0,
-        0,
-    ),
-    (
-        "Ind excludes",
-        "Indication excludes criterion",
-        "Excluded by ind",
-        "Criterion excluded by indication",
-        0,
-        0,
-    ),
-    (
-        "Set has any",
-        "Criterion set has any member",
-        "Any member of set",
-        "Alternative member of criterion set",
-        0,
-        0,
-    ),
-    (
-        "Set has all",
-        "Criterion set has all members",
-        "All member of set",
-        "Conjunctive member of criterion set",
-        0,
-        0,
-    ),
-    (
-        "Set has dimension",
-        "Criterion set has dimension",
-        "Dimension of set",
-        "Dimension of criterion set",
-        0,
-        0,
-    ),
-    (
         "State has analyte",
         "Biomarker state has analyte",
         "Analyte of state",
@@ -247,14 +205,6 @@ RELATIONSHIPS = [
         "Biomarker state has variant",
         "Variant of state",
         "Variant of biomarker state",
-        0,
-        0,
-    ),
-    (
-        "State has threshold",
-        "Biomarker state has threshold",
-        "Threshold of state",
-        "Threshold of biomarker state",
         0,
         0,
     ),
@@ -455,10 +405,11 @@ class Builder:
         self.review: dict[tuple[int, int, str], dict[str, str]] = {}
         self.status: dict[str, dict[str, str]] = {}
         self.source_map: dict[tuple[str, str, str], dict[str, object]] = {}
-        self.bounds: dict[int, dict[str, object]] = {}
+        self.value_terms: dict[tuple[str, str, str], tuple[str, str, list]] = {}
+        self.criteria_rows: list[list[object]] = []
+        self.term_rows: list[list[object]] = []
         self.cited_existing: dict[int, set[str]] = defaultdict(set)
         self.previous = self._previous_ids()
-        self.set_cache: dict[tuple, int] = {}
         self.state_columns: dict[tuple[str, str], int] = {}
         self.unresolved: list[list[object]] = []
 
@@ -708,7 +659,7 @@ def parse_threshold(finding: str) -> dict[str, object] | None:
     unit = m["unit"] or ""
     assay = (m["assay"] or "").upper()
     if assay == "CPS":
-        unit = ""
+        unit = "score"
     unit = (
         "mut/Mb" if unit == "mutations/mb" else ("ng/mL" if unit == "ng/ml" else unit)
     )
@@ -799,36 +750,11 @@ class Vocabulary(Builder):
         self.gene_states: dict[str, dict[str, int]] = defaultdict(dict)
         self.state_meta: dict[int, dict[str, object]] = {}
         self.mapping_rows: dict[tuple[str, str, str], dict[str, object]] = {}
-        self.dimension: dict[str, int] = {}
         self.gene_case: dict[str, str] = {}
         self.static()
 
     # ---- static concepts
     def static(self) -> None:
-        for key, name in (
-            ("biomarker", "Biomarker"),
-            ("stage", "Stage"),
-            ("status", "Status"),
-            ("stage_or_status", "Stage or status"),
-            ("age", "Age"),
-            ("sex", "Sex"),
-            ("prior_therapy", "Prior therapy"),
-            ("prior_therapy_setting", "Prior therapy setting"),
-            ("prior_biomarker", "Prior biomarker"),
-            ("with_field", "Co-therapy"),
-            ("ineligibility", "Ineligibility"),
-            ("demographics", "Demographics"),
-            ("response_contingency", "Response contingency"),
-            ("risk_stratification", "Risk stratification"),
-            ("exposure_phenotype", "Exposure phenotype"),
-            ("time_contingency", "Time contingency"),
-        ):
-            self.dimension[key] = self.concept(
-                "Criterion Dimension",
-                key,
-                f"Criterion dimension: {name}",
-                owner="HemOnc",
-            )
         self.regulators = {
             name: self.concept(
                 "Regulator",
@@ -1065,42 +991,6 @@ class Vocabulary(Builder):
                 )
 
     # ---- sets
-    def make_set(
-        self, dimension: str, alternatives: list[list[int]], label: str
-    ) -> int:
-        canon = tuple(sorted(tuple(sorted(set(alt))) for alt in alternatives))
-        cache_key = (dimension, canon)
-        if cache_key in self.set_cache:
-            return self.set_cache[cache_key]
-        import hashlib
-
-        digest = hashlib.sha1(repr(cache_key).encode()).hexdigest()[:10]
-        rendered = " OR ".join(
-            " AND ".join(self.label(c) for c in alt) for alt in canon
-        )
-        sid = self.concept(
-            "Criterion Set",
-            f"{dimension}-{digest}",
-            f"{self.label(self.dimension[dimension]).split(': ')[1]}: {rendered}"[:255],
-            provenance="derived from the indications table",
-        )
-        self._names_n = -1
-        self.relate(sid, self.dimension[dimension], "Set has dimension")
-        if len(canon) == 1:
-            for member in canon[0]:
-                self.relate(
-                    sid, member, "Set has all" if len(canon[0]) > 1 else "Set has any"
-                )
-        else:
-            for alt in canon:
-                if len(alt) == 1:
-                    self.relate(sid, alt[0], "Set has any")
-                else:
-                    inner = self.make_set(dimension, [list(alt)], "")
-                    self.relate(sid, inner, "Set has any")
-        self.set_cache[cache_key] = sid
-        return sid
-
     # ---- biomarkers
     def gene_name(self, raw: str) -> str:
         key = norm(raw)
@@ -1159,7 +1049,7 @@ class Vocabulary(Builder):
         f = {"mutation": "mutated"}.get(norm(finding_raw), norm(finding_raw))
         bounds = parse_threshold(f)
         if bounds:
-            f = f"{bounds['qualifier'].lower()} {bounds['cl']} {bounds['vl']:g} {bounds['unit']}".strip()
+            f = f"score {bounds['qualifier'].lower()}".strip()
         return gene, f
 
     @staticmethod
@@ -1170,15 +1060,17 @@ class Vocabulary(Builder):
             label = re.sub(r"\b(cps|tps|til|ihc|ish)\b", lambda m: m[1].upper(), label)
         return label
 
+    @staticmethod
+    def finding_scalar(finding_raw: str) -> dict[str, object] | None:
+        """Numeric cut-off of a finding, held as an attribute and not as a concept."""
+        return parse_threshold(norm(finding_raw))
+
     def state(
         self, gene_raw: str, finding_raw: str, indication: int | None = None
     ) -> int:
         gene, f_key = self.state_key(gene_raw, finding_raw)
-        f = (
-            norm(finding_raw)
-            if f_key.count(" ") and parse_threshold(norm(finding_raw))
-            else f_key
-        )
+        f = norm(finding_raw)
+        f = {"mutation": "mutated"}.get(f, f)
         cache_key = (gene, f_key)
         if cache_key in self.state_columns:
             sid = self.state_columns[cache_key]
@@ -1187,8 +1079,7 @@ class Vocabulary(Builder):
             bounds = parse_threshold(f) if kind == "threshold" else None
             label = self.finding_label(finding_raw)
             if bounds:
-                unit = bounds["unit"]
-                label = f"{bounds['qualifier']} {bounds['cl']} {bounds['vl']:g}{(' ' + unit) if unit else ''}".strip()
+                label = bounds["qualifier"] or "measured value"
             sid = self.concept(
                 "Biomarker State",
                 slug(f"{gene}-{f_key}"),
@@ -1200,44 +1091,19 @@ class Vocabulary(Builder):
             )
             self.state_columns[cache_key] = sid
             self.gene_states[gene][f_key] = sid
-            self.state_meta[sid] = {
-                "gene": gene,
-                "finding": f_key,
-                "kind": kind,
-                "bounds": bounds,
-            }
+            self.state_meta[sid] = {"gene": gene, "finding": f_key, "kind": kind}
             protein_first = kind in {"result", "threshold"} and f != "wild-type"
             analyte, _ = self.analyte(gene, protein_first)
             if analyte:
                 self.relate(sid, analyte, "State has analyte", cite="analyte")
-            if bounds:
-                unit = bounds["unit"]
-                tkey = slug(
-                    f"{bounds['qualifier'] or gene}-{bounds['cl']}{bounds['vl']:g}{unit}"
-                )
-                tid = self.concept(
-                    "Biomarker Threshold",
-                    tkey,
-                    f"{bounds['qualifier'] or gene} {bounds['cl']} {bounds['vl']:g}{(' ' + unit) if unit else ''}",
-                    provenance="closed-set threshold from the indications table",
-                )
-                self.bounds[tid] = {
-                    "qualifier": bounds["qualifier"],
-                    "cl": bounds["cl"],
-                    "vl": f"{bounds['vl']:g}",
-                    "ch": "",
-                    "vh": "",
-                    "unit": unit,
-                }
-                self.relate(sid, tid, "State has threshold")
-            elif kind in {"variant", "fusion"}:
+            if kind in {"variant", "fusion"}:
                 self.relate(sid, DETECTED, "State has result", cite="result")
                 variant = self.variant_for(
                     gene, finding_raw.strip()
                 ) or self.variant_for(gene, f)
                 if variant:
                     self.relate(sid, variant, "State has variant", cite="variant")
-            else:
+            elif kind != "threshold":
                 base = re.sub(r"\s*\(.*\)$", "", f)
                 if base in RESULTS:
                     self.relate(
@@ -1246,6 +1112,21 @@ class Vocabulary(Builder):
         if indication is not None:
             self.used_states[indication].add(sid)
         return sid
+
+    def state_term(
+        self, gene_raw: str, finding_raw: str, indication: int | None = None
+    ) -> Term:
+        sid = self.state(gene_raw, finding_raw, indication)
+        bounds = self.finding_scalar(finding_raw)
+        if bounds is None:
+            return Term(sid)
+        return Term(
+            sid,
+            qualifier=str(bounds["qualifier"]),
+            cl=str(bounds["cl"]),
+            vl=f"{bounds['vl']:g}",
+            unit=str(bounds["unit"]),
+        )
 
     @staticmethod
     def result_base(finding: str) -> str:
@@ -1321,15 +1202,7 @@ class Vocabulary(Builder):
         """Hierarchy and polarity edges between the states created from the data."""
         import yaml
 
-        path = (
-            HERE.parents[1]
-            / "hemonc_alchemy"
-            / "toolkit"
-            / "core"
-            / "indications"
-            / "data"
-            / "finding_implications.yaml"
-        )
+        path = EVIDENCE / "curated_implications.yaml"
         data = yaml.safe_load(path.read_text(encoding="utf-8"))
         for entry in data["implications"]:
             for token in (entry["finding"], *entry["satisfies"]):
@@ -1411,34 +1284,6 @@ class Vocabulary(Builder):
                             "note": "",
                         },
                     )
-        # threshold chains: higher cut-off is a subset of the lower one
-        groups: dict[tuple, list[tuple[float, int]]] = defaultdict(list)
-        for sid, meta in self.state_meta.items():
-            if meta["kind"] != "threshold":
-                continue
-            b = meta["bounds"]
-            assert b is not None
-            groups[(meta["gene"], b["qualifier"], b["unit"], b["cl"])].append(
-                (float(b["vl"]), sid)
-            )
-        for (gene, qualifier, unit, cmp), items in groups.items():
-            items.sort(reverse=True)
-            if cmp != ">=" or len(items) < 2:
-                continue
-            for (_, higher), (_, lower) in pairwise(items):
-                self.relate(
-                    higher,
-                    lower,
-                    "Is a",
-                    review={
-                        "status": "proposed",
-                        "provenance": "population subset: a higher cut-off is met only when every lower cut-off is met",
-                        "reviewer": "",
-                        "reviewed_on": "",
-                        "priority": "later",
-                        "note": "",
-                    },
-                )
         # reviewed-in-code implications carried over as proposed, with their original source text
         entries = {
             (e["biomarker"].casefold(), norm(e["finding"])): e
@@ -1527,53 +1372,84 @@ class Vocabulary(Builder):
         self.cache[key] = (cid, fit, "proposed-new")
         return cid
 
-    def count_band(self, raw: str) -> int:
+    @staticmethod
+    def scalar_term(
+        bounds: dict[str, object], unit: str, *, qualifier: str = "", text: str = ""
+    ) -> Term:
+        def fmt(value: object) -> str:
+            return "" if value in ("", None) else f"{float(value):g}"  # type: ignore[arg-type]
+
+        return Term(
+            None,
+            qualifier,
+            str(bounds.get("cl", "")),
+            fmt(bounds.get("vl", "")),
+            str(bounds.get("ch", "")),
+            fmt(bounds.get("vh", "")),
+            unit,
+            text,
+        )
+
+    def count_term(self, raw: str) -> Term:
         parsed = parse_count(raw)
         assert parsed is not None
-        bounds, _ = parsed
-        if bounds["cl"] == "=" and bounds["vl"] == 0:
-            name = "No prior systemic therapy"
-        else:
-            name = f"Prior lines {raw.strip()}"
-        key = f"COUNT-{slug(norm(raw))}"
-        cid = self.concept(
-            "Prior Therapy Requirement",
-            key,
-            name,
-            provenance="count band from the indications table",
-        )
-        self.bounds[cid] = {
-            "qualifier": "",
-            "cl": bounds["cl"],
-            "vl": bounds["vl"],
-            "ch": bounds["ch"],
-            "vh": bounds["vh"],
-            "unit": "lines",
-        }
-        return cid
+        return self.scalar_term(parsed[0], "lines")
+
+    @staticmethod
+    def concept_terms(alternatives: list[list[int]]) -> list[list[Term]]:
+        return [[Term(c) for c in alt] for alt in alternatives]
+
+    def record_value(
+        self,
+        column: str,
+        raw: str,
+        alternatives: list[list[Term]],
+        *,
+        context: str = "",
+        provenance: str = "",
+    ) -> None:
+        """Register how one raw value reads: a single concept, or terms held in the native tables."""
+        key = (column, norm(raw), norm(context))
+        single = len(alternatives) == 1 and len(alternatives[0]) == 1
+        term = alternatives[0][0] if single else None
+        if term is not None and term.concept_id is not None:
+            if key not in self.source_map:
+                target = term.concept_id
+                self.map_source(
+                    column,
+                    raw,
+                    context,
+                    target,
+                    "none",
+                    "proposed-new" if target >= LOCAL_BASE else "mapped-to-existing",
+                    provenance,
+                )
+            if term.has_scalar:
+                self.value_terms[key] = (raw, context, alternatives)
+            return
+        self.map_source(column, raw, context, 0, "none", "decomposed", provenance)
+        self.value_terms[key] = (raw, context, alternatives)
 
     def therapy_alternatives(
         self, column: str, raw: str, cls: str, indication: int
-    ) -> list[list[int]]:
+    ) -> list[list[Term]]:
         alternatives = []
         for part in split_pipe(raw):
             if is_placeholder(part):
                 continue
-            members: list[int] = []
+            members: list[Term] = []
             rest = part
             if column == "with_field" and norm(part) == "0":
-                members.append(self.monotherapy())
+                members.append(Term(self.monotherapy()))
                 rest = ""
             if column == "prior_therapy":
                 parsed = parse_count(part)
                 if parsed:
-                    members.append(
-                        self.count_band(
-                            re.match(
-                                r"^(\d+(?:\s*\+|\s+to\s+\d+|\s+or\s+\d+|-\d+)?)", part
-                            ).group(1)
-                        )
-                    )  # type: ignore[union-attr]
+                    prefix = re.match(
+                        r"^(\d+(?:\s*\+|\s+to\s+\d+|\s+or\s+\d+|-\d+)?)", part
+                    )
+                    assert prefix is not None
+                    members.append(self.count_term(prefix.group(1)))
                     rest = parsed[1]
             for token in re.split(r"\s+AND\s+|,\s+(?:and\s+)?|\s+and\s+", rest):
                 token = re.sub(
@@ -1583,18 +1459,12 @@ class Vocabulary(Builder):
                     flags=re.IGNORECASE,
                 ).strip()
                 if token:
-                    members.append(self.therapy_leaf(column, token, cls))
+                    members.append(Term(self.therapy_leaf(column, token, cls)))
             if members:
+                members = list(dict.fromkeys(members))
                 alternatives.append(members)
-                target = self.alt_concept(column, members)
-                self.map_source(
-                    column,
-                    part,
-                    "",
-                    target,
-                    "exact" if target < LOCAL_BASE else "none",
-                    "mapped-to-existing" if target < LOCAL_BASE else "proposed-new",
-                    "decomposed therapy descriptors",
+                self.record_value(
+                    column, part, [members], provenance="decomposed therapy descriptors"
                 )
         return alternatives
 
@@ -1617,35 +1487,10 @@ class Vocabulary(Builder):
             )[0]
         return self.local_value(column, value, cls)[0]
 
-    def alt_target(self, dimension: str, alternatives: list[list[int]]) -> int:
-        if len(alternatives) == 1 and len(alternatives[0]) == 1:
-            return alternatives[0][0]
-        return self.make_set(dimension, alternatives, "")
-
-    def ensure_source(
-        self, column: str, raw: str, target: int, provenance: str
-    ) -> None:
-        key = (column, norm(raw), "")
-        if key not in self.source_map:
-            self.map_source(
-                column,
-                raw,
-                "",
-                target,
-                "none",
-                "proposed-new" if target >= LOCAL_BASE else "mapped-to-existing",
-                provenance,
-            )
-
-    def alt_concept(self, dimension: str, members: list[int]) -> int:
-        return (
-            members[0] if len(members) == 1 else self.make_set(dimension, [members], "")
-        )
-
     def build_criteria(
         self, r: dict[str, object], ch: dict[str, dict[int, list[str]]], indication: int
-    ) -> list[tuple[str, str, list[list[int]]]]:
-        out: list[tuple[str, str, list[list[int]]]] = []
+    ) -> list[tuple[str, str, list[list[Term]]]]:
+        out: list[tuple[str, str, list[list[Term]]]] = []
         rid = int(r["id"])
         slots = [(r["biomarker"], r["biomarker_finding"])]
         for n in (2, 3, 4):
@@ -1673,11 +1518,12 @@ class Vocabulary(Builder):
                 mode,
                 pairs,
             )
-            states = []
+            terms = []
             for gene, finding in pairs:
-                states.append(self.state(gene, finding, rid))
+                terms.append(self.state_term(gene, finding, rid))
                 self.map_state_source(gene, finding)
-            alts = [states] if mode == "all" else [[state] for state in states]
+            terms = list(dict.fromkeys(terms))
+            alts = [terms] if mode == "all" else [[term] for term in terms]
             out.append(("biomarker", "requires", alts))
         for column in ("stage", "status", "stage_or_status"):
             values = [
@@ -1685,12 +1531,9 @@ class Vocabulary(Builder):
             ]
             alts = []
             for v in values:
-                per_value = self.disease_alternatives(column, v)
-                self.ensure_source(
-                    column,
-                    v,
-                    self.alt_target(column, per_value),
-                    "decomposed disease phrase",
+                per_value = self.concept_terms(self.disease_alternatives(column, v))
+                self.record_value(
+                    column, v, per_value, provenance="decomposed disease phrase"
                 )
                 alts.extend(per_value)
             if alts:
@@ -1698,7 +1541,7 @@ class Vocabulary(Builder):
         age = str(r["age"] or "").strip()
         if age and norm(age) not in {"any", "not applicable"}:
             unit = str(r["age_unit"] or "UNSPECIFIED").lower()
-            out.append(("age", "requires", [[self.age_band(age, unit)]]))
+            out.append(("age", "requires", [[self.age_term(age, unit)]]))
         if r["sex"]:
             cid = GENDER[str(r["sex"])]
             self.cite("sex", str(r["sex"]), cid, "exact", "target")
@@ -1711,7 +1554,7 @@ class Vocabulary(Builder):
                 "mapped-to-existing",
                 "OMOP Gender",
             )
-            out.append(("sex", "requires", [[cid]]))
+            out.append(("sex", "requires", [[Term(cid)]]))
         negation = ch["prior_therapy_negation"].get(rid, [])
         polarity = (
             "excludes"
@@ -1748,11 +1591,14 @@ class Vocabulary(Builder):
         if settings:
             leaves = []
             for v in settings:
-                leaf = self.setting_leaf(v)
-                self.ensure_source(
-                    "prior_therapy_setting", v, leaf, "prior therapy setting"
+                term = self.setting_term(v)
+                self.record_value(
+                    "prior_therapy_setting",
+                    v,
+                    [[term]],
+                    provenance="prior therapy setting",
                 )
-                leaves.append([leaf])
+                leaves.append([term])
             out.append(("prior_therapy_setting", "requires", leaves))
         pbm = str(r["prior_biomarker"] or "").strip()
         if pbm and norm(pbm) not in {"not applicable", "0"}:
@@ -1791,7 +1637,7 @@ class Vocabulary(Builder):
             ),
         ):
             alts = [
-                [self.population_leaf(column, v, cls)]
+                [Term(self.population_leaf(column, v, cls))]
                 for v in values
                 if not is_placeholder(v)
             ]
@@ -1805,14 +1651,16 @@ class Vocabulary(Builder):
         ]
         alts = []
         for v in rc:
-            per_value = self.or_alternatives(
-                "response_contingency", v, "Response Contingency", split=True
+            per_value = self.concept_terms(
+                self.or_alternatives(
+                    "response_contingency", v, "Response Contingency", split=True
+                )
             )
-            self.ensure_source(
+            self.record_value(
                 "response_contingency",
                 v,
-                self.alt_target("response_contingency", per_value),
-                "decomposed alternatives",
+                per_value,
+                provenance="decomposed alternatives",
             )
             alts.extend(per_value)
         if alts:
@@ -1824,63 +1672,64 @@ class Vocabulary(Builder):
                 "Prior Therapy Requirement",
                 name=norm(str(r["exposure_phenotype"])).capitalize(),
             )
-            out.append(("exposure_phenotype", "requires", [[cid]]))
+            out.append(("exposure_phenotype", "requires", [[Term(cid)]]))
         windows = []
         for window in split_pipe(str(r["time_contingency"] or "")):
             if is_placeholder(window):
                 continue
-            cid, _, _ = self.local_value("time_contingency", window, "Time Window")
             parsed = parse_window(window)
-            if parsed and cid not in self.bounds:
-                self.bounds[cid] = {
-                    "qualifier": "",
-                    "cl": parsed["cl"],
-                    "vl": parsed["vl"],
-                    "ch": parsed["ch"],
-                    "vh": parsed["vh"],
-                    "unit": parsed["unit"],
-                }
-            windows.append([cid])
+            term = (
+                self.scalar_term(parsed, str(parsed["unit"]), text=window)
+                if parsed
+                else Term(text=window)
+            )
+            self.record_value(
+                "time_contingency", window, [[term]], provenance="time contingency"
+            )
+            windows.append([term])
         if windows:
             out.append(("time_contingency", "requires", windows))
         return out
 
-    def age_band(self, raw: str, unit: str) -> int:
-        group = norm(raw) in {"adult", "pediatric"}
-        key = f"{slug(norm(raw))}-{unit}" if not group else slug(norm(raw))
-        suffix = "" if group else f" ({unit})"
-        cid = self.concept(
-            "Age Band",
-            key,
-            f"Age {raw.strip()}{suffix}",
-            provenance="age grammar value of the indications table",
+    def age_term(self, raw: str, unit: str) -> Term:
+        if norm(raw) in {"adult", "pediatric"}:
+            cid = self.concept(
+                "Population Qualifier",
+                f"AGE-{slug(norm(raw))}",
+                raw.strip().capitalize(),
+                provenance="age group word of the indications table",
+            )
+            term = Term(cid)
+            self.record_value(
+                "age", raw, [[term]], context=unit, provenance="age group"
+            )
+            return term
+        parsed = parse_age(raw, unit)
+        marker = re.search(r"nub(p|ya)", raw, re.IGNORECASE)
+        term = (
+            self.scalar_term(
+                parsed, unit, qualifier=marker.group(0).upper() if marker else ""
+            )
+            if parsed
+            else Term(text=raw)
         )
-        if not group:
-            parsed = parse_age(raw, unit)
-            if parsed and cid not in self.bounds:
-                self.bounds[cid] = {
-                    "qualifier": "",
-                    "cl": parsed["cl"],
-                    "vl": parsed["vl"],
-                    "ch": parsed["ch"],
-                    "vh": parsed["vh"],
-                    "unit": unit,
-                }
-        self.map_source("age", raw, unit, cid, "none", "proposed-new", "age band")
-        return cid
+        self.record_value("age", raw, [[term]], context=unit, provenance="age grammar")
+        return term
 
-    def setting_leaf(self, raw: str) -> int:
+    def setting_term(self, raw: str) -> Term:
         if parse_count(raw) and re.fullmatch(
             r"\d+(\s*\+|\s+to\s+\d+|\s+or\s+\d+)?", raw.strip()
         ):
-            return self.count_band(raw)
+            return self.count_term(raw)
         if self.lexicon_ok(norm(raw)):
             alts = self.disease_alternatives("prior_therapy_setting", raw)
             if len(alts) == 1 and len(alts[0]) == 1:
-                return alts[0][0]
-        return self.local_value(
-            "prior_therapy_setting", raw, "Prior Therapy Requirement"
-        )[0]
+                return Term(alts[0][0])
+        return Term(
+            self.local_value("prior_therapy_setting", raw, "Prior Therapy Requirement")[
+                0
+            ]
+        )
 
     def map_state_source(self, gene: str, finding: str) -> None:
         sid = self.state_columns[self.state_key(gene, finding)]
@@ -1893,6 +1742,15 @@ class Vocabulary(Builder):
             "proposed-new",
             "pre-coordinated biomarker state",
         )
+        term = self.state_term(gene, finding)
+        if term.has_scalar:
+            self.record_value(
+                "biomarker_finding",
+                finding,
+                [[term]],
+                context=self.gene_name(gene),
+                provenance="cut-off held as an attribute",
+            )
         analyte, fit = self.analyte(self.gene_name(gene), False)
         if analyte:
             self.cite("biomarker", gene, analyte, fit, "target")
@@ -1995,11 +1853,40 @@ class Vocabulary(Builder):
         for cid in self.context_links(ch["context"].get(rid, [])):
             self.relate(iid, cid, "Ind has context", cite="context")
         for dimension, polarity, alts in criteria:
-            sid = self.make_set(dimension, alts, "")
-            self.relate(
-                iid, sid, "Ind requires" if polarity == "requires" else "Ind excludes"
-            )
+            criterion_id = len(self.criteria_rows) + 1
+            self.criteria_rows.append([criterion_id, iid, dimension, polarity])
+            unique = list(dict.fromkeys(tuple(dict.fromkeys(alt)) for alt in alts))
+            for alt_no, alt in enumerate(unique, start=1):
+                for term_no, term in enumerate(alt, start=1):
+                    self.term_rows.append(
+                        [criterion_id, alt_no, term_no, *term_columns(term)]
+                    )
         return iid
+
+
+TERM_HEADER = [
+    "concept_id",
+    "qualifier",
+    "comparator_low",
+    "value_low",
+    "comparator_high",
+    "value_high",
+    "unit",
+    "text",
+]
+
+
+def term_columns(term: Term) -> list[object]:
+    return [
+        term.concept_id or "",
+        term.qualifier,
+        term.cl,
+        term.vl,
+        term.ch,
+        term.vh,
+        term.unit,
+        term.text,
+    ]
 
 
 def anchor(builder_anchors, cls: str, code: object, ex: Existing) -> int | None:
@@ -2043,33 +1930,21 @@ def main() -> None:
     write_all(vocab, rows, ch, anchored, unanchored, indications, criteria_by_row)
 
 
-def members_of(relationships: set[tuple[int, int, str]]) -> dict[int, list[int]]:
-    out: dict[int, list[int]] = defaultdict(list)
-    for a, b, rel in relationships:
-        if rel in {"Ind requires", "Ind excludes", "Set has any", "Set has all"}:
-            out[a].append(b)
-    return out
-
-
 def write_all(
     vocab: Vocabulary, rows, ch, anchored, unanchored, indications, criteria_by_row
 ) -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     cited = set(vocab.cited_existing)
-    # lung-first review priority: endpoints reachable from lung indications' criteria
-    graph = members_of(vocab.relationships)
-    lung_concepts: set[int] = set()
-    stack = [
-        indications[int(r["id"])]
+    # lung-first review priority: concepts used by lung indications' criteria
+    lung_concepts: set[int] = {
+        term.concept_id
         for r, _, _ in anchored
         if "lung" in str(r["condition"]).casefold()
-    ]
-    while stack:
-        node = stack.pop()
-        for nxt in graph.get(node, []):
-            if nxt not in lung_concepts:
-                lung_concepts.add(nxt)
-                stack.append(nxt)
+        for _, _, alts in criteria_by_row[int(r["id"])]
+        for alt in alts
+        for term in alt
+        if term.concept_id is not None
+    }
     for key, info in vocab.review.items():
         a, b, _ = key
         if a in lung_concepts or b in lung_concepts:
@@ -2191,19 +2066,32 @@ def write_all(
         ],
     )
     write_tsv(
-        OUT / "concept_bounds.tsv",
+        OUT / "indication_criterion.tsv",
+        ["criterion_id", "indication_id", "dimension", "polarity"],
+        vocab.criteria_rows,
+    )
+    write_tsv(
+        OUT / "criterion_term.tsv",
+        ["criterion_id", "alternative_no", "term_no", *TERM_HEADER],
+        vocab.term_rows,
+    )
+    write_tsv(
+        OUT / "source_value_terms.tsv",
         [
-            "concept_id",
-            "qualifier",
-            "comparator_low",
-            "value_low",
-            "comparator_high",
-            "value_high",
-            "unit",
+            "source_column",
+            "raw_value",
+            "context",
+            "alternative_no",
+            "term_no",
+            *TERM_HEADER,
         ],
         [
-            [cid, b["qualifier"], b["cl"], b["vl"], b["ch"], b["vh"], b["unit"]]
-            for cid, b in sorted(vocab.bounds.items())
+            [column, raw, context, alt_no, term_no, *term_columns(term)]
+            for (column, _, _), (raw, context, alts) in sorted(
+                vocab.value_terms.items()
+            )
+            for alt_no, alt in enumerate(alts, start=1)
+            for term_no, term in enumerate(alt, start=1)
         ],
     )
     write_tsv(
@@ -2344,7 +2232,15 @@ def write_all(
             for m in mapped
         ],
     )
-    cited_all = cited | {int(m["concept_id"]) for m in mapped}
+    term_ids = {
+        term.concept_id
+        for rows_ in criteria_by_row.values()
+        for _, _, alts in rows_
+        for alt in alts
+        for term in alt
+        if term.concept_id is not None and term.concept_id < LOCAL_BASE
+    }
+    cited_all = cited | term_ids | {int(m["concept_id"]) for m in mapped}
     write_tsv(
         OUT / "existing_concepts.tsv",
         [
@@ -2494,7 +2390,7 @@ def gap_rows(rows, ch, vocab: Vocabulary, anchored, unanchored) -> list[list[obj
     add(
         "G01",
         "indication model",
-        "No Indication, Criterion Set, Criterion Dimension, Regulator or Approval Path concept classes and no Ind/Set/State relationship types in HemOnc or OMOP",
+        "No Indication, Regulator or Approval Path concept classes, no Ind or State relationship types, and no native criterion tables for AND, OR, polarity and numeric attributes",
         "HemOnc",
         "HemOnc team",
         len(rows),
@@ -2622,7 +2518,7 @@ def gap_rows(rows, ch, vocab: Vocabulary, anchored, unanchored) -> list[list[obj
     add(
         "G13",
         "biomarker findings",
-        "Thresholds are not concepts: PD-L1 CPS, TPS, TIL, TMB, AFP ng/mL, c-Met IHC 3+; only assay concepts exist (OMOP Extension 718584 to 718589)",
+        "Scoring methods are not concepts (PD-L1 CPS, TPS, TIL, IHC 3+); only assay concepts exist (OMOP Extension 718584 to 718589). The cut-offs themselves are numeric attributes held natively",
         "OMOP Genomic and LOINC",
         "OMOP Genomic team",
         count(
@@ -2630,7 +2526,7 @@ def gap_rows(rows, ch, vocab: Vocabulary, anchored, unanchored) -> list[list[obj
                 r"cps|tps|til |at least|>=|>50|greater than|mutations/mb", findings(r)
             )
         ),
-        "Biomarker Threshold concepts",
+        "score states for PD-L1 scoring methods and TMB; cut-offs stay numeric attributes",
     )
     add(
         "G14",
@@ -2749,7 +2645,7 @@ def gap_rows(rows, ch, vocab: Vocabulary, anchored, unanchored) -> list[list[obj
                 or re.match(r"^\d", str(r["prior_therapy"] or ""))
             )
         ),
-        "Time Window and count band concepts",
+        "time window and prior-line count attributes on criterion terms",
     )
     add(
         "G23",
@@ -2769,7 +2665,7 @@ def gap_rows(rows, ch, vocab: Vocabulary, anchored, unanchored) -> list[list[obj
         count(
             lambda r: r["age"] and norm(str(r["age"])) not in {"any", "not applicable"}
         ),
-        "Age Band concepts",
+        "age attributes on criterion terms; adult and pediatric as qualifiers",
     )
     add(
         "G25",

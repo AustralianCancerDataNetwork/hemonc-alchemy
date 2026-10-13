@@ -1,0 +1,19 @@
+implications:
+  - biomarker: EGFR
+    finding: exon 19 deletion
+    satisfies:
+      - activating mutation
+      - sensitizing mutation
+  - biomarker: EGFR
+    finding: p.L858R
+    satisfies:
+      - activating mutation
+      - sensitizing mutation
+  - biomarker: ROS1
+    finding: fusion
+    satisfies:
+      - rearrangement
+  - biomarker: ROS1
+    finding: rearrangement
+    satisfies:
+      - fusion

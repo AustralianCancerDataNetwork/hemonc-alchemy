@@ -1,0 +1,719 @@
+source_column	raw_value	context	alternative_no	term_no	concept_id	qualifier	comparator_low	value_low	comparator_high	value_high	unit	text
+age	1 to 18	year	1	1			>=	1	<=	18	year	
+age	1 to 21	year	1	1			>=	1	<=	21	year	
+age	1 to NUBp	month	1	1		NUBP	>=	1			month	
+age	1 to NUBp	year	1	1		NUBP	>=	1			year	
+age	1 to NUBya	year	1	1		NUBYA	>=	1			year	
+age	1+	month	1	1			>=	1			month	
+age	1+	year	1	1			>=	1			year	
+age	12 to NUBp	year	1	1		NUBP	>=	12			year	
+age	12+	year	1	1			>=	12			year	
+age	13+	year	1	1			>=	13			year	
+age	15+	year	1	1			>=	15			year	
+age	16+	year	1	1			>=	16			year	
+age	2 to NUBp	month	1	1		NUBP	>=	2			month	
+age	2 to NUBp	year	1	1		NUBP	>=	2			year	
+age	2+	year	1	1			>=	2			year	
+age	22+	year	1	1			>=	22			year	
+age	25-	year	1	1					<=	25	year	
+age	3+	year	1	1			>=	3			year	
+age	4 to 11	year	1	1			>=	4	<=	11	year	
+age	6 to NUBp	month	1	1		NUBP	>=	6			month	
+age	60+	year	1	1			>=	60			year	
+age	65+	year	1	1			>=	65			year	
+age	pediatric including adolescent	unspecified	1	1								pediatric including adolescent
+biomarker_finding	>50% of tumor cells with strong (3+ IHC) staining	c-Met	1	1	2020000163	IHC 3+	>	50			%	
+biomarker_finding	>= 10 mutations/Mb	TMB	1	1	2020000161		>=	10			mut/Mb	
+biomarker_finding	at least 1%	PD-L1	1	1	2020000159		>=	1			%	
+biomarker_finding	at least 400 ng/mL	AFP	1	1	2020000162		>=	400			ng/mL	
+biomarker_finding	cps at least 1	PD-L1	1	1	2020000160	CPS	>=	1			score	
+biomarker_finding	CPS at least 1%	PD-L1	1	1	2020000160	CPS	>=	1			score	
+biomarker_finding	cps at least 10	PD-L1	1	1	2020000160	CPS	>=	10			score	
+biomarker_finding	CPS at least 10%	PD-L1	1	1	2020000160	CPS	>=	10			score	
+biomarker_finding	cps at least 5	PD-L1	1	1	2020000160	CPS	>=	5			score	
+biomarker_finding	greater than 400 ng/mL	AFP	1	1	2020000162		>	400			ng/mL	
+biomarker_finding	til at least 1%	PD-L1	1	1	2020000157	TIL	>=	1			%	
+biomarker_finding	TIL at least 5%	PD-L1	1	1	2020000157	TIL	>=	5			%	
+biomarker_finding	TPS at least 1%	PD-L1	1	1	2020000158	TPS	>=	1			%	
+biomarker_finding	TPS at least 5%	PD-L1	1	1	2020000158	TPS	>=	5			%	
+biomarker_finding	TPS at least 50%	PD-L1	1	1	2020000158	TPS	>=	50			%	
+prior_therapy	(Crizotinib AND One other ALK inhibitor)		1	1	35802972							
+prior_therapy	(Crizotinib AND One other ALK inhibitor)		1	2	35807229							
+prior_therapy	(Nephrectomy AND Metastatectomy)		1	1	2036000119							
+prior_therapy	(Nephrectomy AND Metastatectomy)		1	2	35804760							
+prior_therapy	(Paclitaxel AND Anthracycline-based regimen)		1	1	35803229							
+prior_therapy	(Paclitaxel AND Anthracycline-based regimen)		1	2	42542413							
+prior_therapy	(Paclitaxel AND Contraindication to Anthracycline)		1	1	35803229							
+prior_therapy	(Paclitaxel AND Contraindication to Anthracycline)		1	2	2036000012							
+prior_therapy	0		1	1			=	0			lines	
+prior_therapy	0 in the metastatic setting AND Anthracycline-based chemotherapy in the adjuvant setting, unless contraindicated		1	1			=	0			lines	
+prior_therapy	0 in the metastatic setting AND Anthracycline-based chemotherapy in the adjuvant setting, unless contraindicated		1	2	2036000080							
+prior_therapy	0 in the metastatic setting AND Anthracycline-based chemotherapy in the adjuvant setting, unless contraindicated		1	3	42542413							
+prior_therapy	0 in the metastatic setting AND Anthracycline-based chemotherapy in the adjuvant setting, unless contraindicated		1	4	2036000081							
+prior_therapy	0 or 1		1	1			>=	0	<=	1	lines	
+prior_therapy	0 SACT		1	1			=	0			lines	
+prior_therapy	0 SACT		1	2	2036000006							
+prior_therapy	0-2 chemotherapy-based regimens		1	1			>=	0	<=	2	lines	
+prior_therapy	0-2 chemotherapy-based regimens		1	2	2036000029							
+prior_therapy	0-2 chemotherapy-based regimens AND (bevacizumab or other VEGF inhibitors or VEGF receptor-targeted agents)		1	1			>=	0	<=	2	lines	
+prior_therapy	0-2 chemotherapy-based regimens AND (bevacizumab or other VEGF inhibitors or VEGF receptor-targeted agents)		1	2	2036000029							
+prior_therapy	0-2 chemotherapy-based regimens AND (bevacizumab or other VEGF inhibitors or VEGF receptor-targeted agents)		1	3	2036000030							
+prior_therapy	1		1	1			=	1			lines	
+prior_therapy	1 Chemothearpy		1	1			=	1			lines	
+prior_therapy	1 Chemothearpy		1	2	35803401							
+prior_therapy	1 SACT		1	1			=	1			lines	
+prior_therapy	1 SACT		1	2	2036000006							
+prior_therapy	1 to 3		1	1			>=	1	<=	3	lines	
+prior_therapy	1 to 3 SACT		1	1			>=	1	<=	3	lines	
+prior_therapy	1 to 3 SACT		1	2	2036000006							
+prior_therapy	1 VEGF inhibitor		1	1			=	1			lines	
+prior_therapy	1 VEGF inhibitor		1	2	2036000089							
+prior_therapy	1+		1	1			>=	1			lines	
+prior_therapy	1+ ALK TKI		1	1			>=	1			lines	
+prior_therapy	1+ ALK TKI		1	2	35807229							
+prior_therapy	1+ Alkylator-based regimen		1	1			>=	1			lines	
+prior_therapy	1+ Alkylator-based regimen		1	2	37557563							
+prior_therapy	1+ anti-CD20-based regimen		1	1			>=	1			lines	
+prior_therapy	1+ anti-CD20-based regimen		1	2	37557592							
+prior_therapy	1+ anti-HER-based regimen		1	1			>=	1			lines	
+prior_therapy	1+ anti-HER-based regimen		1	2	2036000154							
+prior_therapy	1+ anti-HER2-based regimen		1	1			>=	1			lines	
+prior_therapy	1+ anti-HER2-based regimen		1	2	2036000095							
+prior_therapy	1+ Chemotherapy		1	1			>=	1			lines	
+prior_therapy	1+ Chemotherapy		1	2	35803401							
+prior_therapy	1+ Chemotherapy, including an anthracycline and a taxane		1	1			>=	1			lines	
+prior_therapy	1+ Chemotherapy, including an anthracycline and a taxane		1	2	35803401							
+prior_therapy	1+ Chemotherapy, including an anthracycline and a taxane		1	3	35807214							
+prior_therapy	1+ Chemotherapy, including an anthracycline and a taxane		1	4	35807304							
+prior_therapy	1+ EGFR TKI		1	1			>=	1			lines	
+prior_therapy	1+ EGFR TKI		1	2	2036000009							
+prior_therapy	1+ endocrine therapy		1	1			>=	1			lines	
+prior_therapy	1+ endocrine therapy		1	2	35803407							
+prior_therapy	1+ Endocrine therapy AND CDK4/6 inhibitor		1	1			>=	1			lines	
+prior_therapy	1+ Endocrine therapy AND CDK4/6 inhibitor		1	2	35803407							
+prior_therapy	1+ Endocrine therapy AND CDK4/6 inhibitor		1	3	2036000065							
+prior_therapy	1+ including auto HSCT unless ineligible		1	1			>=	1			lines	
+prior_therapy	1+ including auto HSCT unless ineligible		1	2	2036000036							
+prior_therapy	1+ including lenalidomide		1	1			>=	1			lines	
+prior_therapy	1+ including lenalidomide		1	2	35803149							
+prior_therapy	1+ Multi-agent chemotherapy regimen		1	1			>=	1			lines	
+prior_therapy	1+ Multi-agent chemotherapy regimen		1	2	2036000037							
+prior_therapy	1+ radiation		1	1			>=	1			lines	
+prior_therapy	1+ radiation		1	2	35803411							
+prior_therapy	1+ radiotherapy		1	1			>=	1			lines	
+prior_therapy	1+ radiotherapy		1	2	2036000052							
+prior_therapy	1+ SACT		1	1			>=	1			lines	
+prior_therapy	1+ SACT		1	2	2036000006							
+prior_therapy	1+ systemic		1	1			>=	1			lines	
+prior_therapy	1+ systemic		1	2	2036000083							
+prior_therapy	1+ TKI		1	1			>=	1			lines	
+prior_therapy	1+ TKI		1	2	912198							
+prior_therapy	1+, including Cisplatin		1	1			>=	1			lines	
+prior_therapy	1+, including Cisplatin		1	2	35802958							
+prior_therapy	1+, including Imatinib		1	1			>=	1			lines	
+prior_therapy	1+, including Imatinib		1	2	35803119							
+prior_therapy	1+, including Lenalidomide AND Proteasome inhibitor		1	1			>=	1			lines	
+prior_therapy	1+, including Lenalidomide AND Proteasome inhibitor		1	2	35803149							
+prior_therapy	1+, including Lenalidomide AND Proteasome inhibitor		1	3	35807295							
+prior_therapy	1+, including Platinum-based regimen		1	1			>=	1			lines	
+prior_therapy	1+, including Platinum-based regimen		1	2	37558102							
+prior_therapy	1+, not including bortezomib		1	1			>=	1			lines	
+prior_therapy	1+, not including bortezomib		1	2	2036000117							
+prior_therapy	2		1	1			=	2			lines	
+prior_therapy	2+		1	1			>=	2			lines	
+prior_therapy	2+ anti-HER2-based regimen		1	1			>=	2			lines	
+prior_therapy	2+ anti-HER2-based regimen		1	2	2036000095							
+prior_therapy	2+ Anti-HER2-based regimen, 1+ of which was for metastatic disease		1	1			>=	2			lines	
+prior_therapy	2+ Anti-HER2-based regimen, 1+ of which was for metastatic disease		1	2	2036000095							
+prior_therapy	2+ Anti-HER2-based regimen, 1+ of which was for metastatic disease		1	3	2036000096							
+prior_therapy	2+ chemotherapy		1	1			>=	2			lines	
+prior_therapy	2+ chemotherapy		1	2	35803401							
+prior_therapy	2+ Chemotherapy, including Fluoropyrimidine-based regimen AND Platinum-based regimen AND (Taxane		1	1			>=	2			lines	
+prior_therapy	2+ Chemotherapy, including Fluoropyrimidine-based regimen AND Platinum-based regimen AND (Taxane		1	2	35803401							
+prior_therapy	2+ Chemotherapy, including Fluoropyrimidine-based regimen AND Platinum-based regimen AND (Taxane		1	3	37557866							
+prior_therapy	2+ Chemotherapy, including Fluoropyrimidine-based regimen AND Platinum-based regimen AND (Taxane		1	4	37558102							
+prior_therapy	2+ Chemotherapy, including Fluoropyrimidine-based regimen AND Platinum-based regimen AND (Taxane		1	5	35807304							
+prior_therapy	2+ Chemotherapy-based regimen		1	1			>=	2			lines	
+prior_therapy	2+ Chemotherapy-based regimen		1	2	37557736							
+prior_therapy	2+ including a proteasome inhibitor and an immunomodulatory agent		1	1			>=	2			lines	
+prior_therapy	2+ including a proteasome inhibitor and an immunomodulatory agent		1	2	35807295							
+prior_therapy	2+ including a proteasome inhibitor and an immunomodulatory agent		1	3	2036000027							
+prior_therapy	2+ Multi-agent chemotherapy regimens in non-transplant candidates		1	1			>=	2			lines	
+prior_therapy	2+ Multi-agent chemotherapy regimens in non-transplant candidates		1	2	2036000038							
+prior_therapy	2+ platinum-based chemotherapy		1	1			>=	2			lines	
+prior_therapy	2+ platinum-based chemotherapy		1	2	2036000045							
+prior_therapy	2+ SACT		1	1			>=	2			lines	
+prior_therapy	2+ SACT		1	2	2036000006							
+prior_therapy	2+ SACT, including 1+ in the advanced setting		1	1			>=	2			lines	
+prior_therapy	2+ SACT, including 1+ in the advanced setting		1	2	2036000006							
+prior_therapy	2+ SACT, including 1+ in the advanced setting		1	3	2036000137							
+prior_therapy	2+ SACT, including 1+ in the metastatic setting		1	1			>=	2			lines	
+prior_therapy	2+ SACT, including 1+ in the metastatic setting		1	2	2036000006							
+prior_therapy	2+ SACT, including 1+ in the metastatic setting		1	3	2036000136							
+prior_therapy	2+ SACT, including Anthracycline-based regimen AND Taxane-based regimen		1	1			>=	2			lines	
+prior_therapy	2+ SACT, including Anthracycline-based regimen AND Taxane-based regimen		1	2	2036000006							
+prior_therapy	2+ SACT, including Anthracycline-based regimen AND Taxane-based regimen		1	3	42542413							
+prior_therapy	2+ SACT, including Anthracycline-based regimen AND Taxane-based regimen		1	4	37558217							
+prior_therapy	2+ SACT, including Anthracycline-based regimen AND Taxane-based regimen unless unsuitable		1	1			>=	2			lines	
+prior_therapy	2+ SACT, including Anthracycline-based regimen AND Taxane-based regimen unless unsuitable		1	2	2036000006							
+prior_therapy	2+ SACT, including Anthracycline-based regimen AND Taxane-based regimen unless unsuitable		1	3	42542413							
+prior_therapy	2+ SACT, including Anthracycline-based regimen AND Taxane-based regimen unless unsuitable		1	4	2036000152							
+prior_therapy	2+ SACT, including BTK inhibitor		1	1			>=	2			lines	
+prior_therapy	2+ SACT, including BTK inhibitor		1	2	2036000006							
+prior_therapy	2+ SACT, including BTK inhibitor		1	3	35807208							
+prior_therapy	2+ SACT, including BTK inhibitor AND BCL-2 inhibitor		1	1			>=	2			lines	
+prior_therapy	2+ SACT, including BTK inhibitor AND BCL-2 inhibitor		1	2	2036000006							
+prior_therapy	2+ SACT, including BTK inhibitor AND BCL-2 inhibitor		1	3	35807208							
+prior_therapy	2+ SACT, including BTK inhibitor AND BCL-2 inhibitor		1	4	35807456							
+prior_therapy	2+ SACT, including BTKi		1	1			>=	2			lines	
+prior_therapy	2+ SACT, including BTKi		1	2	2036000006							
+prior_therapy	2+ SACT, including BTKi		1	3	35807208							
+prior_therapy	2+ SACT, including Fluoropyrimidine-based regimen AND Platinum-based regimen		1	1			>=	2			lines	
+prior_therapy	2+ SACT, including Fluoropyrimidine-based regimen AND Platinum-based regimen		1	2	2036000006							
+prior_therapy	2+ SACT, including Fluoropyrimidine-based regimen AND Platinum-based regimen		1	3	37557866							
+prior_therapy	2+ SACT, including Fluoropyrimidine-based regimen AND Platinum-based regimen		1	4	37558102							
+prior_therapy	2+ SACT, including Purine analog		1	1			>=	2			lines	
+prior_therapy	2+ SACT, including Purine analog		1	2	2036000006							
+prior_therapy	2+ SACT, including Purine analog		1	3	35807327							
+prior_therapy	2+ systemic treatments		1	1			>=	2			lines	
+prior_therapy	2+ systemic treatments		1	2	2036000021							
+prior_therapy	2+ TKI		1	1			>=	2			lines	
+prior_therapy	2+ TKI		1	2	912198							
+prior_therapy	2+ TKIs		1	1			>=	2			lines	
+prior_therapy	2+ TKIs		1	2	912198							
+prior_therapy	2+ Tyrosine kinase inhibitor therapy		1	1			>=	2			lines	
+prior_therapy	2+ Tyrosine kinase inhibitor therapy		1	2	912198							
+prior_therapy	2+ when AHSCT is not a treatment option		1	1			>=	2			lines	
+prior_therapy	2+ when AHSCT is not a treatment option		1	2	2036000118							
+prior_therapy	2+, including 1+ in the metastatic setting		1	1			>=	2			lines	
+prior_therapy	2+, including 1+ in the metastatic setting		1	2	2036000136							
+prior_therapy	2+, including 1+ platinum-containing chemotherapy		1	1			>=	2			lines	
+prior_therapy	2+, including 1+ platinum-containing chemotherapy		1	2	37558102							
+prior_therapy	2+, including Bortezomib		1	1			>=	2			lines	
+prior_therapy	2+, including Bortezomib		1	2	35802928							
+prior_therapy	2+, including Bortezomib AND Immunomodulator		1	1			>=	2			lines	
+prior_therapy	2+, including Bortezomib AND Immunomodulator		1	2	35802928							
+prior_therapy	2+, including Bortezomib AND Immunomodulator		1	3	2036000046							
+prior_therapy	2+, including Bortezomib AND Lenalidomide		1	1			>=	2			lines	
+prior_therapy	2+, including Bortezomib AND Lenalidomide		1	2	35802928							
+prior_therapy	2+, including Bortezomib AND Lenalidomide		1	3	35803149							
+prior_therapy	2+, including Lenalidomide AND Proteasome inhibitor		1	1			>=	2			lines	
+prior_therapy	2+, including Lenalidomide AND Proteasome inhibitor		1	2	35803149							
+prior_therapy	2+, including Lenalidomide AND Proteasome inhibitor		1	3	35807295							
+prior_therapy	2+, including Platinum-based regimen		1	1			>=	2			lines	
+prior_therapy	2+, including Platinum-based regimen		1	2	37558102							
+prior_therapy	2+, including Proteasome inhibitor AND Lenalidomide		1	1			>=	2			lines	
+prior_therapy	2+, including Proteasome inhibitor AND Lenalidomide		1	2	35807295							
+prior_therapy	2+, including Proteasome inhibitor AND Lenalidomide		1	3	35803149							
+prior_therapy	3+		1	1			>=	3			lines	
+prior_therapy	3+ Chemotherapy-based regimen		1	1			>=	3			lines	
+prior_therapy	3+ Chemotherapy-based regimen		1	2	37557736							
+prior_therapy	3+ Chemotherapy-based regimen, with progression at least 6 months after a platinum-based regimen		1	1			>=	3			lines	
+prior_therapy	3+ Chemotherapy-based regimen, with progression at least 6 months after a platinum-based regimen		1	2	37557736							
+prior_therapy	3+ Chemotherapy-based regimen, with progression at least 6 months after a platinum-based regimen		1	3	2036000098							
+prior_therapy	3+ SACT		1	1			>=	3			lines	
+prior_therapy	3+ SACT		1	2	2036000006							
+prior_therapy	3+ TKIs, including Imatinib		1	1			>=	3			lines	
+prior_therapy	3+ TKIs, including Imatinib		1	2	912198							
+prior_therapy	3+ TKIs, including Imatinib		1	3	35803119							
+prior_therapy	3+, including a proteasome inhibitor and an IMiD		1	1			>=	3			lines	
+prior_therapy	3+, including a proteasome inhibitor and an IMiD		1	2	35807295							
+prior_therapy	3+, including a proteasome inhibitor and an IMiD		1	3	2036000054							
+prior_therapy	3+, including a proteasome inhibitor and an IMiD and anti-CD38 antibody		1	1			>=	3			lines	
+prior_therapy	3+, including a proteasome inhibitor and an IMiD and anti-CD38 antibody		1	2	35807295							
+prior_therapy	3+, including a proteasome inhibitor and an IMiD and anti-CD38 antibody		1	3	2036000054							
+prior_therapy	3+, including a proteasome inhibitor and an IMiD and anti-CD38 antibody		1	4	35807345							
+prior_therapy	3+, including an immunomodulatory agent, a proteasome inhibitor, and an anti-CD38 antibody		1	1			>=	3			lines	
+prior_therapy	3+, including an immunomodulatory agent, a proteasome inhibitor, and an anti-CD38 antibody		1	2	2036000067							
+prior_therapy	3+, including an immunomodulatory agent, a proteasome inhibitor, and an anti-CD38 antibody		1	3	35807295							
+prior_therapy	3+, including an immunomodulatory agent, a proteasome inhibitor, and an anti-CD38 antibody		1	4	35807345							
+prior_therapy	3+, including Proteasome inhibitor AND Immunomodulator AND anti-CD38 antibody		1	1			>=	3			lines	
+prior_therapy	3+, including Proteasome inhibitor AND Immunomodulator AND anti-CD38 antibody		1	2	35807295							
+prior_therapy	3+, including Proteasome inhibitor AND Immunomodulator AND anti-CD38 antibody		1	3	2036000046							
+prior_therapy	3+, including Proteasome inhibitor AND Immunomodulator AND anti-CD38 antibody		1	4	35807345							
+prior_therapy	4+ including an anti-CD38 monoclonal antibody, a proteasome inhibitor, and an immunomodulatory agent		1	1			>=	4			lines	
+prior_therapy	4+ including an anti-CD38 monoclonal antibody, a proteasome inhibitor, and an immunomodulatory agent		1	2	35807345							
+prior_therapy	4+ including an anti-CD38 monoclonal antibody, a proteasome inhibitor, and an immunomodulatory agent		1	3	35807295							
+prior_therapy	4+ including an anti-CD38 monoclonal antibody, a proteasome inhibitor, and an immunomodulatory agent		1	4	2036000027							
+prior_therapy	4+ SACT, including a proteasome inhibitor, an immunomodulatory agent, and an anti-CD38 monoclonal antibody		1	1			>=	4			lines	
+prior_therapy	4+ SACT, including a proteasome inhibitor, an immunomodulatory agent, and an anti-CD38 monoclonal antibody		1	2	2036000006							
+prior_therapy	4+ SACT, including a proteasome inhibitor, an immunomodulatory agent, and an anti-CD38 monoclonal antibody		1	3	35807295							
+prior_therapy	4+ SACT, including a proteasome inhibitor, an immunomodulatory agent, and an anti-CD38 monoclonal antibody		1	4	2036000027							
+prior_therapy	4+ SACT, including a proteasome inhibitor, an immunomodulatory agent, and an anti-CD38 monoclonal antibody		1	5	2036000066							
+prior_therapy	4+, including 2+ Proteasome inhibitor, 2+ Immunomodulators, and anti-CD38 antibody		1	1			>=	4			lines	
+prior_therapy	4+, including 2+ Proteasome inhibitor, 2+ Immunomodulators, and anti-CD38 antibody		1	2	35807295							
+prior_therapy	4+, including 2+ Proteasome inhibitor, 2+ Immunomodulators, and anti-CD38 antibody		1	3	35807403							
+prior_therapy	4+, including 2+ Proteasome inhibitor, 2+ Immunomodulators, and anti-CD38 antibody		1	4	35807345							
+prior_therapy	4+, including Proteasome inhibitor AND Immunomodulator AND anti-CD38 antibody		1	1			>=	4			lines	
+prior_therapy	4+, including Proteasome inhibitor AND Immunomodulator AND anti-CD38 antibody		1	2	35807295							
+prior_therapy	4+, including Proteasome inhibitor AND Immunomodulator AND anti-CD38 antibody		1	3	2036000046							
+prior_therapy	4+, including Proteasome inhibitor AND Immunomodulator AND anti-CD38 antibody		1	4	35807345							
+prior_therapy	5-FU-based regimen		1	1			=	5			lines	
+prior_therapy	5-FU-based regimen		1	2	37557868							
+prior_therapy	Alkylating agent AND Fludarabine		1	1	35807238							
+prior_therapy	Alkylating agent AND Fludarabine		1	2	35803076							
+prior_therapy	Allogeneic HSCT, with recurrence		1	1	2036000085							
+prior_therapy	Allogeneic HSCT, with recurrence		1	2	2036000086							
+prior_therapy	Androgen receptor-directed therapy AND Taxane-based regimen		1	1	35807500							
+prior_therapy	Androgen receptor-directed therapy AND Taxane-based regimen		1	2	37558217							
+prior_therapy	Anthracycline AND Taxane		1	1	35807214							
+prior_therapy	Anthracycline AND Taxane		1	2	35807304							
+prior_therapy	Anthracycline AND Taxane AND Capecitabine		1	1	35807214							
+prior_therapy	Anthracycline AND Taxane AND Capecitabine		1	2	35807304							
+prior_therapy	Anthracycline AND Taxane AND Capecitabine		1	3	35802939							
+prior_therapy	Anthracycline AND Taxane AND Trastuzumab		1	1	35807214							
+prior_therapy	Anthracycline AND Taxane AND Trastuzumab		1	2	35807304							
+prior_therapy	Anthracycline AND Taxane AND Trastuzumab		1	3	35803361							
+prior_therapy	Anthracycline AND Taxane unless not suitable		1	1	35807214							
+prior_therapy	Anthracycline AND Taxane unless not suitable		1	2	2036000104							
+prior_therapy	Anthracycline and Taxane-based chemotherapy		1	1	35807214							
+prior_therapy	Anthracycline and Taxane-based chemotherapy		1	2	37558217							
+prior_therapy	anthracycline and/or a taxane in the (neo)adjuvant, locally advanced or metastatic setting unless patients were not suitable for these treatments. Patients with hormone receptor (HR)-positive breast cancer should have been treated with a prior endocrine-based therapy, or be considered unsuitable for endocrine-based therapy		1	1	2036000143							
+prior_therapy	anthracycline and/or a taxane in the (neo)adjuvant, locally advanced or metastatic setting unless patients were not suitable for these treatments. Patients with hormone receptor (HR)-positive breast cancer should have been treated with a prior endocrine-based therapy, or be considered unsuitable for endocrine-based therapy		1	2	2036000144							
+prior_therapy	anthracycline and/or a taxane in the (neo)adjuvant, locally advanced or metastatic setting unless patients were not suitable for these treatments. Patients with hormone receptor (HR)-positive breast cancer should have been treated with a prior endocrine-based therapy, or be considered unsuitable for endocrine-based therapy		1	3	2036000145							
+prior_therapy	Anthracycline-based regimen, unless not clinically appropriate		1	1	42542413							
+prior_therapy	Anthracycline-based regimen, unless not clinically appropriate		1	2	2036000070							
+prior_therapy	anti-PD-L1 antibody) AND Platinum-based regimen		1	1	35807270							
+prior_therapy	anti-PD-L1 antibody) AND Platinum-based regimen		1	2	37558102							
+prior_therapy	anti-PD-L1 antibody) AND VEGF TKI		1	1	35807270							
+prior_therapy	anti-PD-L1 antibody) AND VEGF TKI		1	2	35807257							
+prior_therapy	Antiandrogen AND Taxane-based regimen		1	1	35807206							
+prior_therapy	Antiandrogen AND Taxane-based regimen		1	2	37558217							
+prior_therapy	Antiestrogen AND Chemotherapy		1	1	911924							
+prior_therapy	Antiestrogen AND Chemotherapy		1	2	35803401							
+prior_therapy	Appropriate endocrine surgery and hormonal therapy		1	1	2036000156							
+prior_therapy	Appropriate endocrine surgery and hormonal therapy		1	2	35803407							
+prior_therapy	Autologous HSCT AND Brentuximab vedotin		1	1	905826							
+prior_therapy	Autologous HSCT AND Brentuximab vedotin		1	2	35802930							
+prior_therapy	Autologous HSCT, then Brentuximab vedotin		1	1	905826							
+prior_therapy	Autologous HSCT, then Brentuximab vedotin		1	2	2036000099							
+prior_therapy	Carboplatin AND Etoposide AND Atezolizumab		1	1	35802941							
+prior_therapy	Carboplatin AND Etoposide AND Atezolizumab		1	2	35803053							
+prior_therapy	Carboplatin AND Etoposide AND Atezolizumab		1	3	35802902							
+prior_therapy	Carboplatin AND Etoposide AND Atezolizumab and hyaluronidase		1	1	35802941							
+prior_therapy	Carboplatin AND Etoposide AND Atezolizumab and hyaluronidase		1	2	35803053							
+prior_therapy	Carboplatin AND Etoposide AND Atezolizumab and hyaluronidase		1	3	35802902							
+prior_therapy	Carboplatin AND Etoposide AND Atezolizumab and hyaluronidase		1	4	19073699							
+prior_therapy	Chemoradiotherapy-based regimen, then Surgery		1	1	2036000101							
+prior_therapy	Chemoradiotherapy-based regimen, then Surgery		1	2	2036000102							
+prior_therapy	chemotherapy AND auto HSCT		1	1	35803401							
+prior_therapy	chemotherapy AND auto HSCT		1	2	905826							
+prior_therapy	chemotherapy AND bevacizumab		1	1	35803401							
+prior_therapy	chemotherapy AND bevacizumab		1	2	35802921							
+prior_therapy	chemotherapy AND radiation		1	1	35803401							
+prior_therapy	chemotherapy AND radiation		1	2	35803411							
+prior_therapy	debulking surgery AND radiation		1	1	2036000155							
+prior_therapy	debulking surgery AND radiation		1	2	35803411							
+prior_therapy	EGFR-directed therapy AND Platinum-based therapy		1	1	2036000056							
+prior_therapy	EGFR-directed therapy AND Platinum-based therapy		1	2	37558102							
+prior_therapy	EGFR-TKI therapy and platinum-based chemotherapy		1	1	2036000108							
+prior_therapy	EGFR-TKI therapy and platinum-based chemotherapy		1	2	2036000045							
+prior_therapy	endocrine-based regimen AND 1+ taxane-based regimen AND 1+ chemotherapy-based regimen		1	1	37557822							
+prior_therapy	endocrine-based regimen AND 1+ taxane-based regimen AND 1+ chemotherapy-based regimen		1	2	2036000002							
+prior_therapy	endocrine-based regimen AND 1+ taxane-based regimen AND 1+ chemotherapy-based regimen		1	3	2036000003							
+prior_therapy	Endocrine-based therapy AND 1+ Chemotherapy		1	1	37557822							
+prior_therapy	Endocrine-based therapy AND 1+ Chemotherapy		1	2	2036000055							
+prior_therapy	Endocrine-based therapy AND 2+ SACT		1	1	37557822							
+prior_therapy	Endocrine-based therapy AND 2+ SACT		1	2	2036000138							
+prior_therapy	Endocrine-based therapy AND 2+ SACT in the advanced setting		1	1	37557822							
+prior_therapy	Endocrine-based therapy AND 2+ SACT in the advanced setting		1	2	2036000139							
+prior_therapy	Endocrine-based therapy AND Chemotherapy		1	1	37557822							
+prior_therapy	Endocrine-based therapy AND Chemotherapy		1	2	35803401							
+prior_therapy	First-line chemoimmunotherapy, not eligible for autologous HSCT		1	1	2036000090							
+prior_therapy	First-line chemoimmunotherapy, not eligible for autologous HSCT		1	2	2036000091							
+prior_therapy	Fludarabine AND Alemtuzumab		1	1	35803076							
+prior_therapy	Fludarabine AND Alemtuzumab		1	2	35802871							
+prior_therapy	Fluoropyrimidine AND (Oxaliplain		1	1	35807313							
+prior_therapy	Fluoropyrimidine AND (Oxaliplain		1	2	35803227							
+prior_therapy	Fluoropyrimidine AND Oxaliplain AND Irinotecan		1	1	35807313							
+prior_therapy	Fluoropyrimidine AND Oxaliplain AND Irinotecan		1	2	35803227							
+prior_therapy	Fluoropyrimidine AND Oxaliplain AND Irinotecan		1	3	35803130							
+prior_therapy	Fluoropyrimidine AND Oxaliplain AND Irinotecan AND Nivolumab		1	1	35807313							
+prior_therapy	Fluoropyrimidine AND Oxaliplain AND Irinotecan AND Nivolumab		1	2	35803227							
+prior_therapy	Fluoropyrimidine AND Oxaliplain AND Irinotecan AND Nivolumab		1	3	35803130							
+prior_therapy	Fluoropyrimidine AND Oxaliplain AND Irinotecan AND Nivolumab		1	4	35803207							
+prior_therapy	Fluoropyrimidine AND Oxaliplatin AND Bevacizumab		1	1	35807313							
+prior_therapy	Fluoropyrimidine AND Oxaliplatin AND Bevacizumab		1	2	35803227							
+prior_therapy	Fluoropyrimidine AND Oxaliplatin AND Bevacizumab		1	3	35802921							
+prior_therapy	Fluoropyrimidine AND Platinum-based regimen		1	1	35807313							
+prior_therapy	Fluoropyrimidine AND Platinum-based regimen		1	2	37558102							
+prior_therapy	Fluoropyrimidine- and platinum-based regimen		1	1	35807313							
+prior_therapy	Fluoropyrimidine- and platinum-based regimen		1	2	37558102							
+prior_therapy	fluoropyrimidine-, oxaliplatin-, and irinotecan-based chemotherapy		1	1	35807313							
+prior_therapy	fluoropyrimidine-, oxaliplatin-, and irinotecan-based chemotherapy		1	2	37558071							
+prior_therapy	fluoropyrimidine-, oxaliplatin-, and irinotecan-based chemotherapy		1	3	42542415							
+prior_therapy	fluoropyrimidine-, oxaliplatin-, and irinotecan-based chemotherapy AND an anti-VEGF therapy AND if RAS wild-type and medically appropriate, an anti-EGFR therapy		1	1	35807313							
+prior_therapy	fluoropyrimidine-, oxaliplatin-, and irinotecan-based chemotherapy AND an anti-VEGF therapy AND if RAS wild-type and medically appropriate, an anti-EGFR therapy		1	2	37558071							
+prior_therapy	fluoropyrimidine-, oxaliplatin-, and irinotecan-based chemotherapy AND an anti-VEGF therapy AND if RAS wild-type and medically appropriate, an anti-EGFR therapy		1	3	42542415							
+prior_therapy	fluoropyrimidine-, oxaliplatin-, and irinotecan-based chemotherapy AND an anti-VEGF therapy AND if RAS wild-type and medically appropriate, an anti-EGFR therapy		1	4	2036000075							
+prior_therapy	fluoropyrimidine-, oxaliplatin-, and irinotecan-based chemotherapy AND an anti-VEGF therapy AND if RAS wild-type and medically appropriate, an anti-EGFR therapy		1	5	2036000076							
+prior_therapy	fluoropyrimidine-, oxaliplatin-, and irinotecan-based chemotherapy AND an anti-VEGF therapy AND if RAS wild-type and medically appropriate, an anti-EGFR therapy		1	6	2036000077							
+prior_therapy	fluoropyrimidine-, oxaliplatin-, and irinotecan-based chemotherapy AND an anti-VEGF therapy AND if RAS wild-type and medically appropriate, an anti-EGFR therapy		1	7	2036000078							
+prior_therapy	Fluoropyrimidine-based chemotherapy AND oxaliplatin-based chemotherapy AND irinotecan-based chemotherapy AND anti-VEGF biological therapy		1	1	37557866							
+prior_therapy	Fluoropyrimidine-based chemotherapy AND oxaliplatin-based chemotherapy AND irinotecan-based chemotherapy AND anti-VEGF biological therapy		1	2	37558071							
+prior_therapy	Fluoropyrimidine-based chemotherapy AND oxaliplatin-based chemotherapy AND irinotecan-based chemotherapy AND anti-VEGF biological therapy		1	3	42542415							
+prior_therapy	Fluoropyrimidine-based chemotherapy AND oxaliplatin-based chemotherapy AND irinotecan-based chemotherapy AND anti-VEGF biological therapy		1	4	2036000153							
+prior_therapy	Fluoropyrimidine-based regimen AND Oxaliplatin-based regimen AND Irinotecan-based regimen		1	1	37557866							
+prior_therapy	Fluoropyrimidine-based regimen AND Oxaliplatin-based regimen AND Irinotecan-based regimen		1	2	37558071							
+prior_therapy	Fluoropyrimidine-based regimen AND Oxaliplatin-based regimen AND Irinotecan-based regimen		1	3	42542415							
+prior_therapy	Fluoropyrimidine-based regimen AND Oxaliplatin-based regimen AND Irinotecan-based regimen AND VEGFR inhibitor therapy		1	1	37557866							
+prior_therapy	Fluoropyrimidine-based regimen AND Oxaliplatin-based regimen AND Irinotecan-based regimen AND VEGFR inhibitor therapy		1	2	37558071							
+prior_therapy	Fluoropyrimidine-based regimen AND Oxaliplatin-based regimen AND Irinotecan-based regimen AND VEGFR inhibitor therapy		1	3	42542415							
+prior_therapy	Fluoropyrimidine-based regimen AND Oxaliplatin-based regimen AND Irinotecan-based regimen AND VEGFR inhibitor therapy		1	4	35807257							
+prior_therapy	Imatinib AND Sunitinib		1	1	35803119							
+prior_therapy	Imatinib AND Sunitinib		1	2	35803323							
+prior_therapy	Iodine-131 AND 1+ SACT		1	1	35803127							
+prior_therapy	Iodine-131 AND 1+ SACT		1	2	2036000040							
+prior_therapy	Iodine-131, if appropriate		1	1	35803127							
+prior_therapy	Iodine-131, if appropriate		1	2	2036000127							
+prior_therapy	Irinotecan) AND anti-HER2-based regimen, if appropriate		1	1	35803130							
+prior_therapy	Irinotecan) AND anti-HER2-based regimen, if appropriate		1	2	2036000095							
+prior_therapy	Irinotecan) AND anti-HER2-based regimen, if appropriate		1	3	2036000127							
+prior_therapy	Irinotecan-based regimen AND Oxaliplatin-based regimen		1	1	42542415							
+prior_therapy	Irinotecan-based regimen AND Oxaliplatin-based regimen		1	2	37558071							
+prior_therapy	multiagent, multimodality therapy including anti-GD2 immunotherapy		1	1	2036000063							
+prior_therapy	multiagent, multimodality therapy including anti-GD2 immunotherapy		1	2	2036000064							
+prior_therapy	Nephrectomy and resection of metastatic lesions		1	1	2036000119							
+prior_therapy	Nephrectomy and resection of metastatic lesions		1	2	35804760							
+prior_therapy	Nitrosourea AND Procarbazine		1	1	35807317							
+prior_therapy	Nitrosourea AND Procarbazine		1	2	35803269							
+prior_therapy	Obinutuzumab AND Chemotherapy		1	1	35803211							
+prior_therapy	Obinutuzumab AND Chemotherapy		1	2	35803401							
+prior_therapy	Platinum- and Bevacizumab-based regimen		1	1	37558102							
+prior_therapy	Platinum- and Bevacizumab-based regimen		1	2	42542414							
+prior_therapy	Platinum-based regimen AND (anti-PD-1 antibody		1	1	37558102							
+prior_therapy	Platinum-based regimen AND (anti-PD-1 antibody		1	2	35807322							
+prior_therapy	Platinum-based regimen and 0 or 1 additional SACT		1	1	37558102							
+prior_therapy	Platinum-based regimen and 0 or 1 additional SACT		1	2	2036000120							
+prior_therapy	Platinum-based regimen AND Bevacizumab		1	1	37558102							
+prior_therapy	Platinum-based regimen AND Bevacizumab		1	2	35802921							
+prior_therapy	Platinum-based regimen AND Docetaxel monotherapy		1	1	37558102							
+prior_therapy	Platinum-based regimen AND Docetaxel monotherapy		1	2	35803016							
+prior_therapy	Platinum-based regimen AND Paclitaxel-containing regimen		1	1	37558102							
+prior_therapy	Platinum-based regimen AND Paclitaxel-containing regimen		1	2	37558073							
+prior_therapy	Platinum-based regimen, completed at least 6 months prior		1	1	37558102							
+prior_therapy	Platinum-based regimen, completed at least 6 months prior		1	2	2036000082							
+prior_therapy	Platinum-based regimen, with progression within 12 months		1	1	37558102							
+prior_therapy	Platinum-based regimen, with progression within 12 months		1	2	2036000020							
+prior_therapy	Proteasome inhibitor and an IMiD		1	1	35807295							
+prior_therapy	Proteasome inhibitor and an IMiD		1	2	2036000054							
+prior_therapy	relapse within 6 months of adjuvant chemotherapy, including an anthracycline-based regimen unless clinically contraindicated		1	1	2036000113							
+prior_therapy	relapse within 6 months of adjuvant chemotherapy, including an anthracycline-based regimen unless clinically contraindicated		1	2	42542413							
+prior_therapy	Resection AND Platinum-based chemotherapy		1	1	2036000011							
+prior_therapy	Resection AND Platinum-based chemotherapy		1	2	2036000045							
+prior_therapy	Retinoid AND Anthracycline		1	1	35807234							
+prior_therapy	Retinoid AND Anthracycline		1	2	35807214							
+prior_therapy	Rituximab AND Chemotherapy		1	1	35803296							
+prior_therapy	Rituximab AND Chemotherapy		1	2	35803401							
+prior_therapy	Segmental mastectomy, axillary dissection, and breast irradiation		1	1	2036000147							
+prior_therapy	Segmental mastectomy, axillary dissection, and breast irradiation		1	2	2036000148							
+prior_therapy	Segmental mastectomy, axillary dissection, and breast irradiation		1	3	2036000149							
+prior_therapy	Standard therapy including a taxane, unless therapy with a taxane is clinically contraindicated		1	1	2036000041							
+prior_therapy	Standard therapy including a taxane, unless therapy with a taxane is clinically contraindicated		1	2	2036000042							
+prior_therapy	Surgery AND 2 to 3 years of Tamoxifen monotherapy		1	1	35804762							
+prior_therapy	Surgery AND 2 to 3 years of Tamoxifen monotherapy		1	2	35803329							
+prior_therapy	Surgery AND 5 years of Tamoxifen		1	1	35804762							
+prior_therapy	Surgery AND 5 years of Tamoxifen		1	2	35803329							
+prior_therapy	Surgery AND Chemotherapy		1	1	35804762							
+prior_therapy	Surgery AND Chemotherapy		1	2	35803401							
+prior_therapy	Surgery AND Platinum-based regimen		1	1	35804762							
+prior_therapy	Surgery AND Platinum-based regimen		1	2	37558102							
+prior_therapy	Surgery AND standard Tamoxifen		1	1	35804762							
+prior_therapy	Surgery AND standard Tamoxifen		1	2	35803329							
+prior_therapy	Surgery AND Trastuzumab-based regimen		1	1	35804762							
+prior_therapy	Surgery AND Trastuzumab-based regimen		1	2	37558258							
+prior_therapy	Taxane and trastuzumab-based regimen AND Surgery		1	1	35807304							
+prior_therapy	Taxane and trastuzumab-based regimen AND Surgery		1	2	37558258							
+prior_therapy	Taxane and trastuzumab-based regimen AND Surgery		1	3	35804762							
+prior_therapy	Trastuzumab AND Taxane		1	1	35803361							
+prior_therapy	Trastuzumab AND Taxane		1	2	35807304							
+prior_therapy	VEGFR inhibitor AND mTOR pathway inhibitor AND cytokine therapy		1	1	35807257							
+prior_therapy	VEGFR inhibitor AND mTOR pathway inhibitor AND cytokine therapy		1	2	35807369							
+prior_therapy	VEGFR inhibitor AND mTOR pathway inhibitor AND cytokine therapy		1	3	35807228							
+prior_therapy	VEGFR inhibitor therapy AND (Contraindication to Iodine-131		1	1	35807257							
+prior_therapy	VEGFR inhibitor therapy AND (Contraindication to Iodine-131		1	2	2036000039							
+prior_therapy_setting	0		1	1			=	0			lines	
+prior_therapy_setting	1 to 2		1	1			>=	1	<=	2	lines	
+prior_therapy_setting	1+		1	1			>=	1			lines	
+response_contingency	CR or PR		1	1	1633363							
+response_contingency	CR or PR		2	1	2034000021							
+response_contingency	failure or intolerance		1	1	4141764							
+response_contingency	failure or intolerance		2	1	4105297							
+response_contingency	failure or progression		1	1	4141764							
+response_contingency	failure or progression		2	1	32949							
+response_contingency	Microscopic or gross nodal involvement		1	1	2034000029							
+response_contingency	Microscopic or gross nodal involvement		2	1	2034000030							
+response_contingency	MRD greater than or equal to 0.1%		1	1	2034000012							
+response_contingency	MRD greater than or equal to 0.1%		2	1	2034000013							
+response_contingency	no response or progression		1	1	45877597							
+response_contingency	no response or progression		2	1	32949							
+response_contingency	partial response, minor response, or stable disease		1	1	2034000025							
+response_contingency	partial response, minor response, or stable disease		2	1	2034000026							
+response_contingency	partial response, minor response, or stable disease		3	1	1635506							
+response_contingency	PR or CR		1	1	2034000021							
+response_contingency	PR or CR		2	1	1633363							
+response_contingency	refractory or intolerant		1	1	4048615							
+response_contingency	refractory or intolerant		2	1	4105297							
+response_contingency	resistant or intolerant		1	1	4148441							
+response_contingency	resistant or intolerant		2	1	4105297							
+stage_or_status	Advanced unresectable		1	1	46272912							
+stage_or_status	Advanced unresectable		1	2	4313265							
+stage_or_status	Inoperable locally advanced		1	1	2030000001							
+stage_or_status	Inoperable locally advanced		1	2	2032000030							
+stage_or_status	Locally advanced unresectable		1	1	2030000001							
+stage_or_status	Locally advanced unresectable		1	2	46272912							
+stage_or_status	Locally advanced unresectable (stage III)		1	1	2030000001							
+stage_or_status	Locally advanced unresectable (stage III)		1	2	46272912							
+stage_or_status	Locally recurrent unresectable		1	1	2032000019							
+stage_or_status	Locally recurrent unresectable		1	2	46272912							
+stage_or_status	Primary advanced		1	1	4313265							
+stage_or_status	Primary advanced		1	2	2032000023							
+stage_or_status	Recurrent locally advanced		1	1	2030000001							
+stage_or_status	Recurrent locally advanced		1	2	4113136							
+stage_or_status	Unresectable advanced		1	1	46272912							
+stage_or_status	Unresectable advanced		1	2	4313265							
+stage_or_status	Unresectable locally advanced		1	1	2030000001							
+stage_or_status	Unresectable locally advanced		1	2	46272912							
+status	Metastatic or Recurrent		1	1	32944							
+status	Metastatic or Recurrent		2	1	4113136							
+status	Recurrent or refractory unresectable		1	1	4113136							
+status	Recurrent or refractory unresectable		2	1	46272912							
+status	Recurrent or refractory unresectable		2	2	4048615							
+status	Recurrent unresectable		1	1	46272912							
+status	Recurrent unresectable		1	2	4113136							
+status	Relapsed or Metastatic		1	1	4136153							
+status	Relapsed or Metastatic		2	1	32944							
+status	Relapsed or progressive		1	1	4136153							
+status	Relapsed or progressive		2	1	4114504							
+status	Relapsed or refractory		1	1	4136153							
+status	Relapsed or refractory		2	1	4048615							
+status	Symptomatic or progressive		1	1	4142947							
+status	Symptomatic or progressive		2	1	4114504							
+time_contingency	12 months		1	1			=	12			month	12 months
+time_contingency	56 days		1	1			=	56			day	56 days
+time_contingency	6 months of completing therapy		1	1			=	6			month	6 months of completing therapy
+time_contingency	At least 16 weeks		1	1			>=	16			week	At least 16 weeks
+time_contingency	at least 6 months		1	1			>=	6			month	at least 6 months
+time_contingency	during or following		1	1								during or following
+time_contingency	during or within 6 months		1	1					<=	6	month	during or within 6 months
+time_contingency	during or within 6 months of completion		1	1					<=	6	month	during or within 6 months of completion
+time_contingency	For patients with a prior autologous stem cell transplantation, the time to progression should be at least 3 years from transplantation		1	1			>=	3			year	For patients with a prior autologous stem cell transplantation, the time to progression should be at least 3 years from transplantation
+time_contingency	immediately prior		1	1								immediately prior
+time_contingency	Less than one year		1	1					<	1	year	Less than one year
+time_contingency	No progression within 16 weeks of starting platinum-based regimen		1	1					<=	16	week	No progression within 16 weeks of starting platinum-based regimen
+time_contingency	on or within 12 months of completion		1	1					<=	12	month	on or within 12 months of completion
+time_contingency	refractory		1	1								refractory
+time_contingency	Up to 3 months		1	1					<=	3	month	Up to 3 months
+time_contingency	within 12 months		1	1					<=	12	month	within 12 months
+time_contingency	within 12 months of completion		1	1					<=	12	month	within 12 months of completion
+time_contingency	within 12 months of neoadjuvant or adjuvant treatment		1	1					<=	12	month	within 12 months of neoadjuvant or adjuvant treatment
+time_contingency	within 6 months		1	1					<=	6	month	within 6 months
+time_contingency	within 6 months of completion		1	1					<=	6	month	within 6 months of completion
+time_contingency	within 60 days of completion of last therapy		1	1					<=	60	day	within 60 days of completion of last therapy
+time_contingency	within 60 days of completion of the last therapy		1	1					<=	60	day	within 60 days of completion of the last therapy
+time_contingency	Within 84 days		1	1					<=	84	day	Within 84 days
+with_field	(ADT AND Androgen receptor inhibitor)		1	1	37560922							
+with_field	(ADT AND Androgen receptor inhibitor)		1	2	35807500							
+with_field	(Bortezomib AND Dexamethasone)		1	1	35802928							
+with_field	(Bortezomib AND Dexamethasone)		1	2	35803008							
+with_field	(Cisplatin AND Paclitaxel)		1	1	35802958							
+with_field	(Cisplatin AND Paclitaxel)		1	2	35803229							
+with_field	(Fluoropyrimidine AND Irinotecan)		1	1	35807313							
+with_field	(Fluoropyrimidine AND Irinotecan)		1	2	35803130							
+with_field	(Fluoropyrimidine AND Oxaliplatin)		1	1	35807313							
+with_field	(Fluoropyrimidine AND Oxaliplatin)		1	2	35803227							
+with_field	(Fluorouracil AND Leucovorin AND Irinotecan)		1	1	35803077							
+with_field	(Fluorouracil AND Leucovorin AND Irinotecan)		1	2	35803081							
+with_field	(Fluorouracil AND Leucovorin AND Irinotecan)		1	3	35803130							
+with_field	(Fluorouracil AND Leuvorin)		1	1	35803077							
+with_field	(Fluorouracil AND Leuvorin)		1	2	35803081							
+with_field	(Lenalidomide AND Dexamethasone)		1	1	35803149							
+with_field	(Lenalidomide AND Dexamethasone)		1	2	35803008							
+with_field	(Paclitaxel AND Topotecan)		1	1	35803229							
+with_field	(Paclitaxel AND Topotecan)		1	2	35803352							
+with_field	5-FU AND Cisplatin		1	1	35803077							
+with_field	5-FU AND Cisplatin		1	2	35802958							
+with_field	ADT AND (Prednisone		1	1	37560922							
+with_field	ADT AND (Prednisone		1	2	35803268							
+with_field	ADT AND Prednisone		1	1	37560922							
+with_field	ADT AND Prednisone		1	2	35803268							
+with_field	Atezolizumab and hyaluronidase		1	1	35802902							
+with_field	Atezolizumab and hyaluronidase		1	2	19073699							
+with_field	Bendamustine AND Rituximab		1	1	35802918							
+with_field	Bendamustine AND Rituximab		1	2	35803296							
+with_field	Bevacizumab AND Paclitaxel AND Carboplatin		1	1	35802921							
+with_field	Bevacizumab AND Paclitaxel AND Carboplatin		1	2	35803229							
+with_field	Bevacizumab AND Paclitaxel AND Carboplatin		1	3	35802941							
+with_field	Bortezomib AND Cyclophosphamide AND Dexamethasone		1	1	35802928							
+with_field	Bortezomib AND Cyclophosphamide AND Dexamethasone		1	2	35802975							
+with_field	Bortezomib AND Cyclophosphamide AND Dexamethasone		1	3	35803008							
+with_field	Bortezomib AND Dexamethasone		1	1	35802928							
+with_field	Bortezomib AND Dexamethasone		1	2	35803008							
+with_field	Bortezomib AND Lenalidomide AND Dexamethasone		1	1	35802928							
+with_field	Bortezomib AND Lenalidomide AND Dexamethasone		1	2	35803149							
+with_field	Bortezomib AND Lenalidomide AND Dexamethasone		1	3	35803008							
+with_field	Bortezomib AND Melphalan AND Prednisone		1	1	35802928							
+with_field	Bortezomib AND Melphalan AND Prednisone		1	2	35803175							
+with_field	Bortezomib AND Melphalan AND Prednisone		1	3	35803268							
+with_field	Bortezomib AND Thalidomide AND Dexamethasone		1	1	35802928							
+with_field	Bortezomib AND Thalidomide AND Dexamethasone		1	2	35803338							
+with_field	Bortezomib AND Thalidomide AND Dexamethasone		1	3	35803008							
+with_field	Capecitabine AND Bevacizumab		1	1	35802939							
+with_field	Capecitabine AND Bevacizumab		1	2	35802921							
+with_field	Carboplatin AND (Paclitaxel		1	1	35802941							
+with_field	Carboplatin AND (Paclitaxel		1	2	35803229							
+with_field	Carboplatin AND Etoposide		1	1	35802941							
+with_field	Carboplatin AND Etoposide		1	2	35803053							
+with_field	Carboplatin AND Gemcitabine		1	1	35802941							
+with_field	Carboplatin AND Gemcitabine		1	2	35803095							
+with_field	Carboplatin AND nab-Paclitaxel		1	1	35802941							
+with_field	Carboplatin AND nab-Paclitaxel		1	2	35803228							
+with_field	Carboplatin AND Paclitaxel		1	1	35802941							
+with_field	Carboplatin AND Paclitaxel		1	2	35803229							
+with_field	Carboplatin AND Pembrolizumab		1	1	35802941							
+with_field	Carboplatin AND Pembrolizumab		1	2	35803244							
+with_field	Carboplatin AND Pemetrexed		1	1	35802941							
+with_field	Carboplatin AND Pemetrexed		1	2	35803245							
+with_field	Carfilzomib AND Dexamethasone		1	1	35802942							
+with_field	Carfilzomib AND Dexamethasone		1	2	35803008							
+with_field	Carpoplatin AND (Paclitaxel		1	1	35802941							
+with_field	Carpoplatin AND (Paclitaxel		1	2	35803229							
+with_field	Carpoplatin AND Paclitaxel		1	1	35802941							
+with_field	Carpoplatin AND Paclitaxel		1	2	35803229							
+with_field	Cetuximab AND mFOLFOX6		1	1	35802951							
+with_field	Cetuximab AND mFOLFOX6		1	2	35804758							
+with_field	Chemotherapy AND Optional Bevacizumab		1	1	35803401							
+with_field	Chemotherapy AND Optional Bevacizumab		1	2	42542414							
+with_field	Chemotherapy, then 0		1	1	35803401							
+with_field	Chemotherapy, then 0		1	2	2037000021							
+with_field	Cisplatin AND Etoposide		1	1	35802958							
+with_field	Cisplatin AND Etoposide		1	2	35803053							
+with_field	Cisplatin AND Fluoropyrimidine		1	1	35802958							
+with_field	Cisplatin AND Fluoropyrimidine		1	2	35807313							
+with_field	Cisplatin AND Fluorouracil		1	1	35802958							
+with_field	Cisplatin AND Fluorouracil		1	2	35803077							
+with_field	Cisplatin AND Gemcitabine		1	1	35802958							
+with_field	Cisplatin AND Gemcitabine		1	2	35803095							
+with_field	Cisplatin AND Paclitaxel		1	1	35802958							
+with_field	Cisplatin AND Paclitaxel		1	2	35803229							
+with_field	Cisplatin) AND Etoposide		1	1	35802958							
+with_field	Cisplatin) AND Etoposide		1	2	35803053							
+with_field	Cisplatin) AND Gemcitabine		1	1	35802958							
+with_field	Cisplatin) AND Gemcitabine		1	2	35803095							
+with_field	Cobimetinib AND Vemurafenib		1	1	35802966							
+with_field	Cobimetinib AND Vemurafenib		1	2	35803382							
+with_field	Cyclophosphamide AND Doxorubicin		1	1	35802975							
+with_field	Cyclophosphamide AND Doxorubicin		1	2	35803022							
+with_field	Cyclophosphamide AND Doxorubicin AND Prednisone		1	1	35802975							
+with_field	Cyclophosphamide AND Doxorubicin AND Prednisone		1	2	35803022							
+with_field	Cyclophosphamide AND Doxorubicin AND Prednisone		1	3	35803268							
+with_field	Cytarabine AND Anthracycline		1	1	35802979							
+with_field	Cytarabine AND Anthracycline		1	2	35807214							
+with_field	Cytarabine AND Daunorubicin		1	1	35802979							
+with_field	Cytarabine AND Daunorubicin		1	2	35802996							
+with_field	Daratumumab AND Dexamethasone		1	1	35802992							
+with_field	Daratumumab AND Dexamethasone		1	2	35803008							
+with_field	Dexamethasone AND Thalidomide		1	1	35803008							
+with_field	Dexamethasone AND Thalidomide		1	2	35803338							
+with_field	Docetaxel AND ADT		1	1	35803016							
+with_field	Docetaxel AND ADT		1	2	37560922							
+with_field	Doxorubicin AND Cyclophosphamide		1	1	35803022							
+with_field	Doxorubicin AND Cyclophosphamide		1	2	35802975							
+with_field	Doxorubicin AND Cyclophosphamide AND Paclitaxel		1	1	35803022							
+with_field	Doxorubicin AND Cyclophosphamide AND Paclitaxel		1	2	35802975							
+with_field	Doxorubicin AND Cyclophosphamide AND Paclitaxel		1	3	35803229							
+with_field	Doxorubicin AND Vincristine AND Dacarbazine		1	1	35803022							
+with_field	Doxorubicin AND Vincristine AND Dacarbazine		1	2	35803385							
+with_field	Doxorubicin AND Vincristine AND Dacarbazine		1	3	35802985							
+with_field	Doxorubicin AND Vincristine AND Etoposide AND Prednisone AND Cyclophosphamide		1	1	35803022							
+with_field	Doxorubicin AND Vincristine AND Etoposide AND Prednisone AND Cyclophosphamide		1	2	35803385							
+with_field	Doxorubicin AND Vincristine AND Etoposide AND Prednisone AND Cyclophosphamide		1	3	35803053							
+with_field	Doxorubicin AND Vincristine AND Etoposide AND Prednisone AND Cyclophosphamide		1	4	35803268							
+with_field	Doxorubicin AND Vincristine AND Etoposide AND Prednisone AND Cyclophosphamide		1	5	35802975							
+with_field	Durvalumab AND Platinum agent		1	1	35803025							
+with_field	Durvalumab AND Platinum agent		1	2	35807315							
+with_field	Durvalumab AND Platinum-based chemotherapy		1	1	35803025							
+with_field	Durvalumab AND Platinum-based chemotherapy		1	2	37558102							
+with_field	Encorafenib AND mFOLFOX6		1	1	35803035							
+with_field	Encorafenib AND mFOLFOX6		1	2	35804758							
+with_field	Fludarabine AND Cyclophosphamide		1	1	35803076							
+with_field	Fludarabine AND Cyclophosphamide		1	2	35802975							
+with_field	Fluoropyrimidine AND Irinotecan		1	1	35807313							
+with_field	Fluoropyrimidine AND Irinotecan		1	2	35803130							
+with_field	Fluoropyrimidine AND Oxaliplatin		1	1	35807313							
+with_field	Fluoropyrimidine AND Oxaliplatin		1	2	35803227							
+with_field	Fluoropyrimidine AND Platinum agent		1	1	35807313							
+with_field	Fluoropyrimidine AND Platinum agent		1	2	35807315							
+with_field	Fluoropyrimidine- and platinum-based regimen		1	1	35807313							
+with_field	Fluoropyrimidine- and platinum-based regimen		1	2	37558102							
+with_field	Fluorouracil AND Leucovorin		1	1	35803077							
+with_field	Fluorouracil AND Leucovorin		1	2	35803081							
+with_field	Fluorouracil AND Leucovorin AND Oxaliplatin		1	1	35803077							
+with_field	Fluorouracil AND Leucovorin AND Oxaliplatin		1	2	35803081							
+with_field	Fluorouracil AND Leucovorin AND Oxaliplatin		1	3	35803227							
+with_field	Fluorouracil AND Platinum agent		1	1	35803077							
+with_field	Fluorouracil AND Platinum agent		1	2	35807315							
+with_field	Fulvestrant AND GnRH agonist, if premenopausal or perimenopausal		1	1	35803089							
+with_field	Fulvestrant AND GnRH agonist, if premenopausal or perimenopausal		1	2	35807385							
+with_field	Fulvestrant AND GnRH agonist, if premenopausal or perimenopausal		1	3	2037000001							
+with_field	Fulvestrant AND Palbociclib		1	1	35803089							
+with_field	Fulvestrant AND Palbociclib		1	2	35803231							
+with_field	Gemcitabine and Oxaliplatin		1	1	35803095							
+with_field	Gemcitabine and Oxaliplatin		1	2	35803227							
+with_field	Ipilimumab AND Chemotherapy		1	1	35803129							
+with_field	Ipilimumab AND Chemotherapy		1	2	35803401							
+with_field	Ipilimumab AND Platinum doublet		1	1	35803129							
+with_field	Ipilimumab AND Platinum doublet		1	2	42542417							
+with_field	Lenalidomide AND Dexamethasone		1	1	35803149							
+with_field	Lenalidomide AND Dexamethasone		1	2	35803008							
+with_field	Lenalidomide AND Rituximab		1	1	35803149							
+with_field	Lenalidomide AND Rituximab		1	2	35803296							
+with_field	LHRH agonist AND external beam radiotherapy		1	1	35807385							
+with_field	LHRH agonist AND external beam radiotherapy		1	2	35803411							
+with_field	Melphalan AND Prednisone		1	1	35803175							
+with_field	Melphalan AND Prednisone		1	2	35803268							
+with_field	Nitrogen mustard AND Vincristine AND Prednisone		1	1	35807288							
+with_field	Nitrogen mustard AND Vincristine AND Prednisone		1	2	35803385							
+with_field	Nitrogen mustard AND Vincristine AND Prednisone		1	3	35803268							
+with_field	Nivolumab AND Chemotherapy		1	1	35803207							
+with_field	Nivolumab AND Chemotherapy		1	2	35803401							
+with_field	Nivolumab AND Platinum doublet		1	1	35803207							
+with_field	Nivolumab AND Platinum doublet		1	2	42542417							
+with_field	Oxaliplatin AND Bevacizumab		1	1	35803227							
+with_field	Oxaliplatin AND Bevacizumab		1	2	35802921							
+with_field	Palictaxel AND Topotecan		1	1	35803229							
+with_field	Palictaxel AND Topotecan		1	2	35803352							
+with_field	Pemetrexed AND Platinum agent		1	1	35803245							
+with_field	Pemetrexed AND Platinum agent		1	2	35807315							
+with_field	Plasma exchange AND Immunosuppressive therapy		1	1	2037000009							
+with_field	Plasma exchange AND Immunosuppressive therapy		1	2	35803409							
+with_field	Platinum agent AND Fluoropyrimidine		1	1	35807315							
+with_field	Platinum agent AND Fluoropyrimidine		1	2	35807313							
+with_field	Platinum agent AND Fluorouracil		1	1	35807315							
+with_field	Platinum agent AND Fluorouracil		1	2	35803077							
+with_field	Platinum AND Fluoropyrimidine		1	1	35807315							
+with_field	Platinum AND Fluoropyrimidine		1	2	35807313							
+with_field	Platinum AND Fluorouracil		1	1	35807315							
+with_field	Platinum AND Fluorouracil		1	2	35803077							
+with_field	Platinum- and 5-FU		1	1	37558102							
+with_field	Platinum- and 5-FU		1	2	35803077							
+with_field	Platinum-based chemotherapy AND Tremelimumab		1	1	37558102							
+with_field	Platinum-based chemotherapy AND Tremelimumab		1	2	35803363							
+with_field	Pomalidomide AND Dexamethasone		1	1	35803260							
+with_field	Pomalidomide AND Dexamethasone		1	2	35803008							
+with_field	Rituximab AND Cyclophosphamide AND Doxorubicin AND Prednisone		1	1	35803296							
+with_field	Rituximab AND Cyclophosphamide AND Doxorubicin AND Prednisone		1	2	35802975							
+with_field	Rituximab AND Cyclophosphamide AND Doxorubicin AND Prednisone		1	3	35803022							
+with_field	Rituximab AND Cyclophosphamide AND Doxorubicin AND Prednisone		1	4	35803268							
+with_field	Sargramostim AND Aldesleukin AND Isotretinoin		1	1	35803309							
+with_field	Sargramostim AND Aldesleukin AND Isotretinoin		1	2	35802869							
+with_field	Sargramostim AND Aldesleukin AND Isotretinoin		1	3	35803135							
+with_field	Trastuzumab AND Capecitabine		1	1	35803361							
+with_field	Trastuzumab AND Capecitabine		1	2	35802939							
+with_field	Trastuzumab AND Chemotherapy		1	1	35803361							
+with_field	Trastuzumab AND Chemotherapy		1	2	35803401							
+with_field	Trastuzumab AND Docetaxel		1	1	35803361							
+with_field	Trastuzumab AND Docetaxel		1	2	35803016							
+with_field	Trastuzumab AND Platinum agent AND Fluoropyrimidine		1	1	35803361							
+with_field	Trastuzumab AND Platinum agent AND Fluoropyrimidine		1	2	35807315							
+with_field	Trastuzumab AND Platinum agent AND Fluoropyrimidine		1	3	35807313							

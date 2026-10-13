@@ -482,7 +482,6 @@ status	Symptomatic associated with severe morbidity or functional limitations		4
 status	symptomatic bone metastases and no known visceral metastatic disease		32944	Metastatic Disease	Episode	Disease Extent	S	broader	candidate	mapped-to-existing	2026-10-13
 status	transfusion-dependent anemia		439777	Anemia	SNOMED	Disorder	S	broader	candidate	mapped-to-existing	2026-10-13
 status	unresectable		46272912	Tumor surgically unresectable	SNOMED	Clinical Finding	S	exact	target	mapped-to-existing	2026-10-13
-time_contingency	refractory		4048615	Intractable	SNOMED	Qualifier Value	S	exact	target	mapped-to-existing	2026-10-13
 with_field	5-FU		35803077	Fluorouracil	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
 with_field	Abemaciclib		35802858	Abemaciclib	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13
 with_field	Abiraterone		35802860	Abiraterone	HemOnc	Component		exact	target	mapped-to-existing	2026-10-13

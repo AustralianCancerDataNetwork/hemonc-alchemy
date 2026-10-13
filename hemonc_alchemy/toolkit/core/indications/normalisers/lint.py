@@ -3,7 +3,6 @@
 from collections.abc import Mapping
 from dataclasses import dataclass
 
-from ..implications import lint_finding_implications
 from ..loader import IndicationSource
 from . import default_normalisers
 from .age import AgeNormaliser
@@ -27,9 +26,7 @@ class IndicationLintReport:
         )
 
 
-def lint_indications(
-    sources: tuple[IndicationSource, ...], *, check_implications: bool = True
-) -> IndicationLintReport:
+def lint_indications(sources: tuple[IndicationSource, ...]) -> IndicationLintReport:
     biomarker: BiomarkerLint = lint_biomarkers(sources=sources)
     scope_normaliser, age_normaliser = ScopeNormaliser(), AgeNormaliser()
     context_normaliser, sex_normaliser = ContextNormaliser(), SexNormaliser()
@@ -63,9 +60,4 @@ def lint_indications(
                 failures.append(
                     f"{normaliser.name} lost raw text on indication {source.indication_id}"
                 )
-    implication_lint = (
-        lint_finding_implications(sources) if check_implications else None
-    )
-    if implication_lint is not None:
-        failures.extend(implication_lint.failures)
     return IndicationLintReport(diagnostics, tuple(failures))

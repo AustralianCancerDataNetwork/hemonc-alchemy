@@ -19,7 +19,9 @@ TABLES = (
     "concept_class",
     "domain",
     "vocabulary",
-    "concept_bounds",
+    "indication_criterion",
+    "criterion_term",
+    "source_value_terms",
     "concept_status",
     "relationship_review",
     "source_concept_map",
@@ -37,6 +39,26 @@ ANCHOR_CLASSES = {
     "Ind has condition": "Condition",
     "Ind has regimen": "Regimen",
 }
+DIMENSIONS = frozenset(
+    {
+        "biomarker",
+        "stage",
+        "status",
+        "stage_or_status",
+        "age",
+        "sex",
+        "prior_therapy",
+        "prior_therapy_setting",
+        "with_field",
+        "ineligibility",
+        "demographics",
+        "response_contingency",
+        "risk_stratification",
+        "exposure_phenotype",
+        "time_contingency",
+    }
+)
+COMPARATORS = frozenset({"=", ">", ">=", "<", "<="})
 CONCEPT_STATUSES = frozenset({"proposed-new", "mapped-to-existing", "existing"})
 PLACEHOLDER_NAMES = frozenset({"0", "none", "not applicable", "true", "false"})
 
@@ -129,11 +151,6 @@ def _check_concepts(vocab, tables, failures) -> set[int]:
             or not row["proposed_owner"]
         ):
             failures.append(f"concept {cid} has an incomplete concept_status row")
-    for row in tables["concept_bounds"]:
-        if int(row["concept_id"]) not in local:
-            failures.append(
-                f"concept_bounds row for unknown concept {row['concept_id']}"
-            )
     return set(local)
 
 
@@ -239,6 +256,62 @@ def _check_relationships(vocab, tables, failures, local_ids, known_ids) -> None:
             failures.append(f"relationship_review {key} has no provenance")
 
 
+def _check_term(row, label, valid_ids, failures) -> None:
+    concept = row["concept_id"].strip()
+    has_scalar = bool(row["value_low"].strip() or row["value_high"].strip())
+    if concept and int(concept) not in valid_ids:
+        failures.append(f"{label} cites concept {concept} that does not exist")
+    if not (concept or has_scalar or row["text"].strip()):
+        failures.append(f"{label} has no concept, number or text")
+    for side in ("low", "high"):
+        value, comparator = row[f"value_{side}"].strip(), row[f"comparator_{side}"]
+        if value:
+            try:
+                float(value)
+            except ValueError:
+                failures.append(f"{label} has a non-numeric {side} value {value!r}")
+            if comparator not in COMPARATORS:
+                failures.append(
+                    f"{label} has comparator {comparator!r} for its {side} value"
+                )
+        elif comparator:
+            failures.append(f"{label} has a {side} comparator without a value")
+    if has_scalar and not row["unit"].strip():
+        failures.append(f"{label} has a number without a unit")
+
+
+def _check_criteria(vocab, tables, failures, valid_ids) -> None:
+    indications = {c.concept_id for c in vocab.concepts("Indication")}
+    criterion_ids = set()
+    for row in tables["indication_criterion"]:
+        identifier = int(row["criterion_id"])
+        if identifier in criterion_ids:
+            failures.append(f"duplicate criterion_id {identifier}")
+        criterion_ids.add(identifier)
+        if int(row["indication_id"]) not in indications:
+            failures.append(f"criterion {identifier} belongs to an unknown indication")
+        if row["dimension"] not in DIMENSIONS:
+            failures.append(
+                f"criterion {identifier} has unknown dimension {row['dimension']}"
+            )
+        if row["polarity"] not in {"requires", "excludes"}:
+            failures.append(f"criterion {identifier} has polarity {row['polarity']}")
+    seen = set()
+    for row in tables["criterion_term"]:
+        identifier = int(row["criterion_id"])
+        seen.add(identifier)
+        if identifier not in criterion_ids:
+            failures.append(f"criterion_term row for unknown criterion {identifier}")
+        _check_term(row, f"criterion {identifier} term", valid_ids, failures)
+    failures.extend(
+        f"criterion {identifier} has no terms"
+        for identifier in sorted(criterion_ids - seen)
+    )
+    for row in tables["source_value_terms"]:
+        label = f"source value {row['source_column']}: {row['raw_value']}"
+        _check_term(row, label, valid_ids, failures)
+
+
 def _check_anchors(vocab, failures) -> None:
     for indication in vocab.indication_ids():
         counts = Counter(rel.relationship_id for rel in vocab.relationships(indication))
@@ -254,11 +327,6 @@ def _check_anchors(vocab, failures) -> None:
                 failures.append(
                     f"indication {indication} {rel.relationship_id} target {rel.concept_id_2} is not a {expected}"
                 )
-        for criterion in vocab.criteria(indication):
-            if not criterion.alternatives or any(
-                not alt for alt in criterion.alternatives
-            ):
-                failures.append(f"indication {indication} has an empty criterion set")
 
 
 def lint_vocabulary(
@@ -273,12 +341,13 @@ def lint_vocabulary(
     local_ids = _check_concepts(vocab, tables, failures)
     known_ids = _check_existing(vocab, tables, failures, warnings, local_ids)
     _check_relationships(vocab, tables, failures, local_ids, known_ids)
+    _check_criteria(vocab, tables, failures, known_ids | local_ids)
     _check_anchors(vocab, failures)
     unmapped = [
         f"{row['source_column']}: {row['raw_value']}"
         + (f" [{row['context']}]" if row["context"] else "")
         for row in tables["source_concept_map"]
-        if not row["target_concept_id"]
+        if not row["target_concept_id"] and row["status"] != "decomposed"
     ]
     for column, raw, context in source_values:
         if vocab.lookup(column, raw, context) is None:

@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 
 from hemonc_alchemy.toolkit.core.indication_vocabulary import (
-    IndicationVocabulary,
+    LocalTsvVocabulary,
     lint_vocabulary,
     load_vocabulary,
 )
@@ -63,13 +63,66 @@ def test_closure_reproduces_earlier_goldens(vocab):
     assert "BRAF: p.V600" in names(vocab, vocab.implied(v600e))
 
 
-def test_threshold_value_meets_lower_cutoffs_and_closure_follows_chain(vocab):
-    analyte = vocab.concept_for("biomarker", "PD-L1")
-    met = names(vocab, vocab.threshold_states(analyte, "TPS", 60, "%"))
-    assert {"PD-L1: TPS >= 1 %", "PD-L1: TPS >= 50 %"} <= met
-    top = finding_state(vocab, "PD-L1", "TPS at least 50%")
-    assert "PD-L1: TPS >= 1 %" in names(vocab, vocab.ancestors(top))
-    assert names(vocab, vocab.threshold_states(analyte, "TPS", 0.5, "%")) == set()
+def terms_of(vocab, state_id):
+    return [
+        term
+        for i in vocab.indication_ids()
+        for criterion in vocab.criteria(i)
+        for alternative in criterion.alternatives
+        for term in alternative
+        if term.concept_id == state_id
+    ]
+
+
+def test_cutoffs_are_attributes_of_a_score_state_not_concepts(vocab):
+    assert vocab.concepts("Biomarker Threshold") == ()
+    score = finding_state(vocab, "PD-L1", "TPS at least 50%")
+    assert finding_state(vocab, "PD-L1", "TPS at least 1%") == score
+    cutoffs = {t.bounds.value_low for t in terms_of(vocab, score) if t.bounds}
+    assert {1.0, 5.0, 50.0} <= cutoffs
+    met = {value for value in cutoffs if value <= 60}
+    assert {1.0, 50.0} <= met
+    assert not {value for value in cutoffs if value <= 0.5}
+    assert all(
+        t.bounds.comparator_low == ">="
+        and t.bounds.unit == "%"
+        and t.bounds.qualifier == "TPS"
+        for t in terms_of(vocab, score)
+        if t.bounds
+    )
+
+
+def test_age_prior_lines_and_time_windows_are_scalar_terms_without_concepts(vocab):
+    for cls in ("Age Band", "Time Window", "Biomarker Threshold", "Criterion Set"):
+        assert vocab.concepts(cls) == ()
+    ages = [
+        term
+        for i in vocab.indication_ids()
+        for criterion in vocab.criteria(i)
+        if criterion.dimension == "age"
+        for alternative in criterion.alternatives
+        for term in alternative
+        if term.bounds
+    ]
+    assert any(
+        t.concept_id is None
+        and t.bounds.comparator_low == ">="
+        and t.bounds.value_low == 12
+        and t.bounds.unit == "year"
+        for t in ages
+    )
+    lines = vocab.terms_for_source("prior_therapy", "2+ SACT")
+    assert any(
+        t.bounds and t.bounds.unit == "lines" and t.bounds.value_low == 2
+        for t in lines[0]
+    )
+    assert vocab.terms_for_source("age", "adult", "year") is None
+    window = vocab.terms_for_source("time_contingency", "within 6 months")[0][0]
+    assert (
+        window.bounds.comparator_high,
+        window.bounds.value_high,
+        window.bounds.unit,
+    ) == ("<=", 6, "month")
 
 
 def test_clinical_implication_is_not_taxonomy(vocab):
@@ -121,7 +174,7 @@ def test_indication_criteria_are_ands_of_ors_with_polarity(vocab):
         for c in vocab.criteria(i)
         if c.dimension == "biomarker"
         and len(c.alternatives) == 2
-        and {vocab.concept(a[0]).concept_name for a in c.alternatives}
+        and {vocab.concept(a[0].concept_id).concept_name for a in c.alternatives}
         == {"EGFR: exon 19 deletion", "EGFR: p.L858R"}
     ]
     assert egfr_or
@@ -169,7 +222,7 @@ def rewrite(directory: Path, table: str, change):
 
 
 def lint_failures(directory):
-    return lint_vocabulary(IndicationVocabulary(directory)).failures
+    return lint_vocabulary(LocalTsvVocabulary(directory)).failures
 
 
 def test_lint_reports_a_dangling_relationship_endpoint(copy):
@@ -209,13 +262,13 @@ def test_lint_reports_an_undefined_relationship_id(copy):
     rewrite(
         copy,
         "relationship",
-        lambda rows: [r for r in rows if r["relationship_id"] != "Set has any"],
+        lambda rows: [r for r in rows if r["relationship_id"] != "State has analyte"],
     )
     assert any("not defined in relationship.tsv" in f for f in lint_failures(copy))
 
 
 def test_lint_reports_a_hierarchy_cycle(copy):
-    vocab = IndicationVocabulary(copy)
+    vocab = LocalTsvVocabulary(copy)
     child = finding_state(vocab, "BRAF", "p.V600E")
     parent = finding_state(vocab, "BRAF", "p.V600")
 
@@ -298,7 +351,8 @@ def biomarker_criteria(vocab, raw):
 
 def state_names(vocab, alternatives):
     return {
-        frozenset(vocab.concept(i).concept_name for i in alt) for alt in alternatives
+        frozenset(vocab.concept(t.concept_id).concept_name for t in alt)
+        for alt in alternatives
     }
 
 
@@ -306,7 +360,8 @@ def test_slot_pairing_is_an_independent_or_product_filtered_by_allowed_results(v
     (criterion,) = [
         c
         for c in biomarker_criteria(vocab, "ER|PR / positive|unknown")
-        if {vocab.concept(a[0]).concept_name for a in c.alternatives} >= {"PR: unknown"}
+        if {vocab.concept(a[0].concept_id).concept_name for a in c.alternatives}
+        >= {"PR: unknown"}
     ]
     assert state_names(vocab, criterion.alternatives) == {
         frozenset({name})
@@ -365,3 +420,25 @@ def test_lint_reports_a_bare_placeholder_concept_name(copy):
     rewrite(copy, "concept", rename)
     failures = lint_failures(copy)
     assert sum("bare placeholder" in f for f in failures) == 2
+
+
+def test_lint_reports_a_scalar_term_without_a_unit_and_a_term_with_nothing(copy):
+    def blank_unit(rows):
+        for row in rows:
+            if row["value_low"]:
+                row["unit"] = ""
+                break
+        return rows
+
+    rewrite(copy, "criterion_term", blank_unit)
+    assert any("number without a unit" in f for f in lint_failures(copy))
+
+    shutil.rmtree(copy)
+    shutil.copytree(data_directory(), copy)
+
+    def empty(rows):
+        rows[0].update(concept_id="", value_low="", value_high="", text="")
+        return rows
+
+    rewrite(copy, "criterion_term", empty)
+    assert any("no concept, number or text" in f for f in lint_failures(copy))

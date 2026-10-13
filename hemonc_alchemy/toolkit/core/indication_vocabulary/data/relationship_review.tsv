@@ -21,8 +21,6 @@ concept_id_1	concept_id_2	relationship_id	status	provenance	reviewer	reviewed_on
 2020000074	2020000012	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			lung-first	
 2020000120	2020000127	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			lung-first	
 2020000130	2020000048	Is a	proposed	structural rule: a qualified result is a kind of the plain result			lung-first	
-2020000143	2020000145	Is a	proposed	population subset: a higher cut-off is met only when every lower cut-off is met			lung-first	
-2020000146	2020000143	Is a	proposed	population subset: a higher cut-off is met only when every lower cut-off is met			lung-first	
 2030000001	4313265	Is a	proposed	clinical judgement: 'locally advanced' is a kind of 'advanced'; no such link in SNOMED or Cancer Modifier			lung-first	
 2030000002	4125638	Is a	proposed	existing concept is broader than 'node-positive early' (evidence lane)			lung-first	
 2030000007	4313265	Is a	proposed	clinical judgement: 'regionally advanced' is a kind of 'advanced'; no such link in SNOMED or Cancer Modifier			lung-first	
@@ -98,9 +96,6 @@ concept_id_1	concept_id_2	relationship_id	status	provenance	reviewer	reviewed_on
 2020000105	2020000100	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			later	
 2020000113	2020000077	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			later	
 2020000119	2020000141	Is a	proposed	structural rule: a specific variant or mutation class is a kind of mutation of the gene			later	
-2020000142	2020000144	Is a	proposed	population subset: a higher cut-off is met only when every lower cut-off is met			later	
-2020000148	2020000149	Is a	proposed	population subset: a higher cut-off is met only when every lower cut-off is met			later	
-2020000150	2020000148	Is a	proposed	population subset: a higher cut-off is met only when every lower cut-off is met			later	
 2020000155	2020000002	Is a	proposed	structural rule: a qualified result is a kind of the plain result			later	
 2020000156	2020000126	Is a	proposed	structural rule: a qualified result is a kind of the plain result			later	
 2032000010	1633488	Is a	proposed	existing concept is broader than 'first or second complete remission with minimal residual disease (MRD) greater than or equal to 0.1%' (evidence lane)			later	
