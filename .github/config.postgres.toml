@@ -1,0 +1,32 @@
+# Throwaway GitHub service credentials. Runtime references cannot point at a
+# test_only connection in oa-configurator 2.1, so keep the two roles distinct.
+[connections.ci_source]
+dialect = "postgresql+psycopg"
+host = "localhost"
+port = 5432
+user = "test"
+password = "test"
+database_name = "postgres"
+
+[connections.ci_test]
+dialect = "postgresql+psycopg"
+host = "localhost"
+port = 5432
+user = "test"
+password = "test"
+database_name = "test"
+test_only = true
+
+[databases.ci_source]
+kind = "generic"
+connection = "ci_source"
+schema_name = "public"
+
+[databases.ci_test]
+kind = "generic"
+connection = "ci_test"
+schema_name = "public"
+
+[tools.hemonc_alchemy]
+hemonc_db = "ci_source"
+test_hemonc_db = "ci_test"

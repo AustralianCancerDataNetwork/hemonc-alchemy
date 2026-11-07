@@ -34,7 +34,15 @@ The `exploration` extra adds the Python kernel, matplotlib, IPython, and the Pos
 uv sync --extra dev --extra exploration
 ```
 
-The repository devcontainer installs the development, exploration, PostgreSQL, authoring, and OMOP extras together.
+The repository devcontainers install the development, exploration, PostgreSQL, DuckDB, authoring, and OMOP extras together.
+
+## Use DuckDB
+
+```bash
+uv add "hemonc-alchemy[duckdb]"
+```
+
+The extra installs the DuckDB engine and shared oa-configurator/orm-loader backend support. See [Local development](local-development.md) for the independent file-backed workflow and [Upgrading](upgrading.md) for existing applications.
 
 ## Use the OMOP bridge
 

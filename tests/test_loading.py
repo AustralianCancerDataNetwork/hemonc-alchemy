@@ -15,7 +15,9 @@ from pathlib import Path
 import pytest
 import sqlalchemy as sa
 import sqlalchemy.orm as so
+from orm_loader.loaders import LoadReport
 
+from hemonc_alchemy.config import create_default_hemonc_engine
 from hemonc_alchemy.model.base import Base
 from hemonc_alchemy.model.entities import (
     Canonicaltriples,
@@ -50,7 +52,7 @@ def test_surrogate_identity_treats_invalid_datetime_placeholder_as_null():
     failures = []
 
     assert _identity_value(
-        "Uncertain date", column, source=True, on_error=failures.append
+        "Uncertain date", column, on_error=failures.append
     ) is None
     assert failures == ["Uncertain date"]
 
@@ -68,7 +70,7 @@ pytestmark = [
 
 @pytest.fixture
 def session():
-    engine = sa.create_engine("sqlite:///:memory:")
+    engine = create_default_hemonc_engine("sqlite:///:memory:")
     with so.Session(engine) as s:
         yield s
 
@@ -180,7 +182,8 @@ class TestDenormalisedLoadingNaturalKey:
         count = session.execute(sa.text("SELECT COUNT(*) FROM canonicaltriples_class_1_provenance")).scalar()
         assert count == results["class_1_provenance"]
 
-    def test_casts_enum_natural_key_before_child_insert(self, tmp_path):
+    @pytest.mark.parametrize("include_rejected", [False, True])
+    def test_casts_enum_natural_key_before_child_insert(self, tmp_path, include_rejected):
         csv_path = tmp_path / "canonicaltriples.csv"
         csv_path.write_text(
             "class_1,relationship,class_2,date_added,in_ohdsi,internal,used_in,"
@@ -188,20 +191,28 @@ class TestDenormalisedLoadingNaturalKey:
             "Regimen,is_a,Context,2020-01-01,0,0,x,HTML\n"
         )
 
-        engine = sa.create_engine("sqlite:///:memory:")
+        if include_rejected:
+            with csv_path.open("a") as handle:
+                handle.write("Regimen,is_a,Context,2020-01-01,invalid-boolean,0,x,rejected\n")
+
+        engine = create_default_hemonc_engine("sqlite:///:memory:")
         Base.metadata.create_all(
             engine,
             tables=[Canonicaltriples.__table__, canonicaltriples_Class_1_provenanceMap.__table__],
         )
         with so.Session(engine) as session:
-            results = load_all(session, Canonicaltriples, tmp_path)
+            report = LoadReport()
+            results = load_all(session, Canonicaltriples, tmp_path, report=report)
             session.commit()
+            assert results["canonicaltriples"] == 1
+            assert report.rows_rejected == int(include_rejected)
 
             assert results["class_1_provenance"] == 1
             row = session.execute(
                 sa.select(canonicaltriples_Class_1_provenanceMap)
             ).scalar_one()
         assert row.class_1.value == "regimen"
+        assert row.class_1_provenance == "HTML"
 
     def test_surrogate_parent_matching_handles_sparse_natural_key(self, tmp_path):
         csv_path = tmp_path / "hemonc_classes.csv"
@@ -213,7 +224,7 @@ class TestDenormalisedLoadingNaturalKey:
             "studies$registry,,FALSE,D-2023-06-02,\n"
         )
 
-        engine = sa.create_engine("sqlite:///:memory:")
+        engine = create_default_hemonc_engine("sqlite:///:memory:")
         Base.metadata.create_all(
             engine,
             tables=[
@@ -286,30 +297,23 @@ class TestSurrogatePkEndToEnd:
     Postgres does.
     """
 
-    def test_primary_and_denorm_load_with_correct_linkage(self, pg_session):
+    def test_primary_and_denorm_load_with_correct_linkage(self, pg_load_engine):
+        from hemonc_alchemy.model.entities import variants_StudyMap
+
         map_tables = [rel.mapper.class_.__table__ for rel in sa.inspect(Variants).relationships]
-        with pg_session.get_bind().begin() as conn:
-            for table in [*map_tables, Variants.__table__]:
-                conn.execute(sa.text(f'DROP TABLE IF EXISTS "{table.name}" CASCADE'))
-        Base.metadata.create_all(pg_session.get_bind(), tables=[Variants.__table__, *map_tables])
-
-        results = load_all(pg_session, Variants, _REAL_DATA_DIR)
-        pg_session.commit()
-
-        assert results["variants"] > 0
-        assert set(results) >= {"variants", "blob", "study", "tracer"}
-        assert all(count > 0 for count in results.values())
-
-        # Every row in variants_study must resolve to a real parent --
-        # proves the natural-key-to-id lookup actually matched real rows,
-        # not just that inserts happened to succeed.
-        orphaned = pg_session.execute(
-            sa.text(
-                "SELECT COUNT(*) FROM variants_study m "
-                "LEFT JOIN variants v ON v.id = m.parent_id WHERE v.id IS NULL"
+        Base.metadata.create_all(pg_load_engine, tables=[Variants.__table__, *map_tables])
+        with so.Session(pg_load_engine) as session:
+            results = load_all(session, Variants, _REAL_DATA_DIR)
+            session.commit()
+            assert results["variants"] > 0
+            assert set(results) >= {"variants", "blob", "study", "tracer"}
+            assert all(count > 0 for count in results.values())
+            orphaned = session.scalar(
+                sa.select(sa.func.count()).select_from(variants_StudyMap.__table__.outerjoin(
+                    Variants.__table__, Variants.id == variants_StudyMap.parent_id
+                )).where(Variants.id.is_(None))
             )
-        ).scalar()
-        assert orphaned == 0
+            assert orphaned == 0
 
 
 if __name__ == "__main__":

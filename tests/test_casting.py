@@ -1,52 +1,16 @@
-"""A bad value in the extract must become NULL or drop the row, never a
-sentinel like -1 that would read as real data.
-
-Casting is orm-loader's, not ours; these tests hold the guarantee at both
-levels -- the cast function directly, and a real entity's load end to end.
-
-Two levels of proof:
-- `TestPerformCastDirectly` exercises `perform_cast`/`TableCastingStats`
-  directly, matching exactly what `PandasLoader.cast_to_model` does
-  internally -- the mechanism the AC describes ("cast failures are
-  counted/logged per column; no magic sentinel defaults").
-- `TestLoadCsvEndToEnd` proves it end-to-end through a real generated
-  entity class's own `load_csv()`, against a real (if small) CSV, on a
-  real SQLite database -- a bad value in a nullable column comes back as
-  NULL, not a `-1`/`-1.0` sentinel, and the row still loads. The
-  complementary case is covered too: in a non-nullable column the loader
-  drops the row rather than inventing a value to satisfy the constraint.
-
-  This end-to-end path was blocked on its first run by an unrelated bug
-  this test caught: every generated entity class used to render its own
-  `pk_columns` class attribute (a plain list of natural-key column
-  names), which shadowed `orm_loader.tables.ORMTableBase.pk_columns()`
-  -- a same-named method `merge_from_staging()` calls internally.
-  `cls.pk_columns()` tried to call a list. Confirmed independent of
-  casting itself (the CAST warning log line fired correctly before the
-  crash). Fixed by renaming the generated attribute to
-  `natural_key_columns` (compiler/schema_model.py's `table_class()`);
-  `TableMeta.pk_columns`, the compiler's own internal field, is
-  unrelated and unchanged.
-
-`Units` covers the direct-cast and non-nullable cases: a simple lookup
-table (no surrogate `id`, no FK, no denormalised columns). It was the whole
-suite's subject until the 2026-08 drop made every one of its columns
-non-nullable, at which point a bad `concept_code` stopped being a NULL and
-became a dropped row. `Regimens.first_studied` (nullable Integer) carries
-the null-not-sentinel case now. Enum casting is , covered separately in
-`test_enum_casting.py`.
-"""
+"""Malformed nullable values become NULL; malformed required values reject rows."""
 
 from __future__ import annotations
 
 import pytest
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from orm_loader.loaders.data.converters import perform_cast
-from orm_loader.loaders.data_classes import TableCastingStats
+from orm_loader.loaders import LoadReport
 
+from hemonc_alchemy.config import create_default_hemonc_engine
 from hemonc_alchemy.model.base import Base
 from hemonc_alchemy.model.entities import Regimens, Units
+from hemonc_alchemy.model.ingestion import conversion_policy, convert_value
 
 pytestmark = pytest.mark.skipif(
     len(Base.metadata.tables) == 0,
@@ -54,39 +18,18 @@ pytestmark = pytest.mark.skipif(
 )
 
 
-class TestPerformCastDirectly:
-    def test_bad_value_is_recorded_not_defaulted(self):
-        stats = TableCastingStats(table_name="units")
-        col_type = Units.__table__.c.concept_code.type
+class TestConversionPolicy:
+    def test_bad_value_is_rejected_not_defaulted(self):
+        with pytest.raises(ValueError):
+            convert_value("not-a-number", Units.__table__.c.concept_code, conversion_policy())
 
-        result = perform_cast(
-            "not-a-number",
-            col_type,
-            on_error=lambda value: stats.record(column="concept_code", value=value),
-        )
-
-        assert result is None
-        assert stats.has_failures()
-        assert stats.total_failures == 1
-        assert stats.columns["concept_code"].examples == ["not-a-number"]
-
-    def test_good_value_casts_cleanly_with_no_failures(self):
-        stats = TableCastingStats(table_name="units")
-        col_type = Units.__table__.c.concept_code.type
-
-        result = perform_cast(
-            "134444",
-            col_type,
-            on_error=lambda value: stats.record(column="concept_code", value=value),
-        )
-
-        assert result == 134444
-        assert not stats.has_failures()
+    def test_good_value_casts_cleanly(self):
+        assert convert_value("134444", Units.__table__.c.concept_code, conversion_policy()) == 134444
 
 
 @pytest.fixture
 def session():
-    engine = sa.create_engine("sqlite:///:memory:")
+    engine = create_default_hemonc_engine("sqlite:///:memory:")
     Base.metadata.create_all(engine, tables=[Units.__table__, Regimens.__table__])
     with so.Session(engine) as s:
         yield s
@@ -119,7 +62,7 @@ class TestLoadCsvEndToEnd:
             f"2,2,bad,{self._FIXED},not-a-number\n"
         )
 
-        total = Regimens.load_csv(session, csv_path)
+        total = Regimens.load_file(session, csv_path)
         assert total == 2
 
         rows = {
@@ -142,7 +85,11 @@ class TestLoadCsvEndToEnd:
             "bad_unit,UNITS_PER_VOLUME,not-a-number,2020-01-01,TRUE,FALSE,FALSE\n"
         )
 
-        total = Units.load_csv(session, csv_path)
+        report = LoadReport()
+        total = Units.load_file(session, csv_path, report=report)
+        assert report.rows_rejected == 1
+        assert report.accounted
+        assert report.rejects_path.is_file()
         assert total == 1
 
         rows = {row.unit: row.concept_code for row in session.execute(sa.select(Units)).scalars()}

@@ -2,8 +2,8 @@
 #
 # Copied to ~/.config/omop/config.toml (mode 600) by post-create.sh the first
 # time the container is created, so `omop-config configure hemonc_alchemy` can
-# edit it afterwards without touching this checked-in seed. Delete that copy
-# and rebuild the container to start again from this file.
+# edit it afterwards without touching this checked-in seed. Existing copies
+# are preserved; apply configuration upgrades to your active copy explicitly.
 #
 # The credentials below are the throwaway ones the compose stack creates; they
 # only reach the `postgres` service on the devcontainer network. Real passwords
@@ -51,13 +51,13 @@ schema_name = "public"
 [databases.cdm_db]
 kind        = "cdm"
 connection  = "devcontainer_postgres"
-cdm_schema  = "public"
+cdm_schema  = "cdm"
 vocab_schema = "omop"
 
 [databases.test_cdm_db]
 kind        = "cdm"
 connection  = "devcontainer_postgres_test"
-cdm_schema  = "public"
+cdm_schema  = "cdm"
 vocab_schema = "omop"
 
 # ---------------------------------------------------------------------------
@@ -66,11 +66,12 @@ vocab_schema = "omop"
 
 [tools.hemonc_alchemy]
 hemonc_db      = "hemonc_db"
+omop_db        = "cdm_db"
 test_hemonc_db = "test_hemonc_db"
 
 [tools.omop_alchemy]
 cdm_db      = "cdm_db"
-test_cdm_db = "test_cdm_db"
+test_cdm_db_pg = "test_cdm_db"
 
 [logging]
 level = "INFO"

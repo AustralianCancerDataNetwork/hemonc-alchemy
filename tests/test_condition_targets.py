@@ -9,6 +9,7 @@ import sqlalchemy as sa
 from sqlalchemy.pool import StaticPool
 
 from hemonc_alchemy.compiler.condition_target_generation import Candidate, generate
+from hemonc_alchemy.config import create_default_hemonc_engine
 from hemonc_alchemy.integrations.omop import load_omop_binding
 from hemonc_alchemy.integrations.omop.schema import schema_aware_bind
 from hemonc_alchemy.integrations.omop.standardise import (
@@ -229,7 +230,7 @@ def test_patches_hold_gap_fills_and_demotions_in_table_shape():
 
 
 def _sqlite_vocabulary():
-    engine = sa.create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
+    engine = create_default_hemonc_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
     metadata = sa.MetaData()
     concept = sa.Table(
         "concept", metadata,

@@ -14,6 +14,19 @@ jobs:
     uses: AustralianCancerDataNetwork/cava-devops/.github/workflows/label-gate.yml@main
 
   build-test:
+    uses: AustralianCancerDataNetwork/cava-devops/.github/workflows/build-test.yml@main
+    with:
+      python-version: "3.12"
+      ty-src: hemonc_alchemy/cli.py hemonc_alchemy/config.py hemonc_alchemy/bootstrap.py hemonc_alchemy/integrations
+
+  duckdb:
+    uses: AustralianCancerDataNetwork/cava-devops/.github/workflows/build-test-duckdb.yml@main
+    with:
+      python-version: "3.12"
+      markers: duckdb
+      ty-src: hemonc_alchemy/cli.py hemonc_alchemy/config.py hemonc_alchemy/bootstrap.py hemonc_alchemy/integrations
+
+  postgres:
     uses: AustralianCancerDataNetwork/cava-devops/.github/workflows/build-test-postgres.yml@main
     with:
       python-version: "3.12"
@@ -23,25 +36,14 @@ jobs:
       # The generated model and loader use dynamic SQLAlchemy/pandas types
       # that are not yet clean under ty. Keep the shared check focused on the
       # typed public/configuration boundary until those surfaces are annotated.
-      ty-src: hemonc_alchemy/cli.py hemonc_alchemy/config.py hemonc_alchemy/integrations
+      ty-src: hemonc_alchemy/cli.py hemonc_alchemy/config.py hemonc_alchemy/bootstrap.py hemonc_alchemy/integrations
       setup-commands: |
+        # This shared workflow runs bare pytest. Environment addopts follow
+        # project addopts, so this explicitly selects our PostgreSQL axis.
+        echo 'PYTEST_ADDOPTS=-m postgres' >> "$GITHUB_ENV"
+        echo 'HEMONC_REQUIRE_POSTGRES=1' >> "$GITHUB_ENV"
         mkdir -p "$HOME/.config/omop"
-        cat > "$HOME/.config/omop/config.toml" <<'EOF'
-        [connections.ci_postgres]
-        dialect = "postgresql+psycopg"
-        host = "localhost"
-        port = 5432
-        user = "test"
-        password = "test"
-        database_name = "test"
-        test_only = true
+        install -m 600 .github/config.postgres.toml "$HOME/.config/omop/config.toml"
 
-        [databases.ci_hemonc_db]
-        kind = "generic"
-        connection = "ci_postgres"
-        schema_name = "public"
-
-        [tools.hemonc_alchemy]
-        hemonc_db = "ci_hemonc_db"
-        test_hemonc_db = "ci_hemonc_db"
-        EOF
+  installed-wheel:
+    uses: ./.github/workflows/wheel-smoke.yml

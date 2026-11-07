@@ -4,10 +4,11 @@ oa-configurator integration for hemonc-alchemy.
 
 from __future__ import annotations
 
-from typing import Annotated, ClassVar
+from typing import Annotated, Any, ClassVar
 
 import sqlalchemy as sa
 from oa_configurator import (  # type: ignore[import-untyped]  # no py.typed marker upstream
+    CDMDatabaseConfig,
     GenericDatabaseConfig,
     PackageConfigBase,
     RefTo,
@@ -24,16 +25,24 @@ class HemOncAlchemyConfig(PackageConfigBase):
     ----------
     hemonc_db : str
         Name of the ``[databases.*]`` entry holding the HemOnc database.
+    omop_db : str, optional
+        CDM target supplying the vocabulary role for same-database joins.
     test_hemonc_db : str, optional
         Name of the ``[databases.*]`` entry holding the test HemOnc database,
         marked ``RefTo(GenericDatabaseConfig, is_test=True)``.
+    test_hemonc_db_duckdb : str, optional
+        DuckDB test target; leave unset for disposable-file provisioning.
     """
 
     tool_name: ClassVar[str] = "hemonc_alchemy"
     extra_logging_namespaces: ClassVar[tuple[str, ...]] = ("orm_loader",)
 
     hemonc_db: Annotated[str, RefTo(GenericDatabaseConfig)] = "hemonc_db"
+    omop_db: Annotated[str | None, RefTo(CDMDatabaseConfig)] = None
     test_hemonc_db: Annotated[
+        str | None, RefTo(GenericDatabaseConfig, is_test=True)
+    ] = None
+    test_hemonc_db_duckdb: Annotated[
         str | None, RefTo(GenericDatabaseConfig, is_test=True)
     ] = None
 
@@ -67,3 +76,14 @@ def get_hemonc_context() -> tuple[HemOncAlchemyConfig, ResolvedDatabase]:
 def create_hemonc_engine(resolved: ResolvedDatabase) -> sa.Engine:
     """Create the hemonc-alchemy database engine."""
     return resolved.create_engine()
+
+
+def create_default_hemonc_engine(url: str | sa.URL, **kwargs: Any) -> sa.Engine:
+    """Create a URL-based engine with HemOnc in the connection's default schema.
+
+    Explicit execution options, including schema routes, take precedence.
+    Use create_hemonc_engine for an oa-configurator target instead.
+    """
+    options = dict(kwargs.pop("execution_options", {}))
+    mapping = {"primary": None, **(options.get("schema_translate_map") or {})}
+    return sa.create_engine(url, execution_options={**options, "schema_translate_map": mapping}, **kwargs)

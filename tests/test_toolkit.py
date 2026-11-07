@@ -10,9 +10,9 @@ from __future__ import annotations
 from datetime import UTC, datetime
 
 import pytest
-import sqlalchemy as sa
 import sqlalchemy.orm as so
 
+from hemonc_alchemy.config import create_default_hemonc_engine
 from hemonc_alchemy.model.base import Base
 from hemonc_alchemy.model.entities import Sigs, Variants
 from hemonc_alchemy.toolkit.analytics.treatment.classification import (
@@ -30,7 +30,7 @@ pytestmark = pytest.mark.skipif(
 
 @pytest.fixture
 def session():
-    engine = sa.create_engine("sqlite:///:memory:")
+    engine = create_default_hemonc_engine("sqlite:///:memory:")
     Base.metadata.create_all(engine)
     with so.Session(engine) as s:
         yield s

@@ -6,6 +6,7 @@ import pytest
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
+from hemonc_alchemy.config import create_default_hemonc_engine
 from hemonc_alchemy.toolkit.analytics.treatment.filters import (
     standalone_radiation_sig_statement,
 )
@@ -45,7 +46,7 @@ def test_condition_lookup_is_composable_and_exact():
 def test_standalone_radiation_filter_uses_normalized_study_links():
     sql = _sql(standalone_radiation_sig_statement([123]))
 
-    assert "JOIN sigs_study ON sigs_study.parent_id = sigs.id" in sql
+    assert 'JOIN "primary".sigs_study ON "primary".sigs_study.parent_id = "primary".sigs.id' in sql
     assert "sigs.class_field = 'RAD_SIG'" in sql
     assert "sigs.variant_cui IS NULL" in sql
 
@@ -59,7 +60,7 @@ def test_sig_selection_uses_normalized_links_and_explicit_nonvariant_policy():
     )
     sql = _sql(sig_search_statement(spec))
 
-    assert "JOIN sigs_study ON sigs_study.parent_id = sigs.id" in sql
+    assert 'JOIN "primary".sigs_study ON "primary".sigs_study.parent_id = "primary".sigs.id' in sql
     assert "sigs.component ILIKE '%%External beam radiotherapy%%'" in sql
     assert "sigs.variant_cui IS NULL" in sql
     assert "sigs.class_field = 'RAD_SIG'" in sql
@@ -90,9 +91,9 @@ def test_sig_selection_adds_only_required_component_joins(
 
     for table in ("drugs", "drugs_canmed_major_class", "drugs_canmed_minor_class"):
         if table in joined_tables:
-            assert f"JOIN {table}" in sql
+            assert f'JOIN "primary".{table}' in sql
         else:
-            assert f"JOIN {table}" not in sql
+            assert f'JOIN "primary".{table}' not in sql
 
 
 def test_sig_selection_rejects_unknown_search_column():
@@ -114,8 +115,8 @@ def test_variant_selection_ranks_versions_and_normalizes_phase():
         )
     )
 
-    assert "row_number() OVER (PARTITION BY variants.variant_cui" in sql
-    assert "variants_study.parent_id = variants.id" in sql
+    assert 'row_number() OVER (PARTITION BY "primary".variants.variant_cui' in sql
+    assert 'variants_study.parent_id = "primary".variants.id' in sql
     assert "sigs.phase = 'ADJUVANT'" in sql
     assert "count(DISTINCT categorized_components.sig_id)" in sql
 
@@ -159,7 +160,7 @@ def test_category_expression_supports_one_column_and_rejects_empty_mapping():
         metadata,
         sa.Column("main_class", sa.String),
     )
-    engine = sa.create_engine("sqlite:///:memory:")
+    engine = create_default_hemonc_engine("sqlite:///:memory:")
     metadata.create_all(engine)
     with engine.begin() as connection:
         connection.execute(components.insert(), [{"main_class": "Platinum agent"}])

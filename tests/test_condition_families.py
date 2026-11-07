@@ -5,6 +5,7 @@ from __future__ import annotations
 import pytest
 import sqlalchemy as sa
 
+from hemonc_alchemy.config import create_default_hemonc_engine
 from hemonc_alchemy.integrations.omop.schema import schema_aware_bind
 from hemonc_alchemy.model import Conditions
 from hemonc_alchemy.toolkit.core import condition_families as families_module
@@ -90,7 +91,7 @@ def test_variant_index_places_chop_in_lymphoma(imported_session):
 def _sqlite_vocabulary_with_ancestry():
     from sqlalchemy.pool import StaticPool
 
-    engine = sa.create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
+    engine = create_default_hemonc_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
     metadata = sa.MetaData()
     concept = sa.Table(
         "concept", metadata,

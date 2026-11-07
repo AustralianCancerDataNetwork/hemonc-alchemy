@@ -7,6 +7,7 @@ import pytest
 import sqlalchemy as sa
 from sqlalchemy.orm import Session
 
+from hemonc_alchemy.config import create_default_hemonc_engine
 from hemonc_alchemy.toolkit.core.catalogue import (
     CatalogueSpec,
     IndicationSpec,
@@ -49,9 +50,10 @@ def catalogue_session(request):
     engine = (
         request.getfixturevalue("pg_engine")
         if postgres
-        else sa.create_engine("sqlite://")
+        else create_default_hemonc_engine("sqlite://")
     )
     with engine.connect() as conn:
+        conn.execution_options(schema_translate_map={"primary": "pg_temp" if postgres else "temp"})
         transaction = conn.begin()
         for name, columns in TABLES.items():
             conn.exec_driver_sql(f"CREATE TEMPORARY TABLE {name} ({columns})")

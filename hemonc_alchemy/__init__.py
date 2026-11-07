@@ -9,6 +9,7 @@ from importlib import import_module
 from typing import TYPE_CHECKING
 
 from .config import HemOncAlchemyConfig as HemOncAlchemyConfig
+from .config import create_default_hemonc_engine as create_default_hemonc_engine
 from .config import create_hemonc_engine as create_hemonc_engine
 from .config import get_hemonc_context as get_hemonc_context
 
@@ -18,7 +19,7 @@ if TYPE_CHECKING:
         resolve_all_days as resolve_all_days,
     )
 
-_EAGER = ["HemOncAlchemyConfig", "create_hemonc_engine", "get_hemonc_context"]
+_EAGER = ["HemOncAlchemyConfig", "create_default_hemonc_engine", "create_hemonc_engine", "get_hemonc_context"]
 
 
 def _model():

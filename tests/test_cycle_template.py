@@ -6,6 +6,7 @@ import pytest
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 
+from hemonc_alchemy.config import create_default_hemonc_engine
 from hemonc_alchemy.integrations.omop.schema import schema_aware_bind
 from hemonc_alchemy.model import Variants
 from hemonc_alchemy.toolkit.analytics.treatment.scheduling import (
@@ -29,7 +30,7 @@ def _load_latest_variant(cui: int):
     """The highest-`version` row for `cui`, or skip if postgres/the row is unavailable."""
     engine = None
     try:
-        engine = sa.create_engine(
+        engine = create_default_hemonc_engine(
             _DEVCONTAINER_URL, future=True,
             connect_args={"options": "-csearch_path=public,omop"},
         )

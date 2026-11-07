@@ -37,7 +37,12 @@ from .queries import (
     rxnorm_ingredient_to_drug,
     snomed_to_condition,
 )
-from .schema import OmopUnavailableError, omop_availability, require_omop_available
+from .schema import (
+    OmopUnavailableError,
+    omop_availability,
+    require_omop_available,
+    schema_aware_bind,
+)
 
 __all__ = [
     "COMPONENT_ROLE_RELATIONSHIPS",
@@ -75,6 +80,7 @@ __all__ = [
     "require_omop_available",
     "resolve_hemonc_concepts",
     "rxnorm_ingredient_to_drug",
+    "schema_aware_bind",
     "snomed_to_condition",
     "suspicious_condition_mappings",
     "vocabulary_versions",

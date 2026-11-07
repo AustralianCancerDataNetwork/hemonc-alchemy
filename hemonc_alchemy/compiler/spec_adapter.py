@@ -40,7 +40,7 @@ def hemonc_table_specs(registry: SchemaRegistry) -> dict[str, TableSpec]:
     return {
         name: TableSpec(
             table_name=name,
-            schema="hemonc",
+            schema="primary",
             is_required=meta.maturity == "prod",
             description=meta.description,
         )

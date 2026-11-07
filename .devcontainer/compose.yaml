@@ -3,7 +3,7 @@ services:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
-    command: ["/bin/sh", "-c", "uv sync --frozen --extra dev --extra author --extra exploration --extra postgres --extra omop && sleep infinity"]
+    command: ["/bin/sh", "-c", "bash .devcontainer/post-create.sh && sleep infinity"]
     environment:
       DATABASE_URL: postgresql+psycopg://hemonc:hemonc@postgres:5432/hemonc_alchemy
       OA_CONFIG_PATH: /home/vscode/.config/omop/config.toml

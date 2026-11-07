@@ -12,86 +12,75 @@ This is handled in `toolkit/loading.py` (`load_denormalised`).
 
 from __future__ import annotations
 
-from collections.abc import Callable
+import warnings
 from enum import Enum
+from pathlib import Path
 from types import ModuleType
-from typing import Any
+from typing import Any, cast
 
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from orm_loader.tables import CSVLoadableTableInterface, SerialisableTableInterface
+from orm_loader.loaders import open_reader
+from orm_loader.tables import FileLoadableTableInterface, SerialisableTableInterface
 
-from ..naming import safe_enum_key
+from .ingestion import GeneratedIdReader, conversion_policy
 
 
 class Base(so.DeclarativeBase):
     pass
 
 
-class EntityBase(Base, CSVLoadableTableInterface, SerialisableTableInterface):
-    """Abstract base for every generated HemOnc entity class."""
+def hemonc_enum(enum_class: type[Enum]) -> sa.Enum:
+    """Keep native PostgreSQL enums and enforce labels portably on DuckDB.
+
+    The DuckDB dialect does not translate schema tags in named enum column
+    references. Its VARCHAR variant retains database label checks without
+    placing types in the wrong physical schema.
+    """
+    # Staging tables may reuse the type object, so attaching one must not
+    # change the schema of the original table's native enum.
+    return sa.Enum(enum_class, schema="primary").with_variant(
+        sa.Enum(enum_class, native_enum=False, create_constraint=True), "duckdb"
+    )
+
+
+class EntityBase(Base, FileLoadableTableInterface, SerialisableTableInterface):
+    """Generated HemOnc entity with explicit conversion and snapshot ID support."""
 
     __abstract__ = True
 
+    @classmethod
+    def load_file(cls, session: so.Session, path: Path, **kwargs: Any) -> int:
+        policy = kwargs.get("policy") or conversion_policy(cast(sa.Table, cls.__table__))
+        kwargs["policy"] = policy
+        reader = kwargs.get("reader")
+        if reader is None:
+            reader = open_reader(
+                path, cls.model_columns(),
+                chunksize=kwargs.pop("chunksize", None),
+                quote_mode=kwargs.pop("quote_mode", None),
+                skip_malformed=policy.errors.on_error == "reject_row",
+            )
+        column = cls.__table__.c.get("id")
+        if column is not None and column.primary_key and column.autoincrement is True and "id" not in reader.columns:
+            reader = GeneratedIdReader(reader, cls, session)
+        kwargs["reader"] = reader
+        # SQLAlchemy's generated class descriptors are broader than upstream's protocol.
+        return super().load_file(session, path, **kwargs)  # ty: ignore[invalid-argument-type]
+
+    @classmethod
+    def load_csv(cls, session: so.Session, path: Path, **kwargs: Any) -> int:
+        """Compatibility alias; use load_file for new code."""
+        warnings.warn("load_csv() is deprecated; use load_file()", DeprecationWarning, stacklevel=2)
+        return cls.load_file(session, path, **kwargs)
+
 
 def register_enum_casts() -> None:
-    """
-    
-    Register a validating cast rule for every generated `sa.Enum` column,
-    across every table (including generated map/denormalised tables)
-
-    Uses `scalar`, instead of the `enum_type` default, because
-    `compiler/schema_model.py`'s `EnumSpec.enum_class` builds `.value` from
-    `v.strip().lower()`, deliberately canonicalising case-only near-duplicates
-    but real CSV data keeps its original casing (`"Procedure"`, not
-    `"procedure"`). `enum_type`'s exact-match default would fail against
-    every such column.
-    
-    Stores the matching member's `.name` (per `sa.Enum` defaults),
-    
-    An unmatched value is recorded via the existing `TableCastingStats`
-    on_error path and the column is set to `None`.
-    """
-    from orm_loader.loaders.data.converters import register_column_cast_rule
-
-    def _make_scalar(enum_type: type[Enum]) -> Callable[[Any], Any]:
-        def _scalar(value: Any) -> Any:
-            if value is None:
-                return None
-            s = str(value).strip().lower()
-            if not s:
-                return None
-            try:
-                return enum_type(s).name  # exact value match
-            except ValueError:
-                # Fall back to the member *name*, because that is the
-                # equivalence the compiler actually asserted. Where two source
-                # spellings normalise to one `safe_enum_key`, only one of them
-                # survives as a member value (the last seen, so effectively
-                # decided by CSV row order), and an exact-value lookup nulls
-                # every row carrying the other. 'CPS at least 10%' x3 lost to
-                # 'CPS at least 10' x1; plain 'RMST' x12 lost to 'RMST:' x1.
-                # Both spellings map to the same member here instead.
-                try:
-                    return enum_type[safe_enum_key(s)].name
-                except KeyError as exc:
-                    # Re-raised as ValueError so this rule has one failure
-                    # type regardless of which lookup missed. orm-loader
-                    # catches Exception and routes it to on_error either way,
-                    # but callers testing the rule directly shouldn't have to
-                    # know which of the two paths ran.
-                    raise ValueError(
-                        f"{value!r} matches no member of {enum_type.__name__}"
-                    ) from exc
-        return _scalar
-
-    for table in Base.metadata.tables.values():
-        for col in table.columns:
-            if isinstance(col.type, sa.Enum):
-                enum_type = col.type.enum_class
-                if enum_type is None:
-                    continue
-                register_column_cast_rule(table.name, col.name, scalar=_make_scalar(enum_type))
+    """Compatibility hook: HemOnc file loads now install a local conversion policy."""
+    warnings.warn(
+        "register_enum_casts() is unnecessary; file loads use an explicit HemOnc policy",
+        DeprecationWarning, stacklevel=2,
+    )
 
 
 def is_concrete_entity(obj: object) -> bool:

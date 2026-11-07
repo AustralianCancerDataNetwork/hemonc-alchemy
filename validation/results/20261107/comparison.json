@@ -1,0 +1,11 @@
+{
+  "differences": [],
+  "loadable_sources": 22,
+  "passed": true,
+  "rows": {
+    "left": 2111833,
+    "right": 2111833
+  },
+  "source_id": "91b4cd4f39d2cb3c5386b122df303e44f59ff725dbedb62579dbfae15a7a8873",
+  "tables_compared": 97
+}

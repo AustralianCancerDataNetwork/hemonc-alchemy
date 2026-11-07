@@ -21,30 +21,22 @@ from __future__ import annotations
 import csv
 import logging
 import tempfile
+from collections import Counter
 from collections.abc import Callable, Generator
 from contextlib import contextmanager
 from datetime import date, datetime
-from enum import Enum
-from functools import partial
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Protocol
+from typing import Any, ClassVar, Protocol
 
 import pandas as pd
 import sqlalchemy as sa
 import sqlalchemy.orm as so
+from orm_loader.conversion import ConversionPolicy
 
-from ..model.base import register_enum_casts
+from ..model.ingestion import conversion_policy, convert_value, interpret_values
 from ..naming import resolve_source_csv, safe_identifier
 
-if TYPE_CHECKING:
-    from orm_loader.loaders.data_classes import TableCastingStats
-
 logger = logging.getLogger(__name__)
-
-
-def _record_cast_failure(value: Any, *, column: str, stats: TableCastingStats) -> None:
-    """`on_error` callback for `perform_cast`, bound per-column via `partial`."""
-    stats.record(column=column, value=value)
 
 
 class _MappedEntity(Protocol):
@@ -52,12 +44,12 @@ class _MappedEntity(Protocol):
     including the small per-column map/child tables.
     """
 
-    __tablename__: str
-    __name__: str
-    __table__: sa.Table
+    __tablename__: ClassVar[str]
+    __name__: ClassVar[str]
+    __table__: ClassVar[sa.Table]
 
     @classmethod
-    def load_csv(cls, session: so.Session, path: Path, **kwargs: Any) -> int: ...
+    def load_file(cls, session: so.Session, path: Path, **kwargs: Any) -> int: ...
 
 
 class _GeneratedEntity(_MappedEntity, Protocol):
@@ -65,10 +57,10 @@ class _GeneratedEntity(_MappedEntity, Protocol):
     per-table metadata attributes.
     """
 
-    id: Any
-    natural_key_columns: list[str]
-    denormalised_columns: list[str]
-    derived_columns: list[str]
+    id: ClassVar[Any]
+    natural_key_columns: ClassVar[list[str]]
+    denormalised_columns: ClassVar[list[str]]
+    derived_columns: ClassVar[list[str]]
 
 
 def _header_renames(path: Path) -> dict[str, str]:
@@ -149,9 +141,9 @@ def load_entity(
     Extra keyword arguments (`merge_strategy`, `chunksize`, `dedupe`, ...) are
     passed through to the underlying loader.
     """
-    register_enum_casts()
+    load_csv_kwargs.setdefault("rejects_dir", data_dir / "rejects")
     with _resolved_csv_path(data_dir, entity_cls.__tablename__) as path:
-        return entity_cls.load_csv(session, path, **load_csv_kwargs)
+        return entity_cls.load_file(session, path, **load_csv_kwargs)
 
 
 def load_all(
@@ -168,7 +160,7 @@ def load_all(
     """
     primary_total = load_entity(session, entity_cls, data_dir, **load_csv_kwargs)
     session.flush()
-    denorm_totals = load_denormalised(session, entity_cls, data_dir)
+    denorm_totals = load_denormalised(session, entity_cls, data_dir, policy=load_csv_kwargs.get("policy"))
     return {entity_cls.__tablename__: primary_total, **denorm_totals}
 
 
@@ -208,80 +200,61 @@ def _map_class_for_column(entity_cls: type[_GeneratedEntity], column: str) -> ty
 
 
 def _read_source_csv(path: Path) -> pd.DataFrame:
-    df = pd.read_csv(path, dtype=str)
+    df = pd.read_csv(path, dtype=str, keep_default_na=False)
     return df.rename(columns=lambda c: safe_identifier(c).lower())
 
 
 def _identity_value(
-    value: Any, column: sa.Column, *, source: bool, on_error: Callable[[Any], None]
+    value: Any, column: sa.Column, *, on_error: Callable[[Any], None],
+    policy: ConversionPolicy | None = None,
 ) -> object:
-    """Return a comparable representation of one parent identity value.
-
-    Source CSV values and values read back from SQLAlchemy have different
-    Python representations (for example ``"Regimen"`` versus an enum
-    member, or ``"0"`` versus ``False``).  Parent matching must compare the
-    values after the same casts used by the main loader.
-    """
+    """Compare source and database identities under the file conversion policy."""
     if value is None or (isinstance(value, float) and pd.isna(value)) or value is pd.NaT:
         return None
-
-    column_type = column.type
-    if isinstance(column_type, sa.Enum):
-        if isinstance(value, Enum):
-            return ("enum", value.name)
-        from orm_loader.loaders.data.converters import perform_cast
-
-        cast = perform_cast(
-            value,
-            column_type,
-            on_error=on_error,
-            table_name=column.table.name,
-            column_name=column.name,
-        )
-        return None if cast is None else ("enum", str(cast))
-
     try:
-        python_type = column_type.python_type
-    except NotImplementedError:
-        python_type = str
-
-    if python_type is bool:
-        if isinstance(value, bool):
-            return value
-        return str(value).strip().lower() in {"true", "t", "yes", "y", "1"}
-    if python_type is int:
-        try:
-            return int(value)
-        except (TypeError, ValueError, OverflowError):
-            on_error(value)
-            return None
-    if python_type is float:
-        try:
-            return float(value)
-        except (TypeError, ValueError, OverflowError):
-            on_error(value)
-            return None
-    if python_type in {date, datetime}:
-        try:
-            return pd.Timestamp(value).isoformat()
-        except (TypeError, ValueError, OverflowError):
-            # Match orm-loader's handling of placeholders such as
-            # "Uncertain date": an invalid value is loaded as NULL when the
-            # generated column is nullable, so it must not abort parent-row
-            # matching here.
-            on_error(value)
-            return None
-    return str(value).strip()
+        result = convert_value(value, column, policy or conversion_policy())
+    except ValueError:
+        on_error(value)
+        return None
+    return _identity_result(result, column)
 
 
-def _surrogate_parent_lookup(
+def _identity_result(result: Any, column: sa.Column) -> object:
+    """Canonicalize a value already interpreted by the file policy."""
+    if result is None:
+        return None
+    if isinstance(column.type, sa.Enum):
+        return ("enum", result)
+    if isinstance(result, (date, datetime)):
+        return result.isoformat()
+    return result
+
+
+def _identity_keys(rows, columns, policy: ConversionPolicy, failures: Counter) -> list[tuple]:
+    """Convert whole columns once rather than invoking Arrow for every cell."""
+    if not rows:
+        return []
+    keys = []
+    for index, column in enumerate(columns):
+        values, invalid = interpret_values([row[index] for row in rows], column, policy)
+        bad = invalid.to_pylist()
+        if any(bad):
+            failures.update({"<row identity>": sum(bad)})
+        keys.append([
+            _identity_result(None if failed else value, column)
+            for value, failed in zip(values.to_pylist(), bad)
+        ])
+    return list(zip(*keys))
+
+
+def _parent_lookup(
     session: so.Session,
     entity_cls: type[_GeneratedEntity],
     df: pd.DataFrame,
-    denormalised_columns: set[str],
-    stats,
-) -> dict[object, int | None]:
-    """Map a source-row identity to its generated parent id.
+    failures: Counter,
+    policy: ConversionPolicy,
+) -> dict[object, tuple | None]:
+    """Match source rows to accepted parents by their complete scalar identity.
 
     A nullable natural key cannot identify a denormalised row.  For those
     tables, use every scalar source column as the row identity. The returned
@@ -290,6 +263,8 @@ def _surrogate_parent_lookup(
     to an arbitrary parent.
     """
     table = entity_cls.__table__
+    denormalised_columns = set(entity_cls.denormalised_columns)
+    key_columns = ["id"] if "id" in table.c else _natural_key_columns(entity_cls)
     identity_columns = [
         column
         for column in table.columns
@@ -300,56 +275,45 @@ def _surrogate_parent_lookup(
     ]
     if not identity_columns:
         raise RuntimeError(
-            f"{entity_cls.__name__} has a surrogate id but no scalar source columns "
+            f"{entity_cls.__name__} has no scalar source columns "
             "available to match denormalised rows."
         )
 
-    def failed(value):
-        stats.record(column="<row identity>", value=value)
-
     parent_rows = session.execute(
-        sa.select(entity_cls.id, *(getattr(entity_cls, column.name) for column in identity_columns))
+        sa.select(*(table.c[name] for name in key_columns), *identity_columns)
     ).all()
-    lookup: dict[tuple[object, ...], int | None] = {}
-    for row in parent_rows:
-        key = tuple(
-            _identity_value(value, column, source=False, on_error=failed)
-            for value, column in zip(row[1:], identity_columns)
-        )
+    lookup: dict[tuple[object, ...], tuple | None] = {}
+    parent_keys = _identity_keys([row[len(key_columns):] for row in parent_rows], identity_columns, policy, failures)
+    for row, key in zip(parent_rows, parent_keys):
         if key in lookup:
             lookup[key] = None
         else:
-            lookup[key] = row[0]
+            lookup[key] = tuple(row[:len(key_columns)])
 
-    source_lookup: dict[object, int | None] = {}
-    for index, source_row in df.iterrows():
-        key = tuple(
-            _identity_value(source_row[column.name], column, source=True, on_error=failed)
-            for column in identity_columns
-        )
-        source_lookup[index] = lookup.get(key)
-    return source_lookup
+    source_rows = list(df[[column.name for column in identity_columns]].itertuples(index=False, name=None))
+    source_keys = _identity_keys(source_rows, identity_columns, policy, failures)
+    return {index: lookup.get(key) for index, key in zip(df.index, source_keys)}
 
 
 def load_denormalised(
     session: so.Session,
     entity_cls: type[_GeneratedEntity],
     data_dir: Path,
+    *,
+    policy: ConversionPolicy | None = None,
 ) -> dict[str, int]:
     """Fill the child tables holding an entity's pipe-delimited columns.
 
     Must run after `load_entity` for the same entity. Returns a count per
     column loaded.
 
-    Values are cast the same way `load_csv` casts them, so a bad value is
+    Values are cast the same way `load_file` casts them, so a bad value is
     dropped with a warning rather than replaced by a sentinel. This includes
     enum-valued natural-key columns copied into a map table: those key fields
     need the same normalisation as the denormalised value itself.
     """
-    from orm_loader.loaders.data.converters import perform_cast
-    from orm_loader.loaders.data_classes import TableCastingStats
-
-    register_enum_casts()
+    policy = policy or conversion_policy()
+    failures: Counter[str] = Counter()
 
     if not entity_cls.denormalised_columns:
         return {}
@@ -360,30 +324,12 @@ def load_denormalised(
     key_cols = _natural_key_columns(entity_cls)
     is_surrogate = "id" in entity_cls.__table__.c
 
-    parent_lookup: dict[object, int | None] = {}
-    if is_surrogate:
-        identity_stats = TableCastingStats(table_name=entity_cls.__tablename__)
-        parent_lookup = _surrogate_parent_lookup(
-            session,
-            entity_cls,
-            df,
-            set(entity_cls.denormalised_columns),
-            identity_stats,
-        )
-        if identity_stats.has_failures():
-            for col_name, col_stats in identity_stats.columns.items():
-                logger.warning(
-                    "CAST %s.%s: %d row(s) failed. Examples: %s",
-                    entity_cls.__tablename__,
-                    col_name,
-                    col_stats.count,
-                    col_stats.examples,
-                )
-    elif not key_cols or not all(column in df.columns for column in key_cols):
+    if not is_surrogate and (not key_cols or not all(column in df.columns for column in key_cols)):
         raise RuntimeError(
             f"{entity_cls.__name__} has denormalised columns but no complete natural key "
             "available in its source CSV."
         )
+    parent_lookup = _parent_lookup(session, entity_cls, df, failures, policy)
 
     results: dict[str, int] = {}
     for column in entity_cls.denormalised_columns:
@@ -391,8 +337,7 @@ def load_denormalised(
             continue
 
         map_cls = _map_class_for_column(entity_cls, column)
-        value_type = map_cls.__table__.c[column].type
-        stats = TableCastingStats(table_name=map_cls.__tablename__)
+        value_column = map_cls.__table__.c[column]
 
         seen: set[tuple] = set()
         records: list[dict] = []
@@ -401,43 +346,21 @@ def load_denormalised(
             if raw is None or (isinstance(raw, float) and pd.isna(raw)):
                 continue
 
-            if is_surrogate:
-                parent_id = parent_lookup.get(index)
-                if parent_id is None:
-                    continue
-                fixed_fields = {"parent_id": parent_id}
-            else:
-                fixed_fields = {}
-                for key_col in key_cols:
-                    key_value = row[key_col]
-                    key_type = map_cls.__table__.c[key_col].type
-                    if isinstance(key_type, sa.Enum):
-                        key_value = perform_cast(
-                            key_value,
-                            key_type,
-                            on_error=partial(_record_cast_failure, column=key_col, stats=stats),
-                            table_name=map_cls.__tablename__,
-                            column_name=key_col,
-                        )
-                        if key_value is None:
-                            break
-                    fixed_fields[key_col] = key_value
-
-                if len(fixed_fields) != len(key_cols):
-                    continue
+            parent_key = parent_lookup.get(index)
+            if parent_key is None:
+                continue
+            fixed_fields = {"parent_id": parent_key[0]} if is_surrogate else dict(zip(key_cols, parent_key))
 
             for token in str(raw).split("|"):
                 token = token.strip()
                 if not token:
                     continue
 
-                value = perform_cast(
-                    token,
-                    value_type,
-                    on_error=partial(_record_cast_failure, column=column, stats=stats),
-                    table_name=map_cls.__tablename__,
-                    column_name=column,
-                )
+                try:
+                    value = convert_value(token, value_column, policy)
+                except ValueError:
+                    failures.update([column])
+                    continue
                 if value is None:
                     continue
 
@@ -457,17 +380,9 @@ def load_denormalised(
         if records:
             session.execute(sa.insert(map_cls.__table__), records)
 
-        if stats.has_failures():
-            for col_name, col_stats in stats.columns.items():
-                logger.warning(
-                    "CAST %s.%s: %d row(s) failed. Examples: %s",
-                    map_cls.__tablename__,
-                    col_name,
-                    col_stats.count,
-                    col_stats.examples,
-                )
-
         results[column] = len(records)
 
+    for column, count in failures.items():
+        logger.warning("CAST %s.%s: %d value(s) failed", entity_cls.__tablename__, column, count)
     session.flush()
     return results

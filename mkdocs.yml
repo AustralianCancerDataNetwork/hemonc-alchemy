@@ -75,6 +75,7 @@ nav:
       - Configuration: getting-started/configuration.md
       - Quickstart: getting-started/quickstart.md
       - Local development: getting-started/local-development.md
+      - Upgrading: getting-started/upgrading.md
 
   - Understanding HemOnc:
       - Overview: model/index.md

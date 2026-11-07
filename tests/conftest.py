@@ -1,5 +1,7 @@
 """Shared pytest fixtures for tests that need a real PostgreSQL database."""
 
+import os
+
 import pytest
 import sqlalchemy as sa
 
@@ -28,6 +30,8 @@ def pg_db(request):
     try:
         database = database_context.__enter__()
     except (OSError, sa.exc.SQLAlchemyError) as exc:
+        if os.getenv("HEMONC_REQUIRE_POSTGRES") == "1":
+            pytest.fail(f"Required PostgreSQL validation target is unavailable: {exc}")
         pytest.skip(f"PostgreSQL test database is unavailable: {exc}")
     try:
         yield database
@@ -43,3 +47,28 @@ def pg_engine(pg_db):
 @pytest.fixture
 def pg_session(pg_db):
     yield pg_db.session
+
+
+@pytest.fixture
+def pg_load_engine(pg_db):
+    """A committed disposable schema for loaders that commit their own session."""
+    from oa_configurator.testing import isolated_test_schema
+
+    engine = pg_db.committing_engine
+    with isolated_test_schema(engine, prefix="hemonc_load") as schema:
+        mapping = dict(engine.get_execution_options().get("schema_translate_map", {}))
+        mapping["primary"] = schema
+        yield engine.execution_options(schema_translate_map=mapping, compiled_cache={})
+
+
+@pytest.fixture
+def duckdb_db(request):
+    """A disposable DuckDB file provisioned by oa-configurator."""
+    from oa_configurator.testing import isolated_test_database
+
+    from hemonc_alchemy.config import HemOncAlchemyConfig
+
+    with isolated_test_database(
+        HemOncAlchemyConfig, "test_hemonc_db_duckdb", dialect="duckdb", request=request
+    ) as database:
+        yield database

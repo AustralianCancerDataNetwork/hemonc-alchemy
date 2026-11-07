@@ -14,6 +14,7 @@ from .compiler import generate as generate_module
 from .compiler import spec_adapter
 from .compiler import validate as validate_module
 from .compiler.schema_model import load_registry_json
+from .config import create_default_hemonc_engine
 from .errors import HemOncValidationError
 
 app = typer.Typer(
@@ -293,12 +294,11 @@ def regen_condition_targets(
     ] = None,
 ) -> None:
     """Rewrite toolkit/core/condition_patches.csv and write a suggestions sheet. Review the diff before committing."""
-    import sqlalchemy as sa
     from sqlalchemy.orm import Session
 
     from .integrations.omop.schema import omop_availability, schema_aware_bind
 
-    engine = sa.create_engine(db_url)
+    engine = create_default_hemonc_engine(db_url)
     explicit_map = {"vocab": vocab_schema} if vocab_schema is not None else None
     routed_engine = schema_aware_bind(engine, explicit_map)
     try:
@@ -351,9 +351,8 @@ def lint_indications_command(
     from .toolkit.core.indications.normalisers.lint import lint_indications
 
     if database_url:
-        import sqlalchemy as sa
 
-        engine = sa.create_engine(
+        engine = create_default_hemonc_engine(
             database_url, connect_args={"options": "-csearch_path=public,omop"}
         )
     else:

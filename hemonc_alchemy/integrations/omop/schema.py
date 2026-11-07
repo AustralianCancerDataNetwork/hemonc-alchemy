@@ -8,6 +8,8 @@ from typing import Any
 
 import sqlalchemy as sa
 import sqlalchemy.exc
+from oa_configurator import ResolvedCDMDatabase, Resolver, Role
+from oa_configurator.domains.resources.sql import connection_key, is_ephemeral_url
 from sqlalchemy import event
 
 _SCHEMA_TRANSLATE_MAP = "schema_translate_map"
@@ -28,71 +30,96 @@ class OmopUnavailableError(RuntimeError):
     """An OMOP query was requested but its vocabulary could not be reached."""
 
 
-def _configured_map(bind: Any) -> dict[str, str | None] | None:
-    options = bind.get_execution_options()
-    database_name = options.get(_DATABASE_CONFIG_NAME)
-    try:
-        from oa_configurator import Resolver
-        from oa_configurator.domains.resources.sql import connection_key
+def _vocabulary_route(bind: Any, database: ResolvedCDMDatabase) -> dict[str, str | None]:
+    engine = getattr(bind, "engine", bind)
+    vocabulary = database.connection_for_role(Role.VOCAB)
+    if is_ephemeral_url(engine.url) or vocabulary.physical_key() != connection_key(engine.url):
+        raise OmopSchemaConfigurationError(
+            f"OMOP target {database.name!r} does not share a persistent physical database "
+            "with this bind; HemOnc SQL joins require the same database. "
+            "For separate databases, use a separate vocabulary session with a helper that supports it."
+        )
+    return {"vocab": database.schema_for_role(Role.VOCAB)}
 
-        resolver = Resolver.from_active_config()
-    except ImportError:
-        return None
-    except Exception as exc:
-        if database_name is not None:
-            raise OmopSchemaConfigurationError(
-                f"Could not load oa-configurator database {database_name!r}: {exc}"
-            ) from exc
-        return None
 
+def _configured_target(resolver: Resolver, database_name: str | None, physical_key: str) -> ResolvedCDMDatabase | None:
     if database_name is not None:
-        try:
-            resolved = resolver.resolve_database(database_name)
-        except Exception as exc:
-            raise OmopSchemaConfigurationError(
-                f"Could not resolve oa-configurator database {database_name!r}: {exc}"
-            ) from exc
-        return resolved.configured_internal_schema_translate_map()
+        source = resolver.resolve_database(database_name)
+        if isinstance(source, ResolvedCDMDatabase):
+            return source
+    selected = resolver.config.tools.get("hemonc_alchemy", {}).get("omop_db")
+    if selected is not None:
+        target = resolver.resolve_database(selected)
+        if not isinstance(target, ResolvedCDMDatabase):
+            raise OmopSchemaConfigurationError(f"HemOnc omop_db {selected!r} must reference a CDM database")
+        return target
+    candidates = [
+        resolver.resolve_database(name)
+        for name, config in resolver.config.databases.items() if config.kind == "cdm"
+    ]
+    matches = [
+        target for target in candidates if isinstance(target, ResolvedCDMDatabase)
+        and target.connection_for_role(Role.VOCAB).physical_key() == physical_key
+    ]
+    if len(matches) > 1:
+        raise OmopSchemaConfigurationError(
+            "Multiple OMOP targets share this database: "
+            + ", ".join(sorted(target.name for target in matches))
+            + ". Set [tools.hemonc_alchemy].omop_db explicitly."
+        )
+    return matches[0] if matches else None
 
+
+def _configured_map(bind: Any) -> dict[str, str | None] | None:
+    database_name = bind.get_execution_options().get(_DATABASE_CONFIG_NAME)
+    try:
+        resolver = Resolver.from_active_config()
+    except FileNotFoundError as exc:
+        if database_name is None:
+            return None
+        raise OmopSchemaConfigurationError(f"Could not load oa-configurator database {database_name!r}: {exc}") from exc
+    except Exception as exc:
+        raise OmopSchemaConfigurationError(f"Could not load oa-configurator: {exc}") from exc
     engine = getattr(bind, "engine", bind)
     try:
-        physical_key = connection_key(engine.url)
-    except (AttributeError, TypeError, ValueError):
-        return None
-    for name in resolver.config.databases:
-        try:
-            resolved = resolver.resolve_database(name)
-            mapping = resolved.configured_internal_schema_translate_map()
-        except Exception as exc:
-            raise OmopSchemaConfigurationError(
-                f"Could not resolve oa-configurator database {name!r}: {exc}"
-            ) from exc
-        if "vocab" in mapping and resolved.connection.physical_key() == physical_key:
-            return mapping
-    return None
+        target = _configured_target(resolver, database_name, connection_key(engine.url))
+        return _vocabulary_route(bind, target) if target is not None else None
+    except OmopSchemaConfigurationError:
+        raise
+    except Exception as exc:
+        raise OmopSchemaConfigurationError(f"Could not resolve the OMOP vocabulary target: {exc}") from exc
 
 
-def _translate_map(bind: Any, explicit: Mapping[str, str | None] | None) -> dict[str, str | None] | None:
+def _translate_map(
+    bind: Any, explicit: Mapping[str, str | None] | None,
+    omop_database: ResolvedCDMDatabase | None = None,
+) -> dict[str, str | None] | None:
+    existing = dict(bind.get_execution_options().get(_SCHEMA_TRANSLATE_MAP) or {})
+    if explicit is not None and "vocab" in explicit:
+        return {**existing, **explicit}
+    if omop_database is not None:
+        existing.update(_vocabulary_route(bind, omop_database))
+    elif "vocab" not in existing:
+        existing.update(_configured_map(bind) or {})
     if explicit is not None:
-        return dict(explicit)
-    existing = bind.get_execution_options().get(_SCHEMA_TRANSLATE_MAP)
-    if existing is not None:
-        return dict(existing)
-    return _configured_map(bind)
+        existing.update(explicit)
+    return existing or None
 
 
 def schema_aware_bind(
     bind: Any,
     schema_translate_map: Mapping[str, str | None] | None = None,
+    *,
+    omop_database: ResolvedCDMDatabase | None = None,
 ) -> Any:
     """Return a bind, or session, that translates OMOP schema tags."""
     is_session = callable(getattr(bind, "get_bind", None)) and callable(
         getattr(bind, "connection", None)
     )
     source = bind.get_bind() if is_session else bind
-    if is_session and schema_translate_map is None:
+    if is_session and schema_translate_map is None and omop_database is None:
         schema_translate_map = bind.info.get("schema_translate_map")
-    mapping = _translate_map(source, schema_translate_map)
+    mapping = _translate_map(source, schema_translate_map, omop_database)
     if mapping is None:
         return bind
     if is_session:
@@ -150,6 +177,7 @@ def omop_availability(
     *,
     require_relationships: bool = False,
     schema_translate_map: Mapping[str, str | None] | None = None,
+    omop_database: ResolvedCDMDatabase | None = None,
 ) -> OmopAvailability:
     """Check the optional OMOP models and return a diagnostic on failure."""
     from .binding import load_omop_binding
@@ -159,7 +187,7 @@ def omop_availability(
         return OmopAvailability(False, "omop-alchemy is not installed; install the 'omop' extra")
 
     try:
-        schema_aware_bind(session, schema_translate_map)
+        schema_aware_bind(session, schema_translate_map, omop_database=omop_database)
         source = session.get_bind()
         mapping = session.info.get("schema_translate_map")
         if mapping is None:
