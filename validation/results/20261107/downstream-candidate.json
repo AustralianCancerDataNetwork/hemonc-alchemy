@@ -45,7 +45,13 @@
       "skipped": 3
     },
     "new_failures": 0,
-    "note": "The same seven HTML assertion failures reproduce on the unchanged locked baseline."
+    "note": "The same seven HTML assertion failures reproduce on the unchanged locked baseline.",
+    "working_tree_overlay": {
+      "failed": 0,
+      "note": "Current uncommitted Explorer source/test snapshot, with only proposed schema-aware fixture construction applied in a temporary copy. Original working tree unchanged.",
+      "passed": 63,
+      "skipped": 4
+    }
   },
   "status": "candidate_only_not_published"
 }

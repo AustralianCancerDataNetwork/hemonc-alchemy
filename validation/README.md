@@ -49,6 +49,8 @@ Timings are single-run local baselines under uncontrolled host load. The receipt
 
 [Downstream candidate checks](results/20261107/downstream-candidate.json) use a locally built `1.0.0` wheel, not a published release. Ten Explorer PostgreSQL HTTP checks pass with server-enforced read-only connections. Crucible's existing lifecycle creates all 97 tables twice without errors and passes `omop-config verify` in a fresh disposable database, which is removed afterward. Explorer's unchanged locked baseline and candidate both have the same seven HTML assertion failures (49 passed, 7 failed, 3 browser skips); no new failures were introduced by the candidate. Exact downstream registry pins and lockfiles remain gated on package publication.
 
+A temporary snapshot of the current Explorer working tree also passes **63 tests**, with four browser skips, against the installed candidate. Only schema-aware test engine construction is applied to that snapshot; the original uncommitted application/UI work is untouched.
+
 ## Installed-wheel checks
 
 Build the wheel, install it into separate clean environments with no extras and with `duckdb,omop`, then run `wheel_smoke.py` from outside the checkout. The core environment must have neither optional package installed. Both environments create all 97 tables and verify snapshot import, explicit rebuild, and parent-child linkage. CI runs this matrix independently of the source-tree test jobs.

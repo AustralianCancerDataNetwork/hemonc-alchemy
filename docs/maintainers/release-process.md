@@ -7,10 +7,12 @@ HemOnc Alchemy uses the shared [cava-devops](https://github.com/AustralianCancer
 The `CI` workflow runs on pull requests targeting `main`:
 
 - `label-gate / check` requires exactly one release label: `breaking`, `feature`, `fix`, `dependencies`, or `chore`.
-- `build-test / test` runs the default dialect-independent suite without a database service.
+- `default / test` runs the default dialect-independent suite without a database service.
 - `duckdb / test` explicitly selects `duckdb` tests through CAVA's shared DuckDB workflow.
 - `postgres / test` runs the shared PostgreSQL service workflow with `PYTEST_ADDOPTS=-m postgres`. The required-connection flag makes unavailable PostgreSQL fixtures fail instead of silently skipping the dialect job.
-- `wheel (core)` and `wheel (duckdb-omop)` install built wheels in clean environments and exercise them outside the checkout.
+- `installed-wheel / wheel (core)` and `installed-wheel / wheel (duckdb-omop)` install built wheels in clean environments and exercise them outside the checkout.
+
+`build-test / test` retains the organization-required check name and passes only when all four validation jobs succeed. It runs even after a failed, cancelled or skipped dependency, so a skipped job cannot bypass the merge gate.
 
 The project default excludes both `db_dialect` and legacy `postgres` markers. The PostgreSQL override and DuckDB workflow command explicitly replace that selection. Licensed full-extract parity is a separate local release gate; public CI uses synthetic fixtures and skips real-extract checks when their inputs are absent. See the repository's [validation instructions](https://github.com/AustralianCancerDataNetwork/hemonc-alchemy/tree/main/validation).
 
@@ -54,12 +56,11 @@ The repository needs a GitHub environment named `pypi` and a PyPI trusted publis
 
 ## Repository settings
 
-For the workflows to protect the intended path, configure `main` to require pull requests, at least one approval, and these status checks:
+The existing organization rules require pull requests, at least one approval, and these status checks on `main`:
 
 - `label-gate / check`
 - `build-test / test`
-- `duckdb / test`
-- `postgres / test`
-- `wheel (core)` and `wheel (duckdb-omop)`
+
+The aggregate `build-test / test` requires the default, DuckDB, PostgreSQL, and installed-wheel jobs. This protects every validation axis without changing a shared organization ruleset to include repository-specific check names.
 
 Use squash merging as the normal merge strategy and prevent force pushes to `main`. The initial history migration or other exceptional administrative operation should be handled separately from ordinary package changes.

@@ -13,7 +13,7 @@ jobs:
   label-gate:
     uses: AustralianCancerDataNetwork/cava-devops/.github/workflows/label-gate.yml@main
 
-  build-test:
+  default:
     uses: AustralianCancerDataNetwork/cava-devops/.github/workflows/build-test.yml@main
     with:
       python-version: "3.12"
@@ -47,3 +47,15 @@ jobs:
 
   installed-wheel:
     uses: ./.github/workflows/wheel-smoke.yml
+
+  build-test:
+    # Retain the organization-required check name while requiring every axis.
+    name: build-test / test
+    needs: [default, duckdb, postgres, installed-wheel]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require all validation jobs
+        env:
+          ALL_SUCCEEDED: ${{ needs.default.result == 'success' && needs.duckdb.result == 'success' && needs.postgres.result == 'success' && needs.installed-wheel.result == 'success' }}
+        run: test "$ALL_SUCCEEDED" = true
