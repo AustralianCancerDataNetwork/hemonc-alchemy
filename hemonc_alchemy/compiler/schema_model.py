@@ -107,7 +107,6 @@ def sa_import_block() -> str:
         "    BigInteger,\n"
         "    Boolean,\n"
         "    DateTime,\n"
-        "    Enum,\n"
         "    Float,\n"
         "    ForeignKey,\n"
         "    ForeignKeyConstraint,\n"
@@ -115,7 +114,7 @@ def sa_import_block() -> str:
         "    Text,\n"
         ")\n"
         "from sqlalchemy.orm import Mapped, foreign, mapped_column\nfrom sqlalchemy.orm import relationship as sa_relationship\n\n"
-        "from .base import Base, EntityBase\n"
+        "from .base import Base, EntityBase, hemonc_enum\n"
     )
 
 
@@ -291,7 +290,7 @@ class ColumnSpec:
             return "Text"
         if t == "enum":
             enum_cls = f"{table.classname}_{safe_identifier(self.name).capitalize()}Enum"
-            return f"Enum({enum_cls})"
+            return f"hemonc_enum({enum_cls})"
         return "String(255)"
 
     def sa_column_line(self, table: TableMeta) -> str:
@@ -512,7 +511,7 @@ class TableMeta:
         pk_conds = [f"{self.classname}.{pk} == {map_table}.c.{pk}" for pk in self.pk_columns]
         if len(pk_conds) == 1:
             return pk_conds[0]
-        return f"and_({', '.join(pk_conds)})"
+        return f"sa.and_({', '.join(pk_conds)})"
 
     def enrich_field_metadata(self, df_dict: pd.DataFrame) -> set[str]:
         """Enrich this table and return the columns contributed by the sheet.
@@ -716,8 +715,9 @@ class TableMeta:
         lines: list[str] = [f"class {class_name}(EntityBase, Base):", f"    __tablename__ = '{table_name}'", ""]
 
         if parent.uses_surrogate_pk:
+            lines.append("    __table_args__ = {'schema': 'primary'}")
             lines.append(
-                f"    parent_id: Mapped[int] = mapped_column(BigInteger, ForeignKey('{parent.name}.id'), primary_key=True)"
+                f"    parent_id: Mapped[int] = mapped_column(BigInteger, ForeignKey('primary.{parent.name}.id'), primary_key=True)"
             )
         else:
             for pk in parent.pk_columns:
@@ -726,12 +726,16 @@ class TableMeta:
                 sa_type = col.sa_column_type(parent)
                 lines.append(f"    {pk}: Mapped[{py_type}] = mapped_column({sa_type}, primary_key=True)")
 
-            fk_cols = ", ".join(f"'{pk}'" for pk in parent.pk_columns)
-            ref_cols = ", ".join(f"'{parent.name}.{pk}'" for pk in parent.pk_columns)
+            # Parent columns are emitted in name order; DuckDB requires the
+            # referenced composite key to use that exact database key order.
+            database_key = sorted(parent.pk_columns)
+            fk_cols = ", ".join(f"'{pk}'" for pk in database_key)
+            ref_cols = ", ".join(f"'primary.{parent.name}.{pk}'" for pk in database_key)
 
             lines.append("")
             lines.append("    __table_args__ = (")
             lines.append(f"        ForeignKeyConstraint([{fk_cols}], [{ref_cols}]),")
+            lines.append("        {'schema': 'primary'},")
             lines.append("    )")
 
         col_name = nt.column
@@ -813,7 +817,7 @@ class TableMeta:
 
         if self.enums:
             lines.append("    enum_lookup: dict[str, type] = {")
-            for col, enum in self.enums.items():
+            for col, enum in sorted(self.enums.items()):
                 enum_cls = enum.enum_type(self)
                 lines.append(f"        '{col}': {enum_cls},")
             lines.append("    }")
@@ -826,8 +830,11 @@ class TableMeta:
             uniq_cols = ", ".join(f"'{c}'" for c in self.pk_columns)
             lines.append("    __table_args__ = (")
             lines.append(f"        sa.UniqueConstraint({uniq_cols}, name='uq_{self.name}_natural_key'),")
+            lines.append("        {'schema': 'primary'},")
             lines.append("    )")
             lines.append("")
+        else:
+            lines.append("    __table_args__ = {'schema': 'primary'}")
 
         for column_spec in sorted(self.columns.values(), key=lambda c: c.name):
             if column_spec.name in self.denormalised_columns or column_spec.name in self.derived_columns:
@@ -839,7 +846,7 @@ class TableMeta:
         for g in self.normalisation_groups:
             lines.append(f"        {list(g.columns)!r},")
         lines.append("    ]")
-        for nt in self.normalised_tables:
+        for nt in sorted(self.normalised_tables, key=lambda nt: nt.name):
             rel_name = f"{nt.column}_items"
             child_cls = nt.classname
             lines.append(
@@ -848,7 +855,7 @@ class TableMeta:
             )
 
         soft_rel_counts = Counter(rel.local_column for rel in self.soft_relationships)
-        for rel in self.soft_relationships:
+        for rel in sorted(self.soft_relationships, key=lambda rel: (rel.local_column, rel.target_table, rel.target_column)):
             target_cls = registry.tables[rel.target_table].classname
             rel_name = self._relationship_name(rel.local_column, rel.target_table, soft_rel_counts, "obj")
             join_expr = f"{self.classname}.{rel.local_column} == foreign({target_cls}.{rel.target_column})"
@@ -862,7 +869,7 @@ class TableMeta:
             lines.append("")
 
         soft_m2m_counts = Counter(m2m_rel.map_column for m2m_rel in self.soft_m2m_relationships)
-        for m2m_rel in self.soft_m2m_relationships:
+        for m2m_rel in sorted(self.soft_m2m_relationships, key=lambda rel: (rel.map_table, rel.map_column, rel.target_table, rel.target_column)):
             target_cls = registry.tables[m2m_rel.target_table].classname
             map_table = m2m_rel.map_table
             map_column = m2m_rel.map_column
@@ -871,14 +878,15 @@ class TableMeta:
                 map_column, m2m_rel.target_table, soft_m2m_counts, "objects"
             )
 
-            primary_join = self._map_primary_join(map_table)
-            secondary_join = f"{target_cls}.{m2m_rel.target_column} == {map_table}.c.{map_column}"
+            map_expression = f"Base.metadata.tables['primary.{map_table}']"
+            primary_join = self._map_primary_join(map_expression)
+            secondary_join = f"{target_cls}.{m2m_rel.target_column} == {map_expression}.c.{map_column}"
 
             lines.append(f"    {rel_name}: Mapped[list['{target_cls}']] = sa_relationship(")
             lines.append(f"        '{target_cls}',")
-            lines.append(f"        secondary='{map_table}',")
-            lines.append(f'        primaryjoin="{primary_join}",')
-            lines.append(f'        secondaryjoin="{secondary_join}",')
+            lines.append(f"        secondary=lambda: {map_expression},")
+            lines.append(f"        primaryjoin=lambda: {primary_join},")
+            lines.append(f"        secondaryjoin=lambda: {secondary_join},")
             lines.append("        lazy='selectin',")
             lines.append("        viewonly=True,")
             lines.append("    )")
@@ -998,8 +1006,8 @@ class Registry:
         """Render enum class code plus the matching import block."""
         f = enum_import_block() + "\n\n"
         enum_labels: list[str] = []
-        for table in self.tables.values():
-            for enum in table.enums.values():
+        for table in sorted(self.tables.values(), key=lambda table: table.name):
+            for enum in sorted(table.enums.values(), key=lambda enum: enum.name):
                 f += enum.enum_class(table) + "\n\n"
                 enum_labels.append(enum.enum_type(table))
         import_lines = ",\n    ".join(sorted(enum_labels))
@@ -1011,12 +1019,12 @@ class Registry:
         enum_classes, enum_import = self.render_enum_classes()
         f = f"{sa_import_block()}\n\n{enum_import}\n\n"
         rendered: list[str] = []
-        for table in self.tables.values():
+        for table in sorted(self.tables.values(), key=lambda table: table.name):
             if not table.columns:
                 continue
             f += f"{table.table_class(self)}\n\n"
             rendered.append(table.classname)
-            for nt in table.normalised_tables:
+            for nt in sorted(table.normalised_tables, key=lambda nt: nt.name):
                 f += table.normalised_table_class(nt) + "\n\n"
                 rendered.append(nt.classname)
 

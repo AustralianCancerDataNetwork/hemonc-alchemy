@@ -1,0 +1,57 @@
+{
+  "candidate_version": "1.0.0",
+  "crucible_lifecycle": {
+    "candidate_version": "1.0.0",
+    "checks": {
+      "lifecycle_run_1": {
+        "exit_code": 0,
+        "tables": 97
+      },
+      "lifecycle_run_2": {
+        "exit_code": 0,
+        "tables": 97
+      },
+      "oa_configurator_verify": {
+        "exit_code": 0
+      }
+    },
+    "target": "fresh_disposable_database_removed_after_check"
+  },
+  "explorer_postgresql": {
+    "candidate_version": "1.0.0",
+    "responses": {
+      "/": 200,
+      "/api/v1/clinical-areas": 200,
+      "/api/v1/conditions?page_size=5": 200,
+      "/api/v1/dataset": 200,
+      "/api/v1/indications?page_size=5": 200,
+      "/api/v1/regimens?page_size=5": 200,
+      "/conditions/614": 200,
+      "/drugs/105": 200,
+      "/health/ready": 200,
+      "/regimens/2204": 200
+    },
+    "server_enforced_read_only": true
+  },
+  "explorer_tests": {
+    "baseline": {
+      "failed": 7,
+      "passed": 49,
+      "skipped": 3
+    },
+    "candidate": {
+      "failed": 7,
+      "passed": 49,
+      "skipped": 3
+    },
+    "new_failures": 0,
+    "note": "The same seven HTML assertion failures reproduce on the unchanged locked baseline.",
+    "working_tree_overlay": {
+      "failed": 0,
+      "note": "Current uncommitted Explorer source/test snapshot, with only proposed schema-aware fixture construction applied in a temporary copy. Original working tree unchanged.",
+      "passed": 63,
+      "skipped": 4
+    }
+  },
+  "status": "candidate_only_not_published"
+}

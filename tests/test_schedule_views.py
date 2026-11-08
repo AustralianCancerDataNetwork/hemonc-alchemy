@@ -8,6 +8,7 @@ import pytest
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 
+from hemonc_alchemy.config import create_default_hemonc_engine
 from hemonc_alchemy.model.base import Base
 from hemonc_alchemy.model.entities import Drugs, Sigs, Variants
 from hemonc_alchemy.model.enums import Sigs_Cycle_length_unitEnum, Sigs_PhaseEnum
@@ -31,7 +32,7 @@ _D = datetime(2020, 1, 1, tzinfo=UTC)
 
 @pytest.fixture
 def session():
-    engine = sa.create_engine("sqlite:///:memory:")
+    engine = create_default_hemonc_engine("sqlite:///:memory:")
     Base.metadata.create_all(engine)
     with so.Session(engine) as s:
         yield s
@@ -322,22 +323,22 @@ class TestRealVariantReconciliation:
     _DEVCONTAINER_URL = "postgresql+psycopg://hemonc:hemonc@localhost:5432/hemonc_alchemy"
 
     def _load_latest_variant(self, cui: int):
+        engine = create_default_hemonc_engine(self._DEVCONTAINER_URL, future=True)
         try:
-            engine = sa.create_engine(self._DEVCONTAINER_URL, future=True)
-            with engine.connect() as conn:
-                conn.execute(sa.text("SELECT 1"))
-        except Exception as exc:  # noqa: BLE001 -- any connection failure just skips
-            pytest.skip(f"devcontainer PostgreSQL not reachable: {exc}")
-
-        with so.Session(engine) as session:
-            rows = session.execute(
-                sa.select(Variants).where(Variants.variant_cui == cui)
-            ).scalars().all()
-            if not rows:
-                pytest.skip(f"imported database has no variant_cui={cui}")
-            latest = max(rows, key=lambda v: (v.version, v.id))
-            session.expunge(latest)
-            return latest
+            with so.Session(engine) as session:
+                try:
+                    rows = session.scalars(
+                        sa.select(Variants).where(Variants.variant_cui == cui)
+                    ).all()
+                except sa.exc.SQLAlchemyError as exc:
+                    pytest.skip(f"devcontainer PostgreSQL unavailable: {exc}")
+                if not rows:
+                    pytest.skip(f"imported database has no variant_cui={cui}")
+                latest = max(rows, key=lambda variant: (variant.version, variant.id))
+                session.expunge(latest)
+                return latest
+        finally:
+            engine.dispose()
 
     @pytest.mark.postgres
     def test_variant_130784_surfaces_its_two_unrepresented_radiation_sigs(self):

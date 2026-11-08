@@ -11,6 +11,7 @@ from pathlib import Path
 import sqlalchemy as sa
 from sqlalchemy.orm import Session
 
+from hemonc_alchemy.config import create_default_hemonc_engine
 from hemonc_alchemy.model import (
     Indications,
     indications_Biomarker2_findingMap,
@@ -330,7 +331,7 @@ def test_origin_qualifier_and_composite_expression_forms():
 
 
 def test_sqlite_loader_reads_four_slots_and_regimen_links_in_fixed_queries():
-    engine = sa.create_engine("sqlite://")
+    engine = create_default_hemonc_engine("sqlite://")
     tables = (
         Indications.__table__,
         indications_Biomarker2Map.__table__,

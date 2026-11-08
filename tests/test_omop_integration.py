@@ -7,6 +7,7 @@ import sqlalchemy as sa
 from sqlalchemy.pool import StaticPool
 
 from hemonc_alchemy.caching import cached_per_engine
+from hemonc_alchemy.config import create_default_hemonc_engine
 from hemonc_alchemy.integrations.omop import (
     condition_to_snomed,
     coverage_report,
@@ -30,7 +31,7 @@ from hemonc_alchemy.toolkit.analytics.treatment.classification import DrugAncest
 
 
 def _sqlite_omop_session():
-    engine = sa.create_engine(
+    engine = create_default_hemonc_engine(
         "sqlite://",
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
@@ -81,7 +82,7 @@ def _sqlite_omop_session():
 
 
 def test_absent_omop_is_a_noop():
-    engine = sa.create_engine("sqlite://")
+    engine = create_default_hemonc_engine("sqlite://")
     session = sa.orm.Session(engine)
     assert not omop_available(session)
     if load_omop_binding() is None:
@@ -102,7 +103,7 @@ def test_absent_omop_is_a_noop():
 def test_omop_availability_reports_unmapped_vocabulary_schema():
     if load_omop_binding() is None:
         pytest.skip("the optional omop extra is not installed")
-    engine = sa.create_engine("sqlite://")
+    engine = create_default_hemonc_engine("sqlite://")
     session = sa.orm.Session(engine)
     try:
         availability = omop_availability(session)
@@ -118,7 +119,7 @@ def test_omop_availability_reports_unmapped_vocabulary_schema():
 def test_omop_availability_routes_to_attached_vocabulary_schema():
     if load_omop_binding() is None:
         pytest.skip("the optional omop extra is not installed")
-    engine = sa.create_engine(
+    engine = create_default_hemonc_engine(
         "sqlite://",
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
@@ -143,7 +144,7 @@ def test_omop_availability_routes_to_attached_vocabulary_schema():
 def test_omop_queries_report_unrouted_and_wrong_schema_and_work_when_routed():
     if load_omop_binding() is None:
         pytest.skip("the optional omop extra is not installed")
-    engine = sa.create_engine(
+    engine = create_default_hemonc_engine(
         "sqlite://",
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
@@ -182,7 +183,7 @@ def test_omop_queries_report_unrouted_and_wrong_schema_and_work_when_routed():
 
 
 def test_cached_per_engine_partitions_connection_schema_maps():
-    engine = sa.create_engine("sqlite://")
+    engine = create_default_hemonc_engine("sqlite://")
     calls = []
 
     @cached_per_engine
@@ -356,7 +357,7 @@ def ancestry_vocabulary():
 
 
 def _source_drug_session(rows):
-    engine = sa.create_engine("sqlite://", poolclass=StaticPool)
+    engine = create_default_hemonc_engine("sqlite://", poolclass=StaticPool)
     metadata = sa.MetaData()
     drugs = sa.Table("drugs", metadata, sa.Column("main_class", sa.String), sa.Column("drug_cui", sa.Integer))
     metadata.create_all(engine)

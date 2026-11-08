@@ -125,7 +125,7 @@ variants_StudyMap.variant_objects = relationship(
 
 Studies.variants = relationship(
     Variants,
-    secondary="variants_study",
+    secondary=variants_StudyMap.__table__,
     primaryjoin=foreign(variants_StudyMap.study) == Studies.study,
     secondaryjoin=foreign(variants_StudyMap.parent_id) == Variants.id,
     viewonly=True,

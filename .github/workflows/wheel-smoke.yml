@@ -1,0 +1,49 @@
+name: Installed wheel smoke
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: wheel (${{ matrix.install }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - install: core
+            extras: ""
+            backend: sqlite
+          - install: duckdb-omop
+            extras: duckdb,omop
+            backend: duckdb
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - name: Build distribution
+        run: uv build
+      - name: Install isolated wheel
+        env:
+          INSTALL_EXTRAS: ${{ matrix.extras }}
+        run: |
+          uv venv "$RUNNER_TEMP/wheel-env"
+          wheels=(dist/*.whl)
+          requirement="${wheels[0]}"
+          if [ -n "$INSTALL_EXTRAS" ]; then
+            requirement="${requirement}[${INSTALL_EXTRAS}]"
+          fi
+          uv pip install --python "$RUNNER_TEMP/wheel-env/bin/python" "$requirement"
+          uv pip check --python "$RUNNER_TEMP/wheel-env/bin/python"
+      - name: Smoke installed package outside checkout
+        env:
+          BACKEND: ${{ matrix.backend }}
+        working-directory: ${{ runner.temp }}
+        run: |
+          "$RUNNER_TEMP/wheel-env/bin/python" "$GITHUB_WORKSPACE/validation/wheel_smoke.py" --backend "$BACKEND"

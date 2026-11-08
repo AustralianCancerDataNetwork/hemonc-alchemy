@@ -234,7 +234,7 @@ class TestNaturalKeyPolicy:
         assert "id: Mapped[int]" in rendered
         assert "lookup_id: Mapped[Optional[str]]" in rendered
         assert "parent_id: Mapped[int]" in child
-        assert "ForeignKey('lookup_values.id')" in child
+        assert "ForeignKey('primary.lookup_values.id')" in child
 
     def test_duplicate_lookup_key_uses_a_surrogate_key(self):
         meta = TableMeta(

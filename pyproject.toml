@@ -31,14 +31,18 @@ classifiers = [
 dependencies = [
   "sqlalchemy>=2.0.45",
   "pandas>=2.0",
-  "oa-configurator>=2.0.0,<3.0.0",
-  "orm-loader>=2.0.0,<3.0.0",
+  "oa-configurator>=2.1.0,<3.0.0",
+  "orm-loader>=3.0.0,<4.0.0",
   "typer>=0.12",
   "rich>=13.0",
   "pyyaml>=6.0",
 ]
 
 [project.optional-dependencies]
+duckdb = [
+  "oa-configurator[duckdb]>=2.1.0,<3.0.0",
+  "orm-loader[duckdb]>=3.0.0,<4.0.0",
+]
 postgres = [
   "psycopg[binary]>=3.2",
 ]
@@ -49,7 +53,7 @@ author = [
   "pyreadr>=0.5",
 ]
 omop = [
-  "omop-alchemy>=2.0.0,<3.0.0",
+  "omop-alchemy>=3.0.0,<4.0.0",
 ]
 exploration = [
   "hemonc-alchemy[postgres]",
@@ -58,8 +62,8 @@ exploration = [
   "matplotlib>=3.9",
 ]
 dev = [
-  "oa-configurator[dev,postgres]>=2.0.0,<3.0.0",
-  "hemonc-alchemy[author,postgres]",
+  "oa-configurator[dev,postgres,duckdb]>=2.1.0,<3.0.0",
+  "hemonc-alchemy[author,postgres,duckdb]",
   "pytest>=8.0",
   "pytest-cov>=4.0",
   "ruff>=0.4",
@@ -109,7 +113,7 @@ extend-exclude = [
 ]
 
 [tool.pytest.ini_options]
-addopts = "-m 'not db_dialect'"
+addopts = "-m 'not db_dialect and not postgres'"
 markers = [
   "postgres: requires a running docker-compose Postgres instance",
 ]

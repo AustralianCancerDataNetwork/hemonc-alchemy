@@ -1,0 +1,17 @@
+{
+  "name": "HemOnc Alchemy — DuckDB",
+  "dockerComposeFile": "../compose.duckdb.yaml",
+  "service": "python-hemonc-alchemy-duckdb",
+  "workspaceFolder": "/workspace/hemonc-alchemy",
+  "remoteUser": "vscode",
+  "updateRemoteUserUID": true,
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "postStartCommand": "bash .devcontainer/register-kernel.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python", "ms-python.vscode-pylance", "ms-toolsai.jupyter", "charliermarsh.ruff"],
+      "settings": {"python.defaultInterpreterPath": "/opt/venv/bin/python"}
+    }
+  },
+  "shutdownAction": "stopCompose"
+}

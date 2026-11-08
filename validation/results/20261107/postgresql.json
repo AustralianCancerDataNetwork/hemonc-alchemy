@@ -1,0 +1,1784 @@
+{
+  "backend": "postgresql",
+  "errors": [],
+  "loads": {
+    "affiliations": {
+      "accounted": true,
+      "conversion_failures": {},
+      "counts": {
+        "affiliation_europmc": 111319,
+        "affiliation_journal": 30784,
+        "affiliations": 185925
+      },
+      "rows_deduplicated": 0,
+      "rows_read": 185925,
+      "rows_rejected": 0,
+      "rows_staged": 185925
+    },
+    "authors": {
+      "accounted": true,
+      "conversion_failures": {},
+      "counts": {
+        "authors": 185846
+      },
+      "rows_deduplicated": 0,
+      "rows_read": 185846,
+      "rows_rejected": 0,
+      "rows_staged": 185846
+    },
+    "canonicaltriples": {
+      "accounted": true,
+      "conversion_failures": {},
+      "counts": {
+        "canonicaltriples": 228,
+        "class_1_provenance": 237,
+        "class_2_provenance": 231
+      },
+      "rows_deduplicated": 0,
+      "rows_read": 228,
+      "rows_rejected": 0,
+      "rows_staged": 228
+    },
+    "conditions": {
+      "accounted": true,
+      "conversion_failures": {},
+      "counts": {
+        "conditions": 373,
+        "map_icd10cm": 2515,
+        "map_icd9cm": 1189,
+        "map_icdo3": 1705,
+        "map_icdo3_morph": 272,
+        "map_oncotree": 229,
+        "map_seer": 483,
+        "map_type_icdo3_morph": 97
+      },
+      "rows_deduplicated": 0,
+      "rows_read": 373,
+      "rows_rejected": 0,
+      "rows_staged": 373
+    },
+    "contexts": {
+      "accounted": true,
+      "conversion_failures": {},
+      "counts": {
+        "context": 449,
+        "context_pretty": 445,
+        "contexts": 445,
+        "phase": 159,
+        "phenotype": 78,
+        "setting": 447,
+        "stage_or_status": 388
+      },
+      "rows_deduplicated": 0,
+      "rows_read": 445,
+      "rows_rejected": 0,
+      "rows_staged": 445
+    },
+    "drugs": {
+      "accounted": true,
+      "conversion_failures": {},
+      "counts": {
+        "atc": 902,
+        "canmed_major_class": 473,
+        "canmed_major_class_cui": 473,
+        "canmed_minor_class": 412,
+        "canmed_minor_class_cui": 407,
+        "drugs": 883
+      },
+      "rows_deduplicated": 0,
+      "rows_read": 883,
+      "rows_rejected": 0,
+      "rows_staged": 883
+    },
+    "exclusions": {
+      "accounted": true,
+      "conversion_failures": {},
+      "counts": {
+        "exclusions": 18761,
+        "title": 18746
+      },
+      "rows_deduplicated": 0,
+      "rows_read": 18761,
+      "rows_rejected": 0,
+      "rows_staged": 18761
+    },
+    "hemonc_classes": {
+      "accounted": true,
+      "conversion_failures": {},
+      "counts": {
+        "hemonc_classes": 150,
+        "secondary_home_as_cui": 20,
+        "secondary_home_as_string": 148
+      },
+      "rows_deduplicated": 0,
+      "rows_read": 150,
+      "rows_rejected": 0,
+      "rows_staged": 150
+    },
+    "hemonc_rels": {
+      "accounted": true,
+      "conversion_failures": {},
+      "counts": {
+        "hemonc_rels": 99
+      },
+      "rows_deduplicated": 0,
+      "rows_read": 99,
+      "rows_rejected": 0,
+      "rows_staged": 99
+    },
+    "inclusions": {
+      "accounted": true,
+      "conversion_failures": {},
+      "counts": {
+        "inclusions": 11166,
+        "reason_note": 3338,
+        "ref_type": 11167
+      },
+      "rows_deduplicated": 0,
+      "rows_read": 11166,
+      "rows_rejected": 0,
+      "rows_staged": 11166
+    },
+    "indications": {
+      "accounted": true,
+      "conversion_failures": {
+        "indications.<row identity>.identity_to_null": 265,
+        "indications.date.nullable_to_null": 265,
+        "indications.regimen_cui.invalid_child_token": 231
+      },
+      "counts": {
+        "biomarker2": 136,
+        "biomarker2_finding": 136,
+        "biomarker2_type": 136,
+        "biomarker3": 46,
+        "biomarker3_finding": 40,
+        "biomarker3_type": 40,
+        "biomarker4": 9,
+        "biomarker4_finding": 9,
+        "biomarker4_type": 9,
+        "biomarker_type": 861,
+        "context": 415,
+        "demographics": 142,
+        "indications": 3806,
+        "prior_therapy_negation": 1325,
+        "prior_therapy_setting": 171,
+        "regimen": 919,
+        "regimen_cui": 644,
+        "response_contingency": 576,
+        "risk_stratification": 177
+      },
+      "rows_deduplicated": 0,
+      "rows_read": 3806,
+      "rows_rejected": 0,
+      "rows_staged": 3806
+    },
+    "persons": {
+      "accounted": true,
+      "conversion_failures": {},
+      "counts": {
+        "condition_types": 69848,
+        "conditions": 97159,
+        "country": 44457,
+        "location": 68878,
+        "orcid": 9155,
+        "persons": 54804,
+        "site": 61579,
+        "study_groups": 28324,
+        "study_sponsors": 76273
+      },
+      "rows_deduplicated": 0,
+      "rows_read": 54804,
+      "rows_rejected": 0,
+      "rows_staged": 54804
+    },
+    "refs": {
+      "accounted": true,
+      "conversion_failures": {},
+      "counts": {
+        "biblio": 11701,
+        "doi": 11701,
+        "reference": 11701,
+        "refs": 11709,
+        "study": 11701,
+        "title": 11702
+      },
+      "rows_deduplicated": 0,
+      "rows_read": 11709,
+      "rows_rejected": 0,
+      "rows_staged": 11709
+    },
+    "regimens": {
+      "accounted": true,
+      "conversion_failures": {
+        "regimens.all_sact_fda_as_of.nullable_to_null": 4
+      },
+      "counts": {
+        "regimens": 2811
+      },
+      "rows_deduplicated": 0,
+      "rows_read": 2811,
+      "rows_rejected": 0,
+      "rows_staged": 2811
+    },
+    "sig_branch_types": {
+      "accounted": true,
+      "conversion_failures": {},
+      "counts": {
+        "description": 14,
+        "sig_branch_types": 25
+      },
+      "rows_deduplicated": 0,
+      "rows_read": 25,
+      "rows_rejected": 0,
+      "rows_staged": 25
+    },
+    "sigs": {
+      "accounted": true,
+      "conversion_failures": {
+        "sigs.<row identity>.identity_to_null": 22,
+        "sigs.variant_cui.nullable_to_null": 22
+      },
+      "counts": {
+        "cyclesigs_note": 923,
+        "inparens": 3256,
+        "seqrel": 620,
+        "seqrelwhat": 24476,
+        "seqrelwhen": 294,
+        "seqrelwhenunit": 286,
+        "sigs": 24605,
+        "study": 38356,
+        "timing": 7205
+      },
+      "rows_deduplicated": 0,
+      "rows_read": 24605,
+      "rows_rejected": 0,
+      "rows_staged": 24605
+    },
+    "studies": {
+      "accounted": true,
+      "conversion_failures": {
+        "studies.<row identity>.identity_to_null": 10944,
+        "studies.end.nullable_to_null": 5485,
+        "studies.start.nullable_to_null": 5459
+      },
+      "counts": {
+        "intent": 7947,
+        "sponsor": 5130,
+        "studies": 7947,
+        "study_group": 2860
+      },
+      "rows_deduplicated": 0,
+      "rows_read": 7947,
+      "rows_rejected": 0,
+      "rows_staged": 7947
+    },
+    "study_results": {
+      "accounted": true,
+      "conversion_failures": {},
+      "counts": {
+        "comparator_code": 15222,
+        "study_results": 15163
+      },
+      "rows_deduplicated": 0,
+      "rows_read": 15163,
+      "rows_rejected": 0,
+      "rows_staged": 15163
+    },
+    "units": {
+      "accounted": true,
+      "conversion_failures": {},
+      "counts": {
+        "units": 62
+      },
+      "rows_deduplicated": 0,
+      "rows_read": 62,
+      "rows_rejected": 0,
+      "rows_staged": 62
+    },
+    "variant_eligibility": {
+      "accounted": true,
+      "conversion_failures": {},
+      "counts": {
+        "study": 1118,
+        "variant_eligibility": 752
+      },
+      "rows_deduplicated": 0,
+      "rows_read": 752,
+      "rows_rejected": 0,
+      "rows_staged": 752
+    },
+    "variantblob": {
+      "accounted": true,
+      "conversion_failures": {},
+      "counts": {
+        "variantblob": 89
+      },
+      "rows_deduplicated": 0,
+      "rows_read": 89,
+      "rows_rejected": 0,
+      "rows_staged": 89
+    },
+    "variants": {
+      "accounted": true,
+      "conversion_failures": {},
+      "counts": {
+        "blob": 651587,
+        "study": 68750,
+        "tracer": 11019,
+        "variants": 40038
+      },
+      "rows_deduplicated": 0,
+      "rows_read": 40038,
+      "rows_rejected": 0,
+      "rows_staged": 40038
+    }
+  },
+  "python": "3.13.15",
+  "queries": {
+    "condition_614_to_snomed": {
+      "rows": 1,
+      "sha256": "8a3c13be8b991795ec86e0a1ef9807dba600d34bf9e05f7f8eb098393b31324f"
+    },
+    "condition_families": {
+      "rows": 373,
+      "sha256": "d68d61e304cacb598ca585364da00f05fc31cbf315da1bca17bbf9713dbe3513"
+    },
+    "drug_105_to_rxnorm": {
+      "rows": 1,
+      "sha256": "7f4199f25e14108ca5ffd1721a99ec3caabb760c116eb47992cf98bfd3388e3e"
+    },
+    "indication_catalogue": {
+      "rows": 3806,
+      "sha256": "a68308b51ffee1af4ddd293e19fc86683694894330a109eec9e27d646f9ad8a6"
+    },
+    "regimen_2204_to_hemonc": {
+      "rows": 1,
+      "sha256": "d488a4b7fca73081c20d3cc8750806e08852a2d22b3759b46c8232aa72c72298"
+    },
+    "regimen_catalogue": {
+      "rows": 2811,
+      "sha256": "d0b1c9f5513904aab1cd97f748575254864058362015f83e606ec981ada1e59e"
+    }
+  },
+  "source": {
+    "files": {
+      "affiliations": {
+        "bytes": 66588121,
+        "filename": "affiliations.csv",
+        "sha256": "f2b1c51168d9163cab483e7038cf4886e287d33c91dde20704eafeea53627457"
+      },
+      "authors": {
+        "bytes": 47016614,
+        "filename": "authors.csv",
+        "sha256": "c7d3a4a2ca6ae1abfecc2c970ce519d92d3a65a5e5af5012ba58878ea231504b"
+      },
+      "canonicaltriples": {
+        "bytes": 28382,
+        "filename": "canonical_triples.csv",
+        "sha256": "7553fcc16c8220d12ff747aed71e8fbaab8fb3ede3a9870a985e001d188e2dab"
+      },
+      "conditions": {
+        "bytes": 121185,
+        "filename": "conditions.csv",
+        "sha256": "1611d642aab53812e3a52903966a7da3c1a9a7678c080c81ebeff542a0ecd5c0"
+      },
+      "contexts": {
+        "bytes": 116563,
+        "filename": "contexts.csv",
+        "sha256": "f72c01f112d22589b835d1bb9497464cd4469fe4796bd3637f9cc341e71f45fd"
+      },
+      "drugs": {
+        "bytes": 131257,
+        "filename": "drugs.csv",
+        "sha256": "00e6f8688e1cc396dc0f271d45c703b2f1ac9c2348e93fbdbeaa52609a81e835"
+      },
+      "exclusions": {
+        "bytes": 3986833,
+        "filename": "exclusions.csv",
+        "sha256": "5d81c38e9bc1fa28148eb4a4ce00406e0b378ed42106e896a8c2c4b2f45a11bd"
+      },
+      "hemonc_classes": {
+        "bytes": 20741,
+        "filename": "hemonc_classes.csv",
+        "sha256": "1a1c80d5b20ad659af916fb49441eeedc409aa57656cb2c0011e2dcd489cd2be"
+      },
+      "hemonc_rels": {
+        "bytes": 5997,
+        "filename": "hemonc_rels.csv",
+        "sha256": "21bc1f423c357508d4115a682730e68f3422612344807413f687469c2ce8adae"
+      },
+      "inclusions": {
+        "bytes": 738041,
+        "filename": "inclusions.csv",
+        "sha256": "e6712eed5d2b5c9f0c973fb50023faf16630383b71a2207e01eaf63b63875c4b"
+      },
+      "indications": {
+        "bytes": 2266271,
+        "filename": "indications.csv",
+        "sha256": "fd7f7eca6e25dc0a1663e553cec5cc828aad5430eb49a0d04c556a9cb2f771e4"
+      },
+      "persons": {
+        "bytes": 16441255,
+        "filename": "persons.csv",
+        "sha256": "369ef6191587d96822e1bf6ee678b9c059cd372dfb59dc7b87a0fbf86516d299"
+      },
+      "refs": {
+        "bytes": 5171903,
+        "filename": "refs.csv",
+        "sha256": "63cde66ccad2d1fb5cf24033a9f45489a0115fccd29f703b00a0dfc22ca57a67"
+      },
+      "regimens": {
+        "bytes": 520059,
+        "filename": "regimens.csv",
+        "sha256": "0d83e508c21f1e5fcf9d894559930cb83c0446074d47ad3454ccae9c3b486ce6"
+      },
+      "sig_branch_types": {
+        "bytes": 1372,
+        "filename": "sig_branch_types.csv",
+        "sha256": "d64345bc35fcb556fd267fd144374760b8a329fbbd4ff1774a1fbb40400ca9bc"
+      },
+      "sigs": {
+        "bytes": 10082118,
+        "filename": "sigs.csv",
+        "sha256": "e4535ad2e46f55b447ec67646818c1712a7b2e57b269798b17ce26b27ad31836"
+      },
+      "studies": {
+        "bytes": 2107268,
+        "filename": "studies.csv",
+        "sha256": "dafa09a9d6da7fc8ab95ae8e0cbbf63a961d1a0aa93fcf5675659a15bbae12e2"
+      },
+      "study_results": {
+        "bytes": 6295380,
+        "filename": "study_results.csv",
+        "sha256": "7fea17f44e60184a9ab81112c4a2eaf36a7470c17ec6c5ef616c87b595903fda"
+      },
+      "units": {
+        "bytes": 4008,
+        "filename": "units.csv",
+        "sha256": "442c407181e738efefe6cd2eeb78d21237f32e93a62e674309d09ea1083368eb"
+      },
+      "variant_eligibility": {
+        "bytes": 112912,
+        "filename": "variant_eligibility.csv",
+        "sha256": "a7d5c5708cc1c160616ef96d529afcc8c568c3ebc853456b9c67da72b827549b"
+      },
+      "variantblob": {
+        "bytes": 4651,
+        "filename": "variant_blob.csv",
+        "sha256": "c1ac0eee2e892aeb58087d1db72ecde017dbb8d8664ed4879c20c30478e3b74a"
+      },
+      "variants": {
+        "bytes": 25231259,
+        "filename": "variants.csv",
+        "sha256": "54389eddb6692b43d25959652bca3c8613b1f207de30d5bc46387aff2998fb07"
+      }
+    },
+    "full_extract": true,
+    "id": "91b4cd4f39d2cb3c5386b122df303e44f59ff725dbedb62579dbfae15a7a8873",
+    "unmodeled_files": [
+      "biomarkers.csv",
+      "condition_target_proposals.csv",
+      "fixed_concepts.csv",
+      "null_flavors.csv",
+      "pointers.csv",
+      "professional_orgs.csv",
+      "study_demographics beta.csv",
+      "study_eligibility beta.csv",
+      "temp.csv"
+    ]
+  },
+  "status": "complete",
+  "tables": {
+    "affiliations": {
+      "nulls": {
+        "aff_no": 0,
+        "affiliation_hemonc": 0,
+        "date_added": 0,
+        "full_name_europmc": 2787,
+        "full_name_hemonc": 0,
+        "person_cui": 3380,
+        "pmid": 0,
+        "sequence": 0,
+        "temp": 185925,
+        "valid_city": 20852,
+        "valid_country": 10277,
+        "valid_region": 20773,
+        "valid_site": 21421
+      },
+      "orphan_rows": 0,
+      "rows": 185925,
+      "sha256": "2268dcdfe43934d536813c26535e71d8b2ca79f648f58873072c85b750170d28"
+    },
+    "affiliations_affiliation_europmc": {
+      "nulls": {
+        "aff_no": 0,
+        "affiliation_europmc": 0,
+        "pmid": 0,
+        "sequence": 0
+      },
+      "orphan_rows": 0,
+      "rows": 111319,
+      "sha256": "6ce2ec4af40402c7b1d171d667f8fb66df546646389c55431e790fddd0b352d4"
+    },
+    "affiliations_affiliation_journal": {
+      "nulls": {
+        "aff_no": 0,
+        "affiliation_journal": 0,
+        "pmid": 0,
+        "sequence": 0
+      },
+      "orphan_rows": 0,
+      "rows": 30784,
+      "sha256": "8baf522874baaf698b9a695db0c83b6dd08f8f7d53c5f76894fe302effa3a9f3"
+    },
+    "authors": {
+      "nulls": {
+        "aff_no": 0,
+        "city": 0,
+        "city_cui": 27299,
+        "country": 0,
+        "country_cui": 10214,
+        "date_added": 3,
+        "department": 0,
+        "flag": 185846,
+        "fore_name_europmc": 564,
+        "fore_name_hemonc": 0,
+        "full_name_europmc": 2790,
+        "full_name_hemonc": 0,
+        "id": 0,
+        "imputed": 0,
+        "initials": 706,
+        "last_name_europmc": 563,
+        "last_name_hemonc": 0,
+        "orcid": 162273,
+        "person_cui": 3435,
+        "pmid": 0,
+        "region": 0,
+        "role": 1,
+        "sequence": 0,
+        "site": 0,
+        "site_cui": 83273,
+        "suffix": 185214,
+        "temp": 185846
+      },
+      "orphan_rows": 0,
+      "rows": 185846,
+      "sha256": "d4076bdec568122988fc1333e7ade35c45a3536c774f3e7ac3696c507720e7d8"
+    },
+    "canonicaltriples": {
+      "nulls": {
+        "class_1": 0,
+        "class_2": 0,
+        "date_added": 0,
+        "date_deprecated": 227,
+        "in_ohdsi": 0,
+        "internal": 0,
+        "relationship": 0,
+        "used_in": 0
+      },
+      "orphan_rows": 0,
+      "rows": 228,
+      "sha256": "c3db1de0292bcb625ff485e1832fcb276017ffa7c3f687ee83d8392f4d7d09ec"
+    },
+    "canonicaltriples_class_1_provenance": {
+      "nulls": {
+        "class_1": 0,
+        "class_1_provenance": 0,
+        "class_2": 0,
+        "relationship": 0
+      },
+      "orphan_rows": 0,
+      "rows": 237,
+      "sha256": "1828c70f51c63a2430e9e6c2c24bd5b3c58a962e885597aa3a621dc44de77c64"
+    },
+    "canonicaltriples_class_2_provenance": {
+      "nulls": {
+        "class_1": 0,
+        "class_2": 0,
+        "class_2_provenance": 0,
+        "relationship": 0
+      },
+      "orphan_rows": 0,
+      "rows": 231,
+      "sha256": "e6fdd6568a5e072abf77a28c0be43cb6ea8d9e70440d7274156f755e1d172a3b"
+    },
+    "conditions": {
+      "nulls": {
+        "age_focus": 0,
+        "condition": 0,
+        "condition_cui": 0,
+        "condition_type": 0,
+        "date_added": 0,
+        "id": 0,
+        "map_ncit": 0,
+        "map_snomed": 74,
+        "map_type_icd10cm": 225,
+        "map_type_icd9cm": 268,
+        "map_type_icdo3": 198,
+        "map_type_ncit": 0,
+        "map_type_oncotree": 150,
+        "map_type_seer": 373,
+        "map_type_snomed": 74,
+        "regimens_count": 0,
+        "regimenscount": 0,
+        "regimenscountdate": 48,
+        "section": 0,
+        "variants_count": 0,
+        "variantscount": 0,
+        "variantscountdate": 48
+      },
+      "orphan_rows": 0,
+      "rows": 373,
+      "sha256": "40832114318757227eb990e1de57eb9e866fad116228e7c367976c56b900de6c"
+    },
+    "conditions_map_icd10cm": {
+      "nulls": {
+        "map_icd10cm": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 2515,
+      "sha256": "0bf4c8ae3ca4a91c721cced193c773621f21a8c0ec5d2ec148f777d8874a59f6"
+    },
+    "conditions_map_icd9cm": {
+      "nulls": {
+        "map_icd9cm": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 1189,
+      "sha256": "d4561faf9dadc1e036a3fac228c27b3fa491388978a1deed9bf7ed997685f1dd"
+    },
+    "conditions_map_icdo3": {
+      "nulls": {
+        "map_icdo3": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 1705,
+      "sha256": "2e878527f54835704f158e1cb39de8feed7dd0bedb54ff14dbea0631f63d3df6"
+    },
+    "conditions_map_icdo3_morph": {
+      "nulls": {
+        "map_icdo3_morph": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 272,
+      "sha256": "c51aa2d5176d3683a3a0672246045e6a633750cba6bfe269a7691c9bb6662195"
+    },
+    "conditions_map_oncotree": {
+      "nulls": {
+        "map_oncotree": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 229,
+      "sha256": "9f88cf6a04cfd081de3c7603f8e404f6221022a1eb4e2883f18171cd6a809fed"
+    },
+    "conditions_map_seer": {
+      "nulls": {
+        "map_seer": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 483,
+      "sha256": "ff253e0872160db572233cc16ee0ffcffd257190b05b0f78e5dc67c16decf909"
+    },
+    "conditions_map_type_icdo3_morph": {
+      "nulls": {
+        "map_type_icdo3_morph": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 97,
+      "sha256": "e7129918fba7998d8b4d18d0df12a197710b732ee10e64298263e4527746d29a"
+    },
+    "contexts": {
+      "nulls": {
+        "context_raw": 0,
+        "date_added": 0,
+        "date_last_used": 5,
+        "intent": 0,
+        "prior_therapy": 414,
+        "prior_therapy_negation": 414,
+        "risk_stratification": 425,
+        "therapy_type": 387
+      },
+      "orphan_rows": 0,
+      "rows": 445,
+      "sha256": "ae7e0fab401724a2e910011639a4dbc2de86a6446694d9b8f1e17d37ea29c2fc"
+    },
+    "contexts_context": {
+      "nulls": {
+        "context": 0,
+        "context_raw": 0
+      },
+      "orphan_rows": 0,
+      "rows": 449,
+      "sha256": "e813d54667a5ba87795cce10d358a54481f2b86bd740f3da936cefc7727fc490"
+    },
+    "contexts_context_pretty": {
+      "nulls": {
+        "context_pretty": 0,
+        "context_raw": 0
+      },
+      "orphan_rows": 0,
+      "rows": 445,
+      "sha256": "07135bcaec046dc0b037d9db2a39c1e98062a785122da583e692ec5e594325b0"
+    },
+    "contexts_phase": {
+      "nulls": {
+        "context_raw": 0,
+        "phase": 0
+      },
+      "orphan_rows": 0,
+      "rows": 159,
+      "sha256": "61315dcd3e7d6181c74054c006b1b556f7a1124db06b4c3059256b05b6c747ca"
+    },
+    "contexts_phenotype": {
+      "nulls": {
+        "context_raw": 0,
+        "phenotype": 0
+      },
+      "orphan_rows": 0,
+      "rows": 78,
+      "sha256": "0a6c25cbd08e5f75a21630efb7452791c81ca2af7db7a42ce226d6ec1769999b"
+    },
+    "contexts_setting": {
+      "nulls": {
+        "context_raw": 0,
+        "setting": 0
+      },
+      "orphan_rows": 0,
+      "rows": 447,
+      "sha256": "47ab9cb21dc03905dd04a0cbf119cdfbef1eb355141b227e533ef7b88f2d6ce2"
+    },
+    "contexts_stage_or_status": {
+      "nulls": {
+        "context_raw": 0,
+        "stage_or_status": 0
+      },
+      "orphan_rows": 0,
+      "rows": 388,
+      "sha256": "a617de0e3014529f18dbe80cf876abc9342a3f3c1a62563bba175764be2b9242"
+    },
+    "drugs": {
+      "nulls": {
+        "class_type": 4,
+        "date_added": 0,
+        "drug": 0,
+        "drug_cui": 0,
+        "drug_inn": 63,
+        "id": 0,
+        "investigational": 0,
+        "main_class": 4,
+        "multiagent": 0
+      },
+      "orphan_rows": 0,
+      "rows": 883,
+      "sha256": "a5c6d85f5f0bf85c5d984c41138cce7ec6dc0b154e1b2c53153d5e1a1398ed7d"
+    },
+    "drugs_atc": {
+      "nulls": {
+        "atc": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 902,
+      "sha256": "2eb368bacca30cdf1f6fbd46cf6acc7c9a45296322826fb54bbdd353ae999efd"
+    },
+    "drugs_canmed_major_class": {
+      "nulls": {
+        "canmed_major_class": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 473,
+      "sha256": "bb7fda7c38b75d1428f711f53650ab176f6233c73d73eefdc902ae1f58a4acb4"
+    },
+    "drugs_canmed_major_class_cui": {
+      "nulls": {
+        "canmed_major_class_cui": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 473,
+      "sha256": "8875cc9d46da510c7a6305dd9d0ad7ede1fbf22bfdc7ab4381bcc79de2165ebb"
+    },
+    "drugs_canmed_minor_class": {
+      "nulls": {
+        "canmed_minor_class": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 412,
+      "sha256": "0178c3fe0e82013522a8b70cd5d0bec9545f520198e5847ea4567226800993d3"
+    },
+    "drugs_canmed_minor_class_cui": {
+      "nulls": {
+        "canmed_minor_class_cui": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 407,
+      "sha256": "847de41e4027c8329a8929b9dc98913f6e21c2f1d0b5c6dfd12b847af4eb9fb6"
+    },
+    "exclusions": {
+      "nulls": {
+        "date_added": 0,
+        "pmid": 0,
+        "reason": 0,
+        "rev1": 0,
+        "rev2": 18024,
+        "rev3": 18760,
+        "year": 0
+      },
+      "orphan_rows": 0,
+      "rows": 18761,
+      "sha256": "7e815518dd9f2f6eb8284da9f0f50ce6e9aa7929b2426ac71dde9667c8900435"
+    },
+    "exclusions_title": {
+      "nulls": {
+        "pmid": 0,
+        "title": 0
+      },
+      "orphan_rows": 0,
+      "rows": 18746,
+      "sha256": "273ac92d71d6de6866cdafeb01ff035fbba10b8d79664c879c4103d48eaffc4b"
+    },
+    "hemonc_classes": {
+      "nulls": {
+        "class_type": 0,
+        "concept_class_id": 103,
+        "date_added": 2,
+        "date_deprecated": 138,
+        "description": 0,
+        "domain": 1,
+        "id": 0,
+        "in_ohdsi": 0,
+        "omopdomain_id": 111,
+        "omopstandard_concept": 141,
+        "primary_field": 83,
+        "primary_table": 0
+      },
+      "orphan_rows": 0,
+      "rows": 150,
+      "sha256": "a6192219cc8fb18775bab1b4fb94f4805d25204d82c096da01a0155ad2a56b94"
+    },
+    "hemonc_classes_secondary_home_as_cui": {
+      "nulls": {
+        "parent_id": 0,
+        "secondary_home_as_cui": 0
+      },
+      "orphan_rows": 0,
+      "rows": 20,
+      "sha256": "2ec03ca657fac6df031c3321925f9cf2b3aff1d4af9120c0c649217f0f96fe8e"
+    },
+    "hemonc_classes_secondary_home_as_string": {
+      "nulls": {
+        "parent_id": 0,
+        "secondary_home_as_string": 0
+      },
+      "orphan_rows": 0,
+      "rows": 148,
+      "sha256": "72d28514be08b2a79d9f689a1060aff3da3f37e13de73443e3ac0ffe3b508d98"
+    },
+    "hemonc_rels": {
+      "nulls": {
+        "date_added": 0,
+        "date_deprecated": 92,
+        "description": 65,
+        "heritable": 0,
+        "in_ohdsi": 0,
+        "relationship_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 99,
+      "sha256": "c5e6ab61398953cebf79b78522d407946799cb56a215bf8eb8d5fc45848d0cfb"
+    },
+    "inclusions": {
+      "nulls": {
+        "date_added": 0,
+        "pmid": 0,
+        "reason": 0
+      },
+      "orphan_rows": 0,
+      "rows": 11166,
+      "sha256": "396ce77e94f84857b9b3cbedb5eb42cd2ba10d52e93503fb10ba07f52216e46e"
+    },
+    "inclusions_reason_note": {
+      "nulls": {
+        "pmid": 0,
+        "reason_note": 0
+      },
+      "orphan_rows": 0,
+      "rows": 3338,
+      "sha256": "067dcc89ebc3f4245014509aae21366389a210863b1b651f520b53d5355f37eb"
+    },
+    "inclusions_ref_type": {
+      "nulls": {
+        "pmid": 0,
+        "ref_type": 0
+      },
+      "orphan_rows": 0,
+      "rows": 11167,
+      "sha256": "94b14168c2fb0bb2d7f0fb6c68b02698e34cb2c800a26fb13e9da5e239a32a72"
+    },
+    "indications": {
+      "nulls": {
+        "accelerated": 0,
+        "age": 2865,
+        "age_unit": 2865,
+        "biomarker": 2945,
+        "biomarker_finding": 2945,
+        "component": 0,
+        "component_cui": 91,
+        "condition": 0,
+        "condition_cui": 797,
+        "date": 275,
+        "date_added": 0,
+        "exposure_phenotype": 3723,
+        "first_in_class": 0,
+        "id": 0,
+        "ineligibility": 3649,
+        "note": 2815,
+        "prior_biomarker": 3751,
+        "prior_therapy": 2484,
+        "regulator": 0,
+        "sex": 3727,
+        "stage": 3301,
+        "stage_or_status": 3493,
+        "status": 2790,
+        "string": 89,
+        "study": 1965,
+        "study_cui": 2060,
+        "study_yn": 61,
+        "substudy": 3751,
+        "substudy_cui": 3756,
+        "temp": 3781,
+        "time_contingency": 3723,
+        "with_field": 2937,
+        "withdrawn": 0
+      },
+      "orphan_rows": 0,
+      "rows": 3806,
+      "sha256": "d205fa46a000b44deb7636d7b5b50de6af5ab9fbcd4f29a97ea566cab9e84281"
+    },
+    "indications_biomarker2": {
+      "nulls": {
+        "biomarker2": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 136,
+      "sha256": "9cc073a6674eb3b6ad166b1b7b3f06359cffadc51b8441dcc0c4679bfc3b45a9"
+    },
+    "indications_biomarker2_finding": {
+      "nulls": {
+        "biomarker2_finding": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 136,
+      "sha256": "86fca1a3a5fcbe7d28e30305bcf82b968986d8512a08ba85824cd1ea97a408e2"
+    },
+    "indications_biomarker2_type": {
+      "nulls": {
+        "biomarker2_type": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 136,
+      "sha256": "266fe0fc71a2954c24034ccc309cfe493fbbd7fe058d44370f6a919d1d890dd9"
+    },
+    "indications_biomarker3": {
+      "nulls": {
+        "biomarker3": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 46,
+      "sha256": "b28bbbfb4db89e651b90f22dfa83f376d346985fe93ca29b48d3c62796396182"
+    },
+    "indications_biomarker3_finding": {
+      "nulls": {
+        "biomarker3_finding": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 40,
+      "sha256": "cee90759876bb5fac53b638322e7ae81d73bf149527b586e9e21fd3ee3fa9c69"
+    },
+    "indications_biomarker3_type": {
+      "nulls": {
+        "biomarker3_type": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 40,
+      "sha256": "f72dba84d375e4f353542cba75a0064762e3ddf3fac8577c1de0f00dbb957c6e"
+    },
+    "indications_biomarker4": {
+      "nulls": {
+        "biomarker4": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 9,
+      "sha256": "abce41ad01ecf430488b419f1d738b410467d725a42cacb2bafe8906e1434dd4"
+    },
+    "indications_biomarker4_finding": {
+      "nulls": {
+        "biomarker4_finding": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 9,
+      "sha256": "d4fb234298ae755fb4cf394dcf29434a0ff881a7ca6ac8ba854c306efec2fd73"
+    },
+    "indications_biomarker4_type": {
+      "nulls": {
+        "biomarker4_type": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 9,
+      "sha256": "8f7b99e8b6dcbc87401f93b8eb11909c0c570bfc55d318513a560a5b045800e4"
+    },
+    "indications_biomarker_type": {
+      "nulls": {
+        "biomarker_type": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 861,
+      "sha256": "2f84dcf4ff2e7fbab5815447eee28cb1e5b8baf5bf466ab4ff80c26f021d2c69"
+    },
+    "indications_context": {
+      "nulls": {
+        "context": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 415,
+      "sha256": "771a0ad15b779992531c76a79e73d16ead4e5d42b66ac2e1901fd63e421804b8"
+    },
+    "indications_demographics": {
+      "nulls": {
+        "demographics": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 142,
+      "sha256": "c2dc082985e7c93d77b6c010733002f56a39d58d21eb7046df6bb8b1fbf72cb9"
+    },
+    "indications_prior_therapy_negation": {
+      "nulls": {
+        "parent_id": 0,
+        "prior_therapy_negation": 0
+      },
+      "orphan_rows": 0,
+      "rows": 1325,
+      "sha256": "17dc182f98eb7d6542399e1333585b8f549c10357304c972d3c010e422100a2a"
+    },
+    "indications_prior_therapy_setting": {
+      "nulls": {
+        "parent_id": 0,
+        "prior_therapy_setting": 0
+      },
+      "orphan_rows": 0,
+      "rows": 171,
+      "sha256": "b679b34109ad5f5e15cedb518bbc6ece99f50740fd0967c8cb39463b6699d88e"
+    },
+    "indications_regimen": {
+      "nulls": {
+        "parent_id": 0,
+        "regimen": 0
+      },
+      "orphan_rows": 0,
+      "rows": 919,
+      "sha256": "e47f64142afa864108e23cb3586763a7e37edaaa345d0b11a4e74a988184265c"
+    },
+    "indications_regimen_cui": {
+      "nulls": {
+        "parent_id": 0,
+        "regimen_cui": 0
+      },
+      "orphan_rows": 0,
+      "rows": 644,
+      "sha256": "9f00535a214e249fb41d19a613368f6de7afbdee8e53c8650fa59fdb039e87d0"
+    },
+    "indications_response_contingency": {
+      "nulls": {
+        "parent_id": 0,
+        "response_contingency": 0
+      },
+      "orphan_rows": 0,
+      "rows": 576,
+      "sha256": "8f1f899bc64edbefd6a68e47449b4f4136e1be170eb4fe64c38bfc2369739e93"
+    },
+    "indications_risk_stratification": {
+      "nulls": {
+        "parent_id": 0,
+        "risk_stratification": 0
+      },
+      "orphan_rows": 0,
+      "rows": 177,
+      "sha256": "3f488bd2ad979eacb86b916889dc0ebb8a04679691b34fa0e798a21d8ee7c1b9"
+    },
+    "persons": {
+      "nulls": {
+        "co_authors": 0,
+        "co_authorships": 0,
+        "date_added": 0,
+        "first_active_year": 0,
+        "gender": 0,
+        "guideline_pubs": 0,
+        "hyphen_type": 49106,
+        "id": 0,
+        "last_active_year": 0,
+        "multi_site": 0,
+        "name": 0,
+        "person_cui": 843,
+        "ph3_studies": 0,
+        "pivotal_studies": 0,
+        "senior_pubs": 0,
+        "temp": 54804,
+        "vital_status": 0
+      },
+      "orphan_rows": 0,
+      "rows": 54804,
+      "sha256": "77d0b5ee348d39df9eae93cec96fdd682c549f356383d8507bc6227d6d622929"
+    },
+    "persons_condition_types": {
+      "nulls": {
+        "condition_types": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 69848,
+      "sha256": "3aa3dee67206431b2eefe73faaabf8434ae69003519ee815cb74a15644acb310"
+    },
+    "persons_conditions": {
+      "nulls": {
+        "conditions": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 97159,
+      "sha256": "4f1e9b33a4c8ef5b05c7ed4b66259166fb2cfa42296ef560dd868f912650b611"
+    },
+    "persons_country": {
+      "nulls": {
+        "country": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 44457,
+      "sha256": "9eab067236b51991f221bed8a40ce2ce4d8089ac2a227d916ca9b90cdec6f116"
+    },
+    "persons_location": {
+      "nulls": {
+        "location": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 68878,
+      "sha256": "a44a059a66140badc9d80b22b6087c05481c6c053c44d95198335e0d9adf0fc9"
+    },
+    "persons_orcid": {
+      "nulls": {
+        "orcid": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 9155,
+      "sha256": "1812700528ed81294fb8c56815f3b616d68b65e9ab84ea45c534f0f19ab19b72"
+    },
+    "persons_site": {
+      "nulls": {
+        "parent_id": 0,
+        "site": 0
+      },
+      "orphan_rows": 0,
+      "rows": 61579,
+      "sha256": "436b08bfe91a8544ee46e4306f7f2f43f13eb29c4b5dd4f1ff959b1bce8d5920"
+    },
+    "persons_study_groups": {
+      "nulls": {
+        "parent_id": 0,
+        "study_groups": 0
+      },
+      "orphan_rows": 0,
+      "rows": 28324,
+      "sha256": "e93c05f3d931df7bfc5511f8fa84650555282d2954b42fc0c77f8717c16cd0ef"
+    },
+    "persons_study_sponsors": {
+      "nulls": {
+        "parent_id": 0,
+        "study_sponsors": 0
+      },
+      "orphan_rows": 0,
+      "rows": 76273,
+      "sha256": "75978d1dfb000b803a65d9dc49ccf51ee6e05ff9cf9fe7c3d26615ca5e60036c"
+    },
+    "refs": {
+      "nulls": {
+        "biomarker_finding": 10283,
+        "citations": 773,
+        "citations_as_of": 466,
+        "condition": 0,
+        "condition_cui": 437,
+        "date_added": 0,
+        "errata": 0,
+        "id": 0,
+        "journal": 0,
+        "journal_cui": 366,
+        "pmcid": 366,
+        "pmid": 0,
+        "pub_date": 0,
+        "ref_type": 0,
+        "reference_cui": 1731,
+        "study_cui": 1754,
+        "substudy": 9931,
+        "substudy_cui": 11465,
+        "temp": 11709,
+        "url": 11594
+      },
+      "orphan_rows": 0,
+      "rows": 11709,
+      "sha256": "821bd7dc3ee8e5b28e2dd8dc408e8557583cacc4853fbe41fb0476d7cb606f37"
+    },
+    "refs_biblio": {
+      "nulls": {
+        "biblio": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 11701,
+      "sha256": "5cd5f2403ee96a4764f0d49b634d6ab9ff3534a266bcbd4cbd68de981d9107a0"
+    },
+    "refs_doi": {
+      "nulls": {
+        "doi": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 11701,
+      "sha256": "d2e0c3dc2e160befa0ae37b5dd3212019ce6287cace1d74d14fb274688b35aa0"
+    },
+    "refs_reference": {
+      "nulls": {
+        "parent_id": 0,
+        "reference": 0
+      },
+      "orphan_rows": 0,
+      "rows": 11701,
+      "sha256": "10c98f3d9196e8eeabe5da3e204cdf7773ec506fee7c9bf5551bfb927e9e6544"
+    },
+    "refs_study": {
+      "nulls": {
+        "parent_id": 0,
+        "study": 0
+      },
+      "orphan_rows": 0,
+      "rows": 11701,
+      "sha256": "35b03a5888b0edf0f56fb25f6bdef7c77ee722049ff04c92d914f820853a3049"
+    },
+    "refs_title": {
+      "nulls": {
+        "parent_id": 0,
+        "title": 0
+      },
+      "orphan_rows": 0,
+      "rows": 11702,
+      "sha256": "74c45b529b1e0c3515d8c451655d8a572d69186a115e1d34520d645f96a0a77e"
+    },
+    "regimens": {
+      "nulls": {
+        "all_sact_fda": 220,
+        "all_sact_fda_as_of": 240,
+        "components": 33,
+        "contains_rt": 0,
+        "date_added": 0,
+        "first_studied": 169,
+        "highest_evidence": 0,
+        "id": 0,
+        "last_published": 68,
+        "map_ncit": 2188,
+        "regimen_cui": 0,
+        "regimen_name": 0,
+        "regimen_type": 0,
+        "sact": 0,
+        "sact_modalities": 160,
+        "studies": 0,
+        "temp": 2811,
+        "variantcount": 0,
+        "variantcountdate": 0
+      },
+      "orphan_rows": 0,
+      "rows": 2811,
+      "sha256": "8e612147386a34f9a6eb1c6508046531a52c9b1765b17b7dcac1d7cc97c531b6"
+    },
+    "sig_branch_types": {
+      "nulls": {
+        "id": 0,
+        "value": 1
+      },
+      "orphan_rows": 0,
+      "rows": 25,
+      "sha256": "c96e9932491f962816793a4ea036d447db9c9ae4ee259f7eaba97c7c227bd707"
+    },
+    "sig_branch_types_description": {
+      "nulls": {
+        "description": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 14,
+      "sha256": "14c7c37ec5e1f9a8630b26b49a5256ba47d12204c612fdc0e3a2ae2cae82fce7"
+    },
+    "sigs": {
+      "nulls": {
+        "alldays": 2214,
+        "class_field": 1,
+        "component": 0,
+        "component_cui": 0,
+        "component_role": 0,
+        "cycle_length_lb": 366,
+        "cycle_length_ub": 366,
+        "cycle_length_unit": 366,
+        "cyclesigs": 71,
+        "date_added": 0,
+        "divided": 0,
+        "dosecapnum": 23809,
+        "dosecapunit": 23808,
+        "dosecapunit_cui": 23806,
+        "dosemaxnum": 1016,
+        "doseminnum": 1016,
+        "doseunit": 1175,
+        "doseunit_cui": 1333,
+        "durationmaxnum": 19732,
+        "durationminnum": 19732,
+        "durationunit": 19731,
+        "durationunit_cui": 19739,
+        "frequency": 1371,
+        "frequency_cui": 1513,
+        "id": 0,
+        "phase": 23885,
+        "phase_step": 0,
+        "portion": 0,
+        "regimen": 0,
+        "regimen_cui": 0,
+        "route": 851,
+        "route_cui": 1698,
+        "sequence": 23690,
+        "step_number": 0,
+        "subcomponent": 189,
+        "subcomponent_cui": 24405,
+        "tail": 8,
+        "targetlevel": 24534,
+        "targetleveltype": 24535,
+        "targetlevelunit": 24534,
+        "targetlevelunit_cui": 24534,
+        "temp": 24605,
+        "timing_sequence": 740,
+        "variant": 0,
+        "variant_cui": 4971
+      },
+      "orphan_rows": 0,
+      "rows": 24605,
+      "sha256": "0017e9b072d8afad0a3302179efd324fab29939ac8a2cee3ae8edd7573f0b061"
+    },
+    "sigs_cyclesigs_note": {
+      "nulls": {
+        "cyclesigs_note": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 923,
+      "sha256": "6efce6cbf66f064b30ce7c0f21301a94c463dd688e2db75d0ce8528c62e305fd"
+    },
+    "sigs_inparens": {
+      "nulls": {
+        "inparens": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 3256,
+      "sha256": "e8a68933d62416a981ef13a217c47f454441c303c43b8c1a1457b25d8a1a73c4"
+    },
+    "sigs_seqrel": {
+      "nulls": {
+        "parent_id": 0,
+        "seqrel": 0
+      },
+      "orphan_rows": 0,
+      "rows": 620,
+      "sha256": "d95b5567c84fdc8e057ca2efec93ac090040dd6bca83c48facdaa7763fd01d45"
+    },
+    "sigs_seqrelwhat": {
+      "nulls": {
+        "parent_id": 0,
+        "seqrelwhat": 0
+      },
+      "orphan_rows": 0,
+      "rows": 24476,
+      "sha256": "5ec71961895b2c430c940565f60f1faee6a052d04a99efb7c787afb7048b7d14"
+    },
+    "sigs_seqrelwhen": {
+      "nulls": {
+        "parent_id": 0,
+        "seqrelwhen": 0
+      },
+      "orphan_rows": 0,
+      "rows": 294,
+      "sha256": "ff0e4fb9d3c32c48fe0247b6e0965e892fefcf5e6ddc8eb680a6e5b4c50f58f2"
+    },
+    "sigs_seqrelwhenunit": {
+      "nulls": {
+        "parent_id": 0,
+        "seqrelwhenunit": 0
+      },
+      "orphan_rows": 0,
+      "rows": 286,
+      "sha256": "60ab325c93887853631b5c49de2b4b8769c468ca2c75fb1cbec93e030f9340bc"
+    },
+    "sigs_study": {
+      "nulls": {
+        "parent_id": 0,
+        "study": 0
+      },
+      "orphan_rows": 0,
+      "rows": 38356,
+      "sha256": "7f28ab5909841511210c3cd90952293c6636f1da27304dde203da0b130d58f9d"
+    },
+    "sigs_timing": {
+      "nulls": {
+        "parent_id": 0,
+        "timing": 0
+      },
+      "orphan_rows": 0,
+      "rows": 7205,
+      "sha256": "2e9805794670e482f1655f036916abab1271b75616567aca1013a1d010deba8a"
+    },
+    "studies": {
+      "nulls": {
+        "biomarker_finding": 7107,
+        "condition": 0,
+        "condition_cui": 203,
+        "date_added": 0,
+        "end": 6042,
+        "enrollment": 446,
+        "id": 0,
+        "phase": 0,
+        "pubs_in_hemonc": 203,
+        "reg_study": 0,
+        "registry": 3114,
+        "sact": 0,
+        "sponsor_cui": 4053,
+        "sponsor_type": 1880,
+        "start": 6016,
+        "study": 0,
+        "study_arms": 1997,
+        "study_cui": 209,
+        "study_design": 54,
+        "study_design_imputed": 0,
+        "substudy": 7741,
+        "substudy_cui": 7763,
+        "temp": 7947,
+        "trial_id": 3114,
+        "unreg_study": 0
+      },
+      "orphan_rows": 0,
+      "rows": 7947,
+      "sha256": "621dc5d638ee6dcf8787b82dfbeb42fba9741f54e44bae83b3425af7d7d8f244"
+    },
+    "studies_intent": {
+      "nulls": {
+        "intent": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 7947,
+      "sha256": "fff4c2deaa4408c06e336e593499c71b952d8100e1a1edb3ee340abe503f3190"
+    },
+    "studies_sponsor": {
+      "nulls": {
+        "parent_id": 0,
+        "sponsor": 0
+      },
+      "orphan_rows": 0,
+      "rows": 5130,
+      "sha256": "e1ba6355da5c891904f3db9c0ffbb80b1163811fab46e72fbfede5d5da5d981e"
+    },
+    "studies_study_group": {
+      "nulls": {
+        "parent_id": 0,
+        "study_group": 0
+      },
+      "orphan_rows": 0,
+      "rows": 2860,
+      "sha256": "98ee8434abf5322da07117e5f4bff61c180597e4fc4754eb3170c5d39b471ecd"
+    },
+    "study_results": {
+      "nulls": {
+        "arm_type": 16,
+        "biomarker_finding": 12860,
+        "c_modifier": 0,
+        "comparator": 0,
+        "condition": 0,
+        "condition_cui": 246,
+        "context": 0,
+        "date_added": 0,
+        "efficacy": 3128,
+        "endpoint": 3088,
+        "endpoint_class": 3144,
+        "endpoint_type": 3307,
+        "error": 0,
+        "est_ci": 6041,
+        "est_lb": 6077,
+        "est_ub": 6079,
+        "estimate": 5629,
+        "id": 0,
+        "intent": 0,
+        "landmark_num": 14467,
+        "landmark_unit": 14467,
+        "metric": 8593,
+        "metric_ci": 15034,
+        "metric_lb": 15034,
+        "metric_ub": 15034,
+        "metric_unit": 8402,
+        "metric_version": 8223,
+        "p_value": 14783,
+        "r_modifier": 0,
+        "regimen": 0,
+        "regimen_cui": 249,
+        "statistic": 5630,
+        "study": 0,
+        "study_cui": 247,
+        "substudy": 14751,
+        "substudy_cui": 14776,
+        "temp": 15163,
+        "toxicity": 15087
+      },
+      "orphan_rows": 0,
+      "rows": 15163,
+      "sha256": "9742102bd0ecc31f5678975f8c17eaa03268c0985c2cc6885846fa79d9d59b55"
+    },
+    "study_results_comparator_code": {
+      "nulls": {
+        "comparator_code": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 15222,
+      "sha256": "fea9517ea02647013b29e562ed5c93834c6209fc9b6d96cdd1d4abf4db43cb9f"
+    },
+    "units": {
+      "nulls": {
+        "concept_code": 0,
+        "date_added": 0,
+        "fixed": 0,
+        "parameterbased": 0,
+        "timebased": 0,
+        "unit": 0,
+        "unit_type": 0
+      },
+      "orphan_rows": 0,
+      "rows": 62,
+      "sha256": "c00e5024bba3aa399e3382c18411d85d95d70353f9994e66c0846a2ca396a04d"
+    },
+    "variant_eligibility": {
+      "nulls": {
+        "date_added": 0,
+        "id": 0,
+        "logic": 1,
+        "logic_count": 2,
+        "regimen": 0,
+        "regimen_cui": 0,
+        "string": 0,
+        "subtype": 601,
+        "temp": 728,
+        "type": 0,
+        "unit": 151,
+        "unit_cui": 151,
+        "variant_cui": 0
+      },
+      "orphan_rows": 0,
+      "rows": 752,
+      "sha256": "b8ee80671f7f39e2b23f19fcc1d797d8f9cef77ec73ec6058fdd124def843a66"
+    },
+    "variant_eligibility_study": {
+      "nulls": {
+        "parent_id": 0,
+        "study": 0
+      },
+      "orphan_rows": 0,
+      "rows": 1118,
+      "sha256": "1ba327495f0fe165b884bd133798d277a7c15b2b50ffe69828af3be578144ee2"
+    },
+    "variantblob": {
+      "nulls": {
+        "block": 0,
+        "chunk": 0,
+        "chunk_type": 0,
+        "date_created": 0,
+        "date_retired": 32,
+        "order": 0,
+        "version": 0
+      },
+      "orphan_rows": 0,
+      "rows": 89,
+      "sha256": "8b0b3b8c78521022875064bec0da1d064e93bb5ea3e677b661767b2c68196cd7"
+    },
+    "variants": {
+      "nulls": {
+        "allsigshavecyclesigs": 0,
+        "allsigshavedose": 0,
+        "allsigshavedoseunit": 0,
+        "allsigshaveduration": 0,
+        "allsigshavedurationunit": 0,
+        "allsigshavefrequency": 0,
+        "allsigshaveroute": 0,
+        "allsigshaveschedule": 0,
+        "allsigshavesequence": 0,
+        "blob_version": 0,
+        "components": 0,
+        "cyclesigs": 0,
+        "date_added": 0,
+        "date_study_modified": 39795,
+        "date_tracer_modified": 31413,
+        "fullyspecified": 0,
+        "id": 0,
+        "portions": 0,
+        "regimen": 0,
+        "regimen_cui": 61,
+        "routes": 0,
+        "sigs": 0,
+        "temp": 40038,
+        "variant": 0,
+        "variant_cui": 0,
+        "version": 0
+      },
+      "orphan_rows": 0,
+      "rows": 40038,
+      "sha256": "024134165277c02d07bd3e218e461495cbcc2f4b61ad717c86ac4a62e9f7bd94"
+    },
+    "variants_blob": {
+      "nulls": {
+        "blob": 0,
+        "parent_id": 0
+      },
+      "orphan_rows": 0,
+      "rows": 651587,
+      "sha256": "bf45ea22fec1d2231926f877a2df0aa0826de1a73d930fe136dd953e2db760a9"
+    },
+    "variants_study": {
+      "nulls": {
+        "parent_id": 0,
+        "study": 0
+      },
+      "orphan_rows": 0,
+      "rows": 68750,
+      "sha256": "dcfc280ab1051f9f5c353da4064929572363f829d96bdc77f2039a8376a451af"
+    },
+    "variants_tracer": {
+      "nulls": {
+        "parent_id": 0,
+        "tracer": 0
+      },
+      "orphan_rows": 0,
+      "rows": 11019,
+      "sha256": "2b8b96db0a46b18a04fc64616e2a9ef35babe9c36a6ac5b15ba932a8795cf733"
+    }
+  },
+  "timings_seconds": {
+    "load.affiliations": 16.8922,
+    "load.authors": 0.9946,
+    "load.canonicaltriples": 0.0683,
+    "load.conditions": 0.5411,
+    "load.contexts": 0.2375,
+    "load.drugs": 0.3497,
+    "load.exclusions": 1.5106,
+    "load.hemonc_classes": 0.042,
+    "load.hemonc_rels": 0.0122,
+    "load.inclusions": 1.3303,
+    "load.indications": 1.7935,
+    "load.persons": 37.1555,
+    "load.refs": 4.9736,
+    "load.regimens": 0.0429,
+    "load.sig_branch_types": 0.0214,
+    "load.sigs": 9.4035,
+    "load.studies": 1.7512,
+    "load.study_results": 2.0604,
+    "load.units": 0.0134,
+    "load.variant_eligibility": 0.12,
+    "load.variantblob": 0.0127,
+    "load.variants": 72.2943,
+    "query.condition_614_to_snomed": 0.005,
+    "query.condition_families": 0.0489,
+    "query.drug_105_to_rxnorm": 0.0053,
+    "query.indication_catalogue": 0.0379,
+    "query.regimen_2204_to_hemonc": 0.0029,
+    "query.regimen_catalogue": 0.0961,
+    "total": 171.222
+  },
+  "versions": {
+    "SQLAlchemy": "2.0.52",
+    "duckdb": "1.5.6",
+    "duckdb-sqlalchemy": "1.5.6.8",
+    "hemonc-alchemy": "0.3.1.dev0+gc69b49750.d20261107",
+    "oa-configurator": "2.1.0",
+    "orm-loader": "3.0.0"
+  },
+  "vocabulary": {
+    "selection": "HemOnc concepts, outgoing Is a/Maps to targets, vocabulary metadata",
+    "snapshot_sha256": "5873e02e7be7f56f04413f03c85dbc79e7122fd733142c699b48b17d61f8265d",
+    "tables": {
+      "concept": {
+        "nulls": {
+          "concept_class_id": 0,
+          "concept_code": 0,
+          "concept_id": 0,
+          "concept_name": 0,
+          "domain_id": 0,
+          "invalid_reason": 13831,
+          "standard_concept": 6476,
+          "valid_end_date": 0,
+          "valid_start_date": 0,
+          "vocabulary_id": 0
+        },
+        "orphan_rows": 0,
+        "rows": 14144,
+        "sha256": "c57cbf64ca1e5bb9b9ae470779c6a00c20c334085082b0f7eba70f53791cc06f"
+      },
+      "concept_relationship": {
+        "nulls": {
+          "concept_id_1": 0,
+          "concept_id_2": 0,
+          "invalid_reason": 72109,
+          "relationship_id": 0,
+          "valid_end_date": 0,
+          "valid_start_date": 0
+        },
+        "orphan_rows": 0,
+        "rows": 72109,
+        "sha256": "c7532f224c5f0e325e0dd7a7faa7695d3a165b2ec409997503e98a073344a040"
+      },
+      "vocabulary": {
+        "nulls": {
+          "vocabulary_concept_id": 0,
+          "vocabulary_id": 0,
+          "vocabulary_name": 0,
+          "vocabulary_reference": 0,
+          "vocabulary_version": 28
+        },
+        "orphan_rows": 0,
+        "rows": 54,
+        "sha256": "5f0f7e08c3037ac4af783f75dd5cb7b7eb00e2b67e7babced31e55d2d8f88cc0"
+      }
+    }
+  }
+}

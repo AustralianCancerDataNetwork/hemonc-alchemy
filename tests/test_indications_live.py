@@ -11,10 +11,10 @@ The engine connects with ``-csearch_path=public,omop``. See
 import os
 
 import pytest
-import sqlalchemy as sa
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
 
+from hemonc_alchemy.config import create_default_hemonc_engine
 from hemonc_alchemy.toolkit.core.indications import (
     BiomarkerCriterion,
     load_indication_sources,
@@ -44,7 +44,7 @@ def live_session():
         pytest.skip(
             "Set HEMONC_INDICATIONS_DATABASE_URL to run live HemOnc indication checks."
         )
-    engine = sa.create_engine(
+    engine = create_default_hemonc_engine(
         database_url, connect_args={"options": "-csearch_path=public,omop"}
     )
     try:

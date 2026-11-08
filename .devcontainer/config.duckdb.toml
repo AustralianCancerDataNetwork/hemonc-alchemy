@@ -1,0 +1,30 @@
+# File-backed development target; source extracts and this file stay on the mount.
+[connections.devcontainer_duckdb]
+dialect = "duckdb"
+# Keep the file's catalog name distinct from the HemOnc schema name.
+database_name = "/workspace/hemonc-alchemy/data/hemonc-alchemy.duckdb"
+
+[databases.hemonc_db]
+kind = "generic"
+connection = "devcontainer_duckdb"
+schema_name = "hemonc"
+
+[databases.cdm_db]
+kind = "cdm"
+connection = "devcontainer_duckdb"
+cdm_schema = "cdm"
+vocab_schema = "omop"
+
+[tools.hemonc_alchemy]
+hemonc_db = "hemonc_db"
+omop_db = "cdm_db"
+
+[tools.omop_alchemy]
+cdm_db = "cdm_db"
+
+# Unconfigured dialect-specific test fields provision their own disposable files.
+[logging]
+level = "INFO"
+
+[logging.loggers]
+"sqlalchemy.engine" = "WARNING"

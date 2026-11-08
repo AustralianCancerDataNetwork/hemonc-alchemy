@@ -127,6 +127,9 @@ cython_debug/
 
 oa_system_config.yaml
 data/
+validation/private/
+*.duckdb
+*.duckdb.wal
 .DS_Store
 *.csv
 _design/

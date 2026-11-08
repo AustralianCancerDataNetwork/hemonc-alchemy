@@ -9,6 +9,7 @@ import pytest
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 
+from hemonc_alchemy.config import create_default_hemonc_engine
 from hemonc_alchemy.integrations.omop import attach_component_roles, load_omop_binding
 from hemonc_alchemy.integrations.omop.schema import schema_aware_bind
 from hemonc_alchemy.model.base import Base
@@ -71,7 +72,7 @@ def _empty_template(iv_drug: list[str], po_drug: list[str]) -> CycleTemplate:
 def session():
     if load_omop_binding() is None:
         pytest.skip("the optional omop extra is not installed")
-    engine = sa.create_engine(
+    engine = create_default_hemonc_engine(
         "sqlite://", connect_args={"check_same_thread": False}, poolclass=sa.pool.StaticPool
     )
     Base.metadata.create_all(engine)

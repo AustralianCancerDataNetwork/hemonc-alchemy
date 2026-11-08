@@ -1,22 +1,4 @@
-"""Values loaded into an enum column must match a real member of it.
-
-Because SQLAlchemy's Enum is a String subclass, an unrecognised value would
-otherwise pass straight through -- silently wrong on SQLite, and rejected
-outright by Postgres. `register_enum_casts` validates every enum column
-against its members instead.
-
-The one non-obvious piece this suite exists to prove: `compiler/schema_model.py`'s
-`EnumSpec.enum_class` builds every member's `.value` from `v.strip().lower()`
-(the same mechanism behind enum-collision warnings during `regen`, collapsing
-case-only near-duplicates), but real CSV data keeps its original casing.
-A first attempt at `register_enum_casts` used `register_column_cast_rule`'s
-`enum_type=` shortcut directly (an exact-match lookup) and failed on *every*
-real row of `canonicaltriples.class_1` -- not an edge case, 199/199 -- because
-none of the real "Procedure"/"Regimen"-cased values matched the generated
-lowercase members at all. `register_enum_casts` instead applies the identical
-`.strip().lower()` before matching, so casting agrees with what the compiler
-actually generated.
-"""
+"""HemOnc enums use one explicit policy for file loads and child values."""
 
 from __future__ import annotations
 
@@ -28,12 +10,14 @@ import pytest
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 
-from hemonc_alchemy.model.base import Base, register_enum_casts
+from hemonc_alchemy.config import create_default_hemonc_engine
+from hemonc_alchemy.model.base import Base
 from hemonc_alchemy.model.entities import Canonicaltriples, Drugs
 from hemonc_alchemy.model.enums import (
     Canonicaltriples_Class_1Enum,
     Drugs_Class_typeEnum,
 )
+from hemonc_alchemy.model.ingestion import conversion_policy, convert_value
 from hemonc_alchemy.toolkit.loading import load_entity
 
 # Resolved the same way the CLI does (`HEMONC_DATA_DIR`), falling back to the
@@ -48,40 +32,26 @@ pytestmark = pytest.mark.skipif(
 )
 
 
-class TestRegisterEnumCasts:
-    def test_discovers_real_enum_columns_across_the_whole_model(self):
-        from orm_loader.loaders.data.converters import _COLUMN_CAST_RULES
-
-        register_enum_casts()
-
-        assert ("canonicaltriples", "class_1") in _COLUMN_CAST_RULES
-        assert ("drugs", "class_type") in _COLUMN_CAST_RULES
-        # A generated map/denormalised table with its own sa.Enum value column
-        assert ("indications_biomarker2", "biomarker2") in _COLUMN_CAST_RULES
+class TestEnumPolicy:
+    def test_real_parent_and_child_columns_use_the_policy(self):
+        for table, column in [("canonicaltriples", "class_1"), ("drugs", "class_type"), ("indications_biomarker2", "biomarker2")]:
+            col = Base.metadata.tables[f"primary.{table}"].c[column]
+            policy = conversion_policy()
+            assert convert_value(col.type.enums[0], col, policy) == col.type.enums[0]
 
     def test_matches_case_insensitively_like_the_compiler_does(self):
-        from orm_loader.loaders.data.converters import _COLUMN_CAST_RULES
-
-        register_enum_casts()
-        rule = _COLUMN_CAST_RULES[("canonicaltriples", "class_1")]
-
-        # Real source casing ("Procedure"), not the generated lowercase member value
-        assert rule("Procedure") == "PROCEDURE"
-        assert rule("  Regimen  ") == "REGIMEN"
+        column = Canonicaltriples.__table__.c.class_1
+        assert convert_value("Procedure", column, conversion_policy()) == "PROCEDURE"
+        assert convert_value("  Regimen  ", column, conversion_policy()) == "REGIMEN"
 
     def test_unmatched_value_raises_for_the_caller_to_handle(self):
-        from orm_loader.loaders.data.converters import _COLUMN_CAST_RULES
-
-        register_enum_casts()
-        rule = _COLUMN_CAST_RULES[("canonicaltriples", "class_1")]
-
         with pytest.raises(ValueError):
-            rule("not a real class")
+            convert_value("not a real class", Canonicaltriples.__table__.c.class_1, conversion_policy())
 
 
 @pytest.fixture
 def sqlite_session():
-    engine = sa.create_engine("sqlite:///:memory:")
+    engine = create_default_hemonc_engine("sqlite:///:memory:")
     Base.metadata.create_all(engine, tables=[Canonicaltriples.__table__])
     with so.Session(engine) as s:
         yield s
@@ -129,8 +99,7 @@ class TestLoadEntityEndToEnd:
             "Regimen,is_a,third,2020-01-01,0,0,z\n"
         )
 
-        register_enum_casts()
-        total = Canonicaltriples.load_csv(sqlite_session, csv_path)
+        total = Canonicaltriples.load_file(sqlite_session, csv_path)
         sqlite_session.commit()
 
         assert total == 2
@@ -149,19 +118,15 @@ class TestSurrogatePkEnumColumn:
     surrogate-PK loading story (see test_loading.py).
     """
 
-    def test_nullable_enum_column_casts_correctly_on_real_postgres(self, pg_session):
-        with pg_session.get_bind().begin() as conn:
-            conn.execute(sa.text('DROP TABLE IF EXISTS "drugs" CASCADE'))
-        Base.metadata.create_all(pg_session.get_bind(), tables=[Drugs.__table__])
-
-        total = load_entity(pg_session, Drugs, _REAL_DATA_DIR)
-        pg_session.commit()
-
-        assert total > 0
-        rows = pg_session.execute(sa.select(Drugs.class_type)).scalars().all()
-        assert all(v is None or isinstance(v, Drugs_Class_typeEnum) for v in rows)
-        assert any(v == Drugs_Class_typeEnum.MECHANISTIC for v in rows)
-        assert any(v is None for v in rows)  # real source data has some blank class_type rows
+    def test_nullable_enum_column_casts_correctly_on_real_postgres(self, pg_load_engine):
+        Base.metadata.create_all(pg_load_engine, tables=[Drugs.__table__])
+        with so.Session(pg_load_engine) as session:
+            total = load_entity(session, Drugs, _REAL_DATA_DIR)
+            assert total > 0
+            rows = session.execute(sa.select(Drugs.class_type)).scalars().all()
+            assert all(v is None or isinstance(v, Drugs_Class_typeEnum) for v in rows)
+            assert any(v == Drugs_Class_typeEnum.MECHANISTIC for v in rows)
+            assert any(v is None for v in rows)
 
 
 if __name__ == "__main__":

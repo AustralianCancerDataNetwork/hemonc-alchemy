@@ -20,6 +20,7 @@ import pytest
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 
+from hemonc_alchemy.config import create_default_hemonc_engine
 from hemonc_alchemy.model import entities
 from hemonc_alchemy.model.base import Base, concrete_entities
 
@@ -40,13 +41,13 @@ def test_generated_classes_import_and_configure():
 
 
 def test_generated_schema_creates_in_sqlite():
-    engine = sa.create_engine("sqlite:///:memory:")
+    engine = create_default_hemonc_engine("sqlite:///:memory:")
     Base.metadata.create_all(engine)
     assert len(Base.metadata.tables) > 0
 
 
 def test_catalogue_lookup_indexes_are_created():
-    engine = sa.create_engine("sqlite:///:memory:")
+    engine = create_default_hemonc_engine("sqlite:///:memory:")
     Base.metadata.create_all(engine)
     inspector = sa.inspect(engine)
     indexes = {

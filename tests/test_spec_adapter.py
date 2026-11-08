@@ -90,6 +90,14 @@ class TestHemoncFieldSpecs:
 class TestValidateWithOrmLoader:
     """End-to-end against the real generated model."""
 
+    def test_validate_command_uses_the_loader_registry(self, capsys):
+        from hemonc_alchemy.cli import validate
+
+        validate()
+        output = capsys.readouterr().out
+        assert "0 error(s), 0 warning(s)" in output
+        assert "Model is structurally valid." in output
+
     def test_generated_model_has_no_validation_errors(self):
         try:
             from hemonc_alchemy.model import entities

@@ -1,0 +1,12 @@
+name: hemonc-alchemy-duckdb
+services:
+  python-hemonc-alchemy-duckdb:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    command: ["/bin/sh", "-c", "bash .devcontainer/post-create.sh && sleep infinity"]
+    environment:
+      OA_CONFIG_PATH: /home/vscode/.config/omop/hemonc-duckdb.toml
+      OA_CONFIG_SEED: .devcontainer/config.duckdb.toml
+    volumes:
+      - ..:/workspace/hemonc-alchemy:cached
