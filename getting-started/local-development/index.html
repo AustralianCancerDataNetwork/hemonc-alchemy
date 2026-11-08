@@ -16,7 +16,7 @@
         <link rel="prev" href="../quickstart/">
       
       
-        <link rel="next" href="../../model/">
+        <link rel="next" href="../upgrading/">
       
       
         
@@ -515,10 +515,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-runs" class="md-nav__link">
+  <a href="#duckdb-no-postgresql-service-required" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What runs
+        DuckDB: no PostgreSQL service required
       
     </span>
   </a>
@@ -526,10 +526,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#start-the-stack" class="md-nav__link">
+  <a href="#postgresql-existing-shared-development-stack" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Start the stack
+        PostgreSQL: existing shared development stack
       
     </span>
   </a>
@@ -537,10 +537,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#inspect-the-database-with-pgadmin" class="md-nav__link">
+  <a href="#import-and-rebuild-behavior" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Inspect the database with pgAdmin
+        Import and rebuild behavior
       
     </span>
   </a>
@@ -548,21 +548,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#load-an-extract" class="md-nav__link">
+  <a href="#notebooks-and-tests" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Load an extract
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#run-notebooks-and-tests" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Run notebooks and tests
+        Notebooks and tests
       
     </span>
   </a>
@@ -573,6 +562,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../upgrading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1337,10 +1354,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-runs" class="md-nav__link">
+  <a href="#duckdb-no-postgresql-service-required" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What runs
+        DuckDB: no PostgreSQL service required
       
     </span>
   </a>
@@ -1348,10 +1365,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#start-the-stack" class="md-nav__link">
+  <a href="#postgresql-existing-shared-development-stack" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Start the stack
+        PostgreSQL: existing shared development stack
       
     </span>
   </a>
@@ -1359,10 +1376,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#inspect-the-database-with-pgadmin" class="md-nav__link">
+  <a href="#import-and-rebuild-behavior" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Inspect the database with pgAdmin
+        Import and rebuild behavior
       
     </span>
   </a>
@@ -1370,21 +1387,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#load-an-extract" class="md-nav__link">
+  <a href="#notebooks-and-tests" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Load an extract
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#run-notebooks-and-tests" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Run notebooks and tests
+        Notebooks and tests
       
     </span>
   </a>
@@ -1460,43 +1466,45 @@
 
 
 <h1 id="local-development-stack">Local development stack<a class="headerlink" href="#local-development-stack" title="Permanent link">&para;</a></h1>
-<p>The repository's <code>.devcontainer</code> is a disposable environment for exploring the model, running notebooks, and testing loaders. It is not a production deployment and its bootstrap process recreates the database.</p>
-<h2 id="what-runs">What runs<a class="headerlink" href="#what-runs" title="Permanent link">&para;</a></h2>
-<ul>
-<li>PostgreSQL 18 with pgvector, containing the HemOnc database and the optional <code>omop</code> schema.</li>
-<li>A Python development container with the repository mounted at <code>/workspace/hemonc-alchemy</code>.</li>
-<li>pgAdmin for inspecting the database through a browser.</li>
-</ul>
-<h2 id="start-the-stack">Start the stack<a class="headerlink" href="#start-the-stack" title="Permanent link">&para;</a></h2>
+<p>Choose the DuckDB path for a local file or the PostgreSQL path for the shared development stack. Neither starts an import automatically. Both install the frozen project environment and seed configuration only when the selected config file does not exist.</p>
+<h2 id="duckdb-no-postgresql-service-required">DuckDB: no PostgreSQL service required<a class="headerlink" href="#duckdb-no-postgresql-service-required" title="Permanent link">&para;</a></h2>
 <p>From the repository root:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>.devcontainer/compose.duckdb.yaml<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--build
+</code></pre></div>
+<p>First startup installs the frozen development dependencies before seeding configuration. Wait until the service logs report that the stack config was installed or retained. Follow them with <code>docker compose -f .devcontainer/compose.duckdb.yaml logs -f python-hemonc-alchemy-duckdb</code>; press Ctrl-C after setup completes to stop following logs. The service keeps running.</p>
+<p>Place licensed source CSVs under <code>data/Tables</code>, then import:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>.devcontainer/compose.duckdb.yaml<span class="w"> </span><span class="nb">exec</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>python-hemonc-alchemy-duckdb<span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>hemonc_alchemy.bootstrap
+</code></pre></div>
+<p>This Compose file runs only a Python service: it needs no PostgreSQL service, shared network, or database port. In VS Code, choose the <strong>HemOnc Alchemy — DuckDB</strong> development configuration under <code>.devcontainer/duckdb/devcontainer.json</code>. The interpreter is <code>/opt/venv/bin/python</code>.</p>
+<p>The seed is <code>.devcontainer/config.duckdb.toml</code>. Its active copy is <code>/home/vscode/.config/omop/hemonc-duckdb.toml</code>; its database is <code>/workspace/hemonc-alchemy/data/hemonc-alchemy.duckdb</code>. The repository mount persists the database on the host at <code>data/hemonc-alchemy.duckdb</code>. Keep this directory writable by the container user. HemOnc uses schema <code>hemonc</code>; optional vocabulary tables use <code>omop</code>, with CDM tables assigned <code>cdm</code> in the same file. Bootstrap imports HemOnc only; it does not supply an OMOP vocabulary.</p>
+<p>Use one process to write a DuckDB file. Stop other processes using the file before a bootstrap or rebuild; multiple writer processes are unsupported. Multiple processes can read with <code>database.create_engine(register_claims=False, connect_args={"read_only": True})</code> when no writer is running. Sessions within one process can share an engine. Do not commit the database or licensed extracts.</p>
+<p>Stop this independent stack with:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>.devcontainer/compose.duckdb.yaml<span class="w"> </span>down
+</code></pre></div>
+<h2 id="postgresql-existing-shared-development-stack">PostgreSQL: existing shared development stack<a class="headerlink" href="#postgresql-existing-shared-development-stack" title="Permanent link">&para;</a></h2>
+<p>The default <code>.devcontainer/devcontainer.json</code> starts PostgreSQL 18 with pgvector, the Python service, and pgAdmin. Create the network shared with SCOOP before starting:</p>
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>network<span class="w"> </span>inspect<span class="w"> </span>hemonc-alchemy_default<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>hemonc-alchemy_default
-docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>.devcontainer/compose.yaml<span class="w"> </span>up<span class="w"> </span>-d
+docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>.devcontainer/compose.yaml<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--build
 </code></pre></div>
-<p>The network is shared with SCOOP and must exist before Compose starts.</p>
-<p>Open the repository in VS Code's Dev Container. The project interpreter inside the Python service is <code>/opt/venv/bin/python</code>; the notebook kernel should use that environment.</p>
-<h2 id="inspect-the-database-with-pgadmin">Inspect the database with pgAdmin<a class="headerlink" href="#inspect-the-database-with-pgadmin" title="Permanent link">&para;</a></h2>
-<p>Open <a href="http://localhost:5050">http://localhost:5050</a>. The default development login is defined by <code>.devcontainer/.env</code>; set your own values before using the stack on a shared machine.</p>
-<p>Inside pgAdmin, connect to the Compose service rather than the host:</p>
-<div class="highlight"><pre><span></span><code>Host:     postgres
-Port:     5432
-Database: hemonc_alchemy
-User:     hemonc
-</code></pre></div>
-<p><code>postgres</code> is resolvable from the Compose network. <code>localhost</code> would refer to the pgAdmin container itself.</p>
-<h2 id="load-an-extract">Load an extract<a class="headerlink" href="#load-an-extract" title="Permanent link">&para;</a></h2>
-<p>Place source files under <code>data/Tables</code>, then run the bootstrap from the Python service:</p>
+<p>Wait for initial Python service setup and config seeding to finish. Open the repository in VS Code's default Dev Container, or import from the Python service:</p>
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>.devcontainer/compose.yaml<span class="w"> </span><span class="nb">exec</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>python-hemonc-alchemy<span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>.devcontainer/bootstrap.py
+<span class="w">  </span>python-hemonc-alchemy<span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>hemonc_alchemy.bootstrap
 </code></pre></div>
-<p>Bootstrap drops and recreates the target schema before loading. Use it only with the disposable development database; it will destroy data already in that schema. For a controlled application load, use <a href="../../model/loading/">Loading data</a>.</p>
-<h2 id="run-notebooks-and-tests">Run notebooks and tests<a class="headerlink" href="#run-notebooks-and-tests" title="Permanent link">&para;</a></h2>
-<p>The devcontainer installs the exploration and development extras. Open a notebook from <code>notebooks/</code> with the project interpreter, or execute it from the Python service with Jupyter. The notebooks use <code>_setup.open_session()</code> and will report whether they connected to <code>hemonc_db</code> or fell back to their small demo dataset.</p>
-<p>Run the package checks with:</p>
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>.devcontainer/compose.yaml<span class="w"> </span><span class="nb">exec</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>python-hemonc-alchemy<span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>pytest
+<p>The seed <code>.devcontainer/config.toml</code> targets the Compose <code>postgres</code> service. HemOnc uses <code>public</code>, CDM uses <code>cdm</code>, and vocabulary uses <code>omop</code>. A separate test database keeps PostgreSQL tests away from the loaded development database. See <a href="../configuration/#update-an-existing-copied-config">Configuration</a> before using an older copied seed.</p>
+<p>pgAdmin is available at <a href="http://localhost:5050">http://localhost:5050</a>. Set login values in <code>.devcontainer/.env</code> before using a shared machine. Connect to host <code>postgres</code>, port <code>5432</code>, database <code>hemonc_alchemy</code>, user <code>hemonc</code>. Inside pgAdmin, <code>localhost</code> refers to its own container.</p>
+<h2 id="import-and-rebuild-behavior">Import and rebuild behavior<a class="headerlink" href="#import-and-rebuild-behavior" title="Permanent link">&para;</a></h2>
+<p>Bootstrap selects the active oa-configurator <code>hemonc_db</code> target. It creates all generated HemOnc tables and imports the source files it finds. <code>--data-dir</code> selects another extract directory; repeat <code>--table</code> to select specific source tables. Missing or ambiguous selected files fail before database changes.</p>
+<p>An existing HemOnc table makes the default import fail. For a <strong>disposable target</strong>, add <code>--rebuild</code> to reset all HemOnc tables and recognized HemOnc staging objects in the selected schema. Unrelated and vocabulary tables are retained. This is not an incremental reload. A failed import may leave committed parent rows; fix the source and explicitly rebuild the disposable target. See <a href="../../model/loading/">Loading data</a>.</p>
+<p>Existing active config files are retained on restart and rebuild. Set <code>OA_CONFIG_PATH</code> before launching Python to choose a different file; <code>OA_CONFIG_SEED</code> selects a create-time seed. Switching seeds does not overwrite an existing file.</p>
+<h2 id="notebooks-and-tests">Notebooks and tests<a class="headerlink" href="#notebooks-and-tests" title="Permanent link">&para;</a></h2>
+<p>Both development paths install the development, authoring, exploration, PostgreSQL, DuckDB, and OMOP extras. Open notebooks with <code>/opt/venv/bin/python</code>. <code>_setup.open_session()</code> reports whether it connected to the configured database or used the small demo dataset.</p>
+<p>Run these commands inside the chosen Python service:</p>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>pytest
+uv<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>-m<span class="w"> </span>duckdb<span class="w"> </span>-o<span class="w"> </span><span class="nv">addopts</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
 </code></pre></div>
-<p>The Compose configuration also defines a separate test database so PostgreSQL tests do not write to the loaded development database.</p>
+<p>Run PostgreSQL tests in the PostgreSQL path with <code>uv run pytest -m postgres -o addopts=''</code>. The default pytest selection excludes database-dialect tests, so run the selected backend suite explicitly.</p>
 
 
 

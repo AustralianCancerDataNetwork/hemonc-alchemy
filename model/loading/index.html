@@ -476,6 +476,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/upgrading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -692,6 +720,39 @@
     <span class="md-ellipsis">
       
         Load one entity
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#loader-3-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loader 3 compatibility
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conversion-and-rejection-reports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conversion and rejection reports
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transaction-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transaction boundaries
       
     </span>
   </a>
@@ -1326,6 +1387,39 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#loader-3-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loader 3 compatibility
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conversion-and-rejection-reports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conversion and rejection reports
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transaction-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transaction boundaries
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#bootstrap-the-development-database" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1427,11 +1521,41 @@
 <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
 </code></pre></div>
-<p><code>load_all()</code> loads primary rows and their denormalized child tables. It resolves source filenames and headers, applies registered enum casts, and maps child rows back to generated parent IDs.</p>
-<h2 id="bootstrap-the-development-database">Bootstrap the development database<a class="headerlink" href="#bootstrap-the-development-database" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>.devcontainer/bootstrap.py
+<p><code>load_all()</code> loads primary rows and their denormalized child tables. It resolves source filenames and headers, applies an explicit HemOnc conversion policy, and maps child rows back to accepted parents. Its return value remains a dictionary of counts; <code>load_entity()</code> returns the primary count and <code>load_denormalised()</code> returns child counts.</p>
+<h2 id="loader-3-compatibility">Loader 3 compatibility<a class="headerlink" href="#loader-3-compatibility" title="Permanent link">&para;</a></h2>
+<p>HemOnc uses <code>orm-loader</code> 3, <code>oa-configurator</code> 2.1, and optional <code>omop-alchemy</code> 3. Install the DuckDB driver with <code>uv sync --extra duckdb</code>; PostgreSQL remains available with <code>--extra postgres</code>. Both backends support the <a href="../../getting-started/local-development/">configured devcontainer workflow</a>. Use a configured engine or <code>create_default_hemonc_engine()</code> so the generated <code>primary</code> schema role is mapped before creating tables or loading rows.</p>
+<p>Entity classes now provide <code>load_file(session, path, ...)</code>. <code>load_csv()</code> remains a deprecated compatibility alias. <code>register_enum_casts()</code> remains callable but is unnecessary: conversion is local to each load and does not modify an upstream global cast registry.</p>
+<p>An ID-less CSV for a surrogate-key entity requires an <strong>empty parent table</strong>. PostgreSQL and DuckDB reserve IDs from the table's native sequence; subsequent ORM inserts continue from that sequence. SQLite uses the public loader ID allocator for these BIGINT columns. This snapshot path assumes a single writer. A second ID-less import raises before staging; use a fresh disposable target or a source with stable, explicit IDs. Incremental identity reconciliation is not implemented.</p>
+<p>PostgreSQL reserves sequence values on an additional connection because later file batches are read while <code>COPY</code> is active on the loader connection. Its pool must allow that additional connection. Create and commit the schema before beginning the snapshot import.</p>
+<p>Files supplying IDs use the upstream merge strategies. Callers supplying explicit IDs are responsible for synchronizing native sequences before later inserts that omit IDs. Child loading uses plain inserts and is not an idempotent reload operation.</p>
+<h2 id="conversion-and-rejection-reports">Conversion and rejection reports<a class="headerlink" href="#conversion-and-rejection-reports" title="Permanent link">&para;</a></h2>
+<p>The default HemOnc policy preserves case-insensitive enum values and the compiler's normalized-member fallback. Malformed nullable fields are logged and become NULL. Malformed required values reject their rows rather than introducing a sentinel. Rejected parents cannot contribute child rows, including when an accepted parent has the same natural key.</p>
+<p>The policy treats <code>NULL</code>, <code>None</code>, <code>N/A</code>, <code>NaN</code>, <code>nan</code>, <code>null</code>, <code>NA</code>, and <code>n/a</code> as text null markers. Dates use the upstream declared formats (<code>yyyymmdd</code>, <code>dd-mon-yyyy</code>, and <code>yyyy-mm-dd</code>); unrecognized nullable date values become NULL. Source markers stored in string columns remain strings unless they are one of the configured null markers. Ambiguous date formats require an explicit handler.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">orm_loader.loaders</span><span class="w"> </span><span class="kn">import</span> <span class="n">LoadReport</span>
+
+<span class="n">report</span> <span class="o">=</span> <span class="n">LoadReport</span><span class="p">()</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">load_all</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">Variants</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;data/Tables&quot;</span><span class="p">),</span> <span class="n">report</span><span class="o">=</span><span class="n">report</span><span class="p">,</span> <span class="n">resolved</span><span class="o">=</span><span class="n">database</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">rows_read</span><span class="p">,</span> <span class="n">report</span><span class="o">.</span><span class="n">rows_rejected</span><span class="p">,</span> <span class="n">report</span><span class="o">.</span><span class="n">accounted</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">rejects_path</span><span class="p">)</span>
 </code></pre></div>
-<p>The repository bootstrap loops over generated entities for which a source file exists. It drops and recreates the target schema before loading, which makes retries deterministic but destroys existing data in that schema. Use it only with the disposable database described in <a href="../../getting-started/local-development/">Local development</a>.</p>
+<p>Here <code>database</code> is the resolved target from <code>get_hemonc_context()</code>. Pass it through as <code>resolved=</code>; DuckDB requires it to classify foreign-key enforcement. The report describes the primary file, while the returned dictionary includes child counts. <code>load_entity()</code> keeps rejection CSVs under <code>data_dir/rejects</code> even when it normalizes a source through a temporary file. Treat these reports as source data when storing or sharing them.</p>
+<p>To raise on malformed values, including nullable ones, pass an explicit policy. <code>load_all()</code> passes it to both primary and child conversion:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">replace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orm_loader.conversion</span><span class="w"> </span><span class="kn">import</span> <span class="n">ErrorPolicy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.model.ingestion</span><span class="w"> </span><span class="kn">import</span> <span class="n">conversion_policy</span>
+
+<span class="n">strict</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="n">conversion_policy</span><span class="p">(),</span> <span class="n">errors</span><span class="o">=</span><span class="n">ErrorPolicy</span><span class="p">(</span><span class="n">on_error</span><span class="o">=</span><span class="s2">&quot;raise&quot;</span><span class="p">))</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">load_all</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">Variants</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;data/Tables&quot;</span><span class="p">),</span> <span class="n">policy</span><span class="o">=</span><span class="n">strict</span><span class="p">,</span> <span class="n">resolved</span><span class="o">=</span><span class="n">database</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="transaction-boundaries">Transaction boundaries<a class="headerlink" href="#transaction-boundaries" title="Permanent link">&para;</a></h2>
+<p>The upstream file loader commits primary merges internally and can commit intermediate batches. A later child-load failure does not roll back those committed parents; <code>session.rollback()</code> only rolls back work still in the current transaction. Use a disposable target for snapshot imports and rebuild it after a partial failure. Complete schema rebuilding is a separate bootstrap operation.</p>
+<h2 id="bootstrap-the-development-database">Bootstrap the development database<a class="headerlink" href="#bootstrap-the-development-database" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>hemonc_alchemy.bootstrap<span class="w"> </span>--data-dir<span class="w"> </span>data/Tables
+</code></pre></div>
+<p>Bootstrap resolves the active <code>hemonc_db</code> with <code>get_hemonc_context()</code>, uses <code>create_hemonc_engine()</code>, and passes the resolved target and <code>primary</code> staging role through to <code>load_all()</code>. It ignores the legacy <code>DATABASE_URL</code> variable. <code>.devcontainer/bootstrap.py</code> remains a thin wrapper for the same entry point.</p>
+<p>The default operation creates all generated tables and loads the source files present. It refuses a target already containing any HemOnc table. Repeat <code>--table</code>, for example <code>--table units --table hemonc_classes</code>, to select source tables explicitly. Unknown, missing selected, ambiguous, or entirely absent source files fail before opening the engine or rebuilding anything.</p>
+<p>For an existing <strong>disposable target</strong>, explicitly pass <code>--rebuild</code>. This drops generated HemOnc tables and recognized <code>_staging_&lt;hemonc_table&gt;</code> objects only in the configured HemOnc schema, then recreates the metadata before importing. It retains unrelated tables, unrelated staging objects, and OMOP vocabulary tables. It does not drop the schema or use cascading drops. External foreign keys referencing HemOnc can therefore block a rebuild. Selecting <code>--table</code> limits imported files, not the set of tables reset by <code>--rebuild</code>.</p>
+<p>Rebuilds destroy the selected target's HemOnc data. Use only a disposable development target and stop other DuckDB processes using the file first. Each entity can commit before later entities or children fail; retry a partial snapshot with an explicit rebuild after fixing the failure. Programmatic callers can use <code>bootstrap_database(resolved, data_dir, rebuild=False, table_names=None)</code> from <code>hemonc_alchemy.bootstrap</code> and receive per-entity count dictionaries.</p>
 <h2 id="preserve-source-shaped-values">Preserve source-shaped values<a class="headerlink" href="#preserve-source-shaped-values" title="Permanent link">&para;</a></h2>
 <p>The loader does not force uncertain source values into invented types. A field may remain nullable, string-valued, or contain a source marker such as <code>Uncertain date</code>. Convert it only at the analysis boundary where your application can state what happens to values that do not parse.</p>
 

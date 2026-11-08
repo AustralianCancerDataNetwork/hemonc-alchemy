@@ -489,6 +489,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="The devcontainer configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#duckdb-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DuckDB configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update-an-existing-copied-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update an existing copied config
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -496,6 +524,17 @@
     <span class="md-ellipsis">
       
         Check the connection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bring-your-own-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bring your own engine
       
     </span>
   </a>
@@ -554,6 +593,34 @@
     
   
     Local development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../upgrading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrading
   
 
     
@@ -1356,6 +1423,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="The devcontainer configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#duckdb-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DuckDB configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update-an-existing-copied-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update an existing copied config
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1363,6 +1458,17 @@
     <span class="md-ellipsis">
       
         Check the connection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bring-your-own-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bring your own engine
       
     </span>
   </a>
@@ -1443,7 +1549,7 @@
 <ul>
 <li>A <strong>connection</strong> contains driver, host, credentials, and database name.</li>
 <li>A <strong>database</strong> gives that connection a logical name and schema.</li>
-<li>A <strong>tool target</strong> tells HemOnc Alchemy which logical database to use as <code>hemonc_db</code>.</li>
+<li>A <strong>tool target</strong> selects <code>hemonc_db</code> and an optional CDM target, <code>omop_db</code>, for vocabulary queries.</li>
 </ul>
 <p>That indirection is useful when the same application moves between a local database, a shared server, and a test database. It also makes it possible for a HemOnc target and an OMOP target to share a PostgreSQL server while remaining different schemas or databases.</p>
 <h2 id="configure-a-database">Configure a database<a class="headerlink" href="#configure-a-database" title="Permanent link">&para;</a></h2>
@@ -1482,8 +1588,39 @@
 </code></pre></div>
 <p>Toolkit functions do not own your session or transaction. This keeps connection lifetime, transaction boundaries, and error handling under application control.</p>
 <h2 id="the-devcontainer-configuration">The devcontainer configuration<a class="headerlink" href="#the-devcontainer-configuration" title="Permanent link">&para;</a></h2>
-<p>When the repository devcontainer is created, <code>.devcontainer/config.toml</code> is copied to <code>~/.config/omop/config.toml</code> with mode 600. Its <code>hemonc_db</code> target points at the Compose PostgreSQL service; its test target points at a separate <code>hemonc_alchemy_test</code> database. For now, <code>cdm_db</code> and <code>test_cdm_db</code> use the same <code>public</code> schema as their HemOnc databases. This is deliberately a seed configuration rather than a package-level restriction; schema resolution will move to oa-configurator when its cross-package support is available.</p>
-<p>The checked-in file is a seed, not the active configuration. Delete the copied configuration before rebuilding if you want to start again from the seed. To keep configuration elsewhere, set <code>OA_CONFIG_PATH</code>.</p>
+<p>When the repository devcontainer is created, <code>.devcontainer/config.toml</code> is copied to <code>~/.config/omop/config.toml</code> with mode 600. Its <code>hemonc_db</code> target points at the Compose PostgreSQL service; its test target points at a separate <code>hemonc_alchemy_test</code> database. HemOnc's generated tables and foreign keys carry the logical <code>primary</code> role. <code>create_hemonc_engine()</code> uses oa-configurator to map that role to the target's configured <code>schema_name</code>, or the connection's default schema when no override is configured.</p>
+<p>The checked-in file is a seed, not the active configuration. An existing copy is never overwritten. To keep configuration elsewhere, set <code>OA_CONFIG_PATH</code> <strong>before starting Python</strong>. <code>OA_CONFIG_SEED</code> chooses the seed used by <code>post-create.sh</code> when that file is absent. Back up a customized config before editing it.</p>
+<h3 id="duckdb-configuration">DuckDB configuration<a class="headerlink" href="#duckdb-configuration" title="Permanent link">&para;</a></h3>
+<p>Install <code>hemonc-alchemy[duckdb]</code> and use a persistent, writable file. Keep the file stem distinct from the configured schema name: DuckDB uses that stem as its catalog name, and identical names make two-part table references ambiguous.</p>
+<div class="highlight"><pre><span></span><code><span class="k">[connections.local]</span>
+<span class="n">dialect</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;duckdb&quot;</span>
+<span class="n">database_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/absolute/writable/path/hemonc-alchemy.duckdb&quot;</span>
+
+<span class="k">[databases.hemonc_db]</span>
+<span class="n">kind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;generic&quot;</span>
+<span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;local&quot;</span>
+<span class="n">schema_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;hemonc&quot;</span>
+
+<span class="k">[databases.cdm_db]</span>
+<span class="n">kind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;cdm&quot;</span>
+<span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;local&quot;</span>
+<span class="n">cdm_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;cdm&quot;</span>
+<span class="n">vocab_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;omop&quot;</span>
+
+<span class="k">[tools.hemonc_alchemy]</span>
+<span class="n">hemonc_db</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;hemonc_db&quot;</span>
+<span class="n">omop_db</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;cdm_db&quot;</span>
+</code></pre></div>
+<p>Omit the CDM database and <code>omop_db</code> if no vocabulary is needed. Bootstrap creates HemOnc tables; load vocabulary tables separately. A vocabulary join requires the vocabulary role to use the same physical database as HemOnc. Merely sharing a PostgreSQL server is insufficient. A separate schema in the same PostgreSQL database or DuckDB file is supported. See <a href="../../integrations/omop/">OMOP integration</a>.</p>
+<p>The independent DuckDB devcontainer uses <code>.devcontainer/config.duckdb.toml</code>, a separate active config filename, and a database persisted under the repository's <code>data</code> mount. See <a href="../local-development/">Local development</a>.</p>
+<h3 id="update-an-existing-copied-config">Update an existing copied config<a class="headerlink" href="#update-an-existing-copied-config" title="Permanent link">&para;</a></h3>
+<p>Startup preserves an existing file, so dependency upgrades do not apply seed changes to it. Back up the active TOML and apply these changes where applicable:</p>
+<ol>
+<li>In <code>[tools.omop_alchemy]</code>, rename <code>test_cdm_db</code> to <code>test_cdm_db_pg</code>. Keep its existing database reference; the <code>[databases.test_cdm_db]</code> entry need not be renamed.</li>
+<li>In <code>[tools.hemonc_alchemy]</code>, add <code>omop_db = "cdm_db"</code> using the intended CDM database's actual name. This makes vocabulary selection explicit when several CDM targets exist.</li>
+<li>For copies of the old repository seed, change <code>cdm_schema = "public"</code> to <code>"cdm"</code> in <code>[databases.cdm_db]</code> and <code>[databases.test_cdm_db]</code>. Leave HemOnc's <code>schema_name = "public"</code> and <code>vocab_schema = "omop"</code> intact. oa-configurator 2.1 rejects overlapping explicit primary-schema ownership. These settings route future CDM operations; they do not move existing CDM tables. Adapt this layout to any existing clinical tables before using CDM tooling.</li>
+</ol>
+<p>HemOnc-only configs do not need an OMOP target. Existing generic HemOnc targets remain valid. To switch to DuckDB, select a separate config file instead of replacing the PostgreSQL connection in place.</p>
 <h2 id="check-the-connection">Check the connection<a class="headerlink" href="#check-the-connection" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
 <span class="s">from sqlalchemy import text</span>
@@ -1498,6 +1635,15 @@
 <span class="s">PY</span>
 </code></pre></div>
 <p>If the target is missing, configure it with <code>omop-config configure hemonc_alchemy</code> rather than embedding a connection string in analysis code.</p>
+<h2 id="bring-your-own-engine">Bring your own engine<a class="headerlink" href="#bring-your-own-engine" title="Permanent link">&para;</a></h2>
+<p>For a URL-based connection to HemOnc tables in the database's default schema:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_default_hemonc_engine</span>
+
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_default_hemonc_engine</span><span class="p">(</span><span class="s2">&quot;sqlite:///:memory:&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>This helper accepts the usual SQLAlchemy engine keyword arguments and adds <code>schema_translate_map={"primary": None}</code>. Explicit execution options and schema routes take precedence. Existing SQLAlchemy engines can receive that same execution option before creating tables or sessions. For an isolated physical schema, map <code>primary</code> to its name or use the configured target shown above. Mapping does not create the physical schema; provision it before creating the tables.</p>
+<p>Raw SQL text is not rewritten by schema translation. SQLAlchemy model and table expressions carry the logical schema role. The role is also part of metadata keys, for example <code>Base.metadata.tables["primary.variants"]</code>.</p>
+<p>Named PostgreSQL enum types use the same role as their tables. DuckDB uses string columns with label <code>CHECK</code> constraints, avoiding the current driver's untranslated schema references for named enum types while retaining label validation.</p>
 
 
 

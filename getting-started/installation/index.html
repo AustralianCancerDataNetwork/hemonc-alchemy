@@ -464,6 +464,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#use-duckdb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use DuckDB
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#use-the-omop-bridge" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -565,6 +576,34 @@
     
   
     Local development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../upgrading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrading
   
 
     
@@ -1370,6 +1409,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#use-duckdb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use DuckDB
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#use-the-omop-bridge" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1477,7 +1527,11 @@
 <p>The <code>exploration</code> extra adds the Python kernel, matplotlib, IPython, and the PostgreSQL driver used by <code>notebooks/</code>. For package development and notebooks together:</p>
 <div class="highlight"><pre><span></span><code>uv<span class="w"> </span>sync<span class="w"> </span>--extra<span class="w"> </span>dev<span class="w"> </span>--extra<span class="w"> </span>exploration
 </code></pre></div>
-<p>The repository devcontainer installs the development, exploration, PostgreSQL, authoring, and OMOP extras together.</p>
+<p>The repository devcontainers install the development, exploration, PostgreSQL, DuckDB, authoring, and OMOP extras together.</p>
+<h2 id="use-duckdb">Use DuckDB<a class="headerlink" href="#use-duckdb" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>add<span class="w"> </span><span class="s2">&quot;hemonc-alchemy[duckdb]&quot;</span>
+</code></pre></div>
+<p>The extra installs the DuckDB engine and shared oa-configurator/orm-loader backend support. See <a href="../local-development/">Local development</a> for the independent file-backed workflow and <a href="../upgrading/">Upgrading</a> for existing applications.</p>
 <h2 id="use-the-omop-bridge">Use the OMOP bridge<a class="headerlink" href="#use-the-omop-bridge" title="Permanent link">&para;</a></h2>
 <p><code>omop-alchemy</code> is intentionally not a runtime dependency. Install the optional extra only for code that resolves HemOnc identifiers against an OMOP vocabulary:</p>
 <div class="highlight"><pre><span></span><code>uv<span class="w"> </span>sync<span class="w"> </span>--extra<span class="w"> </span>omop

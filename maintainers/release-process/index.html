@@ -474,6 +474,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/upgrading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1460,11 +1488,16 @@
 <h1 id="release-and-repository-workflow">Release and repository workflow<a class="headerlink" href="#release-and-repository-workflow" title="Permanent link">&para;</a></h1>
 <p>HemOnc Alchemy uses the shared <a href="https://github.com/AustralianCancerDataNetwork/cava-devops">cava-devops</a> workflows. The package repository keeps the small amount of configuration that is inherently repository-specific; the CI, label gate, release drafting, documentation deployment, and distribution build logic remains reusable and centralised.</p>
 <h2 id="pull-requests">Pull requests<a class="headerlink" href="#pull-requests" title="Permanent link">&para;</a></h2>
-<p>The <code>CI</code> workflow runs on pull requests targeting <code>main</code>. It has two independent responsibilities:</p>
+<p>The <code>CI</code> workflow runs on pull requests targeting <code>main</code>:</p>
 <ul>
 <li><code>label-gate / check</code> requires exactly one release label: <code>breaking</code>, <code>feature</code>, <code>fix</code>, <code>dependencies</code>, or <code>chore</code>.</li>
-<li><code>build-test / test</code> runs the full test suite against a PostgreSQL service, including tests that need a real database connection.</li>
+<li><code>default / test</code> runs the default dialect-independent suite without a database service.</li>
+<li><code>duckdb / test</code> explicitly selects <code>duckdb</code> tests through CAVA's shared DuckDB workflow.</li>
+<li><code>postgres / test</code> runs the shared PostgreSQL service workflow with <code>PYTEST_ADDOPTS=-m postgres</code>. The required-connection flag makes unavailable PostgreSQL fixtures fail instead of silently skipping the dialect job.</li>
+<li><code>installed-wheel / wheel (core)</code> and <code>installed-wheel / wheel (duckdb-omop)</code> install built wheels in clean environments and exercise them outside the checkout.</li>
 </ul>
+<p><code>build-test / test</code> retains the organization-required check name and passes only when all four validation jobs succeed. It runs even after a failed, cancelled or skipped dependency, so a skipped job cannot bypass the merge gate.</p>
+<p>The project default excludes both <code>db_dialect</code> and legacy <code>postgres</code> markers. The PostgreSQL override and DuckDB workflow command explicitly replace that selection. Licensed full-extract parity is a separate local release gate; public CI uses synthetic fixtures and skips real-extract checks when their inputs are absent. See the repository's <a href="https://github.com/AustralianCancerDataNetwork/hemonc-alchemy/tree/main/validation">validation instructions</a>.</p>
 <p>The label controls release intent, not test selection. Use <code>chore</code> for documentation, refactoring, generated maintenance, and CI changes that should not create a release-note entry. Use the highest applicable bump label when a change affects the public package.</p>
 <p>The PR title becomes the release-note entry. The description is reviewer context, so explain design decisions, data-model consequences, and how the change was verified there. Before merging, confirm that the title is suitable for someone reading the release history months later.</p>
 <h2 id="versioning-and-release-drafting">Versioning and release drafting<a class="headerlink" href="#versioning-and-release-drafting" title="Permanent link">&para;</a></h2>
@@ -1497,6 +1530,7 @@
 </tbody>
 </table>
 <p>A maintainer reviews and publishes the draft from GitHub's Releases page. Publishing creates a <code>vX.Y.Z</code> tag on <code>main</code>; that tag is the only event that starts package publication.</p>
+<p>Before publishing the DuckDB-capable release, require the recorded full-extract parity gate, installed-wheel checks, and downstream PostgreSQL smoke results. Schema-role adoption is a breaking public contract for raw-engine callers, so the <code>breaking</code> label applies under the version policy above. Link the <a href="../../getting-started/upgrading/">upgrade guide</a> from the release notes. Update downstream exact pins only after the distribution is available from PyPI.</p>
 <h2 id="package-publication">Package publication<a class="headerlink" href="#package-publication" title="Permanent link">&para;</a></h2>
 <p><code>publish.yml</code> delegates building to CAVA, which verifies that the tag is reachable from <code>main</code> and produces the wheel and source distribution. The final PyPI upload stays in this repository because PyPI trusted publishing binds its OIDC identity to the calling repository's workflow file.</p>
 <p>The repository needs a GitHub environment named <code>pypi</code> and a PyPI trusted publisher with these values:</p>
@@ -1529,11 +1563,12 @@
 <h2 id="documentation-deployment">Documentation deployment<a class="headerlink" href="#documentation-deployment" title="Permanent link">&para;</a></h2>
 <p><code>docs.yml</code> deploys the MkDocs site after changes land on <code>main</code> and can also be run manually. The documentation dependencies live in the <code>dev</code> extra so the reusable deployment workflow can recreate the same build environment.</p>
 <h2 id="repository-settings">Repository settings<a class="headerlink" href="#repository-settings" title="Permanent link">&para;</a></h2>
-<p>For the workflows to protect the intended path, configure <code>main</code> to require pull requests, at least one approval, and these status checks:</p>
+<p>The existing organization rules require pull requests, at least one approval, and these status checks on <code>main</code>:</p>
 <ul>
 <li><code>label-gate / check</code></li>
 <li><code>build-test / test</code></li>
 </ul>
+<p>The aggregate <code>build-test / test</code> requires the default, DuckDB, PostgreSQL, and installed-wheel jobs. This protects every validation axis without changing a shared organization ruleset to include repository-specific check names.</p>
 <p>Use squash merging as the normal merge strategy and prevent force pushes to <code>main</code>. The initial history migration or other exceptional administrative operation should be handled separately from ordinary package changes.</p>
 
 

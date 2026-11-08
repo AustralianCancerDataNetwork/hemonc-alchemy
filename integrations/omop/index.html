@@ -476,6 +476,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/upgrading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1514,13 +1542,25 @@
 <div class="highlight"><pre><span></span><code>uv<span class="w"> </span>add<span class="w"> </span><span class="s2">&quot;hemonc-alchemy[omop]&quot;</span>
 </code></pre></div>
 <p>The bridge lazily loads OMOP Alchemy's public CDM models and uses their validity semantics. The HemOnc package does not import the optional model tree during ordinary package imports. HemOnc-specific mapping joins remain local because OMOP Alchemy cannot know which HemOnc CUI or relationship policy a consumer intends.</p>
-<p>The current devcontainer configuration puts both vocabularies in the same schema so the public OMOP models can be queried directly from the HemOnc session. This is configuration, not an invariant enforced by the integration; schema resolution will move to oa-configurator as that support lands:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.integrations.omop</span><span class="w"> </span><span class="kn">import</span> <span class="n">omop_available</span><span class="p">,</span> <span class="n">map_to_standard</span>
+<p>Set <code>[tools.hemonc_alchemy].omop_db</code> to the intended CDM database entry in oa-configurator. The bridge adds that target's <code>vocab</code> route to the HemOnc bind while preserving HemOnc's <code>primary</code> route. The repository seeds use separate schemas: <code>public</code> (PostgreSQL) or <code>hemonc</code> (DuckDB) for source tables, and <code>omop</code> for vocabulary. Sharing a default schema is also supported when configured. Both roles must reach the same physical database for SQL joins. See <a href="../../getting-started/configuration/">Configuration</a> for the TOML layout and existing-config upgrade steps.</p>
+<p>Use availability diagnostics before optional queries:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.integrations.omop</span><span class="w"> </span><span class="kn">import</span> <span class="n">omop_availability</span><span class="p">,</span> <span class="n">map_to_standard</span>
 
-<span class="k">if</span> <span class="n">omop_available</span><span class="p">(</span><span class="n">session</span><span class="p">):</span>
+<span class="n">status</span> <span class="o">=</span> <span class="n">omop_availability</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">require_relationships</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">status</span><span class="o">.</span><span class="n">available</span><span class="p">:</span>
     <span class="n">mappings</span> <span class="o">=</span> <span class="n">map_to_standard</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="p">[</span><span class="mi">105</span><span class="p">],</span> <span class="n">target_vocabulary</span><span class="o">=</span><span class="s2">&quot;RxNorm&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">reason</span><span class="p">)</span>
 </code></pre></div>
-<p>If the configured OMOP tables or vocabulary are not present, the bridge returns an empty result rather than making HemOnc-only applications fail during startup.</p>
+<p>With no <code>omop</code> extra installed, availability is false and optional query helpers remain no-ops. With the extra installed but unreachable vocabulary tables, availability reports the schema route and database failure; guarded query helpers raise <code>OmopUnavailableError</code>. An unavailable vocabulary is therefore distinguishable from a valid query with no mapping rows. Ordinary HemOnc imports do not require a vocabulary or load the OMOP model tree.</p>
+<p>For an explicit application-owned context, resolve a <code>ResolvedCDMDatabase</code> and route the session before calling query helpers:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">oa_configurator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Resolver</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.integrations.omop</span><span class="w"> </span><span class="kn">import</span> <span class="n">schema_aware_bind</span>
+
+<span class="n">vocabulary</span> <span class="o">=</span> <span class="n">Resolver</span><span class="o">.</span><span class="n">from_active_config</span><span class="p">()</span><span class="o">.</span><span class="n">resolve_database</span><span class="p">(</span><span class="s2">&quot;cdm_db&quot;</span><span class="p">)</span>
+<span class="n">schema_aware_bind</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">omop_database</span><span class="o">=</span><span class="n">vocabulary</span><span class="p">)</span>
+</code></pre></div>
+<p><code>omop_availability(session, omop_database=vocabulary)</code> accepts the same context. Explicit <code>schema_translate_map={"vocab": "omop"}</code> overrides configuration and retains existing routes; this remains useful for manually attached test schemas. Explicit context selection takes precedence over automatic discovery. An existing vocabulary map is retained unless explicitly replaced. For an unselected generic HemOnc target, legacy discovery accepts exactly one matching CDM vocabulary target; multiple matches report ambiguity and require <code>omop_db</code>. A bind already identified as a CDM target uses its own vocabulary role.</p>
 <h2 id="common-queries">Common queries<a class="headerlink" href="#common-queries" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.integrations.omop</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">condition_to_snomed</span><span class="p">,</span>
@@ -1554,7 +1594,8 @@ Cisplatin (CUI 105)
 </ul>
 <p>These are curated HemOnc taxonomy edges, not a replacement for <code>public.indications</code>. Regulatory indication data in the HemOnc table is richer and has different semantics and coverage.</p>
 <h2 id="database-boundary">Database boundary<a class="headerlink" href="#database-boundary" title="Permanent link">&para;</a></h2>
-<p>The mapping and relationship query helpers perform same-database joins. If HemOnc and OMOP are in separate databases, query the source CUIs first and resolve them with a second OMOP session. <code>main_class_ancestry(source_session, omop_session=vocabulary_session)</code> handles this separation directly, combining the query results in Python. PostgreSQL being on the same server is not enough for an ordinary cross-database SQL join; other queries require an explicit application-level bridge, an FDW, or a materialized mapping subset.</p>
+<p>The mapping and relationship query helpers perform same-database joins. Resolved vocabulary targets in another physical database are rejected before connecting to that target; there is no automatic attach or cross-database join. Only the vocabulary role must be local: the selected CDM target can keep its clinical primary in another database while sharing a local vocabulary connection.</p>
+<p>If HemOnc and OMOP vocabulary are in separate databases, query the source CUIs first and resolve them with a second OMOP session. <code>main_class_ancestry(source_session, omop_session=vocabulary_session)</code> handles this separation directly, combining the query results in Python. PostgreSQL being on the same server is not enough for an ordinary cross-database SQL join. Other queries require an explicit application-level bridge, an FDW, or a materialized mapping subset.</p>
 
 
 
