@@ -14,8 +14,10 @@ from sqlalchemy.orm import Session
 from hemonc_alchemy.config import create_default_hemonc_engine
 from hemonc_alchemy.model.base import Base, register_enum_casts
 from hemonc_alchemy.model.entities import (
+    Drugs,
     HemoncClasses,
     Units,
+    drugs_Canmed_major_class_cuiMap,
     hemonc_classes_Secondary_home_as_stringMap,
 )
 from hemonc_alchemy.model.ingestion import conversion_policy, convert_value
@@ -129,6 +131,51 @@ def test_nullable_conversion_keeps_children_attached(database, tmp_path):
         assert counts["hemonc_classes"] == 2
         assert session.scalars(sa.select(HemoncClasses.omopdomain_id)).all() == [None, None]
         assert counts["secondary_home_as_string"] == 3
+
+
+@pytest.mark.parametrize("malformed", ["extra_field", "missing_field"])
+def test_malformed_rows_are_rejected_by_parent_and_child_readers(database, tmp_path, malformed):
+    engine, resolved = database
+    Base.metadata.create_all(engine, tables=[
+        HemoncClasses.__table__, hemonc_classes_Secondary_home_as_stringMap.__table__,
+    ])
+    path = snapshot(tmp_path)
+    lines = path.read_text().splitlines()
+    rejected = lines[1].replace("studies$registry|studies$trial", "rejected$child")
+    rejected = rejected + ",extra" if malformed == "extra_field" else rejected.rsplit(",", 1)[0]
+    path.write_text("\n".join([*lines[:2], rejected, lines[2]]) + "\n")
+    with Session(engine) as session:
+        counts = load_all(session, HemoncClasses, tmp_path, resolved=resolved)
+        assert counts["hemonc_classes"] == 2
+        assert counts["secondary_home_as_string"] == 3
+        children = session.scalars(sa.select(
+            hemonc_classes_Secondary_home_as_stringMap.secondary_home_as_string,
+        )).all()
+        assert set(children) == {"studies$registry", "studies$trial", "studies$other"}
+
+
+@pytest.mark.parametrize("on_error", ["reject_row", "raise"])
+@pytest.mark.parametrize("quote_mode", ["csv", "literal"])
+def test_child_conversion_obeys_error_policy(database, tmp_path, on_error, quote_mode):
+    engine, resolved = database
+    Base.metadata.create_all(engine, tables=[
+        Drugs.__table__, drugs_Canmed_major_class_cuiMap.__table__,
+    ])
+    (tmp_path / "drugs.csv").write_text(
+        "drug,drug_cui,date_added,investigational,multiagent,canmed_major_class_cui\n"
+        '\"Example drug\",101,2023-06-02,FALSE,FALSE,not-a-number|123\n'
+    )
+    policy = replace(conversion_policy(), errors=ErrorPolicy(on_error=on_error))
+    with Session(engine) as session:
+        if on_error == "raise":
+            with pytest.raises(ValueError, match="not-a-number"):
+                load_all(session, Drugs, tmp_path, resolved=resolved, policy=policy, quote_mode=quote_mode)
+        else:
+            counts = load_all(session, Drugs, tmp_path, resolved=resolved, policy=policy, quote_mode=quote_mode)
+            assert counts["canmed_major_class_cui"] == 1
+            assert session.scalars(sa.select(
+                drugs_Canmed_major_class_cuiMap.canmed_major_class_cui,
+            )).all() == [123]
 
 
 def test_policy_preserves_compiler_enum_collision_equivalence():

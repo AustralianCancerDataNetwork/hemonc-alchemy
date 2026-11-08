@@ -32,6 +32,7 @@ import pandas as pd
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 from orm_loader.conversion import ConversionPolicy
+from orm_loader.loaders import open_reader
 
 from ..model.ingestion import conversion_policy, convert_value, interpret_values
 from ..naming import resolve_source_csv, safe_identifier
@@ -160,7 +161,10 @@ def load_all(
     """
     primary_total = load_entity(session, entity_cls, data_dir, **load_csv_kwargs)
     session.flush()
-    denorm_totals = load_denormalised(session, entity_cls, data_dir, policy=load_csv_kwargs.get("policy"))
+    denorm_totals = load_denormalised(
+        session, entity_cls, data_dir,
+        policy=load_csv_kwargs.get("policy"), quote_mode=load_csv_kwargs.get("quote_mode"),
+    )
     return {entity_cls.__tablename__: primary_total, **denorm_totals}
 
 
@@ -199,9 +203,18 @@ def _map_class_for_column(entity_cls: type[_GeneratedEntity], column: str) -> ty
     return relationship_prop.mapper.class_
 
 
-def _read_source_csv(path: Path) -> pd.DataFrame:
-    df = pd.read_csv(path, dtype=str, keep_default_na=False)
-    return df.rename(columns=lambda c: safe_identifier(c).lower())
+def _read_source_csv(
+    path: Path, entity_cls: type[_GeneratedEntity], policy: ConversionPolicy,
+    quote_mode: str | None = None,
+) -> pd.DataFrame:
+    """Read child source values under the same CSV rules as the parent loader."""
+    columns: dict[str, sa.ColumnElement[Any]] = {column.name: column for column in entity_cls.__table__.c}
+    columns.update({name: sa.column(name, sa.String()) for name in entity_cls.denormalised_columns})
+    reader = open_reader(
+        path, columns, quote_mode=quote_mode, skip_malformed=policy.errors.on_error == "reject_row",
+    )
+    frames = [batch.to_pandas() for batch in reader.batches()]
+    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame(columns=reader.columns)
 
 
 def _identity_value(
@@ -301,14 +314,15 @@ def load_denormalised(
     data_dir: Path,
     *,
     policy: ConversionPolicy | None = None,
+    quote_mode: str | None = None,
 ) -> dict[str, int]:
     """Fill the child tables holding an entity's pipe-delimited columns.
 
     Must run after `load_entity` for the same entity. Returns a count per
     column loaded.
 
-    Values are cast the same way `load_file` casts them, so a bad value is
-    dropped with a warning rather than replaced by a sentinel. This includes
+    Values are cast the same way `load_file` casts them. A bad value is
+    dropped with a warning by default, or raises under a strict policy. This includes
     enum-valued natural-key columns copied into a map table: those key fields
     need the same normalisation as the denormalised value itself.
     """
@@ -319,7 +333,7 @@ def load_denormalised(
         return {}
 
     with _resolved_csv_path(data_dir, entity_cls.__tablename__) as path:
-        df = _read_source_csv(path)
+        df = _read_source_csv(path, entity_cls, policy, quote_mode)
 
     key_cols = _natural_key_columns(entity_cls)
     is_surrogate = "id" in entity_cls.__table__.c
@@ -359,6 +373,8 @@ def load_denormalised(
                 try:
                     value = convert_value(token, value_column, policy)
                 except ValueError:
+                    if policy.errors.on_error == "raise":
+                        raise
                     failures.update([column])
                     continue
                 if value is None:

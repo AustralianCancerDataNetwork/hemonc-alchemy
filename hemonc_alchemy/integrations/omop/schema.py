@@ -117,8 +117,12 @@ def schema_aware_bind(
         getattr(bind, "connection", None)
     )
     source = bind.get_bind() if is_session else bind
-    if is_session and schema_translate_map is None and omop_database is None:
-        schema_translate_map = bind.info.get("schema_translate_map")
+    if is_session:
+        cached_map = dict(bind.info.get("schema_translate_map") or {})
+        # A new target replaces cached vocabulary routing, while retaining other Session routes.
+        if omop_database is not None:
+            cached_map.pop("vocab", None)
+        schema_translate_map = {**cached_map, **(schema_translate_map or {})}
     mapping = _translate_map(source, schema_translate_map, omop_database)
     if mapping is None:
         return bind

@@ -114,6 +114,26 @@ def test_configured_target_adds_vocab_to_a_generic_engine(routed_database, monke
         assert joined_unit(session) == ("mg", "Example unit")
 
 
+@pytest.mark.parametrize("selection", ["map", "target"])
+def test_vocabulary_update_preserves_session_primary_route(routed_database, selection):
+    engine, target, _ = routed_database
+    primary = engine.get_execution_options()["schema_translate_map"]["primary"]
+    different_default = engine.execution_options(schema_translate_map={"primary": "other_source"})
+    with Session(different_default) as session:
+        schema_aware_bind(session, {"primary": primary, "vocab": "previous_vocabulary"})
+        # Update an active Session as well as its route for future transactions.
+        assert session.scalar(sa.select(Units.unit)) == "mg"
+        if selection == "map":
+            schema_aware_bind(session, {"vocab": target.vocab_schema})
+        else:
+            schema_aware_bind(session, omop_database=target)
+        assert session.info["schema_translate_map"]["primary"] == primary
+        assert session.info["schema_translate_map"]["vocab"] == target.vocab_schema
+        assert joined_unit(session) == ("mg", "Example unit")
+        session.commit()
+        assert joined_unit(session) == ("mg", "Example unit")
+
+
 def test_missing_vocabulary_schema_is_reported_without_hiding_the_route(routed_database):
     engine, target, _ = routed_database
     with Session(engine) as session:
