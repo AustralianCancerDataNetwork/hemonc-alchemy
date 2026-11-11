@@ -3,12 +3,7 @@
 from __future__ import annotations
 
 import pytest
-import sqlalchemy as sa
-import sqlalchemy.orm as so
 
-from hemonc_alchemy.config import create_default_hemonc_engine
-from hemonc_alchemy.integrations.omop.schema import schema_aware_bind
-from hemonc_alchemy.model import Variants
 from hemonc_alchemy.toolkit.analytics.treatment.scheduling import (
     cycle_block_templates,
     cycle_template,
@@ -22,65 +17,36 @@ _DEGARELIX_MONOTHERAPY_CUI = 131601
 _ELTROMBOPAG_MONOTHERAPY_CUI = 131885
 _ANASTROZOLE_MONOTHERAPY_CUI = 129670
 _A_CMF_CUI = 129540
-_DEVCONTAINER_URL = "postgresql+psycopg://hemonc:hemonc@localhost:5432/hemonc_alchemy"
-_DEV_SCHEMA_TRANSLATE_MAP = {"vocab": "omop"}
-
-
-def _load_latest_variant(cui: int):
-    """The highest-`version` row for `cui`, or skip if postgres/the row is unavailable."""
-    engine = None
-    try:
-        engine = create_default_hemonc_engine(
-            _DEVCONTAINER_URL, future=True,
-            connect_args={"options": "-csearch_path=public,omop"},
-        )
-        with engine.connect() as conn:
-            conn.execute(sa.text("SELECT 1"))
-    except Exception as exc:  # noqa: BLE001 -- any connection failure just skips
-        if engine is not None:
-            engine.dispose()
-        pytest.skip(f"devcontainer PostgreSQL not reachable: {exc}")
-
-    try:
-        with so.Session(schema_aware_bind(engine, _DEV_SCHEMA_TRANSLATE_MAP)) as session:
-            rows = session.execute(
-                sa.select(Variants).where(Variants.variant_cui == cui)
-            ).scalars().all()
-            if not rows:
-                pytest.skip(f"imported database has no variant_cui={cui}")
-            yield max(rows, key=lambda variant: variant.version)
-    finally:
-        engine.dispose()
 
 
 @pytest.fixture
-def variant_129505():
-    yield from _load_latest_variant(_SEVEN_PLUS_THREE_D_CUI)
+def variant_129505(latest_imported_variant):
+    return latest_imported_variant(_SEVEN_PLUS_THREE_D_CUI)
 
 
 @pytest.fixture
-def variant_129853():
-    yield from _load_latest_variant(_BEACOPP_14_CUI)
+def variant_129853(latest_imported_variant):
+    return latest_imported_variant(_BEACOPP_14_CUI)
 
 
 @pytest.fixture
-def variant_131601():
-    yield from _load_latest_variant(_DEGARELIX_MONOTHERAPY_CUI)
+def variant_131601(latest_imported_variant):
+    return latest_imported_variant(_DEGARELIX_MONOTHERAPY_CUI)
 
 
 @pytest.fixture
-def variant_131885():
-    yield from _load_latest_variant(_ELTROMBOPAG_MONOTHERAPY_CUI)
+def variant_131885(latest_imported_variant):
+    return latest_imported_variant(_ELTROMBOPAG_MONOTHERAPY_CUI)
 
 
 @pytest.fixture
-def variant_129670():
-    yield from _load_latest_variant(_ANASTROZOLE_MONOTHERAPY_CUI)
+def variant_129670(latest_imported_variant):
+    return latest_imported_variant(_ANASTROZOLE_MONOTHERAPY_CUI)
 
 
 @pytest.fixture
-def variant_129540():
-    yield from _load_latest_variant(_A_CMF_CUI)
+def variant_129540(latest_imported_variant):
+    return latest_imported_variant(_A_CMF_CUI)
 
 
 def test_seven_plus_three_d_cycle_template(variant_129505):

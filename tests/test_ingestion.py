@@ -21,7 +21,12 @@ from hemonc_alchemy.model.entities import (
     hemonc_classes_Secondary_home_as_stringMap,
 )
 from hemonc_alchemy.model.ingestion import conversion_policy, convert_value
-from hemonc_alchemy.toolkit.loading import load_all, load_entity
+from hemonc_alchemy.toolkit.loading import (
+    _resolved_csv_path,
+    load_all,
+    load_denormalised,
+    load_entity,
+)
 
 
 @pytest.fixture(params=[
@@ -117,6 +122,116 @@ def test_generated_ids_across_batches_leave_native_sequence_ready(database, tmp_
             del record["id"]
             record["description"] = "Subsequent ORM insert"
             assert session.scalar(sa.insert(HemoncClasses.__table__).returning(HemoncClasses.id), record) == 3
+
+
+@pytest.mark.parametrize("split_load", [False, True])
+def test_snapshot_children_follow_assigned_ids_for_duplicates_and_rejected_parents(database, tmp_path, split_load):
+    from orm_loader.loaders import open_reader
+
+    engine, resolved = database
+    Base.metadata.create_all(engine, tables=[
+        HemoncClasses.__table__, hemonc_classes_Secondary_home_as_stringMap.__table__,
+    ])
+    path = snapshot(tmp_path)
+    header, first, last = path.read_text().splitlines()
+    second = first.replace("studies$registry|studies$trial", "studies$other")
+    rejected = first.replace("ready for core,ready for core", "INVALID,ready for core").replace(
+        "studies$registry|studies$trial", "rejected$child",
+    )
+    # Same scalar values, differing children; a complete duplicate; a rejected
+    # parent in the middle; another accepted row after the reserved-ID gap.
+    path.write_text(f"{header}\n{first}\n{second}\n{first}\n{rejected}\n{last}\n")
+    with Session(engine) as session:
+        if split_load:
+            with _resolved_csv_path(tmp_path, "hemonc_classes") as source:
+                reader = SmallBatches(open_reader(source, HemoncClasses.model_columns(), skip_malformed=True))
+                assert HemoncClasses.load_file(session, source, reader=reader, resolved=resolved) == 4
+            session.commit()
+            counts = load_denormalised(session, HemoncClasses, tmp_path)
+        else:
+            counts = load_all(session, HemoncClasses, tmp_path, resolved=resolved)
+            assert counts["hemonc_classes"] == 4
+        assert counts["secondary_home_as_string"] == 6
+        children = session.execute(sa.select(
+            hemonc_classes_Secondary_home_as_stringMap.parent_id,
+            hemonc_classes_Secondary_home_as_stringMap.secondary_home_as_string,
+        )).all()
+        assert set(children) == {
+            (1, "studies$registry"), (1, "studies$trial"),
+            (2, "studies$other"),
+            (3, "studies$registry"), (3, "studies$trial"),
+            (5, "studies$other"),
+        }
+
+
+def test_child_load_refuses_changed_snapshot(database, tmp_path):
+    engine, resolved = database
+    HemoncClasses.__table__.create(engine)
+    path = snapshot(tmp_path)
+    with Session(engine) as session:
+        load_entity(session, HemoncClasses, tmp_path, resolved=resolved)
+        path.write_text(path.read_text().replace("studies$other", "different$evidence"))
+        with pytest.raises(ValueError, match="unchanged parent source"):
+            load_denormalised(session, HemoncClasses, tmp_path)
+
+
+def test_separate_session_refuses_ambiguous_parent_fallback(database, tmp_path):
+    engine, resolved = database
+    HemoncClasses.__table__.create(engine)
+    path = snapshot(tmp_path)
+    header, first, _ = path.read_text().splitlines()
+    path.write_text(f"{header}\n{first}\n{first}\n")
+    with Session(engine) as session:
+        load_entity(session, HemoncClasses, tmp_path, resolved=resolved)
+        session.commit()
+    with Session(engine) as session, pytest.raises(ValueError, match="ambiguous parent association"):
+        load_denormalised(session, HemoncClasses, tmp_path)
+
+
+def test_supplied_ids_disambiguate_parents_without_attaching_rejected_rows(database, tmp_path):
+    engine, resolved = database
+    Base.metadata.create_all(engine, tables=[
+        HemoncClasses.__table__, hemonc_classes_Secondary_home_as_stringMap.__table__,
+    ])
+    path = snapshot(tmp_path)
+    header, first, _ = path.read_text().splitlines()
+    second = first.replace("studies$registry|studies$trial", "studies$other")
+    rejected = first.replace("clinical trial,,,ready", "clinical trial,INVALID,,ready").replace(
+        "studies$registry|studies$trial", "rejected$child",
+    )
+    path.write_text(f"id,{header}\n101,{first}\n202,{second}\n101,{rejected}\n")
+    with Session(engine) as session:
+        counts = load_all(session, HemoncClasses, tmp_path, resolved=resolved, policy=conversion_policy())
+        assert counts["hemonc_classes"] == 2
+        assert counts["secondary_home_as_string"] == 3
+        assert set(session.execute(sa.select(
+            hemonc_classes_Secondary_home_as_stringMap.parent_id,
+            hemonc_classes_Secondary_home_as_stringMap.secondary_home_as_string,
+        ))) == {(101, "studies$registry"), (101, "studies$trial"), (202, "studies$other")}
+
+
+def test_rollback_discards_snapshot_bindings(database, tmp_path):
+    engine, resolved = database
+    HemoncClasses.__table__.create(engine)
+    path = snapshot(tmp_path)
+    header, first, _ = path.read_text().splitlines()
+    path.write_text(f"{header}\n{first}\n{first}\n")
+    with Session(engine) as session:
+        load_entity(session, HemoncClasses, tmp_path, resolved=resolved)
+        session.execute(sa.select(HemoncClasses.id))
+        session.rollback()
+        with pytest.raises(ValueError, match="ambiguous parent association"):
+            load_denormalised(session, HemoncClasses, tmp_path)
+
+
+def test_child_load_refuses_changed_csv_options(database, tmp_path):
+    engine, resolved = database
+    HemoncClasses.__table__.create(engine)
+    snapshot(tmp_path)
+    with Session(engine) as session:
+        load_entity(session, HemoncClasses, tmp_path, resolved=resolved, quote_mode="csv")
+        with pytest.raises(ValueError, match="same CSV reading options"):
+            load_denormalised(session, HemoncClasses, tmp_path, quote_mode="literal")
 
 
 def test_nullable_conversion_keeps_children_attached(database, tmp_path):

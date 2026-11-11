@@ -1060,7 +1060,6 @@
       },
       "denormalised_columns": [
         "context",
-        "context_pretty",
         "phase",
         "phenotype",
         "setting",
@@ -1104,10 +1103,6 @@
       "normalised_tables": [
         {
           "column": "context",
-          "parent": "contexts"
-        },
-        {
-          "column": "context_pretty",
           "parent": "contexts"
         },
         {
@@ -1700,7 +1695,6 @@
         }
       },
       "denormalised_columns": [
-        "reason_note",
         "ref_type"
       ],
       "derived_columns": [],
@@ -1727,10 +1721,6 @@
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
       "normalised_tables": [
-        {
-          "column": "reason_note",
-          "parent": "inclusions"
-        },
         {
           "column": "ref_type",
           "parent": "inclusions"
@@ -2898,10 +2888,6 @@
         }
       },
       "denormalised_columns": [
-        "biblio",
-        "doi",
-        "reference",
-        "study",
         "title"
       ],
       "derived_columns": [
@@ -2945,22 +2931,6 @@
       "normalisation_groups": [],
       "normalised_tables": [
         {
-          "column": "biblio",
-          "parent": "refs"
-        },
-        {
-          "column": "doi",
-          "parent": "refs"
-        },
-        {
-          "column": "reference",
-          "parent": "refs"
-        },
-        {
-          "column": "study",
-          "parent": "refs"
-        },
-        {
           "column": "title",
           "parent": "refs"
         }
@@ -2972,15 +2942,7 @@
         "biomarker_finding",
         "pmid"
       ],
-      "soft_m2m_relationships": [
-        {
-          "local_table": "refs",
-          "map_column": "study",
-          "map_table": "refs_study",
-          "target_column": "study",
-          "target_table": "studies"
-        }
-      ],
+      "soft_m2m_relationships": [],
       "soft_relationships": [
         {
           "local_column": "pmid",
@@ -3244,9 +3206,7 @@
           "type": "String"
         }
       },
-      "denormalised_columns": [
-        "description"
-      ],
+      "denormalised_columns": [],
       "derived_columns": [],
       "description": "Table of allowed SIG branch types",
       "enums": {},
@@ -3256,12 +3216,7 @@
       "name": "sig_branch_types",
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
-      "normalised_tables": [
-        {
-          "column": "description",
-          "parent": "sig_branch_types"
-        }
-      ],
+      "normalised_tables": [],
       "pk_columns": [
         "value"
       ],
@@ -3590,14 +3545,10 @@
         }
       },
       "denormalised_columns": [
-        "cyclesigs_note",
-        "inparens",
         "seqrel",
-        "seqrelwhat",
         "seqrelwhen",
         "seqrelwhenunit",
-        "study",
-        "timing"
+        "study"
       ],
       "derived_columns": [],
       "description": "Table of SIGs",
@@ -3789,19 +3740,7 @@
       "normalisation_groups": [],
       "normalised_tables": [
         {
-          "column": "cyclesigs_note",
-          "parent": "sigs"
-        },
-        {
-          "column": "inparens",
-          "parent": "sigs"
-        },
-        {
           "column": "seqrel",
-          "parent": "sigs"
-        },
-        {
-          "column": "seqrelwhat",
           "parent": "sigs"
         },
         {
@@ -3814,10 +3753,6 @@
         },
         {
           "column": "study",
-          "parent": "sigs"
-        },
-        {
-          "column": "timing",
           "parent": "sigs"
         }
       ],

@@ -5,7 +5,6 @@ from __future__ import annotations
 from datetime import UTC, date, datetime
 
 import pytest
-import sqlalchemy as sa
 import sqlalchemy.orm as so
 
 from hemonc_alchemy.config import create_default_hemonc_engine
@@ -73,6 +72,7 @@ def _sig(session, *, sig_id, variant_cui, drug_cui, route, alldays, **overrides)
     component = overrides.pop("component", f"c{drug_cui}")
     assert not overrides
     sig = Sigs(
+        seqrelwhat="-",
         id=sig_id, variant_cui=variant_cui, component_cui=drug_cui, component=component,
         class_field="iv intermittent canonical sig", component_role="primary systemic",
         portion="1", regimen="R", regimen_cui=1, step_number="1", divided=False,
@@ -320,31 +320,11 @@ class TestBuildScheduleViews:
 class TestRealVariantReconciliation:
     """Source rows from the configured HemOnc database (see schedule-samples.json)."""
 
-    _DEVCONTAINER_URL = "postgresql+psycopg://hemonc:hemonc@localhost:5432/hemonc_alchemy"
-
-    def _load_latest_variant(self, cui: int):
-        engine = create_default_hemonc_engine(self._DEVCONTAINER_URL, future=True)
-        try:
-            with so.Session(engine) as session:
-                try:
-                    rows = session.scalars(
-                        sa.select(Variants).where(Variants.variant_cui == cui)
-                    ).all()
-                except sa.exc.SQLAlchemyError as exc:
-                    pytest.skip(f"devcontainer PostgreSQL unavailable: {exc}")
-                if not rows:
-                    pytest.skip(f"imported database has no variant_cui={cui}")
-                latest = max(rows, key=lambda variant: (variant.version, variant.id))
-                session.expunge(latest)
-                return latest
-        finally:
-            engine.dispose()
-
     @pytest.mark.postgres
-    def test_variant_130784_surfaces_its_two_unrepresented_radiation_sigs(self):
+    def test_variant_130784_surfaces_its_two_unrepresented_radiation_sigs(self, latest_imported_variant):
         # P0-A15: six source sigs, only four represented; sigs 5505/5506 have
         # no day expression and must show up as unplaced, not vanish.
-        variant = self._load_latest_variant(130784)
+        variant = latest_imported_variant(130784)
         view = build_schedule_view(variant)
         assert not view.bounded
         assert len(view.events) == 31
@@ -354,9 +334,9 @@ class TestRealVariantReconciliation:
         assert view.coverage.unplaced_instructions == 2
 
     @pytest.mark.postgres
-    def test_variant_129553_surfaces_its_unrepresented_ns_route_sig(self):
+    def test_variant_129553_surfaces_its_unrepresented_ns_route_sig(self, latest_imported_variant):
         # P0-A16: sig 260 has route/day "NS"; only sig 259 reaches the projection.
-        variant = self._load_latest_variant(129553)
+        variant = latest_imported_variant(129553)
         view = build_schedule_view(variant)
         assert not view.bounded
         assert len(view.events) == 728
@@ -367,10 +347,10 @@ class TestRealVariantReconciliation:
         )
 
     @pytest.mark.postgres
-    def test_variant_129505_decay_override_matches_the_captured_sample(self):
+    def test_variant_129505_decay_override_matches_the_captured_sample(self, latest_imported_variant):
         # P0-A08: with decay_days=0 the sample recorded exactly 4 events for
         # sigs 35/36; the toolkit's own default (decay_days=2) gives 8.
-        variant = self._load_latest_variant(129505)
+        variant = latest_imported_variant(129505)
         view = build_schedule_view(variant)
         assert len(view.events) == 4
         assert {e.instruction.sig_id for e in view.events} == {35, 36}

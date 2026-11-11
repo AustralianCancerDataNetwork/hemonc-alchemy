@@ -30,6 +30,14 @@ class Base(so.DeclarativeBase):
     pass
 
 
+@sa.event.listens_for(so.Session, "after_soft_rollback")
+def _discard_snapshot_parent_ids(session: so.Session, previous_transaction: Any) -> None:
+    """A rolled-back load must not retain source-to-ID bindings for reuse."""
+    for key in list(session.info):
+        if isinstance(key, tuple) and len(key) == 2 and key[0] == "hemonc_snapshot_parent_ids":
+            del session.info[key]
+
+
 def hemonc_enum(enum_class: type[Enum]) -> sa.Enum:
     """Keep native PostgreSQL enums and enforce labels portably on DuckDB.
 
@@ -51,6 +59,8 @@ class EntityBase(Base, FileLoadableTableInterface, SerialisableTableInterface):
 
     @classmethod
     def load_file(cls, session: so.Session, path: Path, **kwargs: Any) -> int:
+        snapshot_key = ("hemonc_snapshot_parent_ids", cls)
+        session.info.pop(snapshot_key, None)
         policy = kwargs.get("policy") or conversion_policy(cast(sa.Table, cls.__table__))
         kwargs["policy"] = policy
         reader = kwargs.get("reader")
@@ -66,7 +76,10 @@ class EntityBase(Base, FileLoadableTableInterface, SerialisableTableInterface):
             reader = GeneratedIdReader(reader, cls, session)
         kwargs["reader"] = reader
         # SQLAlchemy's generated class descriptors are broader than upstream's protocol.
-        return super().load_file(session, path, **kwargs)  # ty: ignore[invalid-argument-type]
+        total = super().load_file(session, path, **kwargs)  # ty: ignore[invalid-argument-type]
+        if isinstance(reader, GeneratedIdReader) and getattr(cls, "denormalised_columns", ()):
+            session.info[snapshot_key] = reader.parent_ids
+        return total
 
     @classmethod
     def load_csv(cls, session: so.Session, path: Path, **kwargs: Any) -> int:

@@ -428,7 +428,7 @@ class Contexts(EntityBase, Base):
     natural_key_columns = ['context_raw']
     source_defined_keys: list[str] = ['context_raw', 'context_pretty']
     identity_keys: list[str] = []
-    denormalised_columns: list[str] = ['context', 'context_pretty', 'phase', 'phenotype', 'setting', 'stage_or_status']
+    denormalised_columns: list[str] = ['context', 'phase', 'phenotype', 'setting', 'stage_or_status']
     derived_columns: list[str] = []
 
     enum_lookup: dict[str, type] = {
@@ -437,6 +437,7 @@ class Contexts(EntityBase, Base):
     }
 
     __table_args__ = {'schema': 'primary'}
+    context_pretty: Mapped[str] = mapped_column(String(255), nullable=False)
     context_raw: Mapped[str] = mapped_column(String(255), primary_key=True, nullable=False, default='')
     date_added: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     date_last_used: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
@@ -449,7 +450,6 @@ class Contexts(EntityBase, Base):
     normalisation_groups: list[list[str]] = [
     ]
     context_items: Mapped[list['contexts_ContextMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
-    context_pretty_items: Mapped[list['contexts_Context_prettyMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     phase_items: Mapped[list['contexts_PhaseMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     phenotype_items: Mapped[list['contexts_PhenotypeMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     setting_items: Mapped[list['contexts_SettingMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
@@ -467,19 +467,6 @@ class contexts_ContextMap(EntityBase, Base):
     context: Mapped[str] = mapped_column(String(255), primary_key=True, nullable=False)
 
     parent: Mapped['Contexts'] = sa_relationship(back_populates='context_items')
-
-class contexts_Context_prettyMap(EntityBase, Base):
-    __tablename__ = 'contexts_context_pretty'
-
-    context_raw: Mapped[str] = mapped_column(String(255), primary_key=True)
-
-    __table_args__ = (
-        ForeignKeyConstraint(['context_raw'], ['primary.contexts.context_raw']),
-        {'schema': 'primary'},
-    )
-    context_pretty: Mapped[str] = mapped_column(String(255), primary_key=True, nullable=False)
-
-    parent: Mapped['Contexts'] = sa_relationship(back_populates='context_pretty_items')
 
 class contexts_PhaseMap(EntityBase, Base):
     __tablename__ = 'contexts_phase'
@@ -747,7 +734,7 @@ class Inclusions(EntityBase, Base):
     natural_key_columns = ['pmid']
     source_defined_keys: list[str] = ['pmid']
     identity_keys: list[str] = []
-    denormalised_columns: list[str] = ['reason_note', 'ref_type']
+    denormalised_columns: list[str] = ['ref_type']
     derived_columns: list[str] = []
 
     enum_lookup: dict[str, type] = {
@@ -758,10 +745,10 @@ class Inclusions(EntityBase, Base):
     date_added: Mapped[str] = mapped_column(String(255), nullable=False)
     pmid: Mapped[int] = mapped_column(BigInteger, primary_key=True, nullable=False, default=-1)
     reason: Mapped[Inclusions_ReasonEnum] = mapped_column(hemonc_enum(Inclusions_ReasonEnum), nullable=False)
+    reason_note: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     normalisation_groups: list[list[str]] = [
     ]
-    reason_note_items: Mapped[list['inclusions_Reason_noteMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     ref_type_items: Mapped[list['inclusions_Ref_typeMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     pmid_obj: Mapped[Optional['Exclusions']] = sa_relationship(
         'Exclusions',
@@ -770,19 +757,6 @@ class Inclusions(EntityBase, Base):
         viewonly=True,
     )
 
-
-class inclusions_Reason_noteMap(EntityBase, Base):
-    __tablename__ = 'inclusions_reason_note'
-
-    pmid: Mapped[int] = mapped_column(BigInteger, primary_key=True)
-
-    __table_args__ = (
-        ForeignKeyConstraint(['pmid'], ['primary.inclusions.pmid']),
-        {'schema': 'primary'},
-    )
-    reason_note: Mapped[str] = mapped_column(Text, primary_key=True, nullable=False)
-
-    parent: Mapped['Inclusions'] = sa_relationship(back_populates='reason_note_items')
 
 class inclusions_Ref_typeMap(EntityBase, Base):
     __tablename__ = 'inclusions_ref_type'
@@ -1195,7 +1169,7 @@ class Refs(EntityBase, Base):
     natural_key_columns = ['study_cui', 'substudy_cui', 'condition_cui', 'biomarker_finding', 'pmid']
     source_defined_keys: list[str] = []
     identity_keys: list[str] = []
-    denormalised_columns: list[str] = ['biblio', 'doi', 'reference', 'study', 'title']
+    denormalised_columns: list[str] = ['title']
     derived_columns: list[str] = ['prop_valid_aff_city', 'prop_valid_aff_country', 'prop_valid_aff_region', 'prop_valid_aff_site']
 
     enum_lookup: dict[str, type] = {
@@ -1203,12 +1177,14 @@ class Refs(EntityBase, Base):
     }
 
     __table_args__ = {'schema': 'primary'}
+    biblio: Mapped[str] = mapped_column(String(255), nullable=False)
     biomarker_finding: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     citations: Mapped[Optional[int]] = mapped_column(BigInteger, nullable=True)
     citations_as_of: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
     condition: Mapped[str] = mapped_column(String(255), nullable=False)
     condition_cui: Mapped[Optional[int]] = mapped_column(BigInteger, nullable=True)
     date_added: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    doi: Mapped[str] = mapped_column(String(255), nullable=False)
     errata: Mapped[bool] = mapped_column(Boolean, nullable=False)
     journal: Mapped[str] = mapped_column(String(255), nullable=False)
     journal_cui: Mapped[Optional[int]] = mapped_column(BigInteger, nullable=True)
@@ -1216,7 +1192,9 @@ class Refs(EntityBase, Base):
     pmid: Mapped[int] = mapped_column(BigInteger, nullable=False)
     pub_date: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     ref_type: Mapped[str] = mapped_column(String(255), nullable=False)
+    reference: Mapped[str] = mapped_column(String(255), nullable=False)
     reference_cui: Mapped[Optional[int]] = mapped_column(BigInteger, nullable=True)
+    study: Mapped[str] = mapped_column(String(255), nullable=False)
     study_cui: Mapped[Optional[int]] = mapped_column(BigInteger, nullable=True)
     substudy: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     substudy_cui: Mapped[Optional[int]] = mapped_column(BigInteger, nullable=True)
@@ -1225,10 +1203,6 @@ class Refs(EntityBase, Base):
 
     normalisation_groups: list[list[str]] = [
     ]
-    biblio_items: Mapped[list['refs_BiblioMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
-    doi_items: Mapped[list['refs_DoiMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
-    reference_items: Mapped[list['refs_ReferenceMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
-    study_items: Mapped[list['refs_StudyMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     title_items: Mapped[list['refs_TitleMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     condition_obj: Mapped[Optional['Conditions']] = sa_relationship(
         'Conditions',
@@ -1258,51 +1232,6 @@ class Refs(EntityBase, Base):
         viewonly=True,
     )
 
-    study_objects: Mapped[list['Studies']] = sa_relationship(
-        'Studies',
-        secondary=lambda: Base.metadata.tables['primary.refs_study'],
-        primaryjoin=lambda: Refs.id == Base.metadata.tables['primary.refs_study'].c.parent_id,
-        secondaryjoin=lambda: Studies.study == Base.metadata.tables['primary.refs_study'].c.study,
-        lazy='selectin',
-        viewonly=True,
-    )
-
-
-class refs_BiblioMap(EntityBase, Base):
-    __tablename__ = 'refs_biblio'
-
-    __table_args__ = {'schema': 'primary'}
-    parent_id: Mapped[int] = mapped_column(BigInteger, ForeignKey('primary.refs.id'), primary_key=True)
-    biblio: Mapped[str] = mapped_column(String(255), primary_key=True, nullable=False)
-
-    parent: Mapped['Refs'] = sa_relationship(back_populates='biblio_items')
-
-class refs_DoiMap(EntityBase, Base):
-    __tablename__ = 'refs_doi'
-
-    __table_args__ = {'schema': 'primary'}
-    parent_id: Mapped[int] = mapped_column(BigInteger, ForeignKey('primary.refs.id'), primary_key=True)
-    doi: Mapped[str] = mapped_column(String(255), primary_key=True, nullable=False)
-
-    parent: Mapped['Refs'] = sa_relationship(back_populates='doi_items')
-
-class refs_ReferenceMap(EntityBase, Base):
-    __tablename__ = 'refs_reference'
-
-    __table_args__ = {'schema': 'primary'}
-    parent_id: Mapped[int] = mapped_column(BigInteger, ForeignKey('primary.refs.id'), primary_key=True)
-    reference: Mapped[str] = mapped_column(String(255), primary_key=True, nullable=False)
-
-    parent: Mapped['Refs'] = sa_relationship(back_populates='reference_items')
-
-class refs_StudyMap(EntityBase, Base):
-    __tablename__ = 'refs_study'
-
-    __table_args__ = {'schema': 'primary'}
-    parent_id: Mapped[int] = mapped_column(BigInteger, ForeignKey('primary.refs.id'), primary_key=True)
-    study: Mapped[str] = mapped_column(String(255), primary_key=True, nullable=False)
-
-    parent: Mapped['Refs'] = sa_relationship(back_populates='study_items')
 
 class refs_TitleMap(EntityBase, Base):
     __tablename__ = 'refs_title'
@@ -1365,26 +1294,17 @@ class SigBranchTypes(EntityBase, Base):
     natural_key_columns = ['value']
     source_defined_keys: list[str] = ['value']
     identity_keys: list[str] = []
-    denormalised_columns: list[str] = ['description']
+    denormalised_columns: list[str] = []
     derived_columns: list[str] = []
 
     enum_lookup: dict[str, type] = {}
 
     __table_args__ = {'schema': 'primary'}
+    description: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     value: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
 
     normalisation_groups: list[list[str]] = [
     ]
-    description_items: Mapped[list['sig_branch_types_DescriptionMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
-
-class sig_branch_types_DescriptionMap(EntityBase, Base):
-    __tablename__ = 'sig_branch_types_description'
-
-    __table_args__ = {'schema': 'primary'}
-    parent_id: Mapped[int] = mapped_column(BigInteger, ForeignKey('primary.sig_branch_types.id'), primary_key=True)
-    description: Mapped[str] = mapped_column(String(255), primary_key=True, nullable=False)
-
-    parent: Mapped['SigBranchTypes'] = sa_relationship(back_populates='description_items')
 
 class Sigs(EntityBase, Base):
     __tablename__ = 'sigs'
@@ -1394,7 +1314,7 @@ class Sigs(EntityBase, Base):
     natural_key_columns = ['variant_cui', 'portion', 'component_cui', 'subcomponent_cui', 'frequency_cui', 'timing_sequence', 'step_number']
     source_defined_keys: list[str] = []
     identity_keys: list[str] = []
-    denormalised_columns: list[str] = ['cyclesigs_note', 'inparens', 'seqrel', 'seqrelwhat', 'seqrelwhen', 'seqrelwhenunit', 'study', 'timing']
+    denormalised_columns: list[str] = ['seqrel', 'seqrelwhen', 'seqrelwhenunit', 'study']
     derived_columns: list[str] = []
 
     enum_lookup: dict[str, type] = {
@@ -1423,6 +1343,7 @@ class Sigs(EntityBase, Base):
     cycle_length_ub: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     cycle_length_unit: Mapped[Optional[Sigs_Cycle_length_unitEnum]] = mapped_column(hemonc_enum(Sigs_Cycle_length_unitEnum), nullable=True)
     cyclesigs: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    cyclesigs_note: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     date_added: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     divided: Mapped[bool] = mapped_column(Boolean, nullable=False)
     dosecapnum: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
@@ -1438,6 +1359,7 @@ class Sigs(EntityBase, Base):
     durationunit_cui: Mapped[Optional[int]] = mapped_column(BigInteger, nullable=True)
     frequency: Mapped[Optional[Sigs_FrequencyEnum]] = mapped_column(hemonc_enum(Sigs_FrequencyEnum), nullable=True)
     frequency_cui: Mapped[Optional[int]] = mapped_column(BigInteger, nullable=True)
+    inparens: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     phase: Mapped[Optional[Sigs_PhaseEnum]] = mapped_column(hemonc_enum(Sigs_PhaseEnum), nullable=True)
     phase_step: Mapped[int] = mapped_column(BigInteger, nullable=False)
     portion: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -1445,6 +1367,7 @@ class Sigs(EntityBase, Base):
     regimen_cui: Mapped[int] = mapped_column(BigInteger, nullable=False)
     route: Mapped[Optional[Sigs_RouteEnum]] = mapped_column(hemonc_enum(Sigs_RouteEnum), nullable=True)
     route_cui: Mapped[Optional[int]] = mapped_column(BigInteger, nullable=True)
+    seqrelwhat: Mapped[str] = mapped_column(String(255), nullable=False)
     sequence: Mapped[Optional[Sigs_SequenceEnum]] = mapped_column(hemonc_enum(Sigs_SequenceEnum), nullable=True)
     step_number: Mapped[str] = mapped_column(String(255), nullable=False)
     subcomponent: Mapped[Optional[Sigs_SubcomponentEnum]] = mapped_column(hemonc_enum(Sigs_SubcomponentEnum), nullable=True)
@@ -1455,20 +1378,17 @@ class Sigs(EntityBase, Base):
     targetlevelunit: Mapped[Optional[Sigs_TargetlevelunitEnum]] = mapped_column(hemonc_enum(Sigs_TargetlevelunitEnum), nullable=True)
     targetlevelunit_cui: Mapped[Optional[int]] = mapped_column(BigInteger, nullable=True)
     temp: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    timing: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     timing_sequence: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     variant: Mapped[str] = mapped_column(String(255), nullable=False)
     variant_cui: Mapped[Optional[int]] = mapped_column(BigInteger, nullable=True)
 
     normalisation_groups: list[list[str]] = [
     ]
-    cyclesigs_note_items: Mapped[list['sigs_Cyclesigs_noteMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
-    inparens_items: Mapped[list['sigs_InparensMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     seqrel_items: Mapped[list['sigs_SeqrelMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
-    seqrelwhat_items: Mapped[list['sigs_SeqrelwhatMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     seqrelwhen_items: Mapped[list['sigs_SeqrelwhenMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     seqrelwhenunit_items: Mapped[list['sigs_SeqrelwhenunitMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     study_items: Mapped[list['sigs_StudyMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
-    timing_items: Mapped[list['sigs_TimingMap']] = sa_relationship(back_populates='parent', lazy='selectin', cascade='all, delete-orphan')
     regimen_cui_obj: Mapped[Optional['Regimens']] = sa_relationship(
         'Regimens',
         primaryjoin="Sigs.regimen_cui == foreign(Regimens.regimen_cui)",
@@ -1486,24 +1406,6 @@ class Sigs(EntityBase, Base):
     )
 
 
-class sigs_Cyclesigs_noteMap(EntityBase, Base):
-    __tablename__ = 'sigs_cyclesigs_note'
-
-    __table_args__ = {'schema': 'primary'}
-    parent_id: Mapped[int] = mapped_column(BigInteger, ForeignKey('primary.sigs.id'), primary_key=True)
-    cyclesigs_note: Mapped[str] = mapped_column(Text, primary_key=True, nullable=False)
-
-    parent: Mapped['Sigs'] = sa_relationship(back_populates='cyclesigs_note_items')
-
-class sigs_InparensMap(EntityBase, Base):
-    __tablename__ = 'sigs_inparens'
-
-    __table_args__ = {'schema': 'primary'}
-    parent_id: Mapped[int] = mapped_column(BigInteger, ForeignKey('primary.sigs.id'), primary_key=True)
-    inparens: Mapped[str] = mapped_column(String(255), primary_key=True, nullable=False)
-
-    parent: Mapped['Sigs'] = sa_relationship(back_populates='inparens_items')
-
 class sigs_SeqrelMap(EntityBase, Base):
     __tablename__ = 'sigs_seqrel'
 
@@ -1512,15 +1414,6 @@ class sigs_SeqrelMap(EntityBase, Base):
     seqrel: Mapped[str] = mapped_column(String(255), primary_key=True, nullable=False)
 
     parent: Mapped['Sigs'] = sa_relationship(back_populates='seqrel_items')
-
-class sigs_SeqrelwhatMap(EntityBase, Base):
-    __tablename__ = 'sigs_seqrelwhat'
-
-    __table_args__ = {'schema': 'primary'}
-    parent_id: Mapped[int] = mapped_column(BigInteger, ForeignKey('primary.sigs.id'), primary_key=True)
-    seqrelwhat: Mapped[str] = mapped_column(String(255), primary_key=True, nullable=False)
-
-    parent: Mapped['Sigs'] = sa_relationship(back_populates='seqrelwhat_items')
 
 class sigs_SeqrelwhenMap(EntityBase, Base):
     __tablename__ = 'sigs_seqrelwhen'
@@ -1548,15 +1441,6 @@ class sigs_StudyMap(EntityBase, Base):
     study: Mapped[str] = mapped_column(String(255), primary_key=True, nullable=False)
 
     parent: Mapped['Sigs'] = sa_relationship(back_populates='study_items')
-
-class sigs_TimingMap(EntityBase, Base):
-    __tablename__ = 'sigs_timing'
-
-    __table_args__ = {'schema': 'primary'}
-    parent_id: Mapped[int] = mapped_column(BigInteger, ForeignKey('primary.sigs.id'), primary_key=True)
-    timing: Mapped[str] = mapped_column(String(255), primary_key=True, nullable=False)
-
-    parent: Mapped['Sigs'] = sa_relationship(back_populates='timing_items')
 
 class Studies(EntityBase, Base):
     __tablename__ = 'studies'
@@ -1989,7 +1873,6 @@ __all__ = [
     'conditions_Map_seerMap',
     'conditions_Map_type_icdo3_morphMap',
     'contexts_ContextMap',
-    'contexts_Context_prettyMap',
     'contexts_PhaseMap',
     'contexts_PhenotypeMap',
     'contexts_SettingMap',
@@ -2002,7 +1885,6 @@ __all__ = [
     'exclusions_TitleMap',
     'hemonc_classes_Secondary_home_as_cuiMap',
     'hemonc_classes_Secondary_home_as_stringMap',
-    'inclusions_Reason_noteMap',
     'inclusions_Ref_typeMap',
     'indications_Biomarker2Map',
     'indications_Biomarker2_findingMap',
@@ -2030,20 +1912,11 @@ __all__ = [
     'persons_SiteMap',
     'persons_Study_groupsMap',
     'persons_Study_sponsorsMap',
-    'refs_BiblioMap',
-    'refs_DoiMap',
-    'refs_ReferenceMap',
-    'refs_StudyMap',
     'refs_TitleMap',
-    'sig_branch_types_DescriptionMap',
-    'sigs_Cyclesigs_noteMap',
-    'sigs_InparensMap',
     'sigs_SeqrelMap',
-    'sigs_SeqrelwhatMap',
     'sigs_SeqrelwhenMap',
     'sigs_SeqrelwhenunitMap',
     'sigs_StudyMap',
-    'sigs_TimingMap',
     'studies_IntentMap',
     'studies_SponsorMap',
     'studies_Study_groupMap',

@@ -11,9 +11,9 @@ the source files can stay exactly as HemOnc ships them.
 
 Columns holding several pipe-delimited values in one cell live in their own
 child tables rather than as a single string, and `load_denormalised` fills
-those. It has to run after the parent rows exist, because a child row is
-matched back to its natural key or, for sparse-key tables, its complete
-scalar source-row identity.
+those. It has to run after the parent rows exist. ID-less snapshots retain
+their assigned parent IDs in the loading session; supplied IDs and natural
+keys can also identify accepted parents. No database row order is assumed.
 """
 
 from __future__ import annotations
@@ -34,7 +34,12 @@ import sqlalchemy.orm as so
 from orm_loader.conversion import ConversionPolicy
 from orm_loader.loaders import open_reader
 
-from ..model.ingestion import conversion_policy, convert_value, interpret_values
+from ..model.ingestion import (
+    SnapshotParentIds,
+    conversion_policy,
+    convert_value,
+    interpret_values,
+)
 from ..naming import resolve_source_csv, safe_identifier
 
 logger = logging.getLogger(__name__)
@@ -206,6 +211,7 @@ def _map_class_for_column(entity_cls: type[_GeneratedEntity], column: str) -> ty
 def _read_source_csv(
     path: Path, entity_cls: type[_GeneratedEntity], policy: ConversionPolicy,
     quote_mode: str | None = None,
+    parent_ids: SnapshotParentIds | None = None,
 ) -> pd.DataFrame:
     """Read child source values under the same CSV rules as the parent loader."""
     columns: dict[str, sa.ColumnElement[Any]] = {column.name: column for column in entity_cls.__table__.c}
@@ -213,6 +219,8 @@ def _read_source_csv(
     reader = open_reader(
         path, columns, quote_mode=quote_mode, skip_malformed=policy.errors.on_error == "reject_row",
     )
+    if parent_ids is not None:
+        parent_ids.validate_reader(reader)
     frames = [batch.to_pandas() for batch in reader.batches()]
     return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame(columns=reader.columns)
 
@@ -243,21 +251,26 @@ def _identity_result(result: Any, column: sa.Column) -> object:
     return result
 
 
-def _identity_keys(rows, columns, policy: ConversionPolicy, failures: Counter) -> list[tuple]:
-    """Convert whole columns once rather than invoking Arrow for every cell."""
+def _identity_keys(rows, columns, policy: ConversionPolicy, failures: Counter) -> list[tuple | None]:
+    """Convert columns in batches; rejected rows have no usable identity."""
     if not rows:
         return []
     keys = []
+    rejected = [False] * len(rows)
     for index, column in enumerate(columns):
         values, invalid = interpret_values([row[index] for row in rows], column, policy)
         bad = invalid.to_pylist()
         if any(bad):
             failures.update({"<row identity>": sum(bad)})
+        rejected = [
+            was_rejected or failed or (value is None and not column.nullable)
+            for was_rejected, failed, value in zip(rejected, bad, values.to_pylist())
+        ]
         keys.append([
             _identity_result(None if failed else value, column)
             for value, failed in zip(values.to_pylist(), bad)
         ])
-    return list(zip(*keys))
+    return [None if failed else key for key, failed in zip(zip(*keys), rejected)]
 
 
 def _parent_lookup(
@@ -267,21 +280,29 @@ def _parent_lookup(
     failures: Counter,
     policy: ConversionPolicy,
 ) -> dict[object, tuple | None]:
-    """Match source rows to accepted parents by their complete scalar identity.
+    """Use retained snapshot IDs, or explicit/unambiguous source identities.
 
-    A nullable natural key cannot identify a denormalised row.  For those
-    tables, use every scalar source column as the row identity. The returned
-    mapping is keyed by source dataframe index. ``None`` means the identity
-    was missing or ambiguous in the database and is deliberately not attached
-    to an arbitrary parent.
+    Retained IDs preserve source occurrences even when their scalar values
+    coincide. Otherwise compare supplied IDs and scalar source values under
+    the load's policy. The mapping is keyed by source dataframe index; None
+    excludes a rejected or missing parent. Ambiguous fallback identities raise.
     """
     table = entity_cls.__table__
+    snapshot = session.info.get(("hemonc_snapshot_parent_ids", entity_cls))
+    if snapshot is not None:
+        if len(snapshot.ids) != len(df):
+            raise ValueError(f"{table.name}: parent and child readers produced different source row counts")
+        accepted = set(session.scalars(sa.select(table.c.id)))
+        return {
+            index: (parent_id,) if parent_id in accepted else None
+            for index, parent_id in zip(df.index, snapshot.ids)
+        }
     denormalised_columns = set(entity_cls.denormalised_columns)
     key_columns = ["id"] if "id" in table.c else _natural_key_columns(entity_cls)
     identity_columns = [
         column
         for column in table.columns
-        if column.name != "id"
+        if (column.name != "id" or "id" in df.columns)
         and column.name not in denormalised_columns
         and column.name not in set(getattr(entity_cls, "derived_columns", []))
         and column.name in df.columns
@@ -305,6 +326,13 @@ def _parent_lookup(
 
     source_rows = list(df[[column.name for column in identity_columns]].itertuples(index=False, name=None))
     source_keys = _identity_keys(source_rows, identity_columns, policy, failures)
+    ambiguous = [index for index, key in zip(df.index, source_keys) if key in lookup and lookup[key] is None]
+    if ambiguous:
+        raise ValueError(
+            f"{table.name}: ambiguous parent association for {len(ambiguous)} source rows. "
+            "Load ID-less parents and children in the same Session with load_all(), "
+            "or load_entity() followed by load_denormalised(); alternatively supply parent IDs in the source."
+        )
     return {index: lookup.get(key) for index, key in zip(df.index, source_keys)}
 
 
@@ -318,22 +346,26 @@ def load_denormalised(
 ) -> dict[str, int]:
     """Fill the child tables holding an entity's pipe-delimited columns.
 
-    Must run after `load_entity` for the same entity. Returns a count per
-    column loaded.
+    Must run after `load_entity` for the same entity. For ID-less snapshots,
+    use the same Session and unchanged source so assigned IDs remain available.
+    Returns a count per column loaded. Ambiguous fallback matches raise.
 
     Values are cast the same way `load_file` casts them. A bad value is
     dropped with a warning by default, or raises under a strict policy. This includes
     enum-valued natural-key columns copied into a map table: those key fields
     need the same normalisation as the denormalised value itself.
     """
-    policy = policy or conversion_policy()
+    policy = policy or conversion_policy(entity_cls.__table__)
     failures: Counter[str] = Counter()
 
     if not entity_cls.denormalised_columns:
         return {}
 
     with _resolved_csv_path(data_dir, entity_cls.__tablename__) as path:
-        df = _read_source_csv(path, entity_cls, policy, quote_mode)
+        df = _read_source_csv(
+            path, entity_cls, policy, quote_mode,
+            parent_ids=session.info.get(("hemonc_snapshot_parent_ids", entity_cls)),
+        )
 
     key_cols = _natural_key_columns(entity_cls)
     is_surrogate = "id" in entity_cls.__table__.c
@@ -401,4 +433,5 @@ def load_denormalised(
     for column, count in failures.items():
         logger.warning("CAST %s.%s: %d value(s) failed", entity_cls.__tablename__, column, count)
     session.flush()
+    session.info.pop(("hemonc_snapshot_parent_ids", entity_cls), None)
     return results

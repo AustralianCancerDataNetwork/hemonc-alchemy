@@ -100,6 +100,7 @@ def _sig(
     component = overrides.pop("component", f"c{drug_cui}")
     assert not overrides
     sig = Sigs(
+        seqrelwhat="-",
         id=sig_id, variant_cui=variant_cui, component_cui=drug_cui, component=component,
         class_field=class_field, component_role="primary systemic",
         portion="1", regimen="R", regimen_cui=1, step_number="1", divided=False,

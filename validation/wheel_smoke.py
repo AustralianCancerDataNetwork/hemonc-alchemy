@@ -47,7 +47,7 @@ def main(argv=None) -> int:
         try:
             schema = engine.get_execution_options()["schema_translate_map"]["primary"]
             expected = {table.name for table in Base.metadata.tables.values()}
-            assert len(expected) == 97
+            assert len(expected) == 86  # 22 source tables and 64 collection maps.
             assert expected <= set(sa.inspect(engine).get_table_names(schema=schema))
             with Session(engine) as session:
                 rows = session.execute(sa.select(
@@ -57,7 +57,7 @@ def main(argv=None) -> int:
                 assert set(rows) == {("Registry", "studies$registry"), ("Registry", "studies$trial")}
         finally:
             engine.dispose()
-    print(f"PASS: installed wheel, {args.backend}, all 97 tables, import/rebuild and child linkage")
+    print(f"PASS: installed wheel, {args.backend}, all {len(expected)} tables, import/rebuild and child linkage")
     return 0
 
 

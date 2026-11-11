@@ -12,7 +12,6 @@ from hemonc_alchemy.model.base import Base
 from hemonc_alchemy.model.entities import (
     Sigs,
     Variants,
-    sigs_Cyclesigs_noteMap,
     sigs_StudyMap,
 )
 from hemonc_alchemy.model.enums import (
@@ -68,6 +67,7 @@ class TestDosingInstructions:
         variant = _variant(session, variant_cui=1)
         for sig_id in (1, 2):
             session.add(Sigs(
+                seqrelwhat="-",
                 id=sig_id, variant_cui=1, component_cui=10, component="cisplatin",
                 component_role="primary systemic", portion="1", regimen="R",
                 regimen_cui=1, step_number="1", divided=False, phase_step=1,
@@ -83,6 +83,7 @@ class TestDosingInstructions:
     def test_every_field_preserved_as_a_raw_source_string(self, session):
         variant = _variant(session, variant_cui=2)
         sig = Sigs(
+            seqrelwhat="-",
             id=10, variant_cui=2, component_cui=100, component="cytarabine",
             subcomponent_cui=200, subcomponent=Sigs_SubcomponentEnum.DECITABINE,
             component_role="primary systemic", phase=Sigs_PhaseEnum.INDUCTION,
@@ -99,7 +100,7 @@ class TestDosingInstructions:
             cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
             sequence=Sigs_SequenceEnum.FIRST,
             variant="v", date_added=_D,
-            cyclesigs_note_items=[sigs_Cyclesigs_noteMap(cyclesigs_note="see protocol note")],
+            cyclesigs_note="see protocol note; increase as tolerated",
             study_items=[sigs_StudyMap(study="study-a"), sigs_StudyMap(study="study-b")],
         )
         session.add(sig)
@@ -135,7 +136,7 @@ class TestDosingInstructions:
         assert instruction.cycle_length_lb == "21"
         assert instruction.cycle_length_unit == Sigs_Cycle_length_unitEnum.DAY
         assert instruction.sequence == Sigs_SequenceEnum.FIRST
-        assert instruction.notes == ("see protocol note",)
+        assert instruction.notes == ("see protocol note; increase as tolerated",)
         assert set(instruction.evidence_references) == {"study-a", "study-b"}
         assert instruction.membership_provenance == MEMBERSHIP_PROVENANCE
         assert instruction.membership_provenance == "shared_by_variant_cui"
@@ -143,6 +144,7 @@ class TestDosingInstructions:
     def test_missing_fields_are_null_not_guessed(self, session):
         variant = _variant(session, variant_cui=3)
         sig = Sigs(
+            seqrelwhat="-",
             id=20, variant_cui=3, component_cui=1, component="drug",
             component_role="primary systemic", portion="1", regimen="R",
             regimen_cui=1, step_number="1", divided=False, phase_step=1,
@@ -165,6 +167,7 @@ class TestDosingInstructions:
         # comma-grouped numbers; none of that is this module's job to normalise.
         variant = _variant(session, variant_cui=4)
         sig = Sigs(
+            seqrelwhat="-",
             id=30, variant_cui=4, component_cui=1, component="drug",
             component_role="primary systemic", portion="1", regimen="R",
             regimen_cui=1, step_number="1", divided=False, phase_step=1,
@@ -183,6 +186,7 @@ class TestDosingInstructions:
         # module never calls `resolve_all_days`.
         variant = _variant(session, variant_cui=5)
         sig = Sigs(
+            seqrelwhat="-",
             id=40, variant_cui=5, component_cui=1, component="drug",
             component_role="primary systemic", portion="1", regimen="R",
             regimen_cui=1, step_number="1", divided=False, phase_step=1,

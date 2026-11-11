@@ -28,30 +28,19 @@ from hemonc_alchemy.toolkit.core.links import (
 pytestmark = pytest.mark.postgres
 
 
-@pytest.fixture
-def imported_session(pg_session):
-    try:
-        count = pg_session.execute(sa.select(sa.func.count()).select_from(Conditions)).scalar_one()
-    except sa.exc.DBAPIError as exc:
-        pytest.skip(f"PostgreSQL test database has no imported HemOnc schema: {exc}")
-    if count == 0:
-        pytest.skip("PostgreSQL test database has no imported HemOnc rows")
-    return pg_session
-
-
-def test_condition_component_and_normalized_sig_links(imported_session):
-    condition_name, condition_cui = imported_session.execute(
+def test_condition_component_and_normalized_sig_links(imported_hemonc_session):
+    condition_name, condition_cui = imported_hemonc_session.execute(
         sa.select(Conditions.condition, Conditions.condition_cui)
         .order_by(Conditions.condition_cui)
         .limit(1)
     ).one()
-    assert [row.condition_cui for row in conditions_by_names(imported_session, condition_name)] == [condition_cui]
+    assert [row.condition_cui for row in conditions_by_names(imported_hemonc_session, condition_name)] == [condition_cui]
 
-    hits = search_components(imported_session, "cisplatin")
+    hits = search_components(imported_hemonc_session, "cisplatin")
     assert hits
     assert any(hit.drug_inn == "cisplatin" for hit in hits)
 
-    rt_cui = imported_session.execute(
+    rt_cui = imported_hemonc_session.execute(
         sa.select(Studies.condition_cui)
         .join(sigs_StudyMap, sigs_StudyMap.study == Studies.study)
         .join(Sigs, sigs_StudyMap.parent_id == Sigs.id)
@@ -66,15 +55,15 @@ def test_condition_component_and_normalized_sig_links(imported_session):
     ).scalar_one_or_none()
     if rt_cui is None:
         pytest.skip("imported database has no standalone radiation sigs")
-    sigs = find_standalone_radiation_sigs(imported_session, [rt_cui])
+    sigs = find_standalone_radiation_sigs(imported_hemonc_session, [rt_cui])
     assert sigs
     assert sig_study_tokens(sigs[0])
     assert sig_study_objects(sigs[0])
     assert any(condition.condition_cui == rt_cui for condition in sig_condition_objects(sigs[0]))
 
 
-def test_selection_executes_category_mapping_and_version_policies(imported_session):
-    scope = imported_session.execute(
+def test_selection_executes_category_mapping_and_version_policies(imported_hemonc_session):
+    scope = imported_hemonc_session.execute(
         sa.select(Studies.condition_cui, Drugs.main_class)
         .join(variants_StudyMap, variants_StudyMap.study == Studies.study)
         .join(Variants, variants_StudyMap.parent_id == Variants.id)
@@ -90,9 +79,9 @@ def test_selection_executes_category_mapping_and_version_policies(imported_sessi
         [condition_cui],
         category_requirements=(CategoryRequirement("live-test-category", 1),),
     )
-    latest = select_variants(imported_session, spec, category_mapping=mapping)
+    latest = select_variants(imported_hemonc_session, spec, category_mapping=mapping)
     all_versions = select_variants(
-        imported_session,
+        imported_hemonc_session,
         TreatmentSelectionSpec.for_conditions([condition_cui], version_policy="all"),
     )
     assert latest
@@ -101,8 +90,8 @@ def test_selection_executes_category_mapping_and_version_policies(imported_sessi
     assert VariantBundle.from_variant(latest[0]).variant_cui == latest[0].variant_cui
 
 
-def test_study_variant_links_prefer_highest_version(imported_session):
-    duplicate = imported_session.execute(
+def test_study_variant_links_prefer_highest_version(imported_hemonc_session):
+    duplicate = imported_hemonc_session.execute(
         sa.select(Studies.study)
         .join(variants_StudyMap, variants_StudyMap.study == Studies.study)
         .join(Variants, variants_StudyMap.parent_id == Variants.id)
@@ -113,7 +102,7 @@ def test_study_variant_links_prefer_highest_version(imported_session):
     if duplicate is None:
         pytest.skip("imported database has no study with multiple variant versions")
 
-    study = imported_session.execute(
+    study = imported_hemonc_session.execute(
         sa.select(Studies).where(Studies.study == duplicate).limit(1)
     ).scalar_one()
     variants = study_variant_objects(study)

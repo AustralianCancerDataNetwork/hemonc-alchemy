@@ -156,6 +156,7 @@ class TestDiagnoseVariant:
         session.add(variant)
         session.flush()
         session.add(Sigs(
+            seqrelwhat="-",
             id=19566, variant_cui=1, component_cui=1, component="drug",
             component_role="primary systemic", portion="1", regimen="R",
             regimen_cui=1, step_number="1", divided=False, phase_step=1,
@@ -179,6 +180,7 @@ class TestDiagnoseVariant:
         session.add(variant)
         session.flush()
         session.add(Sigs(
+            seqrelwhat="-",
             id=1, variant_cui=2, component_cui=1, component="drug-a",
             component_role="primary systemic", portion="1", regimen="R",
             regimen_cui=1, step_number="1", divided=False, phase_step=1,

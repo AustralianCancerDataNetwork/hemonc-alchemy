@@ -4,6 +4,56 @@ import os
 
 import pytest
 import sqlalchemy as sa
+from sqlalchemy.orm import Session
+
+
+@pytest.fixture(scope="session")
+def imported_hemonc_engine():
+    """Read an explicitly selected full-extract test dataset without modifying it."""
+    from oa_configurator import Resolver, load_stack_config
+
+    alias = os.getenv("HEMONC_IMPORTED_TEST_DB")
+    if not alias:
+        pytest.skip("HEMONC_IMPORTED_TEST_DB must name an imported test database")
+    database = Resolver(load_stack_config()).resolve_database(alias)
+    if not database.connection.test_only or database.connection.dialect_name != "postgresql":
+        pytest.fail("HEMONC_IMPORTED_TEST_DB must resolve to a test-only PostgreSQL connection")
+    engine = database.create_engine(
+        register_claims=False,
+        connect_args={"options": "-cdefault_transaction_read_only=on"},
+    )
+    # The validation importer places its official OMOP slice beside source tables
+    # in the same disposable schema, so both are removed by that lifecycle.
+    engine = engine.execution_options(schema_translate_map={
+        **engine.get_execution_options().get("schema_translate_map", {}),
+        "vocab": database.schema_name,
+    })
+    try:
+        yield engine
+    finally:
+        engine.dispose()
+
+
+@pytest.fixture
+def imported_hemonc_session(imported_hemonc_engine):
+    with Session(imported_hemonc_engine) as session:
+        yield session
+
+
+@pytest.fixture
+def latest_imported_variant(imported_hemonc_session):
+    """Load variants while keeping their relationships available during a test."""
+    from hemonc_alchemy.model import Variants
+
+    def load(cui: int):
+        rows = imported_hemonc_session.scalars(
+            sa.select(Variants).where(Variants.variant_cui == cui)
+        ).all()
+        if not rows:
+            pytest.skip(f"imported database has no variant_cui={cui}")
+        return max(rows, key=lambda variant: (variant.version, variant.id))
+
+    return load
 
 
 @pytest.fixture

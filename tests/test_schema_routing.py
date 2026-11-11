@@ -55,7 +55,8 @@ def schema_target(request):
 
 
 def test_all_generated_tables_and_enums_use_the_primary_role():
-    assert len(Base.metadata.tables) == 97
+    # 22 source tables plus 64 genuine collection maps after scalar corrections.
+    assert len(Base.metadata.tables) == 86
     assert {table.schema for table in Base.metadata.tables.values()} == {"primary"}
     for table in Base.metadata.tables.values():
         for column in table.c:
