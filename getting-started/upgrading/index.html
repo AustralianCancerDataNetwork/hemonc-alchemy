@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#upgrade-to-the-duckdb-capable-release" class="md-skip">
+        <a href="#upgrading-hemonc-alchemy" class="md-skip">
           Skip to content
         </a>
       
@@ -541,6 +541,67 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#source-only-cleanup-and-regenerated-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source-only cleanup and regenerated schema
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Source-only cleanup and regenerated schema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#replace-proposal-dependent-calls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Replace proposal-dependent calls
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-a-matching-fresh-source-database" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use a matching fresh source database
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update-downstream-applications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update downstream applications
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#duckdb-capable-dependency-family" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DuckDB-capable dependency family
+      
+    </span>
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#install-a-consistent-dependency-family" class="md-nav__link">
@@ -1299,6 +1360,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../maintainers/source-only-release-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Source-only release notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../maintainers/release-process/" class="md-nav__link">
         
   
@@ -1352,6 +1441,67 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#source-only-cleanup-and-regenerated-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source-only cleanup and regenerated schema
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Source-only cleanup and regenerated schema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#replace-proposal-dependent-calls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Replace proposal-dependent calls
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-a-matching-fresh-source-database" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use a matching fresh source database
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update-downstream-applications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update downstream applications
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#duckdb-capable-dependency-family" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DuckDB-capable dependency family
+      
+    </span>
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#install-a-consistent-dependency-family" class="md-nav__link">
@@ -1465,7 +1615,50 @@
   
 
 
-<h1 id="upgrade-to-the-duckdb-capable-release">Upgrade to the DuckDB-capable release<a class="headerlink" href="#upgrade-to-the-duckdb-capable-release" title="Permanent link">&para;</a></h1>
+<h1 id="upgrading-hemonc-alchemy">Upgrading HemOnc Alchemy<a class="headerlink" href="#upgrading-hemonc-alchemy" title="Permanent link">&para;</a></h1>
+<h2 id="source-only-cleanup-and-regenerated-schema">Source-only cleanup and regenerated schema<a class="headerlink" href="#source-only-cleanup-and-regenerated-schema" title="Permanent link">&para;</a></h2>
+<p>The source-only release removes the unapproved indication vocabulary, patient-fit APIs, and local condition mapping corrections. It also includes the source loader fixes and regenerated scalar fields described in the <a href="../../maintainers/source-only-release-notes/">draft release notes</a>. These are breaking API and schema changes.</p>
+<h3 id="replace-proposal-dependent-calls">Replace proposal-dependent calls<a class="headerlink" href="#replace-proposal-dependent-calls" title="Permanent link">&para;</a></h3>
+<p>The <code>toolkit.core.indication_vocabulary</code> package and <code>toolkit.analytics.treatment.indication_fit</code> module are removed. The treatment package no longer exports <code>fits</code>, <code>fit_regimens</code>, <code>PatientState</code>, <code>BiomarkerMeasurement</code>, <code>FitPolicy</code>, or their fit-result types. Use source-facing indication/catalogue APIs for source browsing; patient eligibility matching requires a separately approved implementation.</p>
+<p>Condition mapping APIs now read the imported source fields and standardise through official OMOP vocabulary. <code>load_patches</code>, <code>load_overrides</code>, <code>apply_patches</code>, the condition-target generator and <code>regen-condition-targets</code> command are removed. <code>accepted_codes()</code> accepts the source mappings only, without an overrides argument. Existing mapping, family and diagnosis results may change where they previously depended on local corrections. For example, CUI <code>168651</code> no longer receives the archived Acromegaly mapping gap-fill <code>74107003</code> automatically.</p>
+<h3 id="use-a-matching-fresh-source-database">Use a matching fresh source database<a class="headerlink" href="#use-a-matching-fresh-source-database" title="Permanent link">&para;</a></h3>
+<p>The following fields now remain scalar values on their source tables. Their former collection-map tables and relationships are removed.</p>
+<table>
+<thead>
+<tr>
+<th>Source table</th>
+<th>Scalar fields</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>refs</code></td>
+<td><code>reference</code>, <code>study</code>, <code>biblio</code>, <code>doi</code></td>
+</tr>
+<tr>
+<td><code>sigs</code></td>
+<td><code>cyclesigs_note</code>, <code>inparens</code>, <code>seqrelwhat</code>, <code>timing</code></td>
+</tr>
+<tr>
+<td><code>contexts</code></td>
+<td><code>context_pretty</code></td>
+</tr>
+<tr>
+<td><code>inclusions</code></td>
+<td><code>reason_note</code></td>
+</tr>
+<tr>
+<td><code>sig_branch_types</code></td>
+<td><code>description</code></td>
+</tr>
+</tbody>
+</table>
+<p>For example, read <code>sig.cyclesigs_note</code> directly rather than loading <code>cyclesigs_note_items</code>, and query <code>Refs.study</code> rather than joining <code>refs_StudyMap</code>. The dosing toolkit continues to return its notes as a tuple. Semicolons in a study name or note are preserved as text; genuine pipe-delimited collections retain their child maps.</p>
+<p>An older database may start successfully but fail when an ORM query selects one of the new scalar columns. Upgrade the package and use an artifact rebuilt with the same generated model. Alternatively, import the source extract into a new, separately configured database/file. Retain the previous asset until validation is complete; creating tables on top of it is not a schema migration.</p>
+<p>Source snapshot imports assign local row IDs. Use old numeric record links with their original dataset, and label a candidate explicitly when browsing it. Preserve the source/build manifest alongside the external database artifact. Python distributions contain the model and loader code, while the source and official OMOP vocabulary assets are distributed separately.</p>
+<h3 id="update-downstream-applications">Update downstream applications<a class="headerlink" href="#update-downstream-applications" title="Permanent link">&para;</a></h3>
+<p>Explorer must use the cleaned Alchemy package and matching source asset together. Its source-only approval views replace the proposed vocabulary/fit pages and structured requirement filters. Update exact package pins and lockfiles once the chosen cleaned release is available; the local verification environment is not a replacement for a published dependency.</p>
+<h2 id="duckdb-capable-dependency-family">DuckDB-capable dependency family<a class="headerlink" href="#duckdb-capable-dependency-family" title="Permanent link">&para;</a></h2>
 <p>The new dependency family supports configured PostgreSQL and file-backed DuckDB imports. Models now carry a logical <code>primary</code> schema role, which is a breaking change for callers creating raw SQLAlchemy engines. Use a configured engine or the default-schema helper below. Existing database rows are not automatically moved or rebuilt.</p>
 <h2 id="install-a-consistent-dependency-family">Install a consistent dependency family<a class="headerlink" href="#install-a-consistent-dependency-family" title="Permanent link">&para;</a></h2>
 <table>
@@ -1490,7 +1683,7 @@
 </tr>
 </tbody>
 </table>
-<p>Install <code>hemonc-alchemy[postgres]</code>, <code>hemonc-alchemy[duckdb]</code>, or combine the chosen backend with <code>omop</code>. Remove application constraints that still require oa-configurator 1.x, orm-loader 1.x/2.x, or omop-alchemy 1.x/2.x before resolving the new lockfile. DuckDB support does not change Explorer's PostgreSQL deployment requirement.</p>
+<p>Install <code>hemonc-alchemy[postgres]</code>, <code>hemonc-alchemy[duckdb]</code>, or combine the chosen backend with <code>omop</code>. Remove application constraints that still require oa-configurator 1.x, orm-loader 1.x/2.x, or omop-alchemy 1.x/2.x before resolving the new lockfile. Explorer supports read-only DuckDB source and vocabulary assets as well as configured PostgreSQL access.</p>
 <h2 id="update-engine-construction">Update engine construction<a class="headerlink" href="#update-engine-construction" title="Permanent link">&para;</a></h2>
 <p>For configured databases:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_hemonc_engine</span><span class="p">,</span> <span class="n">get_hemonc_context</span>
