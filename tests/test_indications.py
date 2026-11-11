@@ -1,8 +1,8 @@
 """Unit coverage for the lossless indication biomarker normaliser."""
 
-import importlib.resources
 import shutil
 import subprocess
+import tarfile
 import zipfile
 from dataclasses import replace
 from datetime import UTC, datetime
@@ -445,7 +445,7 @@ def test_sqlite_loader_reads_four_slots_and_regimen_links_in_fixed_queries():
     }
 
 
-def test_wheel_contains_indication_package_files_when_uv_is_available(tmp_path):
+def test_distributions_contain_source_indications_without_proposal_data(tmp_path):
     uv = shutil.which("uv")
     if uv is None:
         import pytest
@@ -453,35 +453,40 @@ def test_wheel_contains_indication_package_files_when_uv_is_available(tmp_path):
         pytest.skip("uv is unavailable; wheel packaging check requires uv build")
     repository = Path(__file__).resolve().parents[1]
     subprocess.run(
-        [uv, "build", "--wheel", "--out-dir", str(tmp_path)],
+        [uv, "build", "--out-dir", str(tmp_path)],
         check=True,
         cwd=repository,
         capture_output=True,
         text=True,
     )
     wheel = next(tmp_path.glob("*.whl"))
-    package = importlib.resources.files("hemonc_alchemy.toolkit.core.indications")
-    files = [entry.name for entry in package.iterdir() if entry.is_file()]
+    source_package = repository / "hemonc_alchemy/toolkit/core/indications"
+    files = [
+        path.relative_to(repository).as_posix()
+        for path in source_package.rglob("*.py")
+        if "__pycache__" not in path.parts
+    ]
     with zipfile.ZipFile(wheel) as archive:
-        members = set(archive.namelist())
-    assert all(
-        f"hemonc_alchemy/toolkit/core/indications/{name}" in members for name in files
-    )
-    assert all(
-        f"hemonc_alchemy/toolkit/core/indications/normalisers/{name}" in members
-        for name in ("age.py", "biomarker.py", "context.py", "scope.py", "sex.py")
-    )
-    vocabulary = importlib.resources.files(
-        "hemonc_alchemy.toolkit.core.indication_vocabulary"
-    )
-    tables = [entry.name for entry in vocabulary.joinpath("data").iterdir()]
-    modules = [entry.name for entry in vocabulary.iterdir() if entry.is_file()]
-    assert tables and modules
-    assert all(
-        f"hemonc_alchemy/toolkit/core/indication_vocabulary/data/{name}" in members
-        for name in tables
-    )
-    assert all(
-        f"hemonc_alchemy/toolkit/core/indication_vocabulary/{name}" in members
-        for name in modules
-    )
+        wheel_members = set(archive.namelist())
+    sdist = next(tmp_path.glob("*.tar.gz"))
+    with tarfile.open(sdist, "r:gz") as archive:
+        sdist_members = {name.split("/", 1)[1] for name in archive.getnames() if "/" in name}
+
+    required_source = {
+        "hemonc_alchemy/toolkit/core/indications/loader.py",
+        "hemonc_alchemy/toolkit/core/indications/resolver.py",
+        "hemonc_alchemy/toolkit/core/catalogue/indications.py",
+        "hemonc_alchemy/toolkit/core/indications/normalisers/biomarker.py",
+    }
+    forbidden = {
+        "hemonc_alchemy/toolkit/core/condition_patches.csv",
+        "hemonc_alchemy/toolkit/core/condition_overrides.csv",
+        "hemonc_alchemy/toolkit/analytics/treatment/indication_fit.py",
+        "hemonc_alchemy/compiler/condition_target_generation.py",
+    }
+    for members in (wheel_members, sdist_members):
+        assert required_source <= members
+        assert set(files) <= members
+        assert not any("/indication_vocabulary/" in name for name in members)
+        assert not any(name.startswith("scripts/indication_vocabulary/") for name in members)
+        assert members.isdisjoint(forbidden)

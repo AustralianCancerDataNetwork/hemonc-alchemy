@@ -35,7 +35,7 @@ Only `report.json` and the comparison summary are intended for sharing. They con
 
 ## What equality means
 
-All 97 generated tables are compared as multisets, including duplicates and per-column NULL counts. Generated parent IDs are replaced with their complete scalar row semantics before hashing; child foreign keys are replaced with the corresponding parent's semantic hash. Different sequence allocation or SQL row order therefore does not create a false difference. A child attached to a different semantic parent does change the fingerprint. Missing parents fail independently of hash equality.
+All 86 current generated tables are compared as multisets, including duplicates and per-column NULL counts. Generated parent IDs are replaced with their complete scalar row semantics before hashing; child foreign keys are replaced with the corresponding parent's semantic hash. Different sequence allocation or SQL row order therefore does not create a false difference. A child attached to a different semantic parent does change the fingerprint. Missing parents fail independently of hash equality.
 
 Per-entity loader reports include accepted/staged, rejected and deduplicated rows, returned child counts, and conversion diagnostics. Identity values normalized to NULL are distinguished from invalid child tokens. Representative queries compare complete regimen and indication catalogues, condition families, and known HemOnc/SNOMED/RxNorm mappings. They must return rows. This vocabulary slice is sufficient for these checks; it is not a full-ontology validation.
 
@@ -53,4 +53,15 @@ A temporary snapshot of the current Explorer working tree also passes **63 tests
 
 ## Installed-wheel checks
 
-Build the wheel, install it into separate clean environments with no extras and with `duckdb,omop`, then run `wheel_smoke.py` from outside the checkout. The core environment must have neither optional package installed. Both environments create all 97 tables and verify snapshot import, explicit rebuild, and parent-child linkage. CI runs this matrix independently of the source-tree test jobs.
+Build the wheel, install it into separate clean environments with no extras and with `duckdb,omop`, then run `wheel_smoke.py` from outside the checkout. The core environment must have neither optional package installed. Both environments create all 86 current tables (22 source tables and 64 collection maps) and verify snapshot import, explicit rebuild, and parent-child linkage. CI runs this matrix independently of the source-tree test jobs. The dated 7 November receipts above describe the earlier 97-table schema.
+
+## Full-extract PostgreSQL regression tests
+
+The live-data tests do not use the active HemOnc database. Set `HEMONC_IMPORTED_TEST_DB` to a configured database alias containing a fresh complete source import and the official OMOP test slice in the same disposable schema, alongside the ordinary `test_hemonc_db` configuration used for disposable synthetic tests. The imported alias must resolve to a `test_only=true` PostgreSQL connection. Test reads are server-enforced read-only, and an explicitly selected incompatible schema fails rather than silently skipping.
+
+```bash
+OA_CONFIG_PATH=/path/to/test-config.toml HEMONC_IMPORTED_TEST_DB=imported_test_dataset \
+  uv run --frozen pytest -m postgres -o addopts=
+```
+
+Without that explicit alias the full-extract tests skip; synthetic PostgreSQL tests continue to use their disposable schemas. Provision and clean up the imported schema through the existing isolated test-database lifecycle.

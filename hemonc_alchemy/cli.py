@@ -8,7 +8,6 @@ from typing import Annotated
 import typer
 
 from .compiler import audit as audit_module
-from .compiler import condition_target_generation as condition_target_generation_module
 from .compiler import diff as diff_module
 from .compiler import generate as generate_module
 from .compiler import spec_adapter
@@ -253,79 +252,6 @@ def audit(
 
     if audit_module.has_hard_failures(results) and not report_only:
         raise typer.Exit(code=1)
-
-
-@app.command(name="regen-condition-targets")
-def regen_condition_targets(
-    data_dir: DataDirOption,
-    db_url: Annotated[
-        str,
-        typer.Option(
-            envvar="HEMONC_VOCAB_URL",
-            help="SQLAlchemy URL of a database holding HemOnc's tables and the OMOP vocabulary.",
-        ),
-    ],
-    vocab_schema: Annotated[
-        str | None,
-        typer.Option(
-            help="Schema holding the OMOP vocabulary tables, if not the connection's default."
-        ),
-    ] = None,
-    review_out: Annotated[
-        Path, typer.Option(help="Where to write the suggested-changes CSV.")
-    ] = Path("condition_targets_review.csv"),
-    proposals: Annotated[
-        Path | None,
-        typer.Option(
-            help="Search proposals CSV; defaults to `data_dir`/condition_target_proposals.csv."
-        ),
-    ] = None,
-    coverage_flags_out: Annotated[
-        Path | None,
-        typer.Option(
-            help="Also write targets that cover conditions outside their HemOnc subtree."
-        ),
-    ] = None,
-    crosswalk: Annotated[
-        Path | None,
-        typer.Option(
-            help="NCIt -> SNOMED crosswalk JSON; defaults to `data_dir`/ncit_snomed_crosswalk.json."
-        ),
-    ] = None,
-) -> None:
-    """Rewrite toolkit/core/condition_patches.csv and write a suggestions sheet. Review the diff before committing."""
-    from sqlalchemy.orm import Session
-
-    from .integrations.omop.schema import omop_availability, schema_aware_bind
-
-    engine = create_default_hemonc_engine(db_url)
-    explicit_map = {"vocab": vocab_schema} if vocab_schema is not None else None
-    routed_engine = schema_aware_bind(engine, explicit_map)
-    try:
-        with Session(routed_engine) as session:
-            availability = omop_availability(session)
-            if not availability.available:
-                typer.secho(
-                    f"OMOP vocabulary unavailable: {availability.reason}",
-                    fg=typer.colors.RED,
-                    bold=True,
-                )
-                raise typer.Exit(code=1)
-            result = condition_target_generation_module.regenerate(
-                data_dir,
-                session,
-                review_out,
-                crosswalk_path=crosswalk,
-                proposals_path=proposals,
-                coverage_flags_path=coverage_flags_out,
-            )
-    finally:
-        engine.dispose()
-    typer.secho(
-        f"Wrote {len(result.patches)} patch row(s) to {condition_target_generation_module.PATCHES_PATH} and "
-        f"{len(result.suggestions)} suggested change(s) to {review_out}.",
-        fg=typer.colors.GREEN,
-    )
 
 
 @app.command(name="lint-indications")

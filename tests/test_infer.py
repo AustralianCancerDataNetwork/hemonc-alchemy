@@ -12,10 +12,23 @@ import pytest
 from hemonc_alchemy.compiler.infer import (
     detect_numeric,
     infer_pipe_groups,
+    looks_denormalised_text,
     parse_unique_key,
     resolve_source_csv,
 )
 from hemonc_alchemy.compiler.schema_model import _clean_identifier_placeholders
+
+
+@pytest.mark.parametrize("value", [
+    "GEICAM/2003-11; CIBOMA/2004-01",
+    "(three times per week; increased as tolerated)",
+])
+def test_semicolons_in_names_and_notes_do_not_imply_a_collection(value):
+    assert not looks_denormalised_text(pd.Series([None, value]))
+
+
+def test_pipe_collections_are_detected_even_when_labels_contain_semicolons():
+    assert looks_denormalised_text(pd.Series(["GEICAM/2003-11; CIBOMA/2004-01|APOLLO"]))
 
 
 class TestParseUniqueKey:

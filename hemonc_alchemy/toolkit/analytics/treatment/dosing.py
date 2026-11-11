@@ -97,7 +97,7 @@ def _dosing_instruction(sig) -> DosingInstruction:
         cycle_length_ub=sig.cycle_length_ub,
         cycle_length_unit=sig.cycle_length_unit,
         sequence=sig.sequence,
-        notes=tuple(item.cyclesigs_note for item in sig.cyclesigs_note_items),
+        notes=(sig.cyclesigs_note,) if sig.cyclesigs_note else (),
         evidence_references=tuple(item.study for item in sig.study_items),
     )
 

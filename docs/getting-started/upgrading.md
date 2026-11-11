@@ -1,4 +1,38 @@
-# Upgrade to the DuckDB-capable release
+# Upgrading HemOnc Alchemy
+
+## Source-only cleanup and regenerated schema
+
+The source-only release removes the unapproved indication vocabulary, patient-fit APIs, and local condition mapping corrections. It also includes the source loader fixes and regenerated scalar fields described in the [draft release notes](../maintainers/source-only-release-notes.md). These are breaking API and schema changes.
+
+### Replace proposal-dependent calls
+
+The `toolkit.core.indication_vocabulary` package and `toolkit.analytics.treatment.indication_fit` module are removed. The treatment package no longer exports `fits`, `fit_regimens`, `PatientState`, `BiomarkerMeasurement`, `FitPolicy`, or their fit-result types. Use source-facing indication/catalogue APIs for source browsing; patient eligibility matching requires a separately approved implementation.
+
+Condition mapping APIs now read the imported source fields and standardise through official OMOP vocabulary. `load_patches`, `load_overrides`, `apply_patches`, the condition-target generator and `regen-condition-targets` command are removed. `accepted_codes()` accepts the source mappings only, without an overrides argument. Existing mapping, family and diagnosis results may change where they previously depended on local corrections. For example, CUI `168651` no longer receives the archived Acromegaly mapping gap-fill `74107003` automatically.
+
+### Use a matching fresh source database
+
+The following fields now remain scalar values on their source tables. Their former collection-map tables and relationships are removed.
+
+| Source table | Scalar fields |
+| --- | --- |
+| `refs` | `reference`, `study`, `biblio`, `doi` |
+| `sigs` | `cyclesigs_note`, `inparens`, `seqrelwhat`, `timing` |
+| `contexts` | `context_pretty` |
+| `inclusions` | `reason_note` |
+| `sig_branch_types` | `description` |
+
+For example, read `sig.cyclesigs_note` directly rather than loading `cyclesigs_note_items`, and query `Refs.study` rather than joining `refs_StudyMap`. The dosing toolkit continues to return its notes as a tuple. Semicolons in a study name or note are preserved as text; genuine pipe-delimited collections retain their child maps.
+
+An older database may start successfully but fail when an ORM query selects one of the new scalar columns. Upgrade the package and use an artifact rebuilt with the same generated model. Alternatively, import the source extract into a new, separately configured database/file. Retain the previous asset until validation is complete; creating tables on top of it is not a schema migration.
+
+Source snapshot imports assign local row IDs. Use old numeric record links with their original dataset, and label a candidate explicitly when browsing it. Preserve the source/build manifest alongside the external database artifact. Python distributions contain the model and loader code, while the source and official OMOP vocabulary assets are distributed separately.
+
+### Update downstream applications
+
+Explorer must use the cleaned Alchemy package and matching source asset together. Its source-only approval views replace the proposed vocabulary/fit pages and structured requirement filters. Update exact package pins and lockfiles once the chosen cleaned release is available; the local verification environment is not a replacement for a published dependency.
+
+## DuckDB-capable dependency family
 
 The new dependency family supports configured PostgreSQL and file-backed DuckDB imports. Models now carry a logical `primary` schema role, which is a breaking change for callers creating raw SQLAlchemy engines. Use a configured engine or the default-schema helper below. Existing database rows are not automatically moved or rebuilt.
 
@@ -10,7 +44,7 @@ The new dependency family supports configured PostgreSQL and file-backed DuckDB 
 | orm-loader | `>=3.0.0,<4` |
 | omop-alchemy, optional | `>=3.0.0,<4` |
 
-Install `hemonc-alchemy[postgres]`, `hemonc-alchemy[duckdb]`, or combine the chosen backend with `omop`. Remove application constraints that still require oa-configurator 1.x, orm-loader 1.x/2.x, or omop-alchemy 1.x/2.x before resolving the new lockfile. DuckDB support does not change Explorer's PostgreSQL deployment requirement.
+Install `hemonc-alchemy[postgres]`, `hemonc-alchemy[duckdb]`, or combine the chosen backend with `omop`. Remove application constraints that still require oa-configurator 1.x, orm-loader 1.x/2.x, or omop-alchemy 1.x/2.x before resolving the new lockfile. Explorer supports read-only DuckDB source and vocabulary assets as well as configured PostgreSQL access.
 
 ## Update engine construction
 

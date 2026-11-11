@@ -29,6 +29,12 @@ PostgreSQL reserves sequence values on an additional connection because later fi
 
 Files supplying IDs use the upstream merge strategies. Callers supplying explicit IDs are responsible for synchronizing native sequences before later inserts that omit IDs. Child loading uses plain inserts and is not an idempotent reload operation.
 
+For ID-less snapshots, the loader retains each parsed source occurrence's assigned ID until its child load completes. Rejected parent IDs are excluded. Thus two sig rows with the same scalar values can keep different study lists, and two exact duplicate occurrences can each retain their children. This association uses the assigned IDs, not the order returned by a database query.
+
+When calling `load_entity()` and `load_denormalised()` separately, use the **same Session, unchanged source file, and matching CSV reading options**. A commit between stages is supported; a rollback discards the retained association. Supplied IDs and unambiguous scalar identities support independent child loads, but ambiguous fallback matches raise an error rather than silently omit children. A changed file or reading options also raises before child insertion. Custom readers must preserve the source record order and parsing rules used by child loading; splitting batches is supported.
+
+Only `|` is automatically inferred and split as a collection delimiter. Semicolons remain part of names or prose: for example, `GEICAM/2003-11; CIBOMA/2004-01` is one study name with CUI `25246`. The updated dictionary overrides preserve reference names, study names, sig notes, and parenthetical expressions as scalar fields. Regenerate and rebuild the source database to adopt these schema changes; existing assets are not migrated by running the loader code.
+
 ## Conversion and rejection reports
 
 The default HemOnc policy preserves case-insensitive enum values and the compiler's normalized-member fallback. Malformed nullable fields are logged and become NULL. Malformed required values reject their rows rather than introducing a sentinel. Rejected parents cannot contribute child rows, including when an accepted parent has the same natural key.

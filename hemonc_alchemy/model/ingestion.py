@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Iterator
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from enum import Enum
+from hashlib import file_digest
 from typing import Any
 
 import pyarrow as pa
@@ -108,6 +109,32 @@ def convert_value(value: Any, column: sa.Column, policy: ConversionPolicy) -> An
     return values[0].as_py()
 
 
+@dataclass
+class SnapshotParentIds:
+    """IDs in parsed source order, retained only for a load's child stage."""
+
+    source_digest: str
+    quote_mode: str | None
+    skip_malformed: bool
+    ids: list[int] = field(default_factory=list)
+
+    @classmethod
+    def from_reader(cls, reader: FileReader) -> SnapshotParentIds:
+        with reader.path.open("rb") as handle:
+            digest = file_digest(handle, "sha256").hexdigest()
+        return cls(digest, getattr(reader, "quote_mode", None), getattr(reader, "skip_malformed", False))
+
+    def validate_reader(self, reader: FileReader) -> None:
+        current = self.from_reader(reader)
+        if (self.source_digest, self.quote_mode, self.skip_malformed) != (
+            current.source_digest, current.quote_mode, current.skip_malformed,
+        ):
+            raise ValueError(
+                "Child loading requires the unchanged parent source and the same CSV reading options; "
+                "reload parents and children together with load_all()."
+            )
+
+
 class GeneratedIdReader(FileReader):
     """Add database-generated IDs to an ID-less snapshot of an empty target.
 
@@ -124,6 +151,7 @@ class GeneratedIdReader(FileReader):
         self.file_columns = reader.file_columns
         self.empty = reader.empty
         self.skipped = reader.skipped
+        self.parent_ids = SnapshotParentIds.from_reader(reader)
         self.session = session
         self.engine = session.get_bind(mapper=model).engine
         table = model.__table__
@@ -160,4 +188,5 @@ class GeneratedIdReader(FileReader):
                         ids = connection.scalars(statement).all()
                 else:
                     ids = self.session.scalars(statement).all()
+            self.parent_ids.ids.extend(ids)
             yield batch.append_column("id", pa.array(ids, pa.int64()))

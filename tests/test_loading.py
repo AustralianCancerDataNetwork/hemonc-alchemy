@@ -22,7 +22,10 @@ from hemonc_alchemy.model.base import Base
 from hemonc_alchemy.model.entities import (
     Canonicaltriples,
     HemoncClasses,
+    Refs,
+    Sigs,
     Units,
+    VariantEligibility,
     Variants,
     canonicaltriples_Class_1_provenanceMap,
     hemonc_classes_Secondary_home_as_stringMap,
@@ -45,6 +48,58 @@ from hemonc_alchemy.toolkit.loading import (
 # all five real-data tests below skipped silently on any other machine --
 # indistinguishable, in the summary, from an intentional skip.
 _REAL_DATA_DIR = Path(os.environ.get("HEMONC_DATA_DIR", "data/Tables"))
+
+
+@pytest.mark.parametrize("model,positions,expected_studies", [
+    (Sigs, [1688, 1689, 8876, 8877], [
+        {"GELTAMO-2006", "ORCHARRD", "SHEBA-07-4466-AN-CTIL"},
+        {"ORCHARRD", "SHEBA-07-4466-AN-CTIL"},
+        {"RTOG 0825", "AVAglio"}, {"RTOG 0825", "AVAglio"},
+    ]),
+    (VariantEligibility, [210, 211], [{"APOLLO", "KarMMa-3"}, {"EQUULEUS--pom"}]),
+])
+def test_real_source_study_collections_remain_attached_to_each_occurrence(tmp_path, model, positions, expected_studies):
+    source = _REAL_DATA_DIR / f"{model.__tablename__}.csv"
+    with source.open(newline="", encoding="utf-8-sig") as handle:
+        rows = list(csv.reader(handle))
+    with (tmp_path / source.name).open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(rows[0])
+        writer.writerows(rows[position] for position in positions)
+    engine = create_default_hemonc_engine("sqlite:///:memory:")
+    tables = [model.__table__, *[rel.mapper.class_.__table__ for rel in sa.inspect(model).relationships
+                               if rel.key.endswith("_items")]]
+    Base.metadata.create_all(engine, tables=tables)
+    try:
+        with so.Session(engine) as session:
+            counts = load_all(session, model, tmp_path)
+            assert counts[model.__tablename__] == len(positions)
+            parents = session.scalars(sa.select(model).options(
+                so.raiseload("*"), so.selectinload(model.study_items).raiseload("*"),
+            ).order_by(model.id)).all()
+            assert [{item.study for item in parent.study_items} for parent in parents] == expected_studies
+    finally:
+        engine.dispose()
+
+
+def test_reference_semicolon_names_are_scalar_and_keep_their_cuis(tmp_path):
+    with (_REAL_DATA_DIR / "refs.csv").open(newline="", encoding="utf-8-sig") as handle:
+        rows = list(csv.reader(handle))
+    with (tmp_path / "refs.csv").open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.writer(handle)
+        writer.writerows([rows[0], rows[1954]])
+    engine = create_default_hemonc_engine("sqlite:///:memory:")
+    Base.metadata.create_all(engine, tables=[Refs.__table__, Refs.title_items.property.mapper.class_.__table__])
+    try:
+        with so.Session(engine) as session:
+            assert load_all(session, Refs, tmp_path)["refs"] == 1
+            record = session.execute(sa.select(Refs.study, Refs.study_cui, Refs.reference, Refs.reference_cui)).one()
+            assert tuple(record) == (
+                "GEICAM/2003-11; CIBOMA/2004-01", 25246,
+                "GEICAM/2003-11; CIBOMA/2004-01::00", 25252,
+            )
+    finally:
+        engine.dispose()
 
 
 def test_surrogate_identity_treats_invalid_datetime_placeholder_as_null():

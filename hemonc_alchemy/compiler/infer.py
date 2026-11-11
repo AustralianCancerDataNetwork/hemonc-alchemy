@@ -50,11 +50,11 @@ DICTIONARY_FILENAME = "data.dictionary.xlsx"
 
 
 def looks_denormalised_text(series: pd.Series) -> bool:
-    """Detect delimited text columns that likely need normalisation."""
+    """Detect pipe-delimited collections; semicolons also occur in names/prose."""
     non_null = series.dropna().astype(str)
     if len(non_null) == 0:
         return False
-    return any(("|" in v) or (";" in v) for v in non_null)
+    return any("|" in v for v in non_null)
 
 
 def max_string_length(series: pd.Series) -> int:

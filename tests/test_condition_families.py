@@ -7,7 +7,6 @@ import sqlalchemy as sa
 
 from hemonc_alchemy.config import create_default_hemonc_engine
 from hemonc_alchemy.integrations.omop.schema import schema_aware_bind
-from hemonc_alchemy.model import Conditions
 from hemonc_alchemy.toolkit.core import condition_families as families_module
 from hemonc_alchemy.toolkit.core import condition_targets as targets_module
 from hemonc_alchemy.toolkit.core.condition_families import (
@@ -70,22 +69,11 @@ def test_condition_outside_every_category_is_its_own_family_with_its_descendants
     assert compute_family_members(found, PARENTS)[GI] == {GI, COLON, MSI_COLON}
 
 
-@pytest.fixture
-def imported_session(pg_session):
-    try:
-        count = pg_session.execute(sa.select(sa.func.count()).select_from(Conditions)).scalar_one()
-    except sa.exc.DBAPIError as exc:
-        pytest.skip(f"PostgreSQL test database has no imported HemOnc schema: {exc}")
-    if count == 0:
-        pytest.skip("PostgreSQL test database has no imported HemOnc rows")
-    return pg_session
-
-
 @pytest.mark.postgres
-def test_variant_index_places_chop_in_lymphoma(imported_session):
-    lymphoma = next(cui for cui, name in targets_module.condition_names(imported_session).items() if name == "Lymphoma")
+def test_variant_index_places_chop_in_lymphoma(imported_hemonc_session):
+    lymphoma = next(cui for cui, name in targets_module.condition_names(imported_hemonc_session).items() if name == "Lymphoma")
     chop = 130614
-    assert lymphoma in variant_families(imported_session)[chop]
+    assert lymphoma in variant_families(imported_hemonc_session)[chop]
 
 
 def _sqlite_vocabulary_with_ancestry():
@@ -159,8 +147,6 @@ MAPPINGS = {
 def covered_hierarchy(monkeypatch):
     parents = {**PARENTS, AGNOSTIC: (SOLID,)}
     monkeypatch.setattr(targets_module, "raw_condition_mappings", lambda session: MAPPINGS)
-    monkeypatch.setattr(targets_module, "load_patches", dict)
-    monkeypatch.setattr(targets_module, "load_overrides", list)
     monkeypatch.setattr(targets_module, "condition_parents", lambda session: parents)
     monkeypatch.setattr(families_module, "condition_parents", lambda session: parents)
 

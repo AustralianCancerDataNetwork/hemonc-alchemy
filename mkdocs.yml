@@ -100,4 +100,5 @@ nav:
 
   - Maintainers:
       - Regenerating the model: maintainers/regeneration.md
+      - Source-only release notes: maintainers/source-only-release-notes.md
       - Contributing and releases: maintainers/release-process.md

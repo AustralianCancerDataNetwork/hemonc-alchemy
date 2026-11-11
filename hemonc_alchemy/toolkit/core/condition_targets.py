@@ -1,18 +1,10 @@
-"""HemOnc condition -> standard SNOMED targets, read at runtime from HemOnc's conditions table and the OMOP vocabulary.
-
-Two committed CSVs beside this module adjust the table until their contents are merged upstream into it:
-`condition_patches.csv` holds generated corrections in the table's own shape (`map_SNOMED`/`map_type_SNOMED`;
-crosswalk gap-fills and demotions, written by `hemonc-alchemy regen-condition-targets`), and
-`condition_overrides.csv` holds reviewed additions/removals. Results are cached per engine.
-"""
+"""HemOnc condition -> standard SNOMED targets from source mappings and the official OMOP vocabulary."""
 
 from __future__ import annotations
 
-import csv
 from collections import defaultdict
 from collections.abc import Iterable, Mapping
-from dataclasses import dataclass, replace
-from pathlib import Path
+from dataclasses import dataclass
 from typing import Any
 
 import sqlalchemy as sa
@@ -22,9 +14,6 @@ from ...caching import cached_per_engine
 from ...integrations.omop.binding import load_omop_binding, omop_available
 from ...integrations.omop.standardise import StandardisedCode, standardise_codes
 from ...model import Conditions
-
-PATCHES_PATH = Path(__file__).with_name("condition_patches.csv")
-OVERRIDES_PATH = Path(__file__).with_name("condition_overrides.csv")
 
 
 @dataclass(frozen=True)
@@ -50,54 +39,12 @@ def _snomed_codes(field: Any) -> tuple[str, ...]:
     return tuple(code.strip() for code in value.split("|") if code.strip()) if value is not None else ()
 
 
-def _read_rows(path: Path) -> list[dict[str, str]]:
-    if not path.exists():
-        return []
-    with path.open(encoding="utf-8", newline="") as handle:
-        return [row for row in csv.DictReader(handle) if row.get("condition_cui")]
-
-
-def load_patches(path: Path = PATCHES_PATH) -> dict[int, dict[str, str]]:
-    """Patched `map_SNOMED` (pipe-separated) and `map_type_SNOMED` per condition."""
-    return {int(row["condition_cui"]): row for row in _read_rows(path)}
-
-
-def load_overrides(path: Path = OVERRIDES_PATH) -> list[dict[str, str]]:
-    """Reviewed `condition_cui,snomed_code,action,note` rows, action `add` or `remove`."""
-    return _read_rows(path)
-
-
-def apply_patches(mappings: Iterable[ConditionMapping], patches: Mapping[int, Mapping[str, str]]) -> dict[int, ConditionMapping]:
-    """`mappings` with patched SNOMED fields replacing the table's."""
-    result = {}
-    for mapping in mappings:
-        patch = patches.get(mapping.condition_cui)
-        if patch is not None:
-            mapping = replace(
-                mapping,
-                map_snomed=_snomed_codes(patch["map_SNOMED"]),
-                map_type_snomed=_value(patch["map_type_SNOMED"]),
-            )
-        result[mapping.condition_cui] = mapping
-    return result
-
-
-def accepted_codes(
-    mappings: Mapping[int, ConditionMapping], overrides: Iterable[Mapping[str, str]]
-) -> dict[int, tuple[str, ...]]:
-    """SNOMED codes per condition whose map type is exact, adjusted by reviewed overrides."""
+def accepted_codes(mappings: Mapping[int, ConditionMapping]) -> dict[int, tuple[str, ...]]:
+    """SNOMED codes per condition whose source map type is exact."""
     codes: dict[int, list[str]] = defaultdict(list)
     for cui, mapping in mappings.items():
         if mapping.map_type_snomed == "exact":
             codes[cui].extend(mapping.map_snomed)
-    for row in overrides:
-        cui, code, action = int(row["condition_cui"]), str(row["snomed_code"]), row["action"].strip()
-        if action == "add" and code not in codes[cui]:
-            codes[cui].append(code)
-        elif action == "remove" and code in codes[cui]:
-            codes[cui].remove(code)
-        elif action not in ("add", "remove"):
-            raise ValueError(f"override action must be add or remove, got {action!r}")
     return {cui: tuple(found) for cui, found in codes.items() if found}
 
 
@@ -136,8 +83,8 @@ def raw_condition_mappings(session: Any) -> dict[int, ConditionMapping]:
 
 @cached_per_engine
 def condition_mappings(session: Any) -> dict[int, ConditionMapping]:
-    """HemOnc's conditions table with `condition_patches.csv` applied."""
-    return apply_patches(raw_condition_mappings(session).values(), load_patches())
+    """HemOnc's conditions table as loaded, with source mappings unchanged."""
+    return raw_condition_mappings(session)
 
 
 def condition_names(session: Any) -> dict[int, str]:
@@ -176,8 +123,8 @@ def condition_parents(session: Any) -> dict[int, tuple[int, ...]]:
 
 
 def accepted_snomed_codes(session: Any, condition_cuis: Iterable[int] | None = None) -> dict[int, tuple[str, ...]]:
-    """Accepted SNOMED codes per condition (patched exact maps plus overrides), optionally restricted."""
-    codes = accepted_codes(condition_mappings(session), load_overrides())
+    """Exact SNOMED codes in source mappings, optionally restricted to condition CUIs."""
+    codes = accepted_codes(condition_mappings(session))
     if condition_cuis is None:
         return codes
     wanted = {int(cui) for cui in condition_cuis}
@@ -197,19 +144,14 @@ def resolve_condition_targets(session: Any) -> dict[int, frozenset[int]]:
 
 
 __all__ = [
-    "OVERRIDES_PATH",
-    "PATCHES_PATH",
     "ConditionMapping",
     "accepted_codes",
     "accepted_snomed_codes",
-    "apply_patches",
     "broader_codes",
     "condition_mappings",
     "condition_names",
     "condition_parents",
     "is_conjunction",
-    "load_overrides",
-    "load_patches",
     "raw_condition_mappings",
     "resolve_condition_targets",
 ]

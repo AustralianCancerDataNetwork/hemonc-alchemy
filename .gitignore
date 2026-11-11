@@ -140,6 +140,3 @@ notebooks/
 reference/
 TODO.md
 docker/
-!hemonc_alchemy/toolkit/core/condition_overrides.csv
-!hemonc_alchemy/toolkit/core/condition_patches.csv
-!hemonc_alchemy/toolkit/core/indication_vocabulary/data/

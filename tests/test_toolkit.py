@@ -69,6 +69,7 @@ def _make_variant(session, variant_cui: int) -> Variants:
 
 def _make_sig(session, *, variant_cui: int, component_cui: int, class_field: str, component_role: str) -> Sigs:
     sig = Sigs(
+        seqrelwhat="-",
         id=component_cui,
         variant_cui=variant_cui,
         component_cui=component_cui,
