@@ -436,8 +436,11 @@ def test_runtime_ancestry_absent_omop_preserves_source_transaction():
     try:
         index = main_class_ancestry(session)
         assert index.unavailable_reason is not None
-        assert "schema tag 'vocab' is unmapped" in index.unavailable_reason
-        assert "OperationalError" in index.unavailable_reason
+        if load_omop_binding() is None:
+            assert "omop-alchemy is not installed" in index.unavailable_reason
+        else:
+            assert "schema tag 'vocab' is unmapped" in index.unavailable_reason
+            assert "OperationalError" in index.unavailable_reason
         assert index.purity({"Hormone"}, DrugAncestry.ENDOCRINE) is None
         assert session.scalar(sa.text("SELECT count(*) FROM drugs")) == 1
     finally:
