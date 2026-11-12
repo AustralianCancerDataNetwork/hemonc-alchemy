@@ -11,13 +11,13 @@ from .....model import (
     Drugs,
     Sigs,
     Studies,
-    StudyResults,
     Variants,
     drugs_Canmed_major_classMap,
     drugs_Canmed_minor_classMap,
     variants_StudyMap,
 )
 from .....model.enums import Sigs_PhaseEnum
+from .....model.relationships import join_mapped_studies, study_context_predicate
 from .....toolkit.core.catalogue.variants import (
     latest_variant_ids as _latest_variant_ids,
 )
@@ -83,11 +83,11 @@ def build_component_statement(
         drugs_Canmed_minor_classMap.canmed_minor_class.label("canmed_minor_class"),
     ]
     stmt = (
-        select(*columns)
-        .select_from(Variants)
-        .join(Sigs, Sigs.variant_cui == Variants.variant_cui)
-        .join(variants_StudyMap, variants_StudyMap.parent_id == Variants.id)
-        .join(Studies, Studies.study == variants_StudyMap.study)
+        join_mapped_studies(
+            select(*columns).select_from(Variants)
+            .join(Sigs, Sigs.variant_cui == Variants.variant_cui)
+            .join(variants_StudyMap, variants_StudyMap.parent_id == Variants.id)
+        )
         .outerjoin(Drugs, Sigs.component_cui == Drugs.drug_cui)
         .outerjoin(
             drugs_Canmed_major_classMap,
@@ -111,12 +111,7 @@ def build_component_statement(
         stmt = stmt.where(Sigs.phase == phase)
     if spec.study_context is not None:
         stmt = stmt.where(
-            sa.exists(
-                select(1).where(
-                    StudyResults.study == Studies.study,
-                    StudyResults.context == spec.study_context,
-                )
-            )
+            study_context_predicate(spec.study_context)
         )
     return stmt
 

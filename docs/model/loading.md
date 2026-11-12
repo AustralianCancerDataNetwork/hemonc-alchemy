@@ -33,7 +33,13 @@ For ID-less snapshots, the loader retains each parsed source occurrence's assign
 
 When calling `load_entity()` and `load_denormalised()` separately, use the **same Session, unchanged source file, and matching CSV reading options**. A commit between stages is supported; a rollback discards the retained association. Supplied IDs and unambiguous scalar identities support independent child loads, but ambiguous fallback matches raise an error rather than silently omit children. A changed file or reading options also raises before child insertion. Custom readers must preserve the source record order and parsing rules used by child loading; splitting batches is supported.
 
-Only `|` is automatically inferred and split as a collection delimiter. Semicolons remain part of names or prose: for example, `GEICAM/2003-11; CIBOMA/2004-01` is one study name with CUI `25246`. The updated dictionary overrides preserve reference names, study names, sig notes, and parenthetical expressions as scalar fields. Regenerate and rebuild the source database to adopt these schema changes; existing assets are not migrated by running the loader code.
+Only `|` is automatically inferred and split as a collection delimiter. Semicolons remain part of names or prose: for example, `GEICAM/2003-11; CIBOMA/2004-01` is one study name with CUI `25246`. Dictionary overrides define reference names, study names, sig notes, and parenthetical expressions as scalar fields.
+
+## Source fields and types
+
+The generated model determines how each field is stored. For example, `StudyResults.metric_num_this_arm` stores values such as `60%` as text, `Persons.total_pubs` is an integer, and the four `Refs.prop_valid_aff_*` fields are numeric proportions. Fields listed in the model metadata's `derived_columns` are excluded from source loading.
+
+Text fields retain their values apart from configured null markers, while dates and enums undergo conversion. Unsupported partial dates in nullable `DateTime` fields become NULL, and enum conversion normalizes source spelling. A database NULL can therefore represent either a missing source value or a failed conversion; use the source file and rejection report to distinguish them.
 
 ## Conversion and rejection reports
 
@@ -80,7 +86,3 @@ The default operation creates all generated tables and loads the source files pr
 For an existing **disposable target**, explicitly pass `--rebuild`. This drops generated HemOnc tables and recognized `_staging_<hemonc_table>` objects only in the configured HemOnc schema, then recreates the metadata before importing. It retains unrelated tables, unrelated staging objects, and OMOP vocabulary tables. It does not drop the schema or use cascading drops. External foreign keys referencing HemOnc can therefore block a rebuild. Selecting `--table` limits imported files, not the set of tables reset by `--rebuild`.
 
 Rebuilds destroy the selected target's HemOnc data. Use only a disposable development target and stop other DuckDB processes using the file first. Each entity can commit before later entities or children fail; retry a partial snapshot with an explicit rebuild after fixing the failure. Programmatic callers can use `bootstrap_database(resolved, data_dir, rebuild=False, table_names=None)` from `hemonc_alchemy.bootstrap` and receive per-entity count dictionaries.
-
-## Preserve source-shaped values
-
-The loader does not force uncertain source values into invented types. A field may remain nullable, string-valued, or contain a source marker such as `Uncertain date`. Convert it only at the analysis boundary where your application can state what happens to values that do not parse.

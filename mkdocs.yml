@@ -75,7 +75,7 @@ nav:
       - Configuration: getting-started/configuration.md
       - Quickstart: getting-started/quickstart.md
       - Local development: getting-started/local-development.md
-      - Upgrading: getting-started/upgrading.md
+      - Updating an existing setup: getting-started/upgrading.md
 
   - Understanding HemOnc:
       - Overview: model/index.md
@@ -100,5 +100,4 @@ nav:
 
   - Maintainers:
       - Regenerating the model: maintainers/regeneration.md
-      - Source-only release notes: maintainers/source-only-release-notes.md
       - Contributing and releases: maintainers/release-process.md

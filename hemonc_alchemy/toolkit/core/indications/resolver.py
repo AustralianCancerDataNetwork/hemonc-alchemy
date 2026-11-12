@@ -7,7 +7,8 @@ from .normalisers import Normaliser, default_normalisers
 
 
 def _withdrawn(value: str) -> bool:
-    return value.strip().casefold() != "false"
+    """Conservatively exclude marked rows without inferring an event direction."""
+    return value.strip().casefold() not in {"", "false"}
 
 
 def resolve_indications(

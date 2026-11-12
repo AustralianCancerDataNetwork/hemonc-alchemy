@@ -1,18 +1,15 @@
 # Installation
 
-Install the package that matches the job you are doing. The base package contains the generated model, connection helpers, and toolkit APIs. PostgreSQL support is optional because the model itself does not require a particular driver.
+The package contains the SQLAlchemy model, connection helpers and toolkit. Choose an extra for the database you want to query.
 
 ## Use HemOnc from another project
 
-```bash
-uv add "hemonc-alchemy[postgres]"
-```
+| Backend | uv | pip |
+| --- | --- | --- |
+| DuckDB file | `uv add "hemonc-alchemy[duckdb]"` | `pip install "hemonc-alchemy[duckdb]"` |
+| PostgreSQL server | `uv add "hemonc-alchemy[postgres]"` | `pip install "hemonc-alchemy[postgres]"` |
 
-With pip:
-
-```bash
-pip install "hemonc-alchemy[postgres]"
-```
+Then [configure the database](configuration.md) and run the [quickstart](quickstart.md).
 
 ## Work on the repository
 
@@ -20,7 +17,7 @@ pip install "hemonc-alchemy[postgres]"
 uv sync --extra dev
 ```
 
-The `dev` extra adds model-generation tools, tests, linting, and documentation dependencies. It does not need to include Jupyter or plotting libraries.
+Run this command from the repository root. The `dev` extra adds model-generation tools, tests, linting and documentation dependencies.
 
 ## Run the notebooks
 
@@ -36,24 +33,16 @@ uv sync --extra dev --extra exploration
 
 The repository devcontainers install the development, exploration, PostgreSQL, DuckDB, authoring, and OMOP extras together.
 
-## Use DuckDB
-
-```bash
-uv add "hemonc-alchemy[duckdb]"
-```
-
-The extra installs the DuckDB engine and shared oa-configurator/orm-loader backend support. See [Local development](local-development.md) for the independent file-backed workflow and [Upgrading](upgrading.md) for existing applications.
-
 ## Use the OMOP bridge
 
-`omop-alchemy` is intentionally not a runtime dependency. Install the optional extra only for code that resolves HemOnc identifiers against an OMOP vocabulary:
+Add `omop` when resolving HemOnc identifiers against an OMOP vocabulary. For example, with DuckDB:
 
 ```bash
-uv sync --extra omop
+uv add "hemonc-alchemy[duckdb,omop]"
 ```
 
-The bridge shares configuration and loading infrastructure with HemOnc Alchemy, but the two packages keep their models separate.
+When working in this repository, use `uv sync --extra dev --extra omop`. See [OMOP integration](../integrations/omop.md) for vocabulary configuration and query examples.
 
 ## What installation does not provide
 
-Installation does not provide Docker, PostgreSQL, pgAdmin, a HemOnc source extract, or clinical data. Use the [development stack](local-development.md) for a disposable local database.
+Supply a populated HemOnc database or a source extract to import. OMOP queries also need a loaded vocabulary. The [local development guide](local-development.md) covers creating a DuckDB database or running the PostgreSQL Compose stack.

@@ -1,13 +1,16 @@
 # Getting started
 
-There are two separate jobs: install the Python package, then point it at a database that already contains HemOnc data. The package does not download or provision a production extract.
+You need the Python package and a populated HemOnc database. Choose the backend that suits your environment:
 
-The shortest useful route is:
+| Backend | Use it when | Install |
+| --- | --- | --- |
+| DuckDB | You want to query a local database file without a database server. | `hemonc-alchemy[duckdb]` |
+| PostgreSQL | You have a PostgreSQL database or need shared server access. | `hemonc-alchemy[postgres]` |
 
-1. [Install](installation.md) the base package and the PostgreSQL driver.
-2. [Configure](configuration.md) a named database with `omop-config`.
-3. Follow the [quickstart](quickstart.md) to resolve a condition and select variants.
+1. [Install the package](installation.md) with your backend extra.
+2. [Configure a database](configuration.md) containing the HemOnc tables.
+3. Run the [quickstart](quickstart.md) to find treatment variants for a condition.
 
-Use the [local development](local-development.md) guide when you want the disposable Compose stack, pgAdmin, or the repository's notebooks.
+If you need to create a database from a source extract, use the [local development guide](local-development.md) for DuckDB or PostgreSQL, then follow [Loading data](../model/loading.md).
 
-The first conceptual guide to read is [Understanding the HemOnc model](../model/index.md). It explains row grain, source identifiers, versioning, and multi-valued fields—the details that determine whether a query is counting what you think it is counting.
+The [model guide](../model/index.md) explains what each row represents and how identifiers and relationships work. Read it before combining tables or counting records.

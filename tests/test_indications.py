@@ -8,6 +8,7 @@ from dataclasses import replace
 from datetime import UTC, datetime
 from pathlib import Path
 
+import pytest
 import sqlalchemy as sa
 from sqlalchemy.orm import Session
 
@@ -490,3 +491,38 @@ def test_distributions_contain_source_indications_without_proposal_data(tmp_path
         assert not any("/indication_vocabulary/" in name for name in members)
         assert not any(name.startswith("scripts/indication_vocabulary/") for name in members)
         assert members.isdisjoint(forbidden)
+
+
+@pytest.mark.parametrize("raw,expected", [
+    ("TRUE", True), (" true ", True), ("2001-07-06", True),
+    ("FALSE", False), (" false ", False), ("", False), ("  ", False),
+    ("Unclassified marker", True),
+])
+def test_withdrawal_flag_conservatively_excludes_non_false_markers(raw, expected):
+    from hemonc_alchemy.toolkit.core.indications.resolver import _withdrawn
+
+    assert _withdrawn(raw) is expected
+
+
+def test_alemtuzumab_authorisation_and_withdrawal_notice_stay_excluded(monkeypatch):
+    from hemonc_alchemy.toolkit.core.indications import resolver
+
+    original_raw = {
+        "withdrawn": "TRUE", "date": "2001-07-06",
+        "string": "Initial authorisation for CLL.",
+    }
+    notice_raw = {
+        "withdrawn": "2001-07-06", "date": "2012-08-08",
+        "string": "Authorisation withdrawn at the manufacturer's request.",
+    }
+    original = replace(
+        source(), indication_id=1, component="Alemtuzumab", regulator="EMA",
+        condition="Chronic lymphocytic leukemia", withdrawn_raw="TRUE", raw=original_raw,
+    )
+    notice = replace(original, indication_id=2, withdrawn_raw="2001-07-06", raw=notice_raw)
+    monkeypatch.setattr(resolver, "load_indication_sources", lambda session, spec: (original, notice))
+
+    resolved = resolver.resolve_indications(None, normalisers=())
+    assert [item.withdrawn for item in resolved] == [True, True]
+    assert resolved[0].raw == original_raw
+    assert resolved[1].raw == notice_raw

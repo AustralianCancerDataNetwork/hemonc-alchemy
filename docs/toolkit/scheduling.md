@@ -1,26 +1,47 @@
 # Schedules and administration
 
-Scheduling helpers translate the source `alldays` notation into objects that can be inspected or projected into a day-by-day administration view. They do not invent a complete course when the source only specifies part of one.
+Use these helpers to read dosing instructions or calculate a treatment timeline from a variant's sigs. Keep the variant attached to its session while related sigs and drugs are loaded.
 
-## Resolve cycle days
+| Output | Function | Use it for |
+| --- | --- | --- |
+| Parsed cycle days | `resolve_all_days()` | Reading one `alldays` expression. |
+| One instruction per sig | `schedule_events()` | Inspecting source dose, route, phase and cycle fields. |
+| Drug/day DataFrame | `administration_frame()` | Comparing administration patterns by drug and route. |
+| Sig-level timeline DataFrame | `roll_out_variant()` | Following phases and repeated cycles, with dates where timing can be calculated. |
+
+## Read cycle days
 
 ```python
 from hemonc_alchemy import resolve_all_days
 
 resolved = resolve_all_days("1,8,15,(+n)")
-resolved.days       # (Day(1), Day(8), Day(15))
-resolved.indefinite # Indefinite(kind="+n", max_days=None)
+[day.value for day in resolved.days]  # [1, 8, 15]
+resolved.indefinite.kind             # "+n"
 ```
 
-An indefinite marker is preserved. The explicit days are only the portion represented in the source expression; inspect `resolved.indefinite` before treating the list as a complete schedule. Optional days remain marked as optional rather than being silently discarded. Unreadable tokens are reported and dropped according to the parser's documented behavior, so batch analyses should retain parse failures as a data-quality measure.
+The continuation marker means the written days are only part of the course. Optional days carry `Day.optional=True`. Unreadable tokens are logged and dropped; an empty day list can indicate an unresolved schedule.
 
-A `1|2`-style token means "one of these, unspecified which" and is kept in `resolved.choices` rather than expanded into `days`.
+A pipe means a choice of days, with no selected alternative:
 
 ```python
 resolved = resolve_all_days("7|8|9|10|11|12|13|14|15")
-resolved.days     # ()
-resolved.choices  # (Choice([7, 8, 9, 10, 11, 12, 13, 14, 15]),)
+resolved.days                # ()
+resolved.choices[0].options   # [7, 8, 9, 10, 11, 12, 13, 14, 15]
 ```
+
+A numeric continuation such as `(+2)` records an interval of two days in `alldays`, or two cycles in `timing_sequence`. Continuation markers retain the interval without generating future events.
+
+## Inspect dosing instructions
+
+```python
+from hemonc_alchemy.toolkit.analytics.treatment.scheduling import schedule_events
+
+for event in schedule_events(variant):
+    print(event.sig.id, event.dose_min, event.dose_max, event.dose_unit)
+    print(event.cycle_length_lb, event.cycle_length_ub, event.cycle_length_unit)
+```
+
+`ScheduleEvent` retains dose and cycle-length bounds in their source form. For example, a bound containing `"1.5-2"` is text and needs an explicit interpretation before numeric analysis. Generated enum fields are enum members. `raw_all_days` contains the original dosing-day expression.
 
 ## Build an administration frame
 
@@ -32,46 +53,83 @@ from hemonc_alchemy.toolkit.analytics.treatment.scheduling import (
 
 frame = administration_frame(variant, decay_days=0)
 clinic = frame[frame.route_group == "IV"]
-matrix = administration_matrix(frame)
+matrix = administration_matrix(frame, route="IV")
 ```
 
-The frame has one row per drug per explicit cycle day, repeated once per cycle where cross-cycle timing resolves (see `elapsed_day` below). `len(frame)` isn't a count of drug-days as a result -- use `frame["day"].nunique()` per drug for that. `decay_days=0` gives dosing days only; the default decay adds an intensity tail to the following days for occupancy-style views. Decay rows have `intensity < 1` and are not extra doses. Passing a list of variants produces one combined frame, which should be grouped by `variant_cui`, not the human-readable `variant` label.
+The frame combines instructions for the same variant, drug, route and day. Repeated cycles have separate rows where `elapsed_day` can be calculated. Pass a list of variants for a combined frame and group results by `variant_cui`.
 
-In `administration_frame`, `indefinite` marks days continuing beyond the explicit days in `alldays`, while `cycle_indefinite` marks cycles continuing beyond the explicit cycles in `timing_sequence`. These columns preserve separate source markers; neither extends the returned rows.
+| Column | Meaning |
+| --- | --- |
+| `day` | Day within a cycle; lead-in days can be negative. It repeats across cycles. |
+| `elapsed_day` | Day relative to variant start; NULL when that position cannot be calculated. |
+| `route_group` | `IV` groups clinic-administered routes, including some non-intravenous routes; `PO` groups home-administered routes. |
+| `intensity` | Projection weight for the day, including optional-day weighting and any decay tail. |
+| `optional` | Whether the dosing day or cycle is optional. |
+| `indefinite`, `cycle_indefinite` | Continuation markers for days and cycles respectively. They do not extend the returned rows. |
+| `timing_status` | Whether timing was calculated, assumed or unresolved. |
 
-`route_group == "IV"` is a historical shorthand for clinic-administered routes and includes more than intravenous administration. `"PO"` represents home-administered routes. Unrecognized or unspecified routes are excluded from administration projections rather than guessed at, so the frame may cover less than the source variant.
+`decay_days=0` returns dosing rows without a decay tail. The default adds two days of decreasing intensity after each dose. These extra rows represent a projection, not extra administrations, and intensity is not a dose amount. Overlapping rows keep the highest intensity.
 
-## Preserve source-shaped values
+Rows without a recognized route group or a resolved drug are excluded. A day choice with a resolved drug and route remains as a row with `day` NULL and an unresolved status. The frame can therefore cover only part of a variant's instructions.
 
-`ScheduleEvent` keeps fields such as dose and cycle-length bounds in their source form. A value like `"1.5-2"` needs an application decision before it becomes numeric. Generated enum fields remain enum members. Convert these values at the boundary where your application can state its handling of null, uncertain, or non-numeric source values.
+`administration_matrix()` pivots the frame by drug and cycle-local `day`, taking the highest intensity across matching rows. It combines repeated cycles and omits days with no entries. Use the timeline below when individual cycles or dates matter.
 
-## Roll out a complete variant timeline
-
-`roll_out_variant` composes explicit cycle numbers, block-specific cycle lengths, and phase boundaries into a deterministic treatment timeline:
+## Calculate a treatment timeline
 
 ```python
 from datetime import date
-
 from hemonc_alchemy.toolkit.analytics.treatment.scheduling import roll_out_variant
 
-timeline = roll_out_variant(variant)
-timeline[["sig_id", "component", "phase", "cycle_number", "day", "phase_elapsed_day", "elapsed_day", "timing_status"]]
+timeline = roll_out_variant(variant, start_date=date(2026, 1, 1), decay_days=0)
+timeline[["sig_id", "phase", "cycle_number", "day", "elapsed_day", "calendar_date", "timing_status"]]
 ```
 
-`elapsed_day` is an integer relative to variant start, where day 0 is the variant start. `phase_elapsed_day` is relative to the start of each phase, with day 0 at that phase's first explicit cycle. When a missing surgery or another unresolved boundary makes the variant-relative date unknown, `elapsed_day` and `calendar_date` stay null while `phase_elapsed_day` retains the within-phase timing where it can be calculated. An unresolved block within the phase also has a null `phase_elapsed_day`. Pass `start_date` to receive known `calendar_date` values as timezone-free `datetime.date` objects:
+### Days and dates
 
-```python
-timeline = roll_out_variant(variant, start_date=date(2026, 1, 1))
-```
+| Column | Meaning |
+| --- | --- |
+| `day` | Day within the cycle, using the source notation. |
+| `phase_elapsed_day` | Zero-based day relative to the phase's first explicit cycle. |
+| `elapsed_day` | Zero-based day relative to variant start. |
+| `calendar_date` | A timezone-free `datetime.date`, when `start_date` is supplied and timing can be calculated. |
 
-Blocks with adjacent cycle-number ranges are anchored sequentially. Blocks with overlapping cycle numbers share the relevant anchor, while genuinely ambiguous source timing remains visible in `timing_status`. When differing cycle lengths overlap across more than one shared cycle, the later block is unresolved. When blocks ending the preceding cycle differ in cycle length, the following block is unresolved. A phase can continue cycle numbering from its predecessor when its first cycle immediately follows the predecessor's last cycle. Phases are ordered by their own `phase_step`, the same rule for every label -- a missing or tied step is `"unresolved: ..."`. The status is otherwise `"resolved"`, or `"resolved_via_fallback: ..."` where an optional cycle was assumed given (below).
+For example, two 21-day cycles with doses on days 1 and 8 produce:
 
-Unresolved phase ordering leaves every date in the variant null. A gap in explicit `phase_step` values leaves dates null from the later phase onward. Optional cycles are counted as given and marked `optional=True`; dates from the first optional cycle and every later phase carry a `resolved_via_fallback` status.
+| Cycle | `day` | `elapsed_day` | Date for a 1 January 2026 start |
+| --- | --- | --- | --- |
+| 1 | 1 | 0 | 1 January |
+| 1 | 8 | 7 | 8 January |
+| 2 | 1 | 21 | 22 January |
+| 2 | 8 | 28 | 29 January |
 
-Each rollout row includes `sig_id` (the source `Sigs.id`), `timing_sequence`, `cycle_length_lb`, `cycle_length_ub`, `cycle_length_unit`, and the `cycle_length_selection` used for this rollout. These fields identify the sig and its cycle definition when a later consumer can supply a missing phase duration. With `start_date`, a phase containing calendar-month or calendar-year cycles has null phase-relative offsets if its actual start date is unknown, since the number of days depends on that date. Without `start_date`, the existing 30-day month and 365-day year approximations apply.
+If an earlier phase has an unknown duration, variant-relative days and dates remain NULL. Phase-relative days can still be available for a later phase whose internal timing is known. An unresolved block also has a NULL phase-relative day.
 
-The timeline includes `modality` (`"systemic"`, `"radiation"`, or null for an unclassified sig), plus the source `component` and `component_cui`. Radiation rows can have a null `drug`. Pass `systemic_only=True` to omit radiation rows from the result; radiation phases still contribute to the timing of later phases. The timeline's `day_indefinite` and `cycle_indefinite` columns distinguish continuing days within a cycle from continuing cycles.
+With `start_date`, month and year cycles use calendar arithmetic. If a phase's start date is unknown, their phase-relative offsets are also NULL. Without `start_date`, calculations use 30-day months and 365-day years.
 
-`administration_frame` retains its cycle-local `day` column and adds `elapsed_day` and `timing_status`. It combines sigs for the same drug and day, so use `roll_out_variant` when phase-relative timing or sig identity is needed. Variants without resolvable cycle metadata still produce explicitly resolvable administration rows, with a null `elapsed_day` and an unresolved status rather than an invented calendar position. Numeric `(+k)` means continuation every k cycles in `timing_sequence` or every k days in `alldays`; the interval is retained without sampling future events. A continuing cycle marker prevents dates from being chained into a later phase.
+### Timing rules and status
 
-A component whose only timing is a `Choice` (e.g. 131Iodine-Tositumomab's dosimetry-driven "day 7-15, one of these") still appears in both `roll_out_variant` and `administration_frame`, with `day` null and `timing_status` reading `"unresolved: choice of days ..."` -- it is not silently omitted just because none of its alternatives was picked.
+Phases are ordered by `phase_step`. Cycle blocks within them are placed using their cycle numbers and cycle lengths:
+
+| Source timing | Result |
+| --- | --- |
+| Adjacent cycle ranges | The following block starts after the preceding block. |
+| Overlapping cycle numbers | Blocks share a cycle anchor. Different lengths overlapping across more than one shared cycle leave the later block unresolved. |
+| Several preceding blocks end together with different cycle lengths | The following block is unresolved. |
+| A phase continues immediately after its predecessor's last cycle number | Cycle numbering continues into that phase. |
+| A continuing-cycle marker has no finite end | A later phase cannot be placed from that marker. |
+
+| `timing_status` | Meaning |
+| --- | --- |
+| `resolved` | Timing could be calculated. |
+| `resolved_via_fallback: ...` | Timing uses a stated assumption. Optional cycles are assumed given. |
+| `unresolved: ...` | Required timing is missing or ambiguous; the message gives the reason. |
+
+Missing or tied phase steps leave all variant-relative dates NULL. A gap in phase steps leaves dates NULL from the later phase onward. From the first optional cycle, and in later phases, status records the assumption that optional cycles were given.
+
+A choice-only instruction, such as one dose on a day between 7 and 15, remains in the result with `day` NULL and an `unresolved: choice of days ...` status. No alternative is selected automatically.
+
+### Components and source fields
+
+Timeline rows include `sig_id`, `component`, `component_cui`, `phase`, `timing_sequence` and the cycle-length bounds, unit and selection used for the calculation. Use these fields to trace a row back to its instruction. `day_indefinite` and `cycle_indefinite` retain separate day and cycle continuation markers.
+
+`modality` is `systemic`, `radiation`, or NULL for an unclassified sig. Radiation rows can have no resolved drug. Pass `systemic_only=True` to omit radiation rows from the output; their phases still contribute to subsequent timing.

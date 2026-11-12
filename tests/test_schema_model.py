@@ -249,6 +249,37 @@ class TestNaturalKeyPolicy:
         assert meta.natural_key_has_duplicates is True
         assert meta.uses_surrogate_pk is True
 
+    @pytest.mark.parametrize("missing", [None, "", "TBA", "pending"])
+    def test_sparse_composite_key_detects_repeated_rows(self, missing):
+        meta = TableMeta(
+            name="lookup_values",
+            description="",
+            kind="lookup",
+            maturity="prod",
+            pk_columns=["name", "value_cui"],
+        )
+        meta.finalise_from_data(
+            pd.DataFrame({"name": ["first", "first", "second"], "value_cui": [missing, missing, "2"]})
+        )
+
+        assert meta.natural_key_has_duplicates is True
+        assert meta.natural_key_is_usable is False
+        assert meta.uses_surrogate_pk is True
+
+    def test_identifier_placeholders_share_a_missing_key_value(self):
+        meta = TableMeta(
+            name="lookup_values",
+            description="",
+            kind="lookup",
+            maturity="prod",
+            pk_columns=["name", "value_cui"],
+        )
+        meta.finalise_from_data(
+            pd.DataFrame({"name": ["same", "same"], "value_cui": ["TBA", "pending"]})
+        )
+
+        assert meta.natural_key_has_duplicates is True
+
     def test_complete_lookup_key_remains_the_database_key(self):
         meta = TableMeta(
             name="lookup_values",
@@ -475,3 +506,18 @@ def test_enum_rendering_escapes_multiline_values():
 
 if __name__ == "__main__":
     pytest.main([__file__])
+
+
+@pytest.mark.parametrize("column", [
+    "metric_num_this_arm", "metric_num_that_arm", "total_pubs",
+    "prop_valid_aff_country", "prop_valid_aff_region", "prop_valid_aff_city", "prop_valid_aff_site",
+])
+def test_source_measurements_are_not_inferred_to_be_derived(column):
+    table = TableMeta(name="example", description="", kind="content", maturity="prod", pk_columns=["id"])
+    table.enrich_field_metadata(pd.DataFrame({
+        "Variable": [column], "Type": ["String"],
+        "Multiple values allowed": ["No"], "Allowed values/format": ["Any"],
+    }))
+    assert column in table.columns
+    assert column not in table.derived_columns
+    assert f"{column}: Mapped" in table.table_class(Registry(tables={"example": table}))

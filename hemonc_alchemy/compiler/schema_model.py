@@ -572,9 +572,6 @@ class TableMeta:
             if is_multi and "html" not in col_name and col_name not in self.pk_columns and "alldays" not in col_name:
                 self.denormalised_columns.append(col_name)
 
-            if "valid" in col_name or "count_" in col_name or "total" in col_name or "num_" in col_name:
-                self.derived_columns.append(col_name)
-
         return enriched_columns
 
     def finalise_from_data(self, df_data: pd.DataFrame | None) -> None:
@@ -655,8 +652,7 @@ class TableMeta:
             key_frame = df_data[self.pk_columns].copy()
             for column in self.pk_columns:
                 key_frame[column] = _clean_identifier_placeholders(key_frame[column], column)
-            complete_keys = key_frame.loc[~key_frame.isna().any(axis=1)]
-            self.natural_key_has_duplicates = bool(complete_keys.duplicated().any())
+            self.natural_key_has_duplicates = bool(key_frame.duplicated().any())
 
         self.normalised_tables = [
             NormalisedTable(parent=self.name, column=c) for c in self.denormalised_columns

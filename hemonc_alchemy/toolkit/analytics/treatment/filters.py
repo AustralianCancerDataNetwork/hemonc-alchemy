@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 
 from ....model import Sigs, Studies, sigs_StudyMap
 from ....model.enums import Sigs_Class_fieldEnum
+from ....model.relationships import join_study_references
 from ....toolkit.core.sigs import SigSelectionSpec, sig_search_statement
 
 
@@ -47,9 +48,11 @@ def studies_with_standalone_radiation_sigs_statement(
     distinctness applies to entity IDs rather than source study names.
     """
     return (
-        select(Studies.id)
-        .join(sigs_StudyMap, sigs_StudyMap.study == Studies.study)
-        .join(Sigs, Sigs.id == sigs_StudyMap.parent_id)
+        join_study_references(
+            select(Studies.id).select_from(Sigs)
+            .join(sigs_StudyMap, sigs_StudyMap.parent_id == Sigs.id),
+            sigs_StudyMap.study,
+        )
         .where(
             Studies.condition_cui.in_(_condition_cuis(condition_cuis)),
             Sigs.class_field == Sigs_Class_fieldEnum.RAD_SIG,

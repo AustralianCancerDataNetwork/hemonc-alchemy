@@ -1,56 +1,29 @@
 # HemOnc Alchemy
 
-HemOnc Alchemy is the Python boundary around an imported HemOnc.org terminology database. It gives research and application code typed SQLAlchemy models, reusable queries, and a small set of treatment interpretations without making either side parse source spreadsheets or maintain a second copy of the terminology.
+HemOnc Alchemy provides Python tools for querying HemOnc.org treatment data. It includes SQLAlchemy models, condition and component searches, regimen selection, dosing schedules, and optional OMOP vocabulary queries.
 
-## The mental model
+Use a local DuckDB file or a PostgreSQL database containing the HemOnc tables. Install the driver for your chosen backend and configure the database before running queries. The package includes the model and loader; HemOnc source data and OMOP vocabulary data are supplied separately.
 
-The package has three layers:
+## Get started
 
-```mermaid
-flowchart LR
-    Extracts[HemOnc extracts] --> Loader[Loader]
-    Loader --> Model[Generated SQLAlchemy model]
-    Model --> Toolkit[Core and treatment toolkit]
-    Toolkit --> Application[Your analysis or application]
-```
+1. [Install](getting-started/installation.md) with the DuckDB or PostgreSQL extra.
+2. [Configure your database](getting-started/configuration.md).
+3. Follow the [quickstart](getting-started/quickstart.md) to find treatment variants for a condition.
 
-The generated model describes what was loaded. The core toolkit helps you navigate that model. The treatment toolkit adds explicit clinical or operational policy, such as what counts as a category or how to identify a standalone radiation sig. Your application still owns cohort definitions, local protocol policy, OMOP mappings, and presentation.
+To create and load a development database, follow [Local development](getting-started/local-development.md).
 
-That separation is the most important design decision in the project. If a question is about the source tables, use the model or `toolkit.core`. If it requires an interpretation of treatment, use `toolkit.analytics.treatment`. If it is specific to a consumer, keep it outside the package.
+## Find the right guide
 
-## Start with the row grain
+| Task | Guide |
+| --- | --- |
+| Understand tables, identifiers and relationships | [The HemOnc model](model/index.md) |
+| Find conditions, components and linked records | [Core queries](toolkit/core.md) |
+| Select or classify treatment variants | [Treatment analytics](toolkit/treatment.md) |
+| Read dosing days or build a treatment timeline | [Schedules and administration](toolkit/scheduling.md) |
+| Resolve HemOnc identifiers through OMOP vocabulary | [OMOP integration](integrations/omop.md) |
 
-Most analysis errors come from counting the wrong thing. The common grains are:
-
-| Entity | One row represents |
-|---|---|
-| `Conditions` | A HemOnc condition and condition CUI |
-| `Regimens` | A named regimen |
-| `Variants` | A concrete, versioned regimen variant |
-| `Sigs` | One dosing instruction within a variant |
-| `Drugs` | A treatment component or drug identity |
-| `Indications` | A drug/condition regulatory indication and its metadata |
-| `Studies` | A source-study row associated with HemOnc content |
-| `StudyResults` | A recorded study outcome |
-
-A variant has many sigs. A study name can occur in several `Studies` rows. A CUI can have multiple imported versions. Decide the unit of analysis before writing a count or join.
-
-## Keep identifiers separate
-
-HemOnc CUIs are source identifiers. Database rows may also have generated surrogate primary keys. OMOP `concept_id` is a different identifier again. A CUI may be used as `concept_code` in the registered HemOnc OMOP vocabulary, but it is not itself an OMOP `concept_id`.
-
-`Variants` has the natural key `(variant_cui, version)`. A latest-version query is a policy choice, not a property of the CUI. `Sigs` currently link to variants through `variant_cui` without a version, so a sig relationship cannot prove version-specific provenance.
-
-## Choose a path
-
-- [Get started](getting-started/index.md) when you need an environment and a session.
-- [Understand the model](model/index.md) before writing joins or aggregations.
-- [Use the toolkit](toolkit/index.md) for condition lookup, component search, treatment selection, and schedule projections.
-- [Read the API reference](reference/index.md) when you already know which boundary you need.
-- [Regenerate the model](maintainers/regeneration.md) only when maintaining the schema or generated code.
-
-The local development stack is optional. HemOnc Alchemy expects a reachable PostgreSQL database containing the generated schema; it does not provision production data.
+When counting results, check what each row represents. For example, one regimen can have several variants, each with several dosing instructions. A study name can also occur in several condition-specific rows. See [Entities and generated models](model/entities.md) for identifiers and [Relationships](model/relationships.md) for study and version-selection rules.
 
 ## Project status
 
-The generated model follows the current HemOnc data dictionary. The toolkit area packages are the stable conceptual boundary for application code; lower-level generated surfaces and compiler modules are implementation or maintenance interfaces.
+HemOnc Alchemy is pre-1.0. APIs and generated schemas may change without a compatibility layer or a migration path.

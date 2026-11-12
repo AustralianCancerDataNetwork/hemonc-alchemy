@@ -16,11 +16,19 @@ here rather than declared in entities.py, they only exist once
 
 from __future__ import annotations
 
-from sqlalchemy import or_, select, union_all
+from sqlalchemy import and_, exists, literal, or_, select, union_all
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import foreign, relationship
 
-from .entities import Conditions, Drugs, Sigs, Studies, Variants, variants_StudyMap
+from .entities import (
+    Conditions,
+    Drugs,
+    Sigs,
+    Studies,
+    StudyResults,
+    Variants,
+    variants_StudyMap,
+)
 
 
 def dedupe_by(items, key_fn):
@@ -66,7 +74,7 @@ Drugs.sigs = relationship(
 
 Sigs.variant_object = relationship(
     Variants,
-    primaryjoin=foreign(Sigs.variant_cui) == Variants.variant_cui,
+    primaryjoin=and_(foreign(Sigs.variant_cui) == Variants.variant_cui, Variants.version == 1),
     viewonly=True,
     lazy="select",
 )
@@ -105,15 +113,40 @@ def join_mapped_studies(statement):
     The relationship's OR condition stops PostgreSQL hashing or indexing the
     join, so it compares every map row with every study.
     """
+    return join_study_references(statement, variants_StudyMap.study)
+
+
+def join_study_references(statement, study_column):
+    """Resolve bare or study--substudy tokens using hashable equality joins."""
     keys = union_all(
         select(Studies.id.label("study_id"), Studies.study.label("study_key")),
         select(Studies.id, Studies.study + "--" + Studies.substudy).where(
             Studies.substudy.is_not(None)
         ),
     ).subquery("study_keys")
-    return statement.join(keys, keys.c.study_key == variants_StudyMap.study).join(
+    return statement.join(keys, keys.c.study_key == study_column).join(
         Studies, Studies.id == keys.c.study_id
     )
+
+
+def study_context_predicate(context):
+    """Match a result's study identity and its substudy/condition/biomarker grain."""
+    context_matches = StudyResults.context == context
+    if context is not None and "|" not in context:
+        delimited_contexts = literal("|") + StudyResults.context + literal("|")
+        context_matches = or_(
+            context_matches, delimited_contexts.contains(f"|{context}|", autoescape=True),
+        )
+    return exists(select(1).where(
+        or_(
+            StudyResults.study_cui == Studies.study_cui,
+            and_(StudyResults.study_cui.is_(None), StudyResults.study == Studies.study),
+        ),
+        StudyResults.substudy_cui.is_not_distinct_from(Studies.substudy_cui),
+        StudyResults.condition_cui.is_not_distinct_from(Studies.condition_cui),
+        StudyResults.biomarker_finding.is_not_distinct_from(Studies.biomarker_finding),
+        context_matches,
+    ))
 
 
 variants_StudyMap.variant_objects = relationship(
@@ -126,7 +159,10 @@ variants_StudyMap.variant_objects = relationship(
 Studies.variants = relationship(
     Variants,
     secondary=variants_StudyMap.__table__,
-    primaryjoin=foreign(variants_StudyMap.study) == Studies.study,
+    primaryjoin=or_(
+        foreign(variants_StudyMap.study) == Studies.study,
+        foreign(variants_StudyMap.study) == Studies.study + "--" + Studies.substudy,
+    ),
     secondaryjoin=foreign(variants_StudyMap.parent_id) == Variants.id,
     viewonly=True,
     lazy="selectin",

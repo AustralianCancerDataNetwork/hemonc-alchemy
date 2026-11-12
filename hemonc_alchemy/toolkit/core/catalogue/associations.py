@@ -2,19 +2,18 @@
 
 from dataclasses import replace
 
-from sqlalchemy import Integer, cast, exists, literal, select, union_all
+from sqlalchemy import Integer, cast, literal, select, union_all
 
 from ....model import (
     Conditions,
     Indications,
     Regimens,
     Studies,
-    StudyResults,
     Variants,
     indications_Regimen_cuiMap,
     variants_StudyMap,
 )
-from ....model.relationships import join_mapped_studies
+from ....model.relationships import join_mapped_studies, study_context_predicate
 from .specs import DEFAULT_CATALOGUE_SPEC, CatalogueSpec
 from .variants import variant_identity_statement
 
@@ -44,12 +43,7 @@ def study_association_statement(spec: CatalogueSpec):
         statement = statement.where(Studies.condition_cui.in_(spec.condition_cuis))
     if spec.study_context is not None:
         statement = statement.where(
-            exists(
-                select(1).where(
-                    StudyResults.study == Studies.study,
-                    StudyResults.context == spec.study_context,
-                )
-            )
+            study_context_predicate(spec.study_context)
         )
     return statement.distinct()
 

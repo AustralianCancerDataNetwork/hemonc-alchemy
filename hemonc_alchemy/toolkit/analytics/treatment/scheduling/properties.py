@@ -23,6 +23,7 @@ their own.
 
 from __future__ import annotations
 
+import logging
 from collections import defaultdict
 from dataclasses import dataclass
 from typing import Any
@@ -34,12 +35,14 @@ from .....model.enums import (
     Sigs_FrequencyEnum,
     Sigs_PhaseEnum,
 )
+from .diagnostics import diagnose_drug_components
 from .handling import Day, Indefinite, resolve_all_days
 from .routes import route_group
 from .tokens import Choice
 
 DEFAULT_DECAY_DAYS = 2
 DEFAULT_DECAY_FACTOR = 0.5
+logger = logging.getLogger(__name__)
 
 _FRAME_COLUMNS = [
     "variant_cui",
@@ -113,21 +116,27 @@ def schedule_events(variant) -> list[ScheduleEvent]:
     return events
 
 
+def _drug_events(variant, group: str) -> list[ScheduleEvent]:
+    """Select routed drug events and report unresolved components."""
+    events = [event for event in schedule_events(variant) if event.route_group == group]
+    for diagnostic in diagnose_drug_components(event.sig for event in events):
+        logger.warning(diagnostic.message)
+    return [event for event in events if event.drug_object is not None]
+
+
 def _drugs_where(variant, group: str) -> list:
     drugs = {}
-    for event in schedule_events(variant):
+    for event in _drug_events(variant, group):
         drug = event.drug_object
-        if event.route_group == group and drug is not None:
-            drugs[drug.drug_cui] = drug
+        drugs[drug.drug_cui] = drug
     return list(drugs.values())
 
 
 def _sigs_by_drug_where(variant, group: str) -> dict:
     out = defaultdict(list)
-    for event in schedule_events(variant):
+    for event in _drug_events(variant, group):
         drug = event.drug_object
-        if event.route_group == group and drug is not None:
-            out[drug].append(event.sig)
+        out[drug].append(event.sig)
     return dict(out)
 
 

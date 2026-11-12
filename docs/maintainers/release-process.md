@@ -35,7 +35,7 @@ When a labelled PR is squash-merged, `merge.yml` updates the standing draft rele
 
 A maintainer reviews and publishes the draft from GitHub's Releases page. Publishing creates a `vX.Y.Z` tag on `main`; that tag is the only event that starts package publication.
 
-Before publishing the DuckDB-capable release, require the recorded full-extract parity gate, installed-wheel checks, and downstream PostgreSQL smoke results. Schema-role adoption is a breaking public contract for raw-engine callers, so the `breaking` label applies under the version policy above. Link the [upgrade guide](../getting-started/upgrading.md) from the release notes. Update downstream exact pins only after the distribution is available from PyPI.
+The shared workflow's label-to-version rules also apply while this package is pre-1.0. In particular, `breaking` selects a major bump; review the proposed version before publishing. API and schema compatibility are not pre-1.0 release requirements.
 
 ## Package publication
 

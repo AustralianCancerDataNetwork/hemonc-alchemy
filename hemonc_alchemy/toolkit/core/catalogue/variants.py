@@ -2,8 +2,8 @@
 
 from sqlalchemy import exists, func, or_, select
 
-from ....model import Sigs, Studies, StudyResults, Variants, variants_StudyMap
-from ....model.relationships import join_mapped_studies
+from ....model import Sigs, Studies, Variants, variants_StudyMap
+from ....model.relationships import join_mapped_studies, study_context_predicate
 from ._queries import paginate, search_predicate
 from .read_models import VariantRecord
 from .specs import DEFAULT_CATALOGUE_SPEC, DEFAULT_PAGINATION, CatalogueSpec, Pagination
@@ -53,12 +53,7 @@ def variant_identity_statement(spec: CatalogueSpec):
             evidence = evidence.where(Studies.condition_cui.in_(spec.condition_cuis))
         if spec.study_context is not None:
             evidence = evidence.where(
-                exists(
-                    select(1).where(
-                        StudyResults.study == Studies.study,
-                        StudyResults.context == spec.study_context,
-                    )
-                )
+                study_context_predicate(spec.study_context)
             )
         statement = statement.where(exists(evidence))
     return statement

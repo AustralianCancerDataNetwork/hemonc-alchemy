@@ -1,42 +1,36 @@
 # Toolkit
 
-The toolkit is the application-facing layer above the generated model. Its useful distinction is not “which helper exists,” but “who owns the meaning of this query?”
+The toolkit provides searches, treatment selection and schedule calculations over the imported HemOnc tables. Query functions accept a SQLAlchemy session; scheduling functions work with the selected variants and their sigs.
 
-## Choose the boundary
+## Choose an operation
 
-| Question | Boundary |
-|---|---|
-| What conditions, drugs, studies, or sigs are linked in HemOnc? | `toolkit.core` |
-| Which variants satisfy component or category requirements? | Treatment selection |
-| Is a variant radiation-only, concurrent chemoradiotherapy, or otherwise classified? | Treatment classification |
-| Which days and routes does a sig imply? | Scheduling |
-| What does this consumer call a modality, bundle, or eligible cohort? | Your application |
+| Task | Functions and examples |
+| --- | --- |
+| Resolve condition names or search components | [Core queries](core.md) |
+| Follow links between sigs, studies, conditions and variants | [Traversal helpers](../model/relationships.md#traversal-helpers) |
+| Select variants by condition, component or category | [Treatment selection](treatment.md#select-variants) |
+| Classify radiation, systemic or drug-ancestry groups | [Treatment classification](treatment.md) |
+| Read dosing days, build administration frames or calculate timelines | [Scheduling](scheduling.md) |
 
-Core operations describe the source model. Treatment analytics encode reusable oncology meaning. Consumer-specific policy should be translated into toolkit specifications or kept in the consuming application rather than added to the generated model.
+## Run a query or build a statement
 
-## Statements versus execution
-
-Many toolkit operations have two forms:
-
-- a statement builder that returns inspectable SQLAlchemy `Select` objects;
-- an execution helper that accepts your `Session` and returns ORM rows or read models.
-
-This is intentional. The toolkit does not hide joins, choose your transaction boundary, or force a pandas representation. Build a statement when you need to add predicates, inspect SQL, or compose it into a larger query.
-
-## Dependency direction
-
-```mermaid
-flowchart TD
-    Model[hemonc_alchemy.model] --> Core[toolkit.core]
-    Core --> Treatment[toolkit.analytics.treatment]
-    Treatment --> Consumer[Downstream applications]
-```
-
-Import from an area package at the application boundary:
+Execution helpers run a query using your session and return results:
 
 ```python
 from hemonc_alchemy.toolkit.core.components import search_components
-from hemonc_alchemy.toolkit.analytics.treatment.selection import select_variants
+
+hits = search_components(session, "cisplatin")
 ```
 
-The generated model and lower-level compiler modules remain available for structural work and maintenance, but they are not substitutes for the toolkit's explicit policies.
+Statement builders return a SQLAlchemy statement that you can extend before execution:
+
+```python
+from hemonc_alchemy.toolkit.core.components import component_search_statement
+
+statement = component_search_statement("cisplatin").limit(20)
+rows = session.execute(statement).mappings().all()
+```
+
+Return types vary by operation: searches can return result records, selection helpers return ORM entities, and schedule projections return pandas DataFrames. Each guide shows how to read its results.
+
+Keep ORM entities attached to their session while accessing related rows. See [Configuration](../getting-started/configuration.md#open-a-session) for creating an engine and session.
