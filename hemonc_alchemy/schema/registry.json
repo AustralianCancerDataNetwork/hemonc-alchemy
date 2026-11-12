@@ -1562,7 +1562,7 @@
       "kind": "lookup",
       "maturity": "prod",
       "name": "hemonc_classes",
-      "natural_key_has_duplicates": false,
+      "natural_key_has_duplicates": true,
       "normalisation_groups": [],
       "normalised_tables": [
         {
@@ -2580,9 +2580,7 @@
         "study_groups",
         "study_sponsors"
       ],
-      "derived_columns": [
-        "total_pubs"
-      ],
+      "derived_columns": [],
       "description": "Table of persons who have authored studies and/or guidelines included on HemOnc.org",
       "enums": {
         "gender": {
@@ -2890,12 +2888,7 @@
       "denormalised_columns": [
         "title"
       ],
-      "derived_columns": [
-        "prop_valid_aff_city",
-        "prop_valid_aff_country",
-        "prop_valid_aff_region",
-        "prop_valid_aff_site"
-      ],
+      "derived_columns": [],
       "description": "Table of published references included on HemOnc.org",
       "enums": {
         "ref_type": {
@@ -2927,7 +2920,7 @@
       "kind": "content",
       "maturity": "prod",
       "name": "refs",
-      "natural_key_has_duplicates": false,
+      "natural_key_has_duplicates": true,
       "normalisation_groups": [],
       "normalised_tables": [
         {
@@ -3736,7 +3729,7 @@
       "kind": "content",
       "maturity": "prod-",
       "name": "sigs",
-      "natural_key_has_duplicates": false,
+      "natural_key_has_duplicates": true,
       "normalisation_groups": [],
       "normalised_tables": [
         {
@@ -4106,7 +4099,7 @@
       "kind": "content",
       "maturity": "prod-",
       "name": "studies",
-      "natural_key_has_duplicates": false,
+      "natural_key_has_duplicates": true,
       "normalisation_groups": [],
       "normalised_tables": [
         {
@@ -4442,10 +4435,7 @@
       "denormalised_columns": [
         "comparator_code"
       ],
-      "derived_columns": [
-        "metric_num_that_arm",
-        "metric_num_this_arm"
-      ],
+      "derived_columns": [],
       "description": "Results of clinical trials by arm",
       "enums": {
         "arm_type": {
@@ -4556,7 +4546,7 @@
       "kind": "content",
       "maturity": "prod-",
       "name": "study_results",
-      "natural_key_has_duplicates": false,
+      "natural_key_has_duplicates": true,
       "normalisation_groups": [],
       "normalised_tables": [
         {

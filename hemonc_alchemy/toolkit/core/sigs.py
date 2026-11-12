@@ -14,12 +14,12 @@ from ...model import (
     Drugs,
     Sigs,
     Studies,
-    StudyResults,
     drugs_Canmed_major_classMap,
     drugs_Canmed_minor_classMap,
     sigs_StudyMap,
 )
 from ...model.enums import Sigs_Class_fieldEnum, Sigs_PhaseEnum
+from ...model.relationships import join_study_references, study_context_predicate
 from .coercion import coerce_enum_value
 from .components import COMPONENT_SEARCH_COLUMNS, COMPONENT_SEARCH_EXPRESSIONS
 
@@ -142,10 +142,11 @@ def sig_search_statement(spec: SigSelectionSpec) -> Select:
     """
 
     stmt = (
-        select(Sigs)
-        .select_from(Sigs)
-        .join(sigs_StudyMap, sigs_StudyMap.parent_id == Sigs.id)
-        .join(Studies, Studies.study == sigs_StudyMap.study)
+        join_study_references(
+            select(Sigs).select_from(Sigs)
+            .join(sigs_StudyMap, sigs_StudyMap.parent_id == Sigs.id),
+            sigs_StudyMap.study,
+        )
         .where(Studies.condition_cui.in_(spec.condition_cuis))
     )
 
@@ -182,12 +183,7 @@ def sig_search_statement(spec: SigSelectionSpec) -> Select:
         stmt = stmt.where(Sigs.variant_cui.is_(None))
     if spec.study_context is not None:
         stmt = stmt.where(
-            sa.exists(
-                select(1).where(
-                    StudyResults.study == Studies.study,
-                    StudyResults.context == spec.study_context,
-                )
-            )
+            study_context_predicate(spec.study_context)
         )
 
     return stmt.distinct()

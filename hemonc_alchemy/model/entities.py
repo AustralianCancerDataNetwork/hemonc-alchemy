@@ -1052,7 +1052,7 @@ class Persons(EntityBase, Base):
     source_defined_keys: list[str] = []
     identity_keys: list[str] = ['person_cui']
     denormalised_columns: list[str] = ['condition_types', 'conditions', 'country', 'location', 'orcid', 'site', 'study_groups', 'study_sponsors']
-    derived_columns: list[str] = ['total_pubs']
+    derived_columns: list[str] = []
 
     enum_lookup: dict[str, type] = {
         'gender': Persons_GenderEnum,
@@ -1076,6 +1076,7 @@ class Persons(EntityBase, Base):
     pivotal_studies: Mapped[str] = mapped_column(String(255), nullable=False)
     senior_pubs: Mapped[int] = mapped_column(BigInteger, nullable=False)
     temp: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    total_pubs: Mapped[int] = mapped_column(BigInteger, nullable=False)
     vital_status: Mapped[int] = mapped_column(BigInteger, nullable=False)
 
     normalisation_groups: list[list[str]] = [
@@ -1170,7 +1171,7 @@ class Refs(EntityBase, Base):
     source_defined_keys: list[str] = []
     identity_keys: list[str] = []
     denormalised_columns: list[str] = ['title']
-    derived_columns: list[str] = ['prop_valid_aff_city', 'prop_valid_aff_country', 'prop_valid_aff_region', 'prop_valid_aff_site']
+    derived_columns: list[str] = []
 
     enum_lookup: dict[str, type] = {
         'ref_type': Refs_Ref_typeEnum,
@@ -1190,6 +1191,10 @@ class Refs(EntityBase, Base):
     journal_cui: Mapped[Optional[int]] = mapped_column(BigInteger, nullable=True)
     pmcid: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     pmid: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    prop_valid_aff_city: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    prop_valid_aff_country: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    prop_valid_aff_region: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    prop_valid_aff_site: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     pub_date: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     ref_type: Mapped[str] = mapped_column(String(255), nullable=False)
     reference: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -1543,7 +1548,7 @@ class StudyResults(EntityBase, Base):
     source_defined_keys: list[str] = []
     identity_keys: list[str] = []
     denormalised_columns: list[str] = ['comparator_code']
-    derived_columns: list[str] = ['metric_num_that_arm', 'metric_num_this_arm']
+    derived_columns: list[str] = []
 
     enum_lookup: dict[str, type] = {
         'arm_type': StudyResults_Arm_typeEnum,
@@ -1581,6 +1586,8 @@ class StudyResults(EntityBase, Base):
     metric: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     metric_ci: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     metric_lb: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    metric_num_that_arm: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    metric_num_this_arm: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     metric_ub: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     metric_unit: Mapped[Optional[StudyResults_Metric_unitEnum]] = mapped_column(hemonc_enum(StudyResults_Metric_unitEnum), nullable=True)
     metric_version: Mapped[Optional[int]] = mapped_column(BigInteger, nullable=True)

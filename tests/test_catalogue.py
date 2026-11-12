@@ -25,9 +25,9 @@ TABLES = {
     "regimens": "id INTEGER, regimen_cui BIGINT, regimen_name TEXT, regimen_type TEXT",
     "variants": "id INTEGER, variant_cui BIGINT, version INTEGER, regimen_cui BIGINT, regimen TEXT, variant TEXT, fullyspecified BOOLEAN",
     "sigs": "id INTEGER, variant_cui BIGINT, component TEXT",
-    "studies": "id INTEGER, study TEXT, condition_cui BIGINT, substudy TEXT",
+    "studies": "id INTEGER, study TEXT, condition_cui BIGINT, substudy TEXT, study_cui BIGINT, substudy_cui BIGINT, biomarker_finding TEXT",
     "variants_study": "parent_id INTEGER, study TEXT",
-    "study_results": "study TEXT, context TEXT",
+    "study_results": "study TEXT, context TEXT, study_cui BIGINT, substudy_cui BIGINT, condition_cui BIGINT, biomarker_finding TEXT",
     "indications": "id INTEGER, condition_cui BIGINT, condition TEXT, component_cui BIGINT, component TEXT, regulator TEXT, withdrawn TEXT, status TEXT, stage TEXT, biomarker TEXT, prior_therapy TEXT",
     "indications_regimen_cui": "parent_id INTEGER, regimen_cui BIGINT",
 }
@@ -36,9 +36,9 @@ DATA = {
     "regimens": "(1,10,'Regimen A','COMPONENT_TO_BASED_REGIMEN'),(2,20,'Regulatory only','COMPONENT_TO_BASED_REGIMEN'),(3,30,'No studies','COMPONENT_TO_BASED_REGIMEN'),(4,40,'Same name','COMPONENT_TO_BASED_REGIMEN'),(5,50,'Same name','COMPONENT_TO_BASED_REGIMEN')",
     "variants": "(1,100,-1,10,'Regimen A','Historical',false),(2,100,0,10,'Regimen A','Latest',false),(3,101,1,10,'Regimen A','No sigs',false),(4,102,1,10,'Regimen A','Other condition',false),(5,300,1,30,'No studies','Unlinked',false),(6,400,1,999,'Broken parent','Orphan',false)",
     "sigs": "(1,100,'Drug A'),(2,100,'Drug B'),(3,102,'Drug B'),(4,300,'Drug A')",
-    "studies": "(1,'study-a',1,NULL),(2,'study-a',2,NULL),(3,'study-b',2,NULL),(4,'history-only',3,NULL)",
+    "studies": "(1,'study-a',1,NULL,11,NULL,NULL),(2,'study-a',2,NULL,11,NULL,NULL),(3,'study-b',2,NULL,12,NULL,NULL),(4,'history-only',3,NULL,13,NULL,NULL)",
     "variants_study": "(1,'history-only'),(2,'study-a'),(3,'study-a'),(4,'study-b'),(6,'missing-study')",
-    "study_results": "('study-a','adjuvant'),('study-b','palliative')",
+    "study_results": "('study-a','adjuvant',11,NULL,2,NULL),('study-b','palliative',12,NULL,2,NULL)",
     "indications": "(1,1,'Condition A',7,'Drug A','FDA','FALSE','Metastatic',NULL,NULL,NULL),(2,1,'Condition A',8,'Drug B','EMA','2020-01-01',NULL,NULL,NULL,NULL),(3,NULL,'Unmapped',9,'Drug C','FDA','TRUE',NULL,NULL,NULL,NULL),(4,99,'Missing condition',9,'Drug C','FDA','FALSE',NULL,NULL,NULL,NULL)",
     "indications_regimen_cui": "(1,10),(2,20),(4,999)",
 }
@@ -113,7 +113,7 @@ def test_duplicate_study_name_preserves_both_conditions_without_fanout(
 def test_split_study_name_matches_only_its_substudy(catalogue_session):
     catalogue_session.execute(
         sa.text(
-            "INSERT INTO studies VALUES (5,'study-c',3,'part-2'),(6,'study-c',3,'part-3')"
+            "INSERT INTO studies (id,study,condition_cui,substudy) VALUES (5,'study-c',3,'part-2'),(6,'study-c',3,'part-3')"
         )
     )
     catalogue_session.execute(

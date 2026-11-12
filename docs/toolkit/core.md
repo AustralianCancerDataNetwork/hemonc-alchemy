@@ -1,10 +1,10 @@
 # Core queries and links
 
-`toolkit.core` answers questions about the HemOnc model without deciding what the result means clinically. Its main jobs are to resolve condition names, search treatment components, select condition-scoped sigs, and traverse normalized links.
+Use `toolkit.core` to resolve condition names, search treatment components, select sigs by condition, and follow links between records.
 
 ## Resolve names to CUIs
 
-Use names at the edge of an application, then carry CUIs through the rest of the query:
+Look up a condition by name and use its HemOnc CUI in subsequent queries:
 
 ```python
 from hemonc_alchemy.toolkit.core.conditions import (
@@ -49,7 +49,7 @@ studies = sig_study_objects(sig)
 variants = study_variant_objects(study)
 ```
 
-These helpers may query the database and may deduplicate by entity identity. They keep source ambiguity visible: a study name can resolve to several study rows, and variant traversal applies an explicit latest-version policy where needed. Keep the entity attached to its session.
+Keep entities attached to their session while following links. A study name can resolve to several rows, and variant helpers apply the [version-selection rules](../model/relationships.md#variant-versions-and-sigs) described in the model guide.
 
 ## Select condition-scoped sigs
 
@@ -69,3 +69,18 @@ sigs = find_sigs(session, spec)
 The condition restriction is resolved through normalized `sigs_study` links. The spec can also constrain regimen, phase, class field, study context, and the columns used for component matching. `sig_search_statement(spec)` returns the inspectable statement without executing it.
 
 Sigs do not carry a version column. A sig selection therefore says which sig rows match; it does not establish version-specific provenance for a variant.
+
+## Source withdrawal markers
+
+The indication resolver sets `ResolvedIndication.withdrawn` from the source marker:
+
+| Source marker | `withdrawn` |
+| --- | --- |
+| Blank or `FALSE` | `False` |
+| `TRUE`, a date, or any other nonempty marker | `True` |
+
+Case and surrounding whitespace are ignored when setting the flag. The original marker is available unchanged in `raw["withdrawn"]`.
+
+Date markers occur on both withdrawal notices and marked authorisation rows. The flag excludes marked records conservatively; a false flag alone does not establish that an authorisation is active. The marker is not parsed into an event type or date.
+
+Regulatory catalogue associations include historical records, without filtering on this flag. Use the resolver flag when excluding marked indication records from your own results.

@@ -17,6 +17,7 @@ from ..classification import (
     is_supportive_block,
     is_supportive_regimen,
 )
+from .diagnostics import Diagnostic, diagnose_drug_components
 from .properties import (
     DEFAULT_DECAY_FACTOR,
     ScheduleEvent,
@@ -63,6 +64,7 @@ class CycleTemplate:
     drug_role: dict[str, ComponentRole]
     # Source day alternatives; they are deliberately not expanded into multiple doses.
     choices: tuple[ChoiceSchedule, ...] = ()
+    diagnostics: tuple[Diagnostic, ...] = ()
 
 
 def _cycle_length_from_bound(lb: str, unit) -> int:
@@ -156,6 +158,7 @@ def cycle_template(variant, *, ancestry: MainClassAncestry | None = None) -> Cyc
         endocrine_regimen=is_endocrine_regimen(variant, ancestry=ancestry),
         supportive_regimen=is_supportive_regimen(variant, ancestry=ancestry),
         drug_role={},
+        diagnostics=diagnose_drug_components(variant.component_sigs),
         choices=tuple(
             ChoiceSchedule((event.drug_object.drug,), event.route_group, tuple(choice.options))
             for event in schedule_events(variant)
@@ -234,6 +237,7 @@ def _block_template(variant, block: CycleBlock, *, diseases, ancestry: MainClass
         endocrine_regimen=is_endocrine_block(block.events, ancestry=ancestry),
         supportive_regimen=is_supportive_block(block.events, ancestry=ancestry),
         drug_role={},
+        diagnostics=diagnose_drug_components(event.sig for event in block.events),
         choices=tuple(
             ChoiceSchedule((event.drug_object.drug,), event.route_group, tuple(choice.options))
             for event in block.events

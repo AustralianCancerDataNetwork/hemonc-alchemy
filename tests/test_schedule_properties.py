@@ -30,10 +30,16 @@ from hemonc_alchemy.toolkit.analytics.treatment.scheduling import (
     anchor_blocks,
     cancer_services_drugs,
     cancer_services_sigs_by_drug,
+    cycle_block_templates,
+    cycle_template,
+    diagnose_variant,
     group_into_blocks,
     home_administered_drugs,
     roll_out_variant,
     schedule_events,
+)
+from hemonc_alchemy.toolkit.analytics.treatment.scheduling.diagnostics import (
+    DiagnosticCode,
 )
 
 pytestmark = pytest.mark.skipif(
@@ -1335,6 +1341,38 @@ class TestAdministrationMatrix:
 
 
 class TestRouteGroupedHelpers:
+    @pytest.mark.parametrize(
+        ("route", "drug_list"),
+        [("INTRAVENOUS", cancer_services_drugs), ("ORAL", home_administered_drugs)],
+    )
+    def test_class_components_are_reported_without_becoming_drugs(self, session, caplog, route, drug_list):
+        variant = _variant(session, 900)
+        _drug(session, 1, "resolved drug")
+        for sig_id, component_cui in enumerate([9001, 9002, 1], start=1):
+            _sig(
+                session, sig_id=sig_id, variant_cui=900, drug_cui=component_cui,
+                component="drug class" if component_cui != 1 else "resolved drug",
+                route=route, alldays="1", timing_sequence="1",
+                cycle_length_lb="21", cycle_length_ub="21",
+                cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+            )
+        session.expire_all()
+
+        assert [drug.drug_cui for drug in drug_list(variant)] == [1]
+        assert "2 sigs" in caplog.text
+        assert "9001" in caplog.text and "9002" in caplog.text
+        diagnostics = [d for d in diagnose_variant(variant) if d.code == DiagnosticCode.DRUG_NOT_RESOLVED]
+        assert len(diagnostics) == 1
+        assert diagnostics[0].message in caplog.text
+
+        template = cycle_template(variant)
+        block = cycle_block_templates(variant)[0].template
+        for result in (template, block):
+            assert result.diagnostics == tuple(diagnostics)
+            assert result.iv_drug + result.po_drug == ["resolved drug"]
+            grid = result.binary_iv if route == "INTRAVENOUS" else result.binary_po
+            assert list(grid.columns) == ["resolved drug"]
+
     def test_splits_drugs_by_where_they_are_given(self, session):
         variant = _variant(session, 90)
         _drug(session, 1, "carboplatin")

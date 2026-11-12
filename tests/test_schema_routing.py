@@ -123,7 +123,7 @@ def test_composite_child_foreign_keys_are_enforced(schema_target):
             **canonical_key, "date_added": "2026-11-07", "in_ohdsi": False, "internal": False, "used_in": "test",
         })
         connection.execute(sa.insert(Base.metadata.tables["primary.affiliations"]), {
-            **affiliation_key, "affiliation_hemonc": "test", "date_added": datetime(2026, 11, 7), "full_name_hemonc": "test",  # noqa: DTZ001 -- column is timezone-naive
+            **affiliation_key, "affiliation_hemonc": "test", "date_added": datetime.fromisoformat("2026-11-07T00:00:00"), "full_name_hemonc": "test",  # column is timezone-naive
         })
         for name, key, value_column in cases:
             connection.execute(sa.insert(Base.metadata.tables[f"primary.{name}"]), {**key, value_column: "valid"})
