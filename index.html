@@ -320,10 +320,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#the-mental-model" class="md-nav__link">
+  <a href="#get-started" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The mental model
+        Get started
       
     </span>
   </a>
@@ -331,32 +331,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#start-with-the-row-grain" class="md-nav__link">
+  <a href="#find-the-right-guide" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Start with the row grain
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#keep-identifiers-separate" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Keep identifiers separate
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#choose-a-path" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Choose a path
+        Find the right guide
       
     </span>
   </a>
@@ -590,7 +568,7 @@
   <span class="md-ellipsis">
     
   
-    Upgrading
+    Updating an existing setup
   
 
     
@@ -1308,34 +1286,6 @@
   
   
     <li class="md-nav__item">
-      <a href="maintainers/source-only-release-notes/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Source-only release notes
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="maintainers/release-process/" class="md-nav__link">
         
   
@@ -1391,10 +1341,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#the-mental-model" class="md-nav__link">
+  <a href="#get-started" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The mental model
+        Get started
       
     </span>
   </a>
@@ -1402,32 +1352,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#start-with-the-row-grain" class="md-nav__link">
+  <a href="#find-the-right-guide" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Start with the row grain
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#keep-identifiers-separate" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Keep identifiers separate
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#choose-a-path" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Choose a path
+        Find the right guide
       
     </span>
   </a>
@@ -1474,76 +1402,49 @@
 
 
 <h1 id="hemonc-alchemy">HemOnc Alchemy<a class="headerlink" href="#hemonc-alchemy" title="Permanent link">&para;</a></h1>
-<p>HemOnc Alchemy is the Python boundary around an imported HemOnc.org terminology database. It gives research and application code typed SQLAlchemy models, reusable queries, and a small set of treatment interpretations without making either side parse source spreadsheets or maintain a second copy of the terminology.</p>
-<h2 id="the-mental-model">The mental model<a class="headerlink" href="#the-mental-model" title="Permanent link">&para;</a></h2>
-<p>The package has three layers:</p>
-<div  class="mermaid">flowchart LR
-    Extracts[HemOnc extracts] --> Loader[Loader]
-    Loader --> Model[Generated SQLAlchemy model]
-    Model --> Toolkit[Core and treatment toolkit]
-    Toolkit --> Application[Your analysis or application]
-</div>
-<p>The generated model describes what was loaded. The core toolkit helps you navigate that model. The treatment toolkit adds explicit clinical or operational policy, such as what counts as a category or how to identify a standalone radiation sig. Your application still owns cohort definitions, local protocol policy, OMOP mappings, and presentation.</p>
-<p>That separation is the most important design decision in the project. If a question is about the source tables, use the model or <code>toolkit.core</code>. If it requires an interpretation of treatment, use <code>toolkit.analytics.treatment</code>. If it is specific to a consumer, keep it outside the package.</p>
-<h2 id="start-with-the-row-grain">Start with the row grain<a class="headerlink" href="#start-with-the-row-grain" title="Permanent link">&para;</a></h2>
-<p>Most analysis errors come from counting the wrong thing. The common grains are:</p>
+<p>HemOnc Alchemy provides Python tools for querying HemOnc.org treatment data. It includes SQLAlchemy models, condition and component searches, regimen selection, dosing schedules, and optional OMOP vocabulary queries.</p>
+<p>Use a local DuckDB file or a PostgreSQL database containing the HemOnc tables. Install the driver for your chosen backend and configure the database before running queries. The package includes the model and loader; HemOnc source data and OMOP vocabulary data are supplied separately.</p>
+<h2 id="get-started">Get started<a class="headerlink" href="#get-started" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="getting-started/installation/">Install</a> with the DuckDB or PostgreSQL extra.</li>
+<li><a href="getting-started/configuration/">Configure your database</a>.</li>
+<li>Follow the <a href="getting-started/quickstart/">quickstart</a> to find treatment variants for a condition.</li>
+</ol>
+<p>To create and load a development database, follow <a href="getting-started/local-development/">Local development</a>.</p>
+<h2 id="find-the-right-guide">Find the right guide<a class="headerlink" href="#find-the-right-guide" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Entity</th>
-<th>One row represents</th>
+<th>Task</th>
+<th>Guide</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>Conditions</code></td>
-<td>A HemOnc condition and condition CUI</td>
+<td>Understand tables, identifiers and relationships</td>
+<td><a href="model/">The HemOnc model</a></td>
 </tr>
 <tr>
-<td><code>Regimens</code></td>
-<td>A named regimen</td>
+<td>Find conditions, components and linked records</td>
+<td><a href="toolkit/core/">Core queries</a></td>
 </tr>
 <tr>
-<td><code>Variants</code></td>
-<td>A concrete, versioned regimen variant</td>
+<td>Select or classify treatment variants</td>
+<td><a href="toolkit/treatment/">Treatment analytics</a></td>
 </tr>
 <tr>
-<td><code>Sigs</code></td>
-<td>One dosing instruction within a variant</td>
+<td>Read dosing days or build a treatment timeline</td>
+<td><a href="toolkit/scheduling/">Schedules and administration</a></td>
 </tr>
 <tr>
-<td><code>Drugs</code></td>
-<td>A treatment component or drug identity</td>
-</tr>
-<tr>
-<td><code>Indications</code></td>
-<td>A drug/condition regulatory indication and its metadata</td>
-</tr>
-<tr>
-<td><code>Studies</code></td>
-<td>A source-study row associated with HemOnc content</td>
-</tr>
-<tr>
-<td><code>StudyResults</code></td>
-<td>A recorded study outcome</td>
+<td>Resolve HemOnc identifiers through OMOP vocabulary</td>
+<td><a href="integrations/omop/">OMOP integration</a></td>
 </tr>
 </tbody>
 </table>
-<p>A variant has many sigs. A study name can occur in several <code>Studies</code> rows. A CUI can have multiple imported versions. Decide the unit of analysis before writing a count or join.</p>
-<h2 id="keep-identifiers-separate">Keep identifiers separate<a class="headerlink" href="#keep-identifiers-separate" title="Permanent link">&para;</a></h2>
-<p>HemOnc CUIs are source identifiers. Database rows may also have generated surrogate primary keys. OMOP <code>concept_id</code> is a different identifier again. A CUI may be used as <code>concept_code</code> in the registered HemOnc OMOP vocabulary, but it is not itself an OMOP <code>concept_id</code>.</p>
-<p><code>Variants</code> has the natural key <code>(variant_cui, version)</code>. A latest-version query is a policy choice, not a property of the CUI. <code>Sigs</code> currently link to variants through <code>variant_cui</code> without a version, so a sig relationship cannot prove version-specific provenance.</p>
-<h2 id="choose-a-path">Choose a path<a class="headerlink" href="#choose-a-path" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="getting-started/">Get started</a> when you need an environment and a session.</li>
-<li><a href="model/">Understand the model</a> before writing joins or aggregations.</li>
-<li><a href="toolkit/">Use the toolkit</a> for condition lookup, component search, treatment selection, and schedule projections.</li>
-<li><a href="reference/index.md">Read the API reference</a> when you already know which boundary you need.</li>
-<li><a href="maintainers/regeneration/">Regenerate the model</a> only when maintaining the schema or generated code.</li>
-</ul>
-<p>The local development stack is optional. HemOnc Alchemy expects a reachable PostgreSQL database containing the generated schema; it does not provision production data.</p>
+<p>When counting results, check what each row represents. For example, one regimen can have several variants, each with several dosing instructions. A study name can also occur in several condition-specific rows. See <a href="model/entities/">Entities and generated models</a> for identifiers and <a href="model/relationships/">Relationships</a> for study and version-selection rules.</p>
 <h2 id="project-status">Project status<a class="headerlink" href="#project-status" title="Permanent link">&para;</a></h2>
-<p>The generated model follows the current HemOnc data dictionary. The toolkit area packages are the stable conceptual boundary for application code; lower-level generated surfaces and compiler modules are implementation or maintenance interfaces.</p>
+<p>HemOnc Alchemy is pre-1.0. APIs and generated schemas may change without a compatibility layer or a migration path.</p>
 
 
 

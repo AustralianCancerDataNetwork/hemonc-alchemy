@@ -490,7 +490,7 @@
   <span class="md-ellipsis">
     
   
-    Upgrading
+    Updating an existing setup
   
 
     
@@ -805,10 +805,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#choose-the-boundary" class="md-nav__link">
+  <a href="#choose-an-operation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Choose the boundary
+        Choose an operation
       
     </span>
   </a>
@@ -816,21 +816,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#statements-versus-execution" class="md-nav__link">
+  <a href="#run-a-query-or-build-a-statement" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Statements versus execution
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#dependency-direction" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Dependency direction
+        Run a query or build a statement
       
     </span>
   </a>
@@ -1288,34 +1277,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../maintainers/source-only-release-notes/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Source-only release notes
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../maintainers/release-process/" class="md-nav__link">
         
   
@@ -1371,10 +1332,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#choose-the-boundary" class="md-nav__link">
+  <a href="#choose-an-operation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Choose the boundary
+        Choose an operation
       
     </span>
   </a>
@@ -1382,21 +1343,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#statements-versus-execution" class="md-nav__link">
+  <a href="#run-a-query-or-build-a-statement" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Statements versus execution
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#dependency-direction" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Dependency direction
+        Run a query or build a statement
       
     </span>
   </a>
@@ -1472,57 +1422,52 @@
 
 
 <h1 id="toolkit">Toolkit<a class="headerlink" href="#toolkit" title="Permanent link">&para;</a></h1>
-<p>The toolkit is the application-facing layer above the generated model. Its useful distinction is not “which helper exists,” but “who owns the meaning of this query?”</p>
-<h2 id="choose-the-boundary">Choose the boundary<a class="headerlink" href="#choose-the-boundary" title="Permanent link">&para;</a></h2>
+<p>The toolkit provides searches, treatment selection and schedule calculations over the imported HemOnc tables. Query functions accept a SQLAlchemy session; scheduling functions work with the selected variants and their sigs.</p>
+<h2 id="choose-an-operation">Choose an operation<a class="headerlink" href="#choose-an-operation" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Question</th>
-<th>Boundary</th>
+<th>Task</th>
+<th>Functions and examples</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>What conditions, drugs, studies, or sigs are linked in HemOnc?</td>
-<td><code>toolkit.core</code></td>
+<td>Resolve condition names or search components</td>
+<td><a href="core/">Core queries</a></td>
 </tr>
 <tr>
-<td>Which variants satisfy component or category requirements?</td>
-<td>Treatment selection</td>
+<td>Follow links between sigs, studies, conditions and variants</td>
+<td><a href="../model/relationships/#traversal-helpers">Traversal helpers</a></td>
 </tr>
 <tr>
-<td>Is a variant radiation-only, concurrent chemoradiotherapy, or otherwise classified?</td>
-<td>Treatment classification</td>
+<td>Select variants by condition, component or category</td>
+<td><a href="treatment/#select-variants">Treatment selection</a></td>
 </tr>
 <tr>
-<td>Which days and routes does a sig imply?</td>
-<td>Scheduling</td>
+<td>Classify radiation, systemic or drug-ancestry groups</td>
+<td><a href="treatment/">Treatment classification</a></td>
 </tr>
 <tr>
-<td>What does this consumer call a modality, bundle, or eligible cohort?</td>
-<td>Your application</td>
+<td>Read dosing days, build administration frames or calculate timelines</td>
+<td><a href="scheduling/">Scheduling</a></td>
 </tr>
 </tbody>
 </table>
-<p>Core operations describe the source model. Treatment analytics encode reusable oncology meaning. Consumer-specific policy should be translated into toolkit specifications or kept in the consuming application rather than added to the generated model.</p>
-<h2 id="statements-versus-execution">Statements versus execution<a class="headerlink" href="#statements-versus-execution" title="Permanent link">&para;</a></h2>
-<p>Many toolkit operations have two forms:</p>
-<ul>
-<li>a statement builder that returns inspectable SQLAlchemy <code>Select</code> objects;</li>
-<li>an execution helper that accepts your <code>Session</code> and returns ORM rows or read models.</li>
-</ul>
-<p>This is intentional. The toolkit does not hide joins, choose your transaction boundary, or force a pandas representation. Build a statement when you need to add predicates, inspect SQL, or compose it into a larger query.</p>
-<h2 id="dependency-direction">Dependency direction<a class="headerlink" href="#dependency-direction" title="Permanent link">&para;</a></h2>
-<div  class="mermaid">flowchart TD
-    Model[hemonc_alchemy.model] --> Core[toolkit.core]
-    Core --> Treatment[toolkit.analytics.treatment]
-    Treatment --> Consumer[Downstream applications]
-</div>
-<p>Import from an area package at the application boundary:</p>
+<h2 id="run-a-query-or-build-a-statement">Run a query or build a statement<a class="headerlink" href="#run-a-query-or-build-a-statement" title="Permanent link">&para;</a></h2>
+<p>Execution helpers run a query using your session and return results:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.toolkit.core.components</span><span class="w"> </span><span class="kn">import</span> <span class="n">search_components</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.toolkit.analytics.treatment.selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">select_variants</span>
+
+<span class="n">hits</span> <span class="o">=</span> <span class="n">search_components</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s2">&quot;cisplatin&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p>The generated model and lower-level compiler modules remain available for structural work and maintenance, but they are not substitutes for the toolkit's explicit policies.</p>
+<p>Statement builders return a SQLAlchemy statement that you can extend before execution:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.toolkit.core.components</span><span class="w"> </span><span class="kn">import</span> <span class="n">component_search_statement</span>
+
+<span class="n">statement</span> <span class="o">=</span> <span class="n">component_search_statement</span><span class="p">(</span><span class="s2">&quot;cisplatin&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">mappings</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</code></pre></div>
+<p>Return types vary by operation: searches can return result records, selection helpers return ORM entities, and schedule projections return pandas DataFrames. Each guide shows how to read its results.</p>
+<p>Keep ORM entities attached to their session while accessing related rows. See <a href="../getting-started/configuration/#open-a-session">Configuration</a> for creating an engine and session.</p>
 
 
 

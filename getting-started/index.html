@@ -500,7 +500,7 @@
   <span class="md-ellipsis">
     
   
-    Upgrading
+    Updating an existing setup
   
 
     
@@ -1218,34 +1218,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../maintainers/source-only-release-notes/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Source-only release notes
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../maintainers/release-process/" class="md-nav__link">
         
   
@@ -1361,15 +1333,35 @@
 
 
 <h1 id="getting-started">Getting started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h1>
-<p>There are two separate jobs: install the Python package, then point it at a database that already contains HemOnc data. The package does not download or provision a production extract.</p>
-<p>The shortest useful route is:</p>
+<p>You need the Python package and a populated HemOnc database. Choose the backend that suits your environment:</p>
+<table>
+<thead>
+<tr>
+<th>Backend</th>
+<th>Use it when</th>
+<th>Install</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DuckDB</td>
+<td>You want to query a local database file without a database server.</td>
+<td><code>hemonc-alchemy[duckdb]</code></td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td>You have a PostgreSQL database or need shared server access.</td>
+<td><code>hemonc-alchemy[postgres]</code></td>
+</tr>
+</tbody>
+</table>
 <ol>
-<li><a href="installation/">Install</a> the base package and the PostgreSQL driver.</li>
-<li><a href="configuration/">Configure</a> a named database with <code>omop-config</code>.</li>
-<li>Follow the <a href="quickstart/">quickstart</a> to resolve a condition and select variants.</li>
+<li><a href="installation/">Install the package</a> with your backend extra.</li>
+<li><a href="configuration/">Configure a database</a> containing the HemOnc tables.</li>
+<li>Run the <a href="quickstart/">quickstart</a> to find treatment variants for a condition.</li>
 </ol>
-<p>Use the <a href="local-development/">local development</a> guide when you want the disposable Compose stack, pgAdmin, or the repository's notebooks.</p>
-<p>The first conceptual guide to read is <a href="../model/">Understanding the HemOnc model</a>. It explains row grain, source identifiers, versioning, and multi-valued fields—the details that determine whether a query is counting what you think it is counting.</p>
+<p>If you need to create a database from a source extract, use the <a href="local-development/">local development guide</a> for DuckDB or PostgreSQL, then follow <a href="../model/loading/">Loading data</a>.</p>
+<p>The <a href="../model/">model guide</a> explains what each row represents and how identifiers and relationships work. Read it before combining tables or counting records.</p>
 
 
 

@@ -559,7 +559,7 @@
   <span class="md-ellipsis">
     
   
-    Upgrading
+    Updating an existing setup
   
 
     
@@ -1277,34 +1277,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../maintainers/source-only-release-notes/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Source-only release notes
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../maintainers/release-process/" class="md-nav__link">
         
   
@@ -1450,8 +1422,8 @@
 
 
 <h1 id="quickstart">Quickstart<a class="headerlink" href="#quickstart" title="Permanent link">&para;</a></h1>
-<p>The normal analysis flow is: resolve a human-readable condition name once, keep the resulting CUI, build an explicit selection specification, and execute it with your session. Names are convenient input; CUIs are the stable scope passed into model queries.</p>
-<p>This example assumes PostgreSQL is configured and the HemOnc tables are loaded:</p>
+<p>Find treatment variants by looking up a condition's HemOnc CUI and passing it to a selection query.</p>
+<p>This example works with a configured DuckDB or PostgreSQL database containing the HemOnc tables. See <a href="../configuration/">Configuration</a> to set up the connection.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_hemonc_engine</span><span class="p">,</span> <span class="n">get_hemonc_context</span>
@@ -1478,21 +1450,25 @@
     <span class="k">for</span> <span class="n">variant</span> <span class="ow">in</span> <span class="n">variants</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">variant</span><span class="o">.</span><span class="n">variant_cui</span><span class="p">,</span> <span class="n">variant</span><span class="o">.</span><span class="n">version</span><span class="p">,</span> <span class="n">variant</span><span class="o">.</span><span class="n">regimen</span><span class="p">)</span>
 </code></pre></div>
-<p><code>version_policy="latest"</code> returns one generated <code>Variants</code> row per <code>variant_cui</code>, using the highest imported <code>(version, id)</code>. Use <code>version_policy="all"</code> when the purpose is to compare or audit imported versions. Do not infer version policy from the CUI alone.</p>
+<p><code>version_policy="latest"</code> selects the highest imported <code>(version, id)</code> per <code>variant_cui</code> before applying condition filters. Use <code>version_policy="all"</code> to query imported versions together. See <a href="../../model/relationships/#variant-versions-and-sigs">Variant versions and sigs</a> for how this differs from the source-defined current version.</p>
 <h2 id="inspect-a-selected-variant">Inspect a selected variant<a class="headerlink" href="#inspect-a-selected-variant" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.toolkit.analytics.treatment.bundles</span><span class="w"> </span><span class="kn">import</span> <span class="n">VariantBundle</span>
 
-<span class="n">bundle</span> <span class="o">=</span> <span class="n">VariantBundle</span><span class="o">.</span><span class="n">from_variant</span><span class="p">(</span><span class="n">variants</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="k">for</span> <span class="n">sig</span> <span class="ow">in</span> <span class="n">bundle</span><span class="o">.</span><span class="n">sigs</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">component</span><span class="p">,</span> <span class="n">sig</span><span class="o">.</span><span class="n">doseminnum</span><span class="p">,</span> <span class="n">sig</span><span class="o">.</span><span class="n">doseunit</span><span class="p">,</span> <span class="n">sig</span><span class="o">.</span><span class="n">alldays</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+    <span class="n">variants</span> <span class="o">=</span> <span class="n">select_variants</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">spec</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">variants</span><span class="p">:</span>
+        <span class="n">bundle</span> <span class="o">=</span> <span class="n">VariantBundle</span><span class="o">.</span><span class="n">from_variant</span><span class="p">(</span><span class="n">variants</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">sig</span> <span class="ow">in</span> <span class="n">bundle</span><span class="o">.</span><span class="n">sigs</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">component</span><span class="p">,</span> <span class="n">sig</span><span class="o">.</span><span class="n">doseminnum</span><span class="p">,</span> <span class="n">sig</span><span class="o">.</span><span class="n">doseunit</span><span class="p">,</span> <span class="n">sig</span><span class="o">.</span><span class="n">alldays</span><span class="p">)</span>
 </code></pre></div>
-<p>The bundle is a read model over ORM rows; it is not a second persistence schema. <code>Sigs</code> has no version column, so its relationship to a selected variant is by shared <code>variant_cui</code>, not proof of version-specific provenance.</p>
+<p>Keep the session open while reading related records. Sigs link through <code>variant_cui</code> without a version, so these instructions are shared across imported versions with that CUI.</p>
 <h2 id="inspect-or-extend-the-sql">Inspect or extend the SQL<a class="headerlink" href="#inspect-or-extend-the-sql" title="Permanent link">&para;</a></h2>
-<p>The toolkit keeps query construction separate from execution. Use a statement when you need to inspect SQL, add a predicate, apply a limit, or return mappings instead of ORM objects:</p>
+<p>Use a statement builder to add filters or limits before running a query:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.toolkit.core.components</span><span class="w"> </span><span class="kn">import</span> <span class="n">component_search_statement</span>
 
 <span class="n">statement</span> <span class="o">=</span> <span class="n">component_search_statement</span><span class="p">(</span><span class="s2">&quot;cisplatin&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-<span class="n">rows</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">mappings</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">mappings</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
 </code></pre></div>
 <p>For treatment selection, <code>build_variant_query_artifacts()</code> exposes the intermediate projections as well as the final statement. This is useful when a selection returns an unexpected number of variants.</p>
 

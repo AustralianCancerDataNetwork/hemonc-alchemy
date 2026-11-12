@@ -490,7 +490,7 @@
   <span class="md-ellipsis">
     
   
-    Upgrading
+    Updating an existing setup
   
 
     
@@ -870,6 +870,17 @@
     <span class="md-ellipsis">
       
         Select condition-scoped sigs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source-withdrawal-markers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source withdrawal markers
       
     </span>
   </a>
@@ -1299,34 +1310,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../maintainers/source-only-release-notes/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Source-only release notes
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../maintainers/release-process/" class="md-nav__link">
         
   
@@ -1425,6 +1408,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#source-withdrawal-markers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source withdrawal markers
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1494,9 +1488,9 @@
 
 
 <h1 id="core-queries-and-links">Core queries and links<a class="headerlink" href="#core-queries-and-links" title="Permanent link">&para;</a></h1>
-<p><code>toolkit.core</code> answers questions about the HemOnc model without deciding what the result means clinically. Its main jobs are to resolve condition names, search treatment components, select condition-scoped sigs, and traverse normalized links.</p>
+<p>Use <code>toolkit.core</code> to resolve condition names, search treatment components, select sigs by condition, and follow links between records.</p>
 <h2 id="resolve-names-to-cuis">Resolve names to CUIs<a class="headerlink" href="#resolve-names-to-cuis" title="Permanent link">&para;</a></h2>
-<p>Use names at the edge of an application, then carry CUIs through the rest of the query:</p>
+<p>Look up a condition by name and use its HemOnc CUI in subsequent queries:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.toolkit.core.conditions</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">condition_cuis_by_names</span><span class="p">,</span>
     <span class="n">conditions_by_names</span><span class="p">,</span>
@@ -1528,7 +1522,7 @@
 <span class="n">studies</span> <span class="o">=</span> <span class="n">sig_study_objects</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
 <span class="n">variants</span> <span class="o">=</span> <span class="n">study_variant_objects</span><span class="p">(</span><span class="n">study</span><span class="p">)</span>
 </code></pre></div>
-<p>These helpers may query the database and may deduplicate by entity identity. They keep source ambiguity visible: a study name can resolve to several study rows, and variant traversal applies an explicit latest-version policy where needed. Keep the entity attached to its session.</p>
+<p>Keep entities attached to their session while following links. A study name can resolve to several rows, and variant helpers apply the <a href="../../model/relationships/#variant-versions-and-sigs">version-selection rules</a> described in the model guide.</p>
 <h2 id="select-condition-scoped-sigs">Select condition-scoped sigs<a class="headerlink" href="#select-condition-scoped-sigs" title="Permanent link">&para;</a></h2>
 <p>Use <code>SigSelectionSpec</code> for candidates that are not naturally retrieved through a regimen-variant selection, such as standalone radiotherapy or surgery:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.toolkit.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">SigSelectionSpec</span><span class="p">,</span> <span class="n">find_sigs</span>
@@ -1542,6 +1536,29 @@
 </code></pre></div>
 <p>The condition restriction is resolved through normalized <code>sigs_study</code> links. The spec can also constrain regimen, phase, class field, study context, and the columns used for component matching. <code>sig_search_statement(spec)</code> returns the inspectable statement without executing it.</p>
 <p>Sigs do not carry a version column. A sig selection therefore says which sig rows match; it does not establish version-specific provenance for a variant.</p>
+<h2 id="source-withdrawal-markers">Source withdrawal markers<a class="headerlink" href="#source-withdrawal-markers" title="Permanent link">&para;</a></h2>
+<p>The indication resolver sets <code>ResolvedIndication.withdrawn</code> from the source marker:</p>
+<table>
+<thead>
+<tr>
+<th>Source marker</th>
+<th><code>withdrawn</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Blank or <code>FALSE</code></td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>TRUE</code>, a date, or any other nonempty marker</td>
+<td><code>True</code></td>
+</tr>
+</tbody>
+</table>
+<p>Case and surrounding whitespace are ignored when setting the flag. The original marker is available unchanged in <code>raw["withdrawn"]</code>.</p>
+<p>Date markers occur on both withdrawal notices and marked authorisation rows. The flag excludes marked records conservatively; a false flag alone does not establish that an authorisation is active. The marker is not parsed into an event type or date.</p>
+<p>Regulatory catalogue associations include historical records, without filtering on this flag. Use the resolver flag when excluding marked indication records from your own results.</p>
 
 
 

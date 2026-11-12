@@ -464,17 +464,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#use-duckdb" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Use DuckDB
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#use-the-omop-bridge" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -603,7 +592,7 @@
   <span class="md-ellipsis">
     
   
-    Upgrading
+    Updating an existing setup
   
 
     
@@ -1321,34 +1310,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../maintainers/source-only-release-notes/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Source-only release notes
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../maintainers/release-process/" class="md-nav__link">
         
   
@@ -1430,17 +1391,6 @@
     <span class="md-ellipsis">
       
         Run the notebooks
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#use-duckdb" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Use DuckDB
       
     </span>
   </a>
@@ -1538,17 +1488,34 @@
 
 
 <h1 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h1>
-<p>Install the package that matches the job you are doing. The base package contains the generated model, connection helpers, and toolkit APIs. PostgreSQL support is optional because the model itself does not require a particular driver.</p>
+<p>The package contains the SQLAlchemy model, connection helpers and toolkit. Choose an extra for the database you want to query.</p>
 <h2 id="use-hemonc-from-another-project">Use HemOnc from another project<a class="headerlink" href="#use-hemonc-from-another-project" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>add<span class="w"> </span><span class="s2">&quot;hemonc-alchemy[postgres]&quot;</span>
-</code></pre></div>
-<p>With pip:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;hemonc-alchemy[postgres]&quot;</span>
-</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Backend</th>
+<th>uv</th>
+<th>pip</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DuckDB file</td>
+<td><code>uv add "hemonc-alchemy[duckdb]"</code></td>
+<td><code>pip install "hemonc-alchemy[duckdb]"</code></td>
+</tr>
+<tr>
+<td>PostgreSQL server</td>
+<td><code>uv add "hemonc-alchemy[postgres]"</code></td>
+<td><code>pip install "hemonc-alchemy[postgres]"</code></td>
+</tr>
+</tbody>
+</table>
+<p>Then <a href="../configuration/">configure the database</a> and run the <a href="../quickstart/">quickstart</a>.</p>
 <h2 id="work-on-the-repository">Work on the repository<a class="headerlink" href="#work-on-the-repository" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>uv<span class="w"> </span>sync<span class="w"> </span>--extra<span class="w"> </span>dev
 </code></pre></div>
-<p>The <code>dev</code> extra adds model-generation tools, tests, linting, and documentation dependencies. It does not need to include Jupyter or plotting libraries.</p>
+<p>Run this command from the repository root. The <code>dev</code> extra adds model-generation tools, tests, linting and documentation dependencies.</p>
 <h2 id="run-the-notebooks">Run the notebooks<a class="headerlink" href="#run-the-notebooks" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>uv<span class="w"> </span>sync<span class="w"> </span>--extra<span class="w"> </span>exploration
 </code></pre></div>
@@ -1556,17 +1523,13 @@
 <div class="highlight"><pre><span></span><code>uv<span class="w"> </span>sync<span class="w"> </span>--extra<span class="w"> </span>dev<span class="w"> </span>--extra<span class="w"> </span>exploration
 </code></pre></div>
 <p>The repository devcontainers install the development, exploration, PostgreSQL, DuckDB, authoring, and OMOP extras together.</p>
-<h2 id="use-duckdb">Use DuckDB<a class="headerlink" href="#use-duckdb" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>add<span class="w"> </span><span class="s2">&quot;hemonc-alchemy[duckdb]&quot;</span>
-</code></pre></div>
-<p>The extra installs the DuckDB engine and shared oa-configurator/orm-loader backend support. See <a href="../local-development/">Local development</a> for the independent file-backed workflow and <a href="../upgrading/">Upgrading</a> for existing applications.</p>
 <h2 id="use-the-omop-bridge">Use the OMOP bridge<a class="headerlink" href="#use-the-omop-bridge" title="Permanent link">&para;</a></h2>
-<p><code>omop-alchemy</code> is intentionally not a runtime dependency. Install the optional extra only for code that resolves HemOnc identifiers against an OMOP vocabulary:</p>
-<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>sync<span class="w"> </span>--extra<span class="w"> </span>omop
+<p>Add <code>omop</code> when resolving HemOnc identifiers against an OMOP vocabulary. For example, with DuckDB:</p>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>add<span class="w"> </span><span class="s2">&quot;hemonc-alchemy[duckdb,omop]&quot;</span>
 </code></pre></div>
-<p>The bridge shares configuration and loading infrastructure with HemOnc Alchemy, but the two packages keep their models separate.</p>
+<p>When working in this repository, use <code>uv sync --extra dev --extra omop</code>. See <a href="../../integrations/omop/">OMOP integration</a> for vocabulary configuration and query examples.</p>
 <h2 id="what-installation-does-not-provide">What installation does not provide<a class="headerlink" href="#what-installation-does-not-provide" title="Permanent link">&para;</a></h2>
-<p>Installation does not provide Docker, PostgreSQL, pgAdmin, a HemOnc source extract, or clinical data. Use the <a href="../local-development/">development stack</a> for a disposable local database.</p>
+<p>Supply a populated HemOnc database or a source extract to import. OMOP queries also need a loaded vocabulary. The <a href="../local-development/">local development guide</a> covers creating a DuckDB database or running the PostgreSQL Compose stack.</p>
 
 
 

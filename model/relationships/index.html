@@ -490,7 +490,7 @@
   <span class="md-ellipsis">
     
   
-    Upgrading
+    Updating an existing setup
   
 
     
@@ -710,10 +710,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ambiguity-is-part-of-the-model" class="md-nav__link">
+  <a href="#study-references-and-counts" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Ambiguity is part of the model
+        Study references and counts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#study-context-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Study-context filters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#variant-versions-and-sigs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variant versions and sigs
       
     </span>
   </a>
@@ -1288,34 +1310,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../maintainers/source-only-release-notes/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Source-only release notes
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../maintainers/release-process/" class="md-nav__link">
         
   
@@ -1393,10 +1387,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ambiguity-is-part-of-the-model" class="md-nav__link">
+  <a href="#study-references-and-counts" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Ambiguity is part of the model
+        Study references and counts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#study-context-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Study-context filters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#variant-versions-and-sigs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variant versions and sigs
       
     </span>
   </a>
@@ -1472,15 +1488,14 @@
 
 
 <h1 id="relationships-and-cross-references">Relationships and cross-references<a class="headerlink" href="#relationships-and-cross-references" title="Permanent link">&para;</a></h1>
-<p>HemOnc contains ordinary foreign-key relationships, normalized child tables for multi-valued fields, and source links that need explicit policy. The ORM exposes these as read-only navigation; it does not remove ambiguity from the data.</p>
+<p>Child tables use foreign keys to link each value to its parent row. Cross-references between source entities use names or CUIs; these are exposed as read-only ORM relationships and can resolve to several rows.</p>
 <h2 id="multi-valued-source-fields">Multi-valued source fields<a class="headerlink" href="#multi-valued-source-fields" title="Permanent link">&para;</a></h2>
-<p>Source spreadsheets often store several values in one cell, for example <code>"12460|1354"</code>. The loader splits those values into child map rows:</p>
-<div class="highlight"><pre><span></span><code>Variants                 variants_study
----------                --------------
-id  ───────────────────  parent_id
-                         study
-</code></pre></div>
-<p>Use <code>variant.study_items</code> or <code>variant.study_objects</code> rather than parsing a pipe-delimited string. The same pattern applies to sigs, indications, and other generated map tables.</p>
+<p>The loader splits pipe-delimited collections into child rows. For a variant's study references, each row in <code>variants_study</code> contains one study token and the parent variant's ID:</p>
+<div  class="mermaid">flowchart TB
+    V["variants<br/>id"] -->|"study_items: one to many"| M["variants_study<br/>parent_id<br/>study"]
+</div>
+<p><code>variants_study.parent_id</code> references <code>variants.id</code>. Use <code>variant.study_items</code> to read the stored tokens. Each item's <code>study_objects</code> resolves its token to matching <code>Studies</code> rows, including <code>study--substudy</code> references. The same parent/child structure is used for collections on sigs, indications and other entities.</p>
+<p><code>variant.study_objects</code> is a separate, generated relationship that matches bare study names only. Use the map item's <code>study_objects</code> when references include a substudy.</p>
 <h2 id="traversal-helpers">Traversal helpers<a class="headerlink" href="#traversal-helpers" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.toolkit.core.links</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">condition_variant_objects</span><span class="p">,</span>
@@ -1493,12 +1508,40 @@ id  ───────────────────  parent_id
 <span class="n">studies</span> <span class="o">=</span> <span class="n">sig_study_objects</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
 <span class="n">variants</span> <span class="o">=</span> <span class="n">study_variant_objects</span><span class="p">(</span><span class="n">study</span><span class="p">)</span>
 </code></pre></div>
-<p>Some helpers issue SQL when a relationship is lazy or when they must resolve a latest variant context. Keep the entity attached to its session for the duration of traversal.</p>
-<h2 id="ambiguity-is-part-of-the-model">Ambiguity is part of the model<a class="headerlink" href="#ambiguity-is-part-of-the-model" title="Permanent link">&para;</a></h2>
-<p><code>Studies.study</code> is not globally unique. The same study name can be represented by several rows, often because it is associated with several conditions. Do not use <code>.scalar_one()</code> on a study-name lookup unless you have first established uniqueness for your extract.</p>
-<p><code>Variants</code> can contain several imported rows for one <code>variant_cui</code>. Traversal and treatment selection therefore need an explicit version policy; the toolkit's latest policy keeps the highest <code>(version, id)</code>.</p>
-<p><code>Sigs</code> currently store <code>variant_cui</code> but not variant version. A sig attached to a selected variant is therefore shared across imported versions with that CUI. It is not evidence of version-specific provenance.</p>
-<p>The toolkit reports or preserves these ambiguities instead of picking an arbitrary row. If your application needs a single result, make the tie-breaking rule part of that application's query.</p>
+<p>Keep entities attached to their SQLAlchemy session while using these helpers: resolving related rows can issue additional queries.</p>
+<h2 id="study-references-and-counts">Study references and counts<a class="headerlink" href="#study-references-and-counts" title="Permanent link">&para;</a></h2>
+<p><code>Studies.study</code> is not unique. A study associated with several conditions can have a row for each condition, so a name lookup can return several rows. Use <code>.scalars().all()</code> unless your query also constrains the row sufficiently to establish uniqueness.</p>
+<p>The study catalogue, sig search, component selection and standalone-radiation queries accept bare study names and <code>study--substudy</code> references. So do <code>Studies.variants</code> and each variant study-map item's <code>study_objects</code>. Other generated name-based relationships compare the stored name literally.</p>
+<p>The regimen catalogue's <code>study_count</code> counts distinct <code>Studies.id</code> values. For example, two condition-specific rows for one study CUI contribute two to that count.</p>
+<h2 id="study-context-filters">Study-context filters<a class="headerlink" href="#study-context-filters" title="Permanent link">&para;</a></h2>
+<p>For a <code>study_context</code> filter, a <code>StudyResults</code> row must match the selected <code>Studies</code> row on study CUI, substudy CUI, condition CUI and biomarker finding. If the result has no study CUI, its exact study name is used instead. A different, non-NULL CUI cannot match by name. For the substudy, condition and biomarker fields, two NULL values count as equal.</p>
+<p>A context field containing <code>consolidation|maintenance</code> matches either complete token. Searching for <code>maintenance</code> does not match <code>maintenance extended</code>; <code>%</code> and <code>_</code> are treated as literal characters. A filter containing <code>|</code> matches only the complete stored field.</p>
+<h2 id="variant-versions-and-sigs">Variant versions and sigs<a class="headerlink" href="#variant-versions-and-sigs" title="Permanent link">&para;</a></h2>
+<p>One <code>variant_cui</code> can have several imported versions. The following accessors select them differently:</p>
+<table>
+<thead>
+<tr>
+<th>Accessor</th>
+<th>Selection rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sig.variant_object</code></td>
+<td>The source-defined current version, <code>version == 1</code>; <code>None</code> if absent.</td>
+</tr>
+<tr>
+<td><code>study_variant_objects(study)</code></td>
+<td>Highest <code>(version, id)</code> per CUI among variants linked to that study.</td>
+</tr>
+<tr>
+<td>Catalogue <code>version_policy="latest"</code></td>
+<td>Highest <code>(version, id)</code> per CUI across all imported variants, selected before study and condition filters.</td>
+</tr>
+</tbody>
+</table>
+<p>The highest numeric version is not the same rule as the source-defined current version. A study-linked historical version can be returned by <code>study_variant_objects()</code> even when the catalogue's <code>latest</code> selection excludes it.</p>
+<p>Sigs store <code>variant_cui</code> without a version. The same sigs are therefore associated with every imported variant version sharing that CUI; those links cannot establish which instructions belonged to a particular historical version.</p>
 
 
 

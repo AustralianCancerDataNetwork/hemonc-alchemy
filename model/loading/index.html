@@ -490,7 +490,7 @@
   <span class="md-ellipsis">
     
   
-    Upgrading
+    Updating an existing setup
   
 
     
@@ -738,6 +738,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#source-fields-and-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source fields and types
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#conversion-and-rejection-reports" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -764,17 +775,6 @@
     <span class="md-ellipsis">
       
         Bootstrap the development database
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#preserve-source-shaped-values" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Preserve source-shaped values
       
     </span>
   </a>
@@ -1321,34 +1321,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../maintainers/source-only-release-notes/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Source-only release notes
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../maintainers/release-process/" class="md-nav__link">
         
   
@@ -1426,6 +1398,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#source-fields-and-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source fields and types
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#conversion-and-rejection-reports" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1452,17 +1435,6 @@
     <span class="md-ellipsis">
       
         Bootstrap the development database
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#preserve-source-shaped-values" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Preserve source-shaped values
       
     </span>
   </a>
@@ -1558,7 +1530,10 @@
 <p>Files supplying IDs use the upstream merge strategies. Callers supplying explicit IDs are responsible for synchronizing native sequences before later inserts that omit IDs. Child loading uses plain inserts and is not an idempotent reload operation.</p>
 <p>For ID-less snapshots, the loader retains each parsed source occurrence's assigned ID until its child load completes. Rejected parent IDs are excluded. Thus two sig rows with the same scalar values can keep different study lists, and two exact duplicate occurrences can each retain their children. This association uses the assigned IDs, not the order returned by a database query.</p>
 <p>When calling <code>load_entity()</code> and <code>load_denormalised()</code> separately, use the <strong>same Session, unchanged source file, and matching CSV reading options</strong>. A commit between stages is supported; a rollback discards the retained association. Supplied IDs and unambiguous scalar identities support independent child loads, but ambiguous fallback matches raise an error rather than silently omit children. A changed file or reading options also raises before child insertion. Custom readers must preserve the source record order and parsing rules used by child loading; splitting batches is supported.</p>
-<p>Only <code>|</code> is automatically inferred and split as a collection delimiter. Semicolons remain part of names or prose: for example, <code>GEICAM/2003-11; CIBOMA/2004-01</code> is one study name with CUI <code>25246</code>. The updated dictionary overrides preserve reference names, study names, sig notes, and parenthetical expressions as scalar fields. Regenerate and rebuild the source database to adopt these schema changes; existing assets are not migrated by running the loader code.</p>
+<p>Only <code>|</code> is automatically inferred and split as a collection delimiter. Semicolons remain part of names or prose: for example, <code>GEICAM/2003-11; CIBOMA/2004-01</code> is one study name with CUI <code>25246</code>. Dictionary overrides define reference names, study names, sig notes, and parenthetical expressions as scalar fields.</p>
+<h2 id="source-fields-and-types">Source fields and types<a class="headerlink" href="#source-fields-and-types" title="Permanent link">&para;</a></h2>
+<p>The generated model determines how each field is stored. For example, <code>StudyResults.metric_num_this_arm</code> stores values such as <code>60%</code> as text, <code>Persons.total_pubs</code> is an integer, and the four <code>Refs.prop_valid_aff_*</code> fields are numeric proportions. Fields listed in the model metadata's <code>derived_columns</code> are excluded from source loading.</p>
+<p>Text fields retain their values apart from configured null markers, while dates and enums undergo conversion. Unsupported partial dates in nullable <code>DateTime</code> fields become NULL, and enum conversion normalizes source spelling. A database NULL can therefore represent either a missing source value or a failed conversion; use the source file and rejection report to distinguish them.</p>
 <h2 id="conversion-and-rejection-reports">Conversion and rejection reports<a class="headerlink" href="#conversion-and-rejection-reports" title="Permanent link">&para;</a></h2>
 <p>The default HemOnc policy preserves case-insensitive enum values and the compiler's normalized-member fallback. Malformed nullable fields are logged and become NULL. Malformed required values reject their rows rather than introducing a sentinel. Rejected parents cannot contribute child rows, including when an accepted parent has the same natural key.</p>
 <p>The policy treats <code>NULL</code>, <code>None</code>, <code>N/A</code>, <code>NaN</code>, <code>nan</code>, <code>null</code>, <code>NA</code>, and <code>n/a</code> as text null markers. Dates use the upstream declared formats (<code>yyyymmdd</code>, <code>dd-mon-yyyy</code>, and <code>yyyy-mm-dd</code>); unrecognized nullable date values become NULL. Source markers stored in string columns remain strings unless they are one of the configured null markers. Ambiguous date formats require an explicit handler.</p>
@@ -1587,8 +1562,6 @@
 <p>The default operation creates all generated tables and loads the source files present. It refuses a target already containing any HemOnc table. Repeat <code>--table</code>, for example <code>--table units --table hemonc_classes</code>, to select source tables explicitly. Unknown, missing selected, ambiguous, or entirely absent source files fail before opening the engine or rebuilding anything.</p>
 <p>For an existing <strong>disposable target</strong>, explicitly pass <code>--rebuild</code>. This drops generated HemOnc tables and recognized <code>_staging_&lt;hemonc_table&gt;</code> objects only in the configured HemOnc schema, then recreates the metadata before importing. It retains unrelated tables, unrelated staging objects, and OMOP vocabulary tables. It does not drop the schema or use cascading drops. External foreign keys referencing HemOnc can therefore block a rebuild. Selecting <code>--table</code> limits imported files, not the set of tables reset by <code>--rebuild</code>.</p>
 <p>Rebuilds destroy the selected target's HemOnc data. Use only a disposable development target and stop other DuckDB processes using the file first. Each entity can commit before later entities or children fail; retry a partial snapshot with an explicit rebuild after fixing the failure. Programmatic callers can use <code>bootstrap_database(resolved, data_dir, rebuild=False, table_names=None)</code> from <code>hemonc_alchemy.bootstrap</code> and receive per-entity count dictionaries.</p>
-<h2 id="preserve-source-shaped-values">Preserve source-shaped values<a class="headerlink" href="#preserve-source-shaped-values" title="Permanent link">&para;</a></h2>
-<p>The loader does not force uncertain source values into invented types. A field may remain nullable, string-valued, or contain a source marker such as <code>Uncertain date</code>. Convert it only at the analysis boundary where your application can state what happens to values that do not parse.</p>
 
 
 

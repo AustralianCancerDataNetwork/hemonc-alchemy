@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://AustralianCancerDataNetwork.github.io/HemOnc_Alchemy/maintainers/release-process/">
       
       
-        <link rel="prev" href="../source-only-release-notes/">
+        <link rel="prev" href="../regeneration/">
       
       
       
@@ -488,7 +488,7 @@
   <span class="md-ellipsis">
     
   
-    Upgrading
+    Updating an existing setup
   
 
     
@@ -1203,34 +1203,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../source-only-release-notes/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Source-only release notes
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -1558,7 +1530,7 @@
 </tbody>
 </table>
 <p>A maintainer reviews and publishes the draft from GitHub's Releases page. Publishing creates a <code>vX.Y.Z</code> tag on <code>main</code>; that tag is the only event that starts package publication.</p>
-<p>Before publishing the DuckDB-capable release, require the recorded full-extract parity gate, installed-wheel checks, and downstream PostgreSQL smoke results. Schema-role adoption is a breaking public contract for raw-engine callers, so the <code>breaking</code> label applies under the version policy above. Link the <a href="../../getting-started/upgrading/">upgrade guide</a> from the release notes. Update downstream exact pins only after the distribution is available from PyPI.</p>
+<p>The shared workflow's label-to-version rules also apply while this package is pre-1.0. In particular, <code>breaking</code> selects a major bump; review the proposed version before publishing. API and schema compatibility are not pre-1.0 release requirements.</p>
 <h2 id="package-publication">Package publication<a class="headerlink" href="#package-publication" title="Permanent link">&para;</a></h2>
 <p><code>publish.yml</code> delegates building to CAVA, which verifies that the tag is reachable from <code>main</code> and produces the wheel and source distribution. The final PyPI upload stays in this repository because PyPI trusted publishing binds its OIDC identity to the calling repository's workflow file.</p>
 <p>The repository needs a GitHub environment named <code>pypi</code> and a PyPI trusted publisher with these values:</p>
