@@ -38,7 +38,9 @@ from hemonc_alchemy.toolkit.analytics.treatment.scheduling import (
     roll_out_variant,
     schedule_events,
 )
-from hemonc_alchemy.toolkit.analytics.treatment.scheduling.diagnostics import DiagnosticCode
+from hemonc_alchemy.toolkit.analytics.treatment.scheduling.diagnostics import (
+    DiagnosticCode,
+)
 
 pytestmark = pytest.mark.skipif(
     len(Base.metadata.tables) == 0,
