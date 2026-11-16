@@ -1109,7 +1109,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/index.md" class="md-nav__link">
+      <a href="../../reference/" class="md-nav__link">
         
   
   
@@ -1137,7 +1137,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/entities.md" class="md-nav__link">
+      <a href="../../reference/entities/" class="md-nav__link">
         
   
   
@@ -1165,7 +1165,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/toolkit.md" class="md-nav__link">
+      <a href="../../reference/toolkit/" class="md-nav__link">
         
   
   
@@ -1193,7 +1193,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/cli.md" class="md-nav__link">
+      <a href="../../reference/cli/" class="md-nav__link">
         
   
   
@@ -1492,10 +1492,13 @@
 <h2 id="multi-valued-source-fields">Multi-valued source fields<a class="headerlink" href="#multi-valued-source-fields" title="Permanent link">&para;</a></h2>
 <p>The loader splits pipe-delimited collections into child rows. For a variant's study references, each row in <code>variants_study</code> contains one study token and the parent variant's ID:</p>
 <div  class="mermaid">flowchart TB
-    V["variants<br/>id"] -->|"study_items: one to many"| M["variants_study<br/>parent_id<br/>study"]
+    V["variants<br/>id"] -->|"study_items: one to many"| M["variants_study<br/>parent_id<br/>position<br/>study"]
 </div>
 <p><code>variants_study.parent_id</code> references <code>variants.id</code>. Use <code>variant.study_items</code> to read the stored tokens. Each item's <code>study_objects</code> resolves its token to matching <code>Studies</code> rows, including <code>study--substudy</code> references. The same parent/child structure is used for collections on sigs, indications and other entities.</p>
 <p><code>variant.study_objects</code> is a separate, generated relationship that matches bare study names only. Use the map item's <code>study_objects</code> when references include a substudy.</p>
+<p>Collection map rows have a one-based <code>position</code> in their key, so source order and repeated values are kept.</p>
+<p>Columns whose lists must be read together, such as an indication's biomarkers and their findings, are stored in chain tables: <code>indications_biomarker_slots</code> (key: parent ID, slot, position), <code>indications_regimen_links</code> and <code>drugs_canmed_pairs</code> (key: parent ID, position). Each references its parent's generated ID.</p>
+<p>Read chains ordered by position, or use <code>load_indication_sources()</code> / <code>resolve_indications()</code>, which return biomarker/finding pairs and regimen name/code links. The per-column maps of chained columns cannot reconstruct pairing. A source row whose lists cannot be aligned has a single position-zero row with <code>aligned=False</code>; read its complete cells from the parent's <code>&lt;column&gt;_raw</code> fields. See <a href="../loading/#paired-multi-value-columns">Paired multi-value columns</a>.</p>
 <h2 id="traversal-helpers">Traversal helpers<a class="headerlink" href="#traversal-helpers" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.toolkit.core.links</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">condition_variant_objects</span><span class="p">,</span>

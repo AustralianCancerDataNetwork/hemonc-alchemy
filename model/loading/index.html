@@ -727,10 +727,71 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#loader-3-compatibility" class="md-nav__link">
+  <a href="#paired-multi-value-columns" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Loader 3 compatibility
+        Paired multi-value columns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paired multi-value columns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-lists-are-aligned" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How lists are aligned
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#raw-source-cells" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Raw source cells
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#which-table-to-read" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which table to read
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alignment-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alignment report
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backends-and-file-loading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backends and file loading
       
     </span>
   </a>
@@ -1120,7 +1181,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/index.md" class="md-nav__link">
+      <a href="../../reference/" class="md-nav__link">
         
   
   
@@ -1148,7 +1209,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/entities.md" class="md-nav__link">
+      <a href="../../reference/entities/" class="md-nav__link">
         
   
   
@@ -1176,7 +1237,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/toolkit.md" class="md-nav__link">
+      <a href="../../reference/toolkit/" class="md-nav__link">
         
   
   
@@ -1204,7 +1265,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/cli.md" class="md-nav__link">
+      <a href="../../reference/cli/" class="md-nav__link">
         
   
   
@@ -1387,10 +1448,71 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#loader-3-compatibility" class="md-nav__link">
+  <a href="#paired-multi-value-columns" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Loader 3 compatibility
+        Paired multi-value columns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paired multi-value columns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-lists-are-aligned" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How lists are aligned
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#raw-source-cells" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Raw source cells
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#which-table-to-read" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which table to read
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alignment-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alignment report
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backends-and-file-loading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backends and file loading
       
     </span>
   </a>
@@ -1521,10 +1643,71 @@
 <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
 </code></pre></div>
-<p><code>load_all()</code> loads primary rows and their denormalized child tables. It resolves source filenames and headers, applies an explicit HemOnc conversion policy, and maps child rows back to accepted parents. Its return value remains a dictionary of counts; <code>load_entity()</code> returns the primary count and <code>load_denormalised()</code> returns child counts.</p>
-<h2 id="loader-3-compatibility">Loader 3 compatibility<a class="headerlink" href="#loader-3-compatibility" title="Permanent link">&para;</a></h2>
-<p>HemOnc uses <code>orm-loader</code> 3, <code>oa-configurator</code> 2.1, and optional <code>omop-alchemy</code> 3. Install the DuckDB driver with <code>uv sync --extra duckdb</code>; PostgreSQL remains available with <code>--extra postgres</code>. Both backends support the <a href="../../getting-started/local-development/">configured devcontainer workflow</a>. Use a configured engine or <code>create_default_hemonc_engine()</code> so the generated <code>primary</code> schema role is mapped before creating tables or loading rows.</p>
-<p>Entity classes now provide <code>load_file(session, path, ...)</code>. <code>load_csv()</code> remains a deprecated compatibility alias. <code>register_enum_casts()</code> remains callable but is unnecessary: conversion is local to each load and does not modify an upstream global cast registry.</p>
+<p><code>load_all()</code> loads primary rows and their denormalized child tables. It resolves source filenames and headers, applies an explicit HemOnc conversion policy, and maps child rows back to accepted parents. It returns a dictionary of counts; <code>load_entity()</code> returns the primary count and <code>load_denormalised()</code> returns child counts.</p>
+<h2 id="paired-multi-value-columns">Paired multi-value columns<a class="headerlink" href="#paired-multi-value-columns" title="Permanent link">&para;</a></h2>
+<p>Some source columns hold pipe-delimited lists that only make sense together. In <code>indications</code>, biomarkers <code>MMR|MSI</code> with findings <code>deficient|high</code> mean MMR deficient and MSI high, not all four combinations. The model calls such a group of columns a chain and stores one child row per source position, so the pairing is kept.</p>
+<table>
+<thead>
+<tr>
+<th>Parent</th>
+<th>Chain table</th>
+<th>Source columns</th>
+<th>Key</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>indications</code></td>
+<td><code>indications_biomarker_slots</code></td>
+<td><code>biomarker</code>, <code>biomarker_finding</code>, <code>biomarker_type</code>, and the same three for <code>biomarker2</code> to <code>biomarker4</code></td>
+<td>parent ID, slot (1 to 4), position</td>
+</tr>
+<tr>
+<td><code>indications</code></td>
+<td><code>indications_regimen_links</code></td>
+<td><code>with</code>, <code>regimen</code>, <code>regimen_cui</code></td>
+<td>parent ID, position</td>
+</tr>
+<tr>
+<td><code>drugs</code></td>
+<td><code>drugs_canmed_pairs</code></td>
+<td><code>canmed_major_class</code>, <code>canmed_major_class_cui</code></td>
+<td>parent ID, position</td>
+</tr>
+</tbody>
+</table>
+<p>Chains are declared by hand in <code>hemonc_alchemy/compiler/chains.py</code>. Regeneration reports columns that look paired but never adds a chain by itself.</p>
+<h3 id="how-lists-are-aligned">How lists are aligned<a class="headerlink" href="#how-lists-are-aligned" title="Permanent link">&para;</a></h3>
+<p>Alignment applies to the complete chain:</p>
+<ol>
+<li>Equal-length lists pair by source position, starting at 1.</li>
+<li>A nonblank single value is repeated across the longest list. Every other nonblank column must have that same length or length 1.</li>
+<li>A blank column contributes nulls. Internal empty positions, such as <code>A||B</code>, are null at their original positions.</li>
+<li>Different lengths greater than one, or a pipe inside parentheses, make the whole chain unaligned. The row then has one marker child (<code>position=0</code>, <code>aligned=False</code>, values null) and is readable only through its raw parent fields.</li>
+</ol>
+<p>Chain rows keep repeated values. A CUI has a nullable integer field and a raw text field: for <code>TBA</code>, <code>regimen_cui_raw</code> is <code>"TBA"</code> and <code>regimen_cui</code> is null. A blank token is null in both.</p>
+<h3 id="raw-source-cells">Raw source cells<a class="headerlink" href="#raw-source-cells" title="Permanent link">&para;</a></h3>
+<p>Every chained column has a <code>&lt;column&gt;_raw</code> text field on the parent holding the complete CSV cell before splitting, trimming or conversion. The <code>with</code> column is named <code>with_field</code>, so its raw field is <code>with_field_raw</code>. Raw fields are filled during child loading: use <code>load_all()</code>, or <code>load_entity()</code> followed by <code>load_denormalised()</code>.</p>
+<p><code>variants.blob</code> is opaque text. Read it unsplit from <code>Variants.blob_raw</code>.</p>
+<h3 id="which-table-to-read">Which table to read<a class="headerlink" href="#which-table-to-read" title="Permanent link">&para;</a></h3>
+<ul>
+<li>For pairing, read the chain tables or the indication toolkit. <code>regimen_links</code> gives name, raw code, typed code, partner, position and alignment in source order; <code>regimen_cuis</code> lists aligned numeric codes only. Unaligned biomarkers are returned as raw criteria, not guessed matches.</li>
+<li>Each chained column also has a per-column map table. It lists that column's distinct values and cannot tell you which values belong together.</li>
+<li>Map tables for all other collection columns are keyed by <code>(parent key, position)</code>. They keep repeated tokens, and their ORM relationships are ordered by position. Empty tokens are skipped without renumbering later positions. The <code>variants_blob</code> map is the exception: it is keyed by value.</li>
+</ul>
+<h3 id="alignment-report">Alignment report<a class="headerlink" href="#alignment-report" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Indications</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.toolkit.chain_loading</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChainLoadReport</span>
+
+<span class="n">chains</span> <span class="o">=</span> <span class="n">ChainLoadReport</span><span class="p">()</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">load_all</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">Indications</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;data/Tables&quot;</span><span class="p">),</span> <span class="n">chain_report</span><span class="o">=</span><span class="n">chains</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">chains</span><span class="o">.</span><span class="n">chains</span><span class="p">[</span><span class="s2">&quot;indications_regimen_links&quot;</span><span class="p">])</span>
+</code></pre></div>
+<p>The chain report counts source rows paired, broadcast and unaligned, lists unaligned parent IDs, and counts repeated source tokens kept and typed conversion failures. Slot reports use keys such as <code>indications_biomarker_slots:3</code>. Blank chains are not counted. Each row belongs to one alignment category, even when a type singleton is the only broadcast member. Returned child totals include unaligned markers. Without an explicit report, the latest report is available at <code>session.info[("hemonc_chain_report", Indications)]</code>.</p>
+<p>Run <code>python scripts/audit_chains.py data/Tables</code> for source-row counts and the complete unaligned/suspicious-row list. A row is flagged as suspicious when a single <code>with</code> value is repeated across regimen names that do not all contain it. Flagged rows are still aligned; the script never corrects source data.</p>
+<h2 id="backends-and-file-loading">Backends and file loading<a class="headerlink" href="#backends-and-file-loading" title="Permanent link">&para;</a></h2>
+<p>HemOnc uses <code>orm-loader</code> 3, <code>oa-configurator</code> 2.1, and optional <code>omop-alchemy</code> 3. Install the DuckDB driver with <code>uv sync --extra duckdb</code>; PostgreSQL uses <code>--extra postgres</code>. Both backends support the <a href="../../getting-started/local-development/">configured devcontainer workflow</a>. Use a configured engine or <code>create_default_hemonc_engine()</code> so the generated <code>primary</code> schema role is mapped before creating tables or loading rows.</p>
+<p>Entity classes provide <code>load_file(session, path, ...)</code>. <code>load_csv()</code> is a deprecated alias for it. <code>register_enum_casts()</code> is unnecessary: conversion is local to each load.</p>
 <p>An ID-less CSV for a surrogate-key entity requires an <strong>empty parent table</strong>. PostgreSQL and DuckDB reserve IDs from the table's native sequence; subsequent ORM inserts continue from that sequence. SQLite uses the public loader ID allocator for these BIGINT columns. This snapshot path assumes a single writer. A second ID-less import raises before staging; use a fresh disposable target or a source with stable, explicit IDs. Incremental identity reconciliation is not implemented.</p>
 <p>PostgreSQL reserves sequence values on an additional connection because later file batches are read while <code>COPY</code> is active on the loader connection. Its pool must allow that additional connection. Create and commit the schema before beginning the snapshot import.</p>
 <p>Files supplying IDs use the upstream merge strategies. Callers supplying explicit IDs are responsible for synchronizing native sequences before later inserts that omit IDs. Child loading uses plain inserts and is not an idempotent reload operation.</p>
@@ -1558,7 +1741,7 @@
 <h2 id="bootstrap-the-development-database">Bootstrap the development database<a class="headerlink" href="#bootstrap-the-development-database" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>hemonc_alchemy.bootstrap<span class="w"> </span>--data-dir<span class="w"> </span>data/Tables
 </code></pre></div>
-<p>Bootstrap resolves the active <code>hemonc_db</code> with <code>get_hemonc_context()</code>, uses <code>create_hemonc_engine()</code>, and passes the resolved target and <code>primary</code> staging role through to <code>load_all()</code>. It ignores the legacy <code>DATABASE_URL</code> variable. <code>.devcontainer/bootstrap.py</code> remains a thin wrapper for the same entry point.</p>
+<p>Bootstrap resolves the active <code>hemonc_db</code> with <code>get_hemonc_context()</code>, uses <code>create_hemonc_engine()</code>, and passes the resolved target and <code>primary</code> staging role through to <code>load_all()</code>. It does not read <code>DATABASE_URL</code>. <code>.devcontainer/bootstrap.py</code> is a thin wrapper for the same entry point.</p>
 <p>The default operation creates all generated tables and loads the source files present. It refuses a target already containing any HemOnc table. Repeat <code>--table</code>, for example <code>--table units --table hemonc_classes</code>, to select source tables explicitly. Unknown, missing selected, ambiguous, or entirely absent source files fail before opening the engine or rebuilding anything.</p>
 <p>For an existing <strong>disposable target</strong>, explicitly pass <code>--rebuild</code>. This drops generated HemOnc tables and recognized <code>_staging_&lt;hemonc_table&gt;</code> objects only in the configured HemOnc schema, then recreates the metadata before importing. It retains unrelated tables, unrelated staging objects, and OMOP vocabulary tables. It does not drop the schema or use cascading drops. External foreign keys referencing HemOnc can therefore block a rebuild. Selecting <code>--table</code> limits imported files, not the set of tables reset by <code>--rebuild</code>.</p>
 <p>Rebuilds destroy the selected target's HemOnc data. Use only a disposable development target and stop other DuckDB processes using the file first. Each entity can commit before later entities or children fail; retry a partial snapshot with an explicit rebuild after fixing the failure. Programmatic callers can use <code>bootstrap_database(resolved, data_dir, rebuild=False, table_names=None)</code> from <code>hemonc_alchemy.bootstrap</code> and receive per-entity count dictionaries.</p>
