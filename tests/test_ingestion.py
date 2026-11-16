@@ -18,6 +18,7 @@ from hemonc_alchemy.model.entities import (
     HemoncClasses,
     Units,
     drugs_Canmed_major_class_cuiMap,
+    drugs_CanmedPairs,
     hemonc_classes_Secondary_home_as_stringMap,
 )
 from hemonc_alchemy.model.ingestion import conversion_policy, convert_value
@@ -274,7 +275,7 @@ def test_malformed_rows_are_rejected_by_parent_and_child_readers(database, tmp_p
 def test_child_conversion_obeys_error_policy(database, tmp_path, on_error, quote_mode):
     engine, resolved = database
     Base.metadata.create_all(engine, tables=[
-        Drugs.__table__, drugs_Canmed_major_class_cuiMap.__table__,
+        Drugs.__table__, drugs_Canmed_major_class_cuiMap.__table__, drugs_CanmedPairs.__table__,
     ])
     (tmp_path / "drugs.csv").write_text(
         "drug,drug_cui,date_added,investigational,multiagent,canmed_major_class_cui\n"

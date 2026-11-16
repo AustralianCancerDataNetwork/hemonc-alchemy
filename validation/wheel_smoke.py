@@ -47,7 +47,7 @@ def main(argv=None) -> int:
         try:
             schema = engine.get_execution_options()["schema_translate_map"]["primary"]
             expected = {table.name for table in Base.metadata.tables.values()}
-            assert len(expected) == 86  # 22 source tables and 64 collection maps.
+            assert len(expected) == 89  # 22 source tables, 64 collection maps and 3 chain tables.
             assert expected <= set(sa.inspect(engine).get_table_names(schema=schema))
             with Session(engine) as session:
                 rows = session.execute(sa.select(

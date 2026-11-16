@@ -10,7 +10,7 @@ from ....model import (
     Regimens,
     Studies,
     Variants,
-    indications_Regimen_cuiMap,
+    indications_RegimenLinks,
     variants_StudyMap,
 )
 from ....model.relationships import join_mapped_studies, study_context_predicate
@@ -52,7 +52,7 @@ def regulatory_association_statement(spec: CatalogueSpec):
     statement = (
         select(
             Indications.condition_cui,
-            indications_Regimen_cuiMap.regimen_cui,
+            indications_RegimenLinks.regimen_cui,
             cast(literal(None), Integer).label("variant_cui"),
             cast(literal(None), Integer).label("version"),
             Indications.id.label("evidence_id"),
@@ -60,14 +60,15 @@ def regulatory_association_statement(spec: CatalogueSpec):
         )
         .select_from(Indications)
         .join(
-            indications_Regimen_cuiMap,
-            indications_Regimen_cuiMap.parent_id == Indications.id,
+            indications_RegimenLinks,
+            indications_RegimenLinks.parent_id == Indications.id,
         )
         .join(
             Conditions,
             Conditions.condition_cui == Indications.condition_cui,
         )
-        .join(Regimens, Regimens.regimen_cui == indications_Regimen_cuiMap.regimen_cui)
+        .join(Regimens, Regimens.regimen_cui == indications_RegimenLinks.regimen_cui)
+        .where(indications_RegimenLinks.aligned.is_(True))
     )
     if spec.condition_cuis is not None:
         statement = statement.where(Indications.condition_cui.in_(spec.condition_cuis))

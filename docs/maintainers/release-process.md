@@ -63,4 +63,4 @@ The existing organization rules require pull requests, at least one approval, an
 
 The aggregate `build-test / test` requires the default, DuckDB, PostgreSQL, and installed-wheel jobs. This protects every validation axis without changing a shared organization ruleset to include repository-specific check names.
 
-Use squash merging as the normal merge strategy and prevent force pushes to `main`. The initial history migration or other exceptional administrative operation should be handled separately from ordinary package changes.
+Use squash merging as the normal merge strategy and prevent force pushes to `main`. Handle exceptional administrative operations separately from ordinary package changes.

@@ -77,7 +77,9 @@ class EntityBase(Base, FileLoadableTableInterface, SerialisableTableInterface):
         kwargs["reader"] = reader
         # SQLAlchemy's generated class descriptors are broader than upstream's protocol.
         total = super().load_file(session, path, **kwargs)  # ty: ignore[invalid-argument-type]
-        if isinstance(reader, GeneratedIdReader) and getattr(cls, "denormalised_columns", ()):
+        if isinstance(reader, GeneratedIdReader) and (
+            getattr(cls, "denormalised_columns", ()) or getattr(cls, "chains", ()) or getattr(cls, "opaque_columns", ())
+        ):
             session.info[snapshot_key] = reader.parent_ids
         return total
 

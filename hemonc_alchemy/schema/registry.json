@@ -1,6 +1,7 @@
 {
   "tables": {
     "affiliations": {
+      "chains": [],
       "columns": {
         "aff_no": {
           "enum": null,
@@ -109,13 +110,16 @@
       "normalised_tables": [
         {
           "column": "affiliation_europmc",
-          "parent": "affiliations"
+          "parent": "affiliations",
+          "positional": true
         },
         {
           "column": "affiliation_journal",
-          "parent": "affiliations"
+          "parent": "affiliations",
+          "positional": true
         }
       ],
+      "opaque_columns": [],
       "pk_columns": [
         "pmid",
         "sequence",
@@ -140,6 +144,7 @@
       "use_surrogate_pk": true
     },
     "authors": {
+      "chains": [],
       "columns": {
         "aff_no": {
           "enum": null,
@@ -322,6 +327,7 @@
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
       "normalised_tables": [],
+      "opaque_columns": [],
       "pk_columns": [
         "pmid",
         "sequence",
@@ -346,6 +352,7 @@
       "use_surrogate_pk": true
     },
     "canonicaltriples": {
+      "chains": [],
       "columns": {
         "class_1": {
           "enum": "class_1",
@@ -445,13 +452,16 @@
       "normalised_tables": [
         {
           "column": "class_1_provenance",
-          "parent": "canonicaltriples"
+          "parent": "canonicaltriples",
+          "positional": true
         },
         {
           "column": "class_2_provenance",
-          "parent": "canonicaltriples"
+          "parent": "canonicaltriples",
+          "positional": true
         }
       ],
+      "opaque_columns": [],
       "pk_columns": [
         "class_1",
         "relationship",
@@ -465,6 +475,7 @@
       "use_surrogate_pk": true
     },
     "changelog": {
+      "chains": [],
       "columns": {},
       "denormalised_columns": [],
       "derived_columns": [],
@@ -477,6 +488,7 @@
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
       "normalised_tables": [],
+      "opaque_columns": [],
       "pk_columns": [
         "date",
         "type",
@@ -491,6 +503,7 @@
       "use_surrogate_pk": true
     },
     "cities": {
+      "chains": [],
       "columns": {},
       "denormalised_columns": [],
       "derived_columns": [],
@@ -503,6 +516,7 @@
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
       "normalised_tables": [],
+      "opaque_columns": [],
       "pk_columns": [
         "concept_code"
       ],
@@ -514,6 +528,7 @@
       "use_surrogate_pk": true
     },
     "concept_relationship_stage": {
+      "chains": [],
       "columns": {},
       "denormalised_columns": [],
       "derived_columns": [],
@@ -526,6 +541,7 @@
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
       "normalised_tables": [],
+      "opaque_columns": [],
       "pk_columns": [
         "concept_code_1",
         "relationship_id",
@@ -540,6 +556,7 @@
       "use_surrogate_pk": true
     },
     "concept_stage": {
+      "chains": [],
       "columns": {},
       "denormalised_columns": [],
       "derived_columns": [],
@@ -552,6 +569,7 @@
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
       "normalised_tables": [],
+      "opaque_columns": [],
       "pk_columns": [
         "concept_code"
       ],
@@ -563,6 +581,7 @@
       "use_surrogate_pk": true
     },
     "concept_synonym_stage": {
+      "chains": [],
       "columns": {},
       "denormalised_columns": [],
       "derived_columns": [],
@@ -575,6 +594,7 @@
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
       "normalised_tables": [],
+      "opaque_columns": [],
       "pk_columns": [
         "synonym_concept_code",
         "synonym_name"
@@ -587,6 +607,7 @@
       "use_surrogate_pk": true
     },
     "conditions": {
+      "chains": [],
       "columns": {
         "age_focus": {
           "enum": "age_focus",
@@ -931,33 +952,41 @@
       "normalised_tables": [
         {
           "column": "map_icd10cm",
-          "parent": "conditions"
+          "parent": "conditions",
+          "positional": true
         },
         {
           "column": "map_icd9cm",
-          "parent": "conditions"
+          "parent": "conditions",
+          "positional": true
         },
         {
           "column": "map_icdo3",
-          "parent": "conditions"
+          "parent": "conditions",
+          "positional": true
         },
         {
           "column": "map_icdo3_morph",
-          "parent": "conditions"
+          "parent": "conditions",
+          "positional": true
         },
         {
           "column": "map_oncotree",
-          "parent": "conditions"
+          "parent": "conditions",
+          "positional": true
         },
         {
           "column": "map_seer",
-          "parent": "conditions"
+          "parent": "conditions",
+          "positional": true
         },
         {
           "column": "map_type_icdo3_morph",
-          "parent": "conditions"
+          "parent": "conditions",
+          "positional": true
         }
       ],
+      "opaque_columns": [],
       "pk_columns": [
         "condition_cui"
       ],
@@ -972,6 +1001,7 @@
       "use_surrogate_pk": true
     },
     "contexts": {
+      "chains": [],
       "columns": {
         "context": {
           "enum": null,
@@ -1103,25 +1133,31 @@
       "normalised_tables": [
         {
           "column": "context",
-          "parent": "contexts"
+          "parent": "contexts",
+          "positional": true
         },
         {
           "column": "phase",
-          "parent": "contexts"
+          "parent": "contexts",
+          "positional": true
         },
         {
           "column": "phenotype",
-          "parent": "contexts"
+          "parent": "contexts",
+          "positional": true
         },
         {
           "column": "setting",
-          "parent": "contexts"
+          "parent": "contexts",
+          "positional": true
         },
         {
           "column": "stage_or_status",
-          "parent": "contexts"
+          "parent": "contexts",
+          "positional": true
         }
       ],
+      "opaque_columns": [],
       "pk_columns": [
         "context_raw"
       ],
@@ -1136,6 +1172,20 @@
       "use_surrogate_pk": true
     },
     "drugs": {
+      "chains": [
+        {
+          "columns": [
+            "canmed_major_class",
+            "canmed_major_class_cui"
+          ],
+          "fields": [
+            "canmed_major_class",
+            "canmed_major_class_cui"
+          ],
+          "name": "canmed_pairs",
+          "slot": null
+        }
+      ],
       "columns": {
         "atc": {
           "enum": null,
@@ -1255,25 +1305,31 @@
       "normalised_tables": [
         {
           "column": "atc",
-          "parent": "drugs"
+          "parent": "drugs",
+          "positional": true
         },
         {
           "column": "canmed_major_class",
-          "parent": "drugs"
+          "parent": "drugs",
+          "positional": false
         },
         {
           "column": "canmed_major_class_cui",
-          "parent": "drugs"
+          "parent": "drugs",
+          "positional": false
         },
         {
           "column": "canmed_minor_class",
-          "parent": "drugs"
+          "parent": "drugs",
+          "positional": true
         },
         {
           "column": "canmed_minor_class_cui",
-          "parent": "drugs"
+          "parent": "drugs",
+          "positional": true
         }
       ],
+      "opaque_columns": [],
       "pk_columns": [
         "drug_cui"
       ],
@@ -1288,6 +1344,7 @@
       "use_surrogate_pk": true
     },
     "exclusions": {
+      "chains": [],
       "columns": {
         "date_added": {
           "enum": null,
@@ -1370,9 +1427,11 @@
       "normalised_tables": [
         {
           "column": "title",
-          "parent": "exclusions"
+          "parent": "exclusions",
+          "positional": true
         }
       ],
+      "opaque_columns": [],
       "pk_columns": [
         "pmid"
       ],
@@ -1392,6 +1451,7 @@
       "use_surrogate_pk": true
     },
     "h4types": {
+      "chains": [],
       "columns": {},
       "denormalised_columns": [],
       "derived_columns": [],
@@ -1404,6 +1464,7 @@
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
       "normalised_tables": [],
+      "opaque_columns": [],
       "pk_columns": [
         "description"
       ],
@@ -1415,6 +1476,7 @@
       "use_surrogate_pk": true
     },
     "hemonc_classes": {
+      "chains": [],
       "columns": {
         "class_type": {
           "enum": "class_type",
@@ -1567,13 +1629,16 @@
       "normalised_tables": [
         {
           "column": "secondary_home_as_cui",
-          "parent": "hemonc_classes"
+          "parent": "hemonc_classes",
+          "positional": true
         },
         {
           "column": "secondary_home_as_string",
-          "parent": "hemonc_classes"
+          "parent": "hemonc_classes",
+          "positional": true
         }
       ],
+      "opaque_columns": [],
       "pk_columns": [
         "concept_class_id"
       ],
@@ -1585,6 +1650,7 @@
       "use_surrogate_pk": true
     },
     "hemonc_rels": {
+      "chains": [],
       "columns": {
         "date_added": {
           "enum": null,
@@ -1649,6 +1715,7 @@
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
       "normalised_tables": [],
+      "opaque_columns": [],
       "pk_columns": [
         "relationship_id"
       ],
@@ -1662,6 +1729,7 @@
       "use_surrogate_pk": true
     },
     "inclusions": {
+      "chains": [],
       "columns": {
         "date_added": {
           "enum": null,
@@ -1723,9 +1791,11 @@
       "normalised_tables": [
         {
           "column": "ref_type",
-          "parent": "inclusions"
+          "parent": "inclusions",
+          "positional": true
         }
       ],
+      "opaque_columns": [],
       "pk_columns": [
         "pmid"
       ],
@@ -1745,6 +1815,78 @@
       "use_surrogate_pk": true
     },
     "indications": {
+      "chains": [
+        {
+          "columns": [
+            "biomarker",
+            "biomarker_finding",
+            "biomarker_type"
+          ],
+          "fields": [
+            "biomarker",
+            "biomarker_finding",
+            "biomarker_type"
+          ],
+          "name": "biomarker_slots",
+          "slot": 1
+        },
+        {
+          "columns": [
+            "biomarker2",
+            "biomarker2_finding",
+            "biomarker2_type"
+          ],
+          "fields": [
+            "biomarker",
+            "biomarker_finding",
+            "biomarker_type"
+          ],
+          "name": "biomarker_slots",
+          "slot": 2
+        },
+        {
+          "columns": [
+            "biomarker3",
+            "biomarker3_finding",
+            "biomarker3_type"
+          ],
+          "fields": [
+            "biomarker",
+            "biomarker_finding",
+            "biomarker_type"
+          ],
+          "name": "biomarker_slots",
+          "slot": 3
+        },
+        {
+          "columns": [
+            "biomarker4",
+            "biomarker4_finding",
+            "biomarker4_type"
+          ],
+          "fields": [
+            "biomarker",
+            "biomarker_finding",
+            "biomarker_type"
+          ],
+          "name": "biomarker_slots",
+          "slot": 4
+        },
+        {
+          "columns": [
+            "with_field",
+            "regimen",
+            "regimen_cui"
+          ],
+          "fields": [
+            "with_field",
+            "regimen",
+            "regimen_cui"
+          ],
+          "name": "regimen_links",
+          "slot": null
+        }
+      ],
       "columns": {
         "accelerated": {
           "enum": null,
@@ -2237,97 +2379,133 @@
       "normalisation_groups": [
         {
           "columns": [
+            "biomarker",
+            "biomarker_finding",
+            "biomarker_type"
+          ]
+        },
+        {
+          "columns": [
             "biomarker2",
-            "biomarker2_finding"
+            "biomarker2_finding",
+            "biomarker2_type"
           ]
         },
         {
           "columns": [
             "biomarker3",
-            "biomarker3_finding"
+            "biomarker3_finding",
+            "biomarker3_type"
           ]
         },
         {
           "columns": [
             "biomarker4",
-            "biomarker4_finding"
+            "biomarker4_finding",
+            "biomarker4_type"
+          ]
+        },
+        {
+          "columns": [
+            "with_field",
+            "regimen",
+            "regimen_cui"
           ]
         }
       ],
       "normalised_tables": [
         {
           "column": "biomarker2",
-          "parent": "indications"
+          "parent": "indications",
+          "positional": false
         },
         {
           "column": "biomarker2_finding",
-          "parent": "indications"
+          "parent": "indications",
+          "positional": false
         },
         {
           "column": "biomarker2_type",
-          "parent": "indications"
+          "parent": "indications",
+          "positional": false
         },
         {
           "column": "biomarker3",
-          "parent": "indications"
+          "parent": "indications",
+          "positional": false
         },
         {
           "column": "biomarker3_finding",
-          "parent": "indications"
+          "parent": "indications",
+          "positional": false
         },
         {
           "column": "biomarker3_type",
-          "parent": "indications"
+          "parent": "indications",
+          "positional": false
         },
         {
           "column": "biomarker4",
-          "parent": "indications"
+          "parent": "indications",
+          "positional": false
         },
         {
           "column": "biomarker4_finding",
-          "parent": "indications"
+          "parent": "indications",
+          "positional": false
         },
         {
           "column": "biomarker4_type",
-          "parent": "indications"
+          "parent": "indications",
+          "positional": false
         },
         {
           "column": "biomarker_type",
-          "parent": "indications"
+          "parent": "indications",
+          "positional": false
         },
         {
           "column": "context",
-          "parent": "indications"
+          "parent": "indications",
+          "positional": true
         },
         {
           "column": "demographics",
-          "parent": "indications"
+          "parent": "indications",
+          "positional": true
         },
         {
           "column": "prior_therapy_negation",
-          "parent": "indications"
+          "parent": "indications",
+          "positional": true
         },
         {
           "column": "prior_therapy_setting",
-          "parent": "indications"
+          "parent": "indications",
+          "positional": true
         },
         {
           "column": "regimen",
-          "parent": "indications"
+          "parent": "indications",
+          "positional": false
         },
         {
           "column": "regimen_cui",
-          "parent": "indications"
+          "parent": "indications",
+          "positional": false
         },
         {
           "column": "response_contingency",
-          "parent": "indications"
+          "parent": "indications",
+          "positional": true
         },
         {
           "column": "risk_stratification",
-          "parent": "indications"
+          "parent": "indications",
+          "positional": true
         }
       ],
+      "opaque_columns": [],
       "pk_columns": [
         "component_cui",
         "condition_cui",
@@ -2372,6 +2550,7 @@
       "use_surrogate_pk": true
     },
     "pagelookup": {
+      "chains": [],
       "columns": {},
       "denormalised_columns": [],
       "derived_columns": [],
@@ -2384,6 +2563,7 @@
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
       "normalised_tables": [],
+      "opaque_columns": [],
       "pk_columns": [
         "index"
       ],
@@ -2395,6 +2575,7 @@
       "use_surrogate_pk": true
     },
     "pagetable": {
+      "chains": [],
       "columns": {},
       "denormalised_columns": [],
       "derived_columns": [],
@@ -2407,6 +2588,7 @@
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
       "normalised_tables": [],
+      "opaque_columns": [],
       "pk_columns": [
         "nameoffile"
       ],
@@ -2418,6 +2600,7 @@
       "use_surrogate_pk": true
     },
     "persons": {
+      "chains": [],
       "columns": {
         "co_authors": {
           "enum": null,
@@ -2624,37 +2807,46 @@
       "normalised_tables": [
         {
           "column": "condition_types",
-          "parent": "persons"
+          "parent": "persons",
+          "positional": true
         },
         {
           "column": "conditions",
-          "parent": "persons"
+          "parent": "persons",
+          "positional": true
         },
         {
           "column": "country",
-          "parent": "persons"
+          "parent": "persons",
+          "positional": true
         },
         {
           "column": "location",
-          "parent": "persons"
+          "parent": "persons",
+          "positional": true
         },
         {
           "column": "orcid",
-          "parent": "persons"
+          "parent": "persons",
+          "positional": true
         },
         {
           "column": "site",
-          "parent": "persons"
+          "parent": "persons",
+          "positional": true
         },
         {
           "column": "study_groups",
-          "parent": "persons"
+          "parent": "persons",
+          "positional": true
         },
         {
           "column": "study_sponsors",
-          "parent": "persons"
+          "parent": "persons",
+          "positional": true
         }
       ],
+      "opaque_columns": [],
       "pk_columns": [
         "name",
         "person_cui"
@@ -2667,6 +2859,7 @@
       "use_surrogate_pk": true
     },
     "protocols": {
+      "chains": [],
       "columns": {},
       "denormalised_columns": [],
       "derived_columns": [],
@@ -2679,6 +2872,7 @@
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
       "normalised_tables": [],
+      "opaque_columns": [],
       "pk_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
@@ -2688,6 +2882,7 @@
       "use_surrogate_pk": true
     },
     "rct_design": {
+      "chains": [],
       "columns": {},
       "denormalised_columns": [],
       "derived_columns": [],
@@ -2700,6 +2895,7 @@
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
       "normalised_tables": [],
+      "opaque_columns": [],
       "pk_columns": [
         "study",
         "regimen",
@@ -2715,6 +2911,7 @@
       "use_surrogate_pk": true
     },
     "refs": {
+      "chains": [],
       "columns": {
         "biblio": {
           "enum": null,
@@ -2925,9 +3122,11 @@
       "normalised_tables": [
         {
           "column": "title",
-          "parent": "refs"
+          "parent": "refs",
+          "positional": true
         }
       ],
+      "opaque_columns": [],
       "pk_columns": [
         "study_cui",
         "substudy_cui",
@@ -2964,6 +3163,7 @@
       "use_surrogate_pk": true
     },
     "regimens": {
+      "chains": [],
       "columns": {
         "all_sact_fda": {
           "enum": "all_sact_fda",
@@ -3126,6 +3326,7 @@
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
       "normalised_tables": [],
+      "opaque_columns": [],
       "pk_columns": [
         "regimen_cui"
       ],
@@ -3140,6 +3341,7 @@
       "use_surrogate_pk": true
     },
     "rxnorm_map": {
+      "chains": [],
       "columns": {},
       "denormalised_columns": [],
       "derived_columns": [],
@@ -3152,6 +3354,7 @@
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
       "normalised_tables": [],
+      "opaque_columns": [],
       "pk_columns": [
         "parent",
         "child"
@@ -3164,6 +3367,7 @@
       "use_surrogate_pk": true
     },
     "sequencetable": {
+      "chains": [],
       "columns": {},
       "denormalised_columns": [],
       "derived_columns": [],
@@ -3176,6 +3380,7 @@
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
       "normalised_tables": [],
+      "opaque_columns": [],
       "pk_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
@@ -3185,6 +3390,7 @@
       "use_surrogate_pk": true
     },
     "sig_branch_types": {
+      "chains": [],
       "columns": {
         "description": {
           "enum": null,
@@ -3210,6 +3416,7 @@
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
       "normalised_tables": [],
+      "opaque_columns": [],
       "pk_columns": [
         "value"
       ],
@@ -3223,6 +3430,7 @@
       "use_surrogate_pk": true
     },
     "sigs": {
+      "chains": [],
       "columns": {
         "alldays": {
           "enum": null,
@@ -3734,21 +3942,26 @@
       "normalised_tables": [
         {
           "column": "seqrel",
-          "parent": "sigs"
+          "parent": "sigs",
+          "positional": true
         },
         {
           "column": "seqrelwhen",
-          "parent": "sigs"
+          "parent": "sigs",
+          "positional": true
         },
         {
           "column": "seqrelwhenunit",
-          "parent": "sigs"
+          "parent": "sigs",
+          "positional": true
         },
         {
           "column": "study",
-          "parent": "sigs"
+          "parent": "sigs",
+          "positional": true
         }
       ],
+      "opaque_columns": [],
       "pk_columns": [
         "variant_cui",
         "portion",
@@ -3780,6 +3993,7 @@
       "use_surrogate_pk": true
     },
     "sites": {
+      "chains": [],
       "columns": {},
       "denormalised_columns": [],
       "derived_columns": [],
@@ -3792,6 +4006,7 @@
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
       "normalised_tables": [],
+      "opaque_columns": [],
       "pk_columns": [
         "site"
       ],
@@ -3803,6 +4018,7 @@
       "use_surrogate_pk": true
     },
     "studies": {
+      "chains": [],
       "columns": {
         "biomarker_finding": {
           "enum": null,
@@ -4104,17 +4320,21 @@
       "normalised_tables": [
         {
           "column": "intent",
-          "parent": "studies"
+          "parent": "studies",
+          "positional": true
         },
         {
           "column": "sponsor",
-          "parent": "studies"
+          "parent": "studies",
+          "positional": true
         },
         {
           "column": "study_group",
-          "parent": "studies"
+          "parent": "studies",
+          "positional": true
         }
       ],
+      "opaque_columns": [],
       "pk_columns": [
         "study_cui",
         "substudy_cui",
@@ -4140,6 +4360,7 @@
       "use_surrogate_pk": true
     },
     "study_demographics": {
+      "chains": [],
       "columns": {},
       "denormalised_columns": [],
       "derived_columns": [],
@@ -4152,6 +4373,7 @@
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
       "normalised_tables": [],
+      "opaque_columns": [],
       "pk_columns": [
         "study_id",
         "condition",
@@ -4165,6 +4387,7 @@
       "use_surrogate_pk": true
     },
     "study_eligibility": {
+      "chains": [],
       "columns": {},
       "denormalised_columns": [],
       "derived_columns": [],
@@ -4177,6 +4400,7 @@
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
       "normalised_tables": [],
+      "opaque_columns": [],
       "pk_columns": [
         "study_id",
         "condition",
@@ -4190,6 +4414,7 @@
       "use_surrogate_pk": true
     },
     "study_results": {
+      "chains": [],
       "columns": {
         "arm_type": {
           "enum": "arm_type",
@@ -4551,9 +4776,11 @@
       "normalised_tables": [
         {
           "column": "comparator_code",
-          "parent": "study_results"
+          "parent": "study_results",
+          "positional": true
         }
       ],
+      "opaque_columns": [],
       "pk_columns": [
         "study_cui",
         "substudy_cui",
@@ -4592,6 +4819,7 @@
       "use_surrogate_pk": true
     },
     "units": {
+      "chains": [],
       "columns": {
         "concept_code": {
           "enum": null,
@@ -4647,6 +4875,7 @@
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
       "normalised_tables": [],
+      "opaque_columns": [],
       "pk_columns": [
         "unit"
       ],
@@ -4661,6 +4890,7 @@
       "use_surrogate_pk": true
     },
     "variant_eligibility": {
+      "chains": [],
       "columns": {
         "date_added": {
           "enum": null,
@@ -4790,9 +5020,11 @@
       "normalised_tables": [
         {
           "column": "study",
-          "parent": "variant_eligibility"
+          "parent": "variant_eligibility",
+          "positional": true
         }
       ],
+      "opaque_columns": [],
       "pk_columns": [
         "variant_cui",
         "logic_count"
@@ -4824,6 +5056,7 @@
       "use_surrogate_pk": true
     },
     "variantblob": {
+      "chains": [],
       "columns": {
         "block": {
           "enum": "block",
@@ -4899,6 +5132,7 @@
       "natural_key_has_duplicates": false,
       "normalisation_groups": [],
       "normalised_tables": [],
+      "opaque_columns": [],
       "pk_columns": [
         "version",
         "chunk"
@@ -4911,6 +5145,7 @@
       "use_surrogate_pk": true
     },
     "variants": {
+      "chains": [],
       "columns": {
         "allsigshavecyclesigs": {
           "enum": null,
@@ -5100,16 +5335,22 @@
       "normalised_tables": [
         {
           "column": "blob",
-          "parent": "variants"
+          "parent": "variants",
+          "positional": false
         },
         {
           "column": "study",
-          "parent": "variants"
+          "parent": "variants",
+          "positional": true
         },
         {
           "column": "tracer",
-          "parent": "variants"
+          "parent": "variants",
+          "positional": true
         }
+      ],
+      "opaque_columns": [
+        "blob"
       ],
       "pk_columns": [
         "variant_cui",

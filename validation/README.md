@@ -4,7 +4,7 @@ These maintainer tools compare one complete generated-model extract on disposabl
 
 ## Reproduce a full comparison
 
-1. Select an authorized local extract. All 22 currently loadable entities must have source files. Auxiliary and beta CSVs outside the generated loader contract are listed as unmodeled inputs. The manifest hashes every selected source file; it does not assume an upstream release date from a directory name.
+1. Select an authorized local extract. Every loadable entity must have a source file. Auxiliary and beta CSVs outside the generated loader contract are listed as unmodeled inputs. The manifest hashes every selected source file; it does not assume an upstream release date from a directory name.
 2. Export an authorized vocabulary snapshot from a configured source database. This selects vocabulary tables only, in one read-only repeatable-read transaction: HemOnc concepts, outgoing `Is a` and `Maps to` edges and their targets, plus vocabulary metadata. The resulting file contains vocabulary records and is private, with mode 600.
 
    ```bash
@@ -35,25 +35,15 @@ Only `report.json` and the comparison summary are intended for sharing. They con
 
 ## What equality means
 
-All 86 current generated tables are compared as multisets, including duplicates and per-column NULL counts. Generated parent IDs are replaced with their complete scalar row semantics before hashing; child foreign keys are replaced with the corresponding parent's semantic hash. Different sequence allocation or SQL row order therefore does not create a false difference. A child attached to a different semantic parent does change the fingerprint. Missing parents fail independently of hash equality.
+All generated tables are compared as multisets, including duplicates and per-column NULL counts. Generated parent IDs are replaced with their complete scalar row semantics before hashing; child foreign keys are replaced with the corresponding parent's semantic hash. Different sequence allocation or SQL row order therefore does not create a false difference. A child attached to a different semantic parent does change the fingerprint. Missing parents fail independently of hash equality.
 
 Per-entity loader reports include accepted/staged, rejected and deduplicated rows, returned child counts, and conversion diagnostics. Identity values normalized to NULL are distinguished from invalid child tokens. Representative queries compare complete regimen and indication catalogues, condition families, and known HemOnc/SNOMED/RxNorm mappings. They must return rows. This vocabulary slice is sufficient for these checks; it is not a full-ontology validation.
 
 `--table` permits focused troubleshooting, but the release comparator rejects partial-extract receipts. A run without `--vocabulary-snapshot` executes only source catalogue checks and cannot pass the full release gate.
 
-## Recorded local result
-
-[7 November 2026 receipts](results/20261107/comparison.json) compare 22 source entities, all 97 tables and **2,111,833 rows** with zero differences or orphan children. The same private vocabulary snapshot supplied 14,144 concepts, 72,109 relationships and 54 vocabulary metadata rows to both targets. All six representative query fingerprints agree.
-
-Timings are single-run local baselines under uncontrolled host load. The receipts separate per-entity loading, query execution and total validation time. Total time also includes table fingerprinting and vocabulary copying. No performance improvement is inferred.
-
-[Downstream candidate checks](results/20261107/downstream-candidate.json) use a locally built `1.0.0` wheel, not a published release. Ten Explorer PostgreSQL HTTP checks pass with server-enforced read-only connections. Crucible's existing lifecycle creates all 97 tables twice without errors and passes `omop-config verify` in a fresh disposable database, which is removed afterward. Explorer's unchanged locked baseline and candidate both have the same seven HTML assertion failures (49 passed, 7 failed, 3 browser skips); no new failures were introduced by the candidate. Exact downstream registry pins and lockfiles remain gated on package publication.
-
-A temporary snapshot of the current Explorer working tree also passes **63 tests**, with four browser skips, against the installed candidate. Only schema-aware test engine construction is applied to that snapshot; the original uncommitted application/UI work is untouched.
-
 ## Installed-wheel checks
 
-Build the wheel, install it into separate clean environments with no extras and with `duckdb,omop`, then run `wheel_smoke.py` from outside the checkout. The core environment must have neither optional package installed. Both environments create all 86 current tables (22 source tables and 64 collection maps) and verify snapshot import, explicit rebuild, and parent-child linkage. CI runs this matrix independently of the source-tree test jobs. The dated 7 November receipts above describe the earlier 97-table schema.
+Build the wheel, install it into separate clean environments with no extras and with `duckdb,omop`, then run `wheel_smoke.py` from outside the checkout. The core environment must have neither optional package installed. Both environments create every generated table and verify snapshot import, explicit rebuild, and parent-child linkage. CI runs this matrix independently of the source-tree test jobs.
 
 ## Full-extract PostgreSQL regression tests
 

@@ -4,8 +4,17 @@ import re
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 
+from .....multivalue import align_values
 from ..loader import IndicationSource
-from ..model import BiomarkerCriterion, Criterion, Finding, Kind, Origin, Presence
+from ..model import (
+    BiomarkerCriterion,
+    Criterion,
+    Finding,
+    Kind,
+    Origin,
+    Presence,
+    RawCriterion,
+)
 
 _NAME_ALIASES = {
     "erbb2": "HER2",
@@ -183,31 +192,32 @@ class BiomarkerNormaliser:
             return Finding(str(raw), Presence.UNKNOWN, Kind.OTHER, parsed=False)
 
     def normalise(self, source: IndicationSource) -> tuple[Criterion, ...]:
+        return tuple(criterion for slot in source.biomarkers
+                     for criterion in self._slot_criteria(source, slot))
+
+    def _slot_criteria(self, source, slot) -> tuple[Criterion, ...]:
+        column = f"biomarker{slot.slot}" if slot.slot > 1 else "biomarker"
+        raw = source.raw.get(column) or "|".join(slot.biomarkers)
+        pairs = slot.pairs
+        aligned = slot.aligned
+        if pairs is None:
+            alignment = align_values(("|".join(slot.biomarkers), "|".join(slot.findings)))
+            pairs = alignment.rows
+            aligned = alignment.status != "unaligned"
+        if not aligned:
+            return tuple(RawCriterion("biomarker", key, source.raw[key])
+                         for key in (column, f"{column}_finding", f"{column}_type")
+                         if source.raw.get(key))
+        group = f"{source.indication_id}:{slot.slot}" if len(pairs) > 1 else None
         criteria = []
-        for slot in source.biomarkers:
-            names = tuple(
-                dict.fromkeys(name.strip() for name in slot.biomarkers if name.strip())
-            )
-            if not names:
+        for name, finding in pairs:
+            if name is None:
+                if finding:
+                    criteria.append(RawCriterion("biomarker", f"{column}_finding", finding))
                 continue
-            findings = tuple(self.parse_finding(value) for value in slot.findings)
-            group = f"{source.indication_id}:{slot.slot}" if len(names) > 1 else None
-            raw = source.raw.get(
-                f"biomarker{slot.slot}" if slot.slot > 1 else "biomarker"
-            ) or "|".join(names)
-            for name in names:
-                criteria.append(
-                    BiomarkerCriterion(
-                        "biomarker",
-                        f"biomarker{slot.slot}" if slot.slot > 1 else "biomarker",
-                        raw,
-                        slot.slot,
-                        self.canonical_name(name) or name,
-                        name,
-                        findings,
-                        group,
-                    )
-                )
+            findings = (self.parse_finding(finding),) if finding is not None else ()
+            criteria.append(BiomarkerCriterion("biomarker", column, raw, slot.slot,
+                                               self.canonical_name(name) or name, name, findings, group))
         return tuple(criteria)
 
     def lint(self, sources: tuple[IndicationSource, ...]) -> "BiomarkerLint":

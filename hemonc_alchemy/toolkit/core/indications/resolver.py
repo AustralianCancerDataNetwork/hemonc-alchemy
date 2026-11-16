@@ -38,6 +38,7 @@ def resolve_indications(
                 _withdrawn(source.withdrawn_raw),
                 criteria,
                 source.raw,
+                source.regimen_links,
             )
         )
     return tuple(result)

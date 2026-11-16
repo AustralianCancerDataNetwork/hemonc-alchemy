@@ -15,13 +15,63 @@ session.commit()
 print(counts)
 ```
 
-`load_all()` loads primary rows and their denormalized child tables. It resolves source filenames and headers, applies an explicit HemOnc conversion policy, and maps child rows back to accepted parents. Its return value remains a dictionary of counts; `load_entity()` returns the primary count and `load_denormalised()` returns child counts.
+`load_all()` loads primary rows and their denormalized child tables. It resolves source filenames and headers, applies an explicit HemOnc conversion policy, and maps child rows back to accepted parents. It returns a dictionary of counts; `load_entity()` returns the primary count and `load_denormalised()` returns child counts.
 
-## Loader 3 compatibility
+## Paired multi-value columns
 
-HemOnc uses `orm-loader` 3, `oa-configurator` 2.1, and optional `omop-alchemy` 3. Install the DuckDB driver with `uv sync --extra duckdb`; PostgreSQL remains available with `--extra postgres`. Both backends support the [configured devcontainer workflow](../getting-started/local-development.md). Use a configured engine or `create_default_hemonc_engine()` so the generated `primary` schema role is mapped before creating tables or loading rows.
+Some source columns hold pipe-delimited lists that only make sense together. In `indications`, biomarkers `MMR|MSI` with findings `deficient|high` mean MMR deficient and MSI high, not all four combinations. The model calls such a group of columns a chain and stores one child row per source position, so the pairing is kept.
 
-Entity classes now provide `load_file(session, path, ...)`. `load_csv()` remains a deprecated compatibility alias. `register_enum_casts()` remains callable but is unnecessary: conversion is local to each load and does not modify an upstream global cast registry.
+| Parent | Chain table | Source columns | Key |
+|---|---|---|---|
+| `indications` | `indications_biomarker_slots` | `biomarker`, `biomarker_finding`, `biomarker_type`, and the same three for `biomarker2` to `biomarker4` | parent ID, slot (1 to 4), position |
+| `indications` | `indications_regimen_links` | `with`, `regimen`, `regimen_cui` | parent ID, position |
+| `drugs` | `drugs_canmed_pairs` | `canmed_major_class`, `canmed_major_class_cui` | parent ID, position |
+
+Chains are declared by hand in `hemonc_alchemy/compiler/chains.py`. Regeneration reports columns that look paired but never adds a chain by itself.
+
+### How lists are aligned
+
+Alignment applies to the complete chain:
+
+1. Equal-length lists pair by source position, starting at 1.
+2. A nonblank single value is repeated across the longest list. Every other nonblank column must have that same length or length 1.
+3. A blank column contributes nulls. Internal empty positions, such as `A||B`, are null at their original positions.
+4. Different lengths greater than one, or a pipe inside parentheses, make the whole chain unaligned. The row then has one marker child (`position=0`, `aligned=False`, values null) and is readable only through its raw parent fields.
+
+Chain rows keep repeated values. A CUI has a nullable integer field and a raw text field: for `TBA`, `regimen_cui_raw` is `"TBA"` and `regimen_cui` is null. A blank token is null in both.
+
+### Raw source cells
+
+Every chained column has a `<column>_raw` text field on the parent holding the complete CSV cell before splitting, trimming or conversion. The `with` column is named `with_field`, so its raw field is `with_field_raw`. Raw fields are filled during child loading: use `load_all()`, or `load_entity()` followed by `load_denormalised()`.
+
+`variants.blob` is opaque text. Read it unsplit from `Variants.blob_raw`.
+
+### Which table to read
+
+- For pairing, read the chain tables or the indication toolkit. `regimen_links` gives name, raw code, typed code, partner, position and alignment in source order; `regimen_cuis` lists aligned numeric codes only. Unaligned biomarkers are returned as raw criteria, not guessed matches.
+- Each chained column also has a per-column map table. It lists that column's distinct values and cannot tell you which values belong together.
+- Map tables for all other collection columns are keyed by `(parent key, position)`. They keep repeated tokens, and their ORM relationships are ordered by position. Empty tokens are skipped without renumbering later positions. The `variants_blob` map is the exception: it is keyed by value.
+
+### Alignment report
+
+```python
+from hemonc_alchemy.model import Indications
+from hemonc_alchemy.toolkit.chain_loading import ChainLoadReport
+
+chains = ChainLoadReport()
+counts = load_all(session, Indications, Path("data/Tables"), chain_report=chains)
+print(chains.chains["indications_regimen_links"])
+```
+
+The chain report counts source rows paired, broadcast and unaligned, lists unaligned parent IDs, and counts repeated source tokens kept and typed conversion failures. Slot reports use keys such as `indications_biomarker_slots:3`. Blank chains are not counted. Each row belongs to one alignment category, even when a type singleton is the only broadcast member. Returned child totals include unaligned markers. Without an explicit report, the latest report is available at `session.info[("hemonc_chain_report", Indications)]`.
+
+Run `python scripts/audit_chains.py data/Tables` for source-row counts and the complete unaligned/suspicious-row list. A row is flagged as suspicious when a single `with` value is repeated across regimen names that do not all contain it. Flagged rows are still aligned; the script never corrects source data.
+
+## Backends and file loading
+
+HemOnc uses `orm-loader` 3, `oa-configurator` 2.1, and optional `omop-alchemy` 3. Install the DuckDB driver with `uv sync --extra duckdb`; PostgreSQL uses `--extra postgres`. Both backends support the [configured devcontainer workflow](../getting-started/local-development.md). Use a configured engine or `create_default_hemonc_engine()` so the generated `primary` schema role is mapped before creating tables or loading rows.
+
+Entity classes provide `load_file(session, path, ...)`. `load_csv()` is a deprecated alias for it. `register_enum_casts()` is unnecessary: conversion is local to each load.
 
 An ID-less CSV for a surrogate-key entity requires an **empty parent table**. PostgreSQL and DuckDB reserve IDs from the table's native sequence; subsequent ORM inserts continue from that sequence. SQLite uses the public loader ID allocator for these BIGINT columns. This snapshot path assumes a single writer. A second ID-less import raises before staging; use a fresh disposable target or a source with stable, explicit IDs. Incremental identity reconciliation is not implemented.
 
@@ -79,7 +129,7 @@ The upstream file loader commits primary merges internally and can commit interm
 uv run python -m hemonc_alchemy.bootstrap --data-dir data/Tables
 ```
 
-Bootstrap resolves the active `hemonc_db` with `get_hemonc_context()`, uses `create_hemonc_engine()`, and passes the resolved target and `primary` staging role through to `load_all()`. It ignores the legacy `DATABASE_URL` variable. `.devcontainer/bootstrap.py` remains a thin wrapper for the same entry point.
+Bootstrap resolves the active `hemonc_db` with `get_hemonc_context()`, uses `create_hemonc_engine()`, and passes the resolved target and `primary` staging role through to `load_all()`. It does not read `DATABASE_URL`. `.devcontainer/bootstrap.py` is a thin wrapper for the same entry point.
 
 The default operation creates all generated tables and loads the source files present. It refuses a target already containing any HemOnc table. Repeat `--table`, for example `--table units --table hemonc_classes`, to select source tables explicitly. Unknown, missing selected, ambiguous, or entirely absent source files fail before opening the engine or rebuilding anything.
 

@@ -194,6 +194,16 @@ class RawCriterion(Criterion):
 
 
 @dataclass(frozen=True)
+class RegimenLink:
+    name: str | None
+    raw_code: str | None
+    code: int | None
+    partner: str | None = None
+    position: int = 1
+    aligned: bool = True
+
+
+@dataclass(frozen=True)
 class ResolvedIndication:
     indication_id: int
     condition_cui: int | None
@@ -205,3 +215,4 @@ class ResolvedIndication:
     withdrawn: bool
     criteria: tuple[Criterion, ...]
     raw: Mapping[str, str | None]
+    regimen_links: tuple[RegimenLink, ...] = ()

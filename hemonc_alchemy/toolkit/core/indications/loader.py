@@ -8,22 +8,18 @@ from sqlalchemy import select
 
 from ....model import (
     Indications,
-    indications_Biomarker2_findingMap,
-    indications_Biomarker2Map,
-    indications_Biomarker3_findingMap,
-    indications_Biomarker3Map,
-    indications_Biomarker4_findingMap,
-    indications_Biomarker4Map,
+    indications_BiomarkerSlots,
     indications_ContextMap,
     indications_DemographicsMap,
     indications_Prior_therapy_negationMap,
     indications_Prior_therapy_settingMap,
-    indications_Regimen_cuiMap,
+    indications_RegimenLinks,
     indications_Response_contingencyMap,
     indications_Risk_stratificationMap,
 )
 from ..catalogue.indications import indication_statement
 from ..catalogue.specs import DEFAULT_INDICATION_SPEC, IndicationSpec
+from .model import RegimenLink
 
 
 @dataclass(frozen=True)
@@ -31,6 +27,9 @@ class BiomarkerSource:
     slot: int
     biomarkers: tuple[str, ...]
     findings: tuple[str, ...]
+    pairs: tuple[tuple[str | None, str | None], ...] | None = None
+    aligned: bool = True
+    types: tuple[str | None, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -59,14 +58,14 @@ class IndicationSource:
     prior_therapy_negation: tuple[str, ...] = ()
     response_contingency: tuple[str, ...] = ()
     risk_stratification: tuple[str, ...] = ()
+    regimen_links: tuple[RegimenLink, ...] = ()
 
 
 def _split(value: str | None) -> tuple[str, ...]:
     if not value:
         return ()
-    return tuple(
-        dict.fromkeys(part.strip() for part in value.split("|") if part.strip())
-    )
+    text = str(getattr(value, "value", value))
+    return tuple(part.strip() for part in text.split("|"))
 
 
 def _load_child_values(
@@ -91,6 +90,28 @@ def _load_child_values(
     return child_values
 
 
+def _biomarker_slots(row, mapped) -> tuple[BiomarkerSource, ...]:
+    slots = []
+    for slot in (1, 2, 3, 4):
+        links = mapped.get((row.id, slot), ())
+        if links:
+            slots.append(BiomarkerSource(
+                slot,
+                tuple(link.biomarker for link in links if link.biomarker is not None),
+                tuple(link.biomarker_finding for link in links if link.biomarker_finding is not None),
+                tuple((link.biomarker, link.biomarker_finding) for link in links if link.aligned),
+                all(link.aligned for link in links),
+                tuple(link.biomarker_type for link in links),
+            ))
+        elif slot == 1:
+            # Scalar/raw-only manually constructed parents remain supported.
+            slots.append(BiomarkerSource(1, _split(row["biomarker_raw"] or row["biomarker"]),
+                                         _split(row["biomarker_finding_raw"] or row["biomarker_finding"])))
+        else:
+            slots.append(BiomarkerSource(slot, (), (), ()))
+    return tuple(slots)
+
+
 def load_indication_sources(
     session, spec: IndicationSpec = DEFAULT_INDICATION_SPEC
 ) -> tuple[IndicationSource, ...]:
@@ -103,70 +124,29 @@ def load_indication_sources(
         return ()
     ids = tuple(row["id"] for row in rows)
     mapped = {}
-    tables = (
-        (2, indications_Biomarker2Map, "biomarker2"),
-        (2, indications_Biomarker2_findingMap, "biomarker2_finding"),
-        (3, indications_Biomarker3Map, "biomarker3"),
-        (3, indications_Biomarker3_findingMap, "biomarker3_finding"),
-        (4, indications_Biomarker4Map, "biomarker4"),
-        (4, indications_Biomarker4_findingMap, "biomarker4_finding"),
-    )
-    for slot, table, attribute in tables:
-        column = getattr(table, attribute)
-        for parent_id, value in session.execute(
-            select(table.parent_id, column)
-            .where(table.parent_id.in_(ids))
-            .order_by(table.parent_id, column)
-        ):
-            mapped.setdefault((parent_id, slot, attribute), []).append(
-                str(getattr(value, "value", value)) if value is not None else None
-            )
+    for link in session.execute(
+        select(indications_BiomarkerSlots.__table__)
+        .where(indications_BiomarkerSlots.parent_id.in_(ids))
+        .order_by(indications_BiomarkerSlots.parent_id, indications_BiomarkerSlots.slot,
+                  indications_BiomarkerSlots.position)
+    ).mappings():
+        mapped.setdefault((link.parent_id, link.slot), []).append(link)
     regimens = {}
-    for parent_id, regimen_cui in session.execute(
-        select(
-            indications_Regimen_cuiMap.parent_id, indications_Regimen_cuiMap.regimen_cui
+    for link in session.execute(
+        select(indications_RegimenLinks.__table__)
+        .where(indications_RegimenLinks.parent_id.in_(ids))
+        .order_by(indications_RegimenLinks.parent_id, indications_RegimenLinks.position)
+    ).mappings():
+        regimens.setdefault(link.parent_id, []).append(
+            RegimenLink(link.regimen, link.regimen_cui_raw, link.regimen_cui,
+                        link.with_field, link.position, link.aligned)
         )
-        .where(indications_Regimen_cuiMap.parent_id.in_(ids))
-        .order_by(
-            indications_Regimen_cuiMap.parent_id, indications_Regimen_cuiMap.regimen_cui
-        )
-    ):
-        regimens.setdefault(parent_id, []).append(regimen_cui)
 
     child_values = _load_child_values(session, ids)
 
     sources = []
     for row in rows:
-        slots = [
-            BiomarkerSource(
-                1,
-                _split(
-                    str(getattr(row["biomarker"], "value", row["biomarker"]))
-                    if row["biomarker"] is not None
-                    else None
-                ),
-                _split(
-                    str(
-                        getattr(
-                            row["biomarker_finding"],
-                            "value",
-                            row["biomarker_finding"],
-                        )
-                    )
-                    if row["biomarker_finding"] is not None
-                    else None
-                ),
-            )
-        ]
-        for slot in (2, 3, 4):
-            name, finding = f"biomarker{slot}", f"biomarker{slot}_finding"
-            slots.append(
-                BiomarkerSource(
-                    slot,
-                    tuple(mapped.get((row.id, slot, name), ())),
-                    tuple(mapped.get((row.id, slot, finding), ())),
-                )
-            )
+        slots = _biomarker_slots(row, mapped)
         raw = {
             column.name: (
                 str(getattr(row[column.name], "value", row[column.name]))
@@ -175,9 +155,10 @@ def load_indication_sources(
             )
             for column in Indications.__table__.columns
         }
-        for slot in (2, 3, 4):
-            raw[f"biomarker{slot}"] = "|".join(slots[slot - 1].biomarkers) or None
-            raw[f"biomarker{slot}_finding"] = "|".join(slots[slot - 1].findings) or None
+        for chain in Indications.chains:
+            for column in chain["columns"]:
+                if row[f"{column}_raw"] is not None:
+                    raw[column] = row[f"{column}_raw"]
         sources.append(
             IndicationSource(
                 row["id"],
@@ -190,7 +171,7 @@ def load_indication_sources(
                 else "",
                 row["withdrawn"],
                 tuple(slots),
-                tuple(regimens.get(row.id, ())),
+                tuple(link.code for link in regimens.get(row.id, ()) if link.aligned and link.code is not None),
                 MappingProxyType(raw),
                 raw.get("stage"),
                 raw.get("status"),
@@ -211,6 +192,7 @@ def load_indication_sources(
                         "risk_stratification",
                     )
                 ),
+                tuple(regimens.get(row.id, ())),
             )
         )
     return tuple(sources)

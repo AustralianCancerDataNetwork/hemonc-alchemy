@@ -2,7 +2,7 @@
 
 from sqlalchemy import exists, func, select
 
-from ....model import Conditions, Indications, Regimens, indications_Regimen_cuiMap
+from ....model import Conditions, Indications, Regimens, indications_RegimenLinks
 from ....model.enums import Indications_RegulatorEnum
 from ..coercion import coerce_enum_value
 from ._queries import paginate, search_predicate
@@ -18,12 +18,12 @@ from .specs import (
 def indication_statement(spec: IndicationSpec = DEFAULT_INDICATION_SPEC):
     regimen_links = (
         select(func.count(func.distinct(Regimens.regimen_cui)))
-        .select_from(indications_Regimen_cuiMap)
+        .select_from(indications_RegimenLinks)
         .join(
             Regimens,
-            Regimens.regimen_cui == indications_Regimen_cuiMap.regimen_cui,
+            Regimens.regimen_cui == indications_RegimenLinks.regimen_cui,
         )
-        .where(indications_Regimen_cuiMap.parent_id == Indications.id)
+        .where(indications_RegimenLinks.parent_id == Indications.id, indications_RegimenLinks.aligned.is_(True))
         .scalar_subquery()
     )
     statement = select(
@@ -49,8 +49,9 @@ def indication_statement(spec: IndicationSpec = DEFAULT_INDICATION_SPEC):
         statement = statement.where(
             exists(
                 select(1).where(
-                    indications_Regimen_cuiMap.parent_id == Indications.id,
-                    indications_Regimen_cuiMap.regimen_cui.in_(spec.regimen_cuis),
+                    indications_RegimenLinks.parent_id == Indications.id,
+                    indications_RegimenLinks.aligned.is_(True),
+                    indications_RegimenLinks.regimen_cui.in_(spec.regimen_cuis),
                 )
             )
         )

@@ -42,7 +42,7 @@ class PassthroughNormaliser:
                 and raw.strip().casefold() == "false"
             ):
                 raw = None
-            if raw is not None:
+            if raw is not None and raw.strip():
                 values.append(RawCriterion(column, column, raw))
         return tuple(values)
 

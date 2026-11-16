@@ -29,7 +29,7 @@ TABLES = {
     "variants_study": "parent_id INTEGER, study TEXT",
     "study_results": "study TEXT, context TEXT, study_cui BIGINT, substudy_cui BIGINT, condition_cui BIGINT, biomarker_finding TEXT",
     "indications": "id INTEGER, condition_cui BIGINT, condition TEXT, component_cui BIGINT, component TEXT, regulator TEXT, withdrawn TEXT, status TEXT, stage TEXT, biomarker TEXT, prior_therapy TEXT",
-    "indications_regimen_cui": "parent_id INTEGER, regimen_cui BIGINT",
+    "indications_regimen_links": "parent_id INTEGER, regimen_cui BIGINT, aligned BOOLEAN",
 }
 DATA = {
     "conditions": "(1,1,'Condition A','Area A'),(2,2,'Condition B','Area B'),(3,3,'100% literal','Undefined')",
@@ -40,7 +40,7 @@ DATA = {
     "variants_study": "(1,'history-only'),(2,'study-a'),(3,'study-a'),(4,'study-b'),(6,'missing-study')",
     "study_results": "('study-a','adjuvant',11,NULL,2,NULL),('study-b','palliative',12,NULL,2,NULL)",
     "indications": "(1,1,'Condition A',7,'Drug A','FDA','FALSE','Metastatic',NULL,NULL,NULL),(2,1,'Condition A',8,'Drug B','EMA','2020-01-01',NULL,NULL,NULL,NULL),(3,NULL,'Unmapped',9,'Drug C','FDA','TRUE',NULL,NULL,NULL,NULL),(4,99,'Missing condition',9,'Drug C','FDA','FALSE',NULL,NULL,NULL,NULL)",
-    "indications_regimen_cui": "(1,10),(2,20),(4,999)",
+    "indications_regimen_links": "(1,10,true),(2,20,true),(4,999,true)",
 }
 
 
@@ -221,3 +221,15 @@ def test_invalid_query_policy():
         CatalogueSpec(version_policy="oldest")
     with pytest.raises(ValueError):
         CatalogueSpec(basis="drug-inferred")
+
+
+def test_regulatory_queries_require_aligned_resolved_chains(catalogue_session):
+    catalogue_session.execute(sa.text("INSERT INTO indications_regimen_links VALUES (3,10,false),(3,NULL,true),(1,10,true)"))
+    rows = {row.record_id: row for row in list_indications(catalogue_session).items}
+    assert rows[1].linked_regimen_count == 1  # Repeated occurrences count as one resolved regimen.
+    assert rows[3].linked_regimen_count == 0
+    filtered = list_indications(catalogue_session, IndicationSpec(regimen_cuis=(10,)))
+    assert [row.record_id for row in filtered.items] == [1]
+    evidence = catalogue_session.execute(condition_regimen_association_statement(
+        CatalogueSpec(regimen_cuis=(10,), basis="regulatory"))).mappings().all()
+    assert [row["evidence_id"] for row in evidence] == [1]

@@ -137,6 +137,6 @@ _design/
 old/
 logs/
 notebooks/
-reference/
+/reference/
 TODO.md
 docker/

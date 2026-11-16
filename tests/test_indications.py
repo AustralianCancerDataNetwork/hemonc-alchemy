@@ -15,17 +15,12 @@ from sqlalchemy.orm import Session
 from hemonc_alchemy.config import create_default_hemonc_engine
 from hemonc_alchemy.model import (
     Indications,
-    indications_Biomarker2_findingMap,
-    indications_Biomarker2Map,
-    indications_Biomarker3_findingMap,
-    indications_Biomarker3Map,
-    indications_Biomarker4_findingMap,
-    indications_Biomarker4Map,
+    indications_BiomarkerSlots,
     indications_ContextMap,
     indications_DemographicsMap,
     indications_Prior_therapy_negationMap,
     indications_Prior_therapy_settingMap,
-    indications_Regimen_cuiMap,
+    indications_RegimenLinks,
     indications_Response_contingencyMap,
     indications_Risk_stratificationMap,
 )
@@ -73,7 +68,7 @@ def source(*slots: BiomarkerSource, indication_id: int = 1) -> IndicationSource:
     )
 
 
-def test_names_and_findings_in_a_slot_are_independent_or_alternatives():
+def test_names_and_findings_in_a_slot_are_paired_alternatives():
     normaliser = BiomarkerNormaliser()
     resolved = normaliser.normalise(
         source(BiomarkerSource(1, ("MMR", "MSI"), ("deficient", "high")))
@@ -84,24 +79,19 @@ def test_names_and_findings_in_a_slot_are_independent_or_alternatives():
     assert [item.biomarker for item in resolved] == ["MMR", "MSI"]
     assert resolved[0].group == resolved[1].group == "1:1"
     assert [[finding.raw for finding in item.findings] for item in resolved] == [
-        ["deficient", "high"],
-        ["deficient", "high"],
+        ["deficient"],
+        ["high"],
     ]
-    assert [finding.detail for finding in resolved[0].findings] == ["deficient", "high"]
+    assert [finding.detail for finding in resolved[0].findings] == ["deficient"]
 
 
-def test_duplicate_names_collapse_but_unknown_finding_remains_unknown():
-    (criterion,) = BiomarkerNormaliser().normalise(
+def test_duplicate_names_keep_their_distinct_findings():
+    criteria = BiomarkerNormaliser().normalise(
         source(BiomarkerSource(1, ("ER", "ER"), ("positive", "unknown")))
     )
-
-    assert criterion.biomarker == "ER"
-    assert criterion.group is None
-    assert [finding.presence for finding in criterion.findings] == [
-        Presence.PRESENT,
-        Presence.UNKNOWN,
-    ]
-    assert [finding.raw for finding in criterion.findings] == ["positive", "unknown"]
+    assert [item.biomarker for item in criteria] == ["ER", "ER"]
+    assert [item.findings[0].presence for item in criteria] == [Presence.PRESENT, Presence.UNKNOWN]
+    assert [item.findings[0].raw for item in criteria] == ["positive", "unknown"]
 
 
 def test_finding_forms_keep_the_raw_text_and_fields():
@@ -335,13 +325,8 @@ def test_sqlite_loader_reads_four_slots_and_regimen_links_in_fixed_queries():
     engine = create_default_hemonc_engine("sqlite://")
     tables = (
         Indications.__table__,
-        indications_Biomarker2Map.__table__,
-        indications_Biomarker2_findingMap.__table__,
-        indications_Biomarker3Map.__table__,
-        indications_Biomarker3_findingMap.__table__,
-        indications_Biomarker4Map.__table__,
-        indications_Biomarker4_findingMap.__table__,
-        indications_Regimen_cuiMap.__table__,
+        indications_BiomarkerSlots.__table__,
+        indications_RegimenLinks.__table__,
         indications_ContextMap.__table__,
         indications_DemographicsMap.__table__,
         indications_Prior_therapy_negationMap.__table__,
@@ -366,28 +351,20 @@ def test_sqlite_loader_reads_four_slots_and_regimen_links_in_fixed_queries():
                 biomarker_finding="negative",
             )
         )
-        for table, column, value in (
-            (indications_Biomarker2Map, "biomarker2", "PR"),
-            (indications_Biomarker2_findingMap, "biomarker2_finding", "NEGATIVE"),
-            (indications_Biomarker3Map, "biomarker3", "HER2"),
-            (indications_Biomarker3_findingMap, "biomarker3_finding", "NEGATIVE"),
-            (indications_Biomarker4Map, "biomarker4", "ROS1"),
-            (indications_Biomarker4_findingMap, "biomarker4_finding", "POSITIVE"),
-        ):
-            connection.execute(
-                table.__table__.insert().values(parent_id=1, **{column: value})
-            )
+        connection.execute(indications_BiomarkerSlots.__table__.insert(), [
+            {"parent_id": 1, "slot": slot, "position": 1, "aligned": True,
+             "biomarker": name, "biomarker_finding": finding}
+            for slot, name, finding in ((2, "PR", "negative"), (3, "HER2", "negative"), (4, "ROS1", "positive"))
+        ])
+        connection.execute(indications_RegimenLinks.__table__.insert(), {
+            "parent_id": 1, "position": 1, "aligned": True, "regimen_cui": 77, "regimen_cui_raw": "77",
+        })
         connection.execute(
-            indications_Regimen_cuiMap.__table__.insert().values(
-                parent_id=1, regimen_cui=77
-            )
-        )
-        connection.execute(
-            indications_ContextMap.__table__.insert().values(parent_id=1, context="1L")
+            indications_ContextMap.__table__.insert().values(parent_id=1, position=1, context="1L")
         )
         connection.execute(
             indications_DemographicsMap.__table__.insert().values(
-                parent_id=1, demographics="adults"
+                parent_id=1, position=1, demographics="adults"
             )
         )
         for table, column, value in (
@@ -401,7 +378,7 @@ def test_sqlite_loader_reads_four_slots_and_regimen_links_in_fixed_queries():
             (indications_Risk_stratificationMap, "risk_stratification", "high risk"),
         ):
             connection.execute(
-                table.__table__.insert().values(parent_id=1, **{column: value})
+                table.__table__.insert().values(parent_id=1, position=1, **{column: value})
             )
 
     calls = []
@@ -417,7 +394,7 @@ def test_sqlite_loader_reads_four_slots_and_regimen_links_in_fixed_queries():
         sa.event.remove(engine, "before_cursor_execute", count_query)
         engine.dispose()
 
-    assert len(calls) == 14
+    assert len(calls) == 9
     assert indication.regimen_cuis == (77,)
     assert indication.withdrawn and indication.raw["withdrawn"] == "2025-01-01"
     biomarkers = [
@@ -425,9 +402,9 @@ def test_sqlite_loader_reads_four_slots_and_regimen_links_in_fixed_queries():
     ]
     assert [(item.slot, item.biomarker) for item in biomarkers] == [
         (1, "ER"),
-        (2, "pr"),
+        (2, "PR"),
         (3, "HER2"),
-        (4, "ros1"),
+        (4, "ROS1"),
     ]
     (context,) = [
         item for item in indication.criteria if isinstance(item, ContextCriterion)

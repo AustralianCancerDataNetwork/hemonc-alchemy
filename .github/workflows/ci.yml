@@ -24,7 +24,6 @@ jobs:
     with:
       python-version: "3.12"
       markers: duckdb
-      ty-src: hemonc_alchemy/cli.py hemonc_alchemy/config.py hemonc_alchemy/bootstrap.py hemonc_alchemy/integrations
 
   postgres:
     uses: AustralianCancerDataNetwork/cava-devops/.github/workflows/build-test-postgres.yml@main

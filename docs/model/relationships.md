@@ -8,12 +8,18 @@ The loader splits pipe-delimited collections into child rows. For a variant's st
 
 ```mermaid
 flowchart TB
-    V["variants<br/>id"] -->|"study_items: one to many"| M["variants_study<br/>parent_id<br/>study"]
+    V["variants<br/>id"] -->|"study_items: one to many"| M["variants_study<br/>parent_id<br/>position<br/>study"]
 ```
 
 `variants_study.parent_id` references `variants.id`. Use `variant.study_items` to read the stored tokens. Each item's `study_objects` resolves its token to matching `Studies` rows, including `study--substudy` references. The same parent/child structure is used for collections on sigs, indications and other entities.
 
 `variant.study_objects` is a separate, generated relationship that matches bare study names only. Use the map item's `study_objects` when references include a substudy.
+
+Collection map rows have a one-based `position` in their key, so source order and repeated values are kept.
+
+Columns whose lists must be read together, such as an indication's biomarkers and their findings, are stored in chain tables: `indications_biomarker_slots` (key: parent ID, slot, position), `indications_regimen_links` and `drugs_canmed_pairs` (key: parent ID, position). Each references its parent's generated ID.
+
+Read chains ordered by position, or use `load_indication_sources()` / `resolve_indications()`, which return biomarker/finding pairs and regimen name/code links. The per-column maps of chained columns cannot reconstruct pairing. A source row whose lists cannot be aligned has a single position-zero row with `aligned=False`; read its complete cells from the parent's `<column>_raw` fields. See [Paired multi-value columns](loading.md#paired-multi-value-columns).
 
 ## Traversal helpers
 
