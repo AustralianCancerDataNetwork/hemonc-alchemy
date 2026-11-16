@@ -3,7 +3,21 @@ from __future__ import annotations
 import subprocess
 from pathlib import Path
 
-from .schema_model import Registry
+from .schema_model import Registry, TableMeta
+
+
+def _collection_changes(name: str, old: TableMeta, new: TableMeta) -> list[str]:
+    """Include generated child keys and authored chains in the schema gate."""
+    changes = []
+    old_maps = {(table.name, table.positional) for table in old.normalised_tables}
+    new_maps = {(table.name, table.positional) for table in new.normalised_tables}
+    if old_maps != new_maps:
+        changes.append(f"{name}: collection tables/positional keys changed {sorted(old_maps)!r} -> {sorted(new_maps)!r}")
+    if old.opaque_columns != new.opaque_columns:
+        changes.append(f"{name}: opaque source fields changed {old.opaque_columns!r} -> {new.opaque_columns!r}")
+    if old.chains != new.chains:
+        changes.append(f"{name}: authored chains changed {old.chains!r} -> {new.chains!r}")
+    return changes
 
 
 def load_previous_registry_from_git(path: Path, ref: str = "HEAD") -> Registry | None:
@@ -60,6 +74,7 @@ def diff_registries(old: Registry, new: Registry) -> list[str]:
     for name in sorted(old_tables & new_tables):
         old_meta = old.tables[name]
         new_meta = new.tables[name]
+        changes.extend(_collection_changes(name, old_meta, new_meta))
         if old_meta.description != new_meta.description:
             changes.append(f"{name}: description changed {old_meta.description!r} -> {new_meta.description!r}")
         if old_meta.maturity != new_meta.maturity:

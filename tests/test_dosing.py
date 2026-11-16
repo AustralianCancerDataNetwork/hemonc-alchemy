@@ -101,7 +101,7 @@ class TestDosingInstructions:
             sequence=Sigs_SequenceEnum.FIRST,
             variant="v", date_added=_D,
             cyclesigs_note="see protocol note; increase as tolerated",
-            study_items=[sigs_StudyMap(study="study-a"), sigs_StudyMap(study="study-b")],
+            study_items=[sigs_StudyMap(position=1, study="study-a"), sigs_StudyMap(position=2, study="study-b")],
         )
         session.add(sig)
         session.flush()

@@ -225,8 +225,8 @@ def infer_pipe_groups(
     Group denormalised columns that appear to explode together row-by-row
     e.g. `biomarker2` and `biomarker2_finding`, where each pipe-delimited
     entry in one column lines up with the corresponding entry in the other.
-    Paired columns like this share one exploded child table instead of two
-    separate ones.
+    This is a diagnostic check only. Authored chain declarations, rather
+    than inference, control generation of positional child tables.
     """
     groups: list[list[str]] = []
     cols = sorted(columns)

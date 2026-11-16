@@ -41,6 +41,7 @@ from ..model.ingestion import (
     interpret_values,
 )
 from ..naming import resolve_source_csv, safe_identifier
+from .chain_loading import ChainLoadReport, load_chains
 
 logger = logging.getLogger(__name__)
 
@@ -164,11 +165,13 @@ def load_all(
     `load_denormalised` separately if you need every entity's own rows in
     place before any child tables are filled.
     """
+    chain_report = load_csv_kwargs.pop("chain_report", None)
     primary_total = load_entity(session, entity_cls, data_dir, **load_csv_kwargs)
     session.flush()
     denorm_totals = load_denormalised(
         session, entity_cls, data_dir,
         policy=load_csv_kwargs.get("policy"), quote_mode=load_csv_kwargs.get("quote_mode"),
+        chain_report=chain_report,
     )
     return {entity_cls.__tablename__: primary_total, **denorm_totals}
 
@@ -216,6 +219,9 @@ def _read_source_csv(
     """Read child source values under the same CSV rules as the parent loader."""
     columns: dict[str, sa.ColumnElement[Any]] = {column.name: column for column in entity_cls.__table__.c}
     columns.update({name: sa.column(name, sa.String()) for name in entity_cls.denormalised_columns})
+    raw_columns = {name for chain in getattr(entity_cls, "chains", ()) for name in chain["columns"]}
+    raw_columns.update(getattr(entity_cls, "opaque_columns", ()))
+    columns.update({name: sa.column(name, sa.Text()) for name in raw_columns})
     reader = open_reader(
         path, columns, quote_mode=quote_mode, skip_malformed=policy.errors.on_error == "reject_row",
     )
@@ -343,6 +349,7 @@ def load_denormalised(
     *,
     policy: ConversionPolicy | None = None,
     quote_mode: str | None = None,
+    chain_report: ChainLoadReport | None = None,
 ) -> dict[str, int]:
     """Fill the child tables holding an entity's pipe-delimited columns.
 
@@ -358,7 +365,8 @@ def load_denormalised(
     policy = policy or conversion_policy(entity_cls.__table__)
     failures: Counter[str] = Counter()
 
-    if not entity_cls.denormalised_columns:
+    if not (entity_cls.denormalised_columns or getattr(entity_cls, "chains", ())
+            or getattr(entity_cls, "opaque_columns", ())):
         return {}
 
     with _resolved_csv_path(data_dir, entity_cls.__tablename__) as path:
@@ -397,7 +405,7 @@ def load_denormalised(
                 continue
             fixed_fields = {"parent_id": parent_key[0]} if is_surrogate else dict(zip(key_cols, parent_key))
 
-            for token in str(raw).split("|"):
+            for position, token in enumerate(str(raw).split("|"), 1):
                 token = token.strip()
                 if not token:
                     continue
@@ -413,11 +421,12 @@ def load_denormalised(
                     continue
 
                 dedupe_key = (*fixed_fields.values(), value)
-                if dedupe_key in seen:
+                if "position" not in map_cls.__table__.c and dedupe_key in seen:
                     continue
                 seen.add(dedupe_key)
 
-                records.append({**fixed_fields, column: value})
+                position_fields = {"position": position} if "position" in map_cls.__table__.c else {}
+                records.append({**fixed_fields, **position_fields, column: value})
 
         # A single bulk insert per column rather than one `session.merge()`
         # per exploded value -- `merge()` is a SELECT-then-insert/update
@@ -430,6 +439,9 @@ def load_denormalised(
 
         results[column] = len(records)
 
+    chain_report = chain_report if chain_report is not None else ChainLoadReport()
+    results.update(load_chains(session, entity_cls, df, parent_lookup, chain_report))
+    session.info[("hemonc_chain_report", entity_cls)] = chain_report
     for column, count in failures.items():
         logger.warning("CAST %s.%s: %d value(s) failed", entity_cls.__tablename__, column, count)
     session.flush()

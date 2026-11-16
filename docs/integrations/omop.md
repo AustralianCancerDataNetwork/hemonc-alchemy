@@ -52,7 +52,7 @@ vocabulary = Resolver.from_active_config().resolve_database("cdm_db")
 schema_aware_bind(session, omop_database=vocabulary)
 ```
 
-`omop_availability(session, omop_database=vocabulary)` accepts the same context. Explicit `schema_translate_map={"vocab": "omop"}` overrides configuration and retains existing routes; this remains useful for manually attached test schemas. Explicit context selection takes precedence over automatic discovery. An existing vocabulary map is retained unless explicitly replaced. For an unselected generic HemOnc target, legacy discovery accepts exactly one matching CDM vocabulary target; multiple matches report ambiguity and require `omop_db`. A bind already identified as a CDM target uses its own vocabulary role.
+`omop_availability(session, omop_database=vocabulary)` accepts the same context. Explicit `schema_translate_map={"vocab": "omop"}` overrides configuration and retains existing routes; this remains useful for manually attached test schemas. Explicit context selection takes precedence over automatic discovery. An existing vocabulary map is retained unless explicitly replaced. For an unselected generic HemOnc target, automatic discovery accepts exactly one matching CDM vocabulary target; multiple matches report ambiguity and require `omop_db`. A bind already identified as a CDM target uses its own vocabulary role.
 
 ## Common queries
 

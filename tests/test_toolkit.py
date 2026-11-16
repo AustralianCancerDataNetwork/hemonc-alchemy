@@ -209,8 +209,8 @@ def test_reverse_study_links_resolve_substudies_and_keep_linked_history(session)
     historical_study = Studies(id=3, study="Historical only", **common)
     session.add_all([
         part_a, part_b, historical_study,
-        variants_StudyMap(parent_id=current.id, study="Trial--A"),
-        variants_StudyMap(parent_id=historical.id, study="Historical only"),
+        variants_StudyMap(parent_id=current.id, position=1, study="Trial--A"),
+        variants_StudyMap(parent_id=historical.id, position=1, study="Historical only"),
     ])
     session.flush()
     session.expire_all()

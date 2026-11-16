@@ -5,6 +5,7 @@ Registry metadata objects: TableMeta, ColumnSpec, EnumSpec, Registry.
 from __future__ import annotations
 
 import json
+import logging
 from collections import Counter
 from dataclasses import asdict, dataclass, field
 from html import escape
@@ -13,6 +14,13 @@ from typing import Literal, Protocol, runtime_checkable
 
 import pandas as pd
 
+from ..multivalue import align_values
+from .chains import (
+    CHAIN_DECLARATIONS,
+    ChainSpec,
+    render_chain_tables,
+    render_source_metadata,
+)
 from .infer import (
     detect_boolean,
     detect_datetime,
@@ -346,6 +354,7 @@ class NormalisedTable:
 
     parent: str
     column: str
+    positional: bool = False
 
     @property
     def name(self) -> str:
@@ -357,7 +366,7 @@ class NormalisedTable:
 
     @classmethod
     def from_dict(cls, raw: dict) -> NormalisedTable:
-        return cls(parent=raw["parent"], column=raw["column"])
+        return cls(parent=raw["parent"], column=raw["column"], positional=raw.get("positional", False))
 
 
 @dataclass
@@ -409,6 +418,8 @@ class TableMeta:
     derived_columns: list[str] = field(default_factory=list)
     normalisation_groups: list[NormalisationGroup] = field(default_factory=list)
 
+    chains: list[ChainSpec] = field(default_factory=list)
+    opaque_columns: list[str] = field(default_factory=list)
     normalised_tables: list[NormalisedTable] = field(default_factory=list)
     soft_relationships: list[ForeignLikeRef] = field(default_factory=list)
     soft_m2m_relationships: list[SoftManyToManyRef] = field(default_factory=list)
@@ -485,6 +496,8 @@ class TableMeta:
             normalisation_groups=[
                 NormalisationGroup.from_dict(g) for g in raw.get("normalisation_groups", [])
             ],
+            chains=[ChainSpec.from_dict(chain) for chain in raw.get("chains", [])],
+            opaque_columns=list(raw.get("opaque_columns", [])),
             normalised_tables=[
                 NormalisedTable.from_dict(nt) for nt in raw.get("normalised_tables", [])
             ],
@@ -584,7 +597,11 @@ class TableMeta:
         - source-defined keys
         - normalisation groups
         """
-        if df_data is None or df_data.empty:
+        if df_data is None:
+            return
+        if df_data.empty:
+            self._declare_chains(df_data, [])
+            self._rebuild_normalised_tables()
             return
 
         df_data = norm_cols(df_data)
@@ -640,11 +657,6 @@ class TableMeta:
 
         groups = infer_pipe_groups(df_data, self.denormalised_columns)
 
-        flattened_multi = {c for g in groups if len(g) > 1 for c in g}
-        final_groups = [g for g in groups if not (len(g) == 1 and g[0] in flattened_multi)]
-
-        self.normalisation_groups = [NormalisationGroup(columns=g) for g in final_groups]
-
         self.derived_columns = sorted(set(self.derived_columns))
         self.source_defined_keys = list(dict.fromkeys(self.source_defined_keys))
 
@@ -654,9 +666,39 @@ class TableMeta:
                 key_frame[column] = _clean_identifier_placeholders(key_frame[column], column)
             self.natural_key_has_duplicates = bool(key_frame.duplicated().any())
 
-        self.normalised_tables = [
-            NormalisedTable(parent=self.name, column=c) for c in self.denormalised_columns
-        ]
+        self._declare_chains(df_data, groups)
+        self._rebuild_normalised_tables()
+
+    def _rebuild_normalised_tables(self) -> None:
+        chained = {column for chain in self.chains for column in chain.columns}
+        # The variants blob map is keyed by value, not position.
+        unordered = chained | ({"blob"} if self.name == "variants" else set())
+        self.normalised_tables = [NormalisedTable(self.name, column, positional=column not in unordered)
+                                  for column in self.denormalised_columns]
+
+    def _declare_chains(self, df_data: pd.DataFrame, inferred: list[list[str]]) -> None:
+        """Declare chains from author guidance; inference only raises diagnostics."""
+        self.chains = list(CHAIN_DECLARATIONS.get(self.name, ()))
+        self.opaque_columns = ["blob"] if self.name == "variants" and "blob" in self.columns else []
+        self.normalisation_groups = [NormalisationGroup(columns=list(chain.columns)) for chain in self.chains]
+        declared = [set(chain.columns) for chain in self.chains]
+        for group in inferred:
+            if not any(set(group) <= columns for columns in declared):
+                logging.getLogger(__name__).warning("%s: inferred undeclared pipe group %s", self.name, group)
+        frame = df_data.rename(columns=lambda column: safe_identifier(column).lower()).fillna("")
+        for chain in self.chains:
+            missing = set(chain.columns) - set(frame.columns)
+            if missing:
+                logging.getLogger(__name__).warning(
+                    "%s.%s: missing declared columns %s", self.name, chain.name, sorted(missing)
+                )
+            unaligned = [index + 2 for index, row in enumerate(frame.to_dict("records"))
+                         if align_values(tuple(str(row.get(column, "")) for column in chain.columns)).status == "unaligned"]
+            if unaligned:
+                logging.getLogger(__name__).warning(
+                    "%s.%s slot=%s: declared chain contradicted at source rows %s",
+                    self.name, chain.name, chain.slot, unaligned,
+                )
 
     def _retype_denormalised_columns(self, df_data: pd.DataFrame) -> None:
         """
@@ -740,7 +782,10 @@ class TableMeta:
         py_type = col_spec.sa_python_type(parent, force_not_null=True)
         sa_type = col_spec.sa_column_type(parent)
 
-        lines.append(f"    {col_name}: Mapped[{py_type}] = mapped_column({sa_type}, primary_key=True, nullable=False)")
+        if nt.positional:
+            lines.append("    position: Mapped[int] = mapped_column(BigInteger, primary_key=True)")
+        value_key = "False" if nt.positional else "True"
+        lines.append(f"    {col_name}: Mapped[{py_type}] = mapped_column({sa_type}, primary_key={value_key}, nullable=False)")
         lines.append("")
         lines.append(f"    parent: Mapped['{parent.classname}'] = sa_relationship(back_populates='{nt.column}_items')")
 
@@ -809,6 +854,7 @@ class TableMeta:
         lines.append(f"    identity_keys: list[str] = {self.identity_keys!r}")
         lines.append(f"    denormalised_columns: list[str] = {self.denormalised_columns!r}")
         lines.append(f"    derived_columns: list[str] = {self.derived_columns!r}")
+        lines.extend(render_source_metadata(self))
         lines.append("")
 
         if self.enums:
@@ -845,9 +891,10 @@ class TableMeta:
         for nt in sorted(self.normalised_tables, key=lambda nt: nt.name):
             rel_name = f"{nt.column}_items"
             child_cls = nt.classname
+            order = f", order_by='{child_cls}.position'" if nt.positional else ""
             lines.append(
                 f"    {rel_name}: Mapped[list['{child_cls}']] = sa_relationship("
-                f"back_populates='parent', lazy='selectin', cascade='all, delete-orphan')"
+                f"back_populates='parent', lazy='selectin', cascade='all, delete-orphan'{order})"
             )
 
         soft_rel_counts = Counter(rel.local_column for rel in self.soft_relationships)
@@ -1023,6 +1070,9 @@ class Registry:
             for nt in sorted(table.normalised_tables, key=lambda nt: nt.name):
                 f += table.normalised_table_class(nt) + "\n\n"
                 rendered.append(nt.classname)
+            for classname, code in render_chain_tables(table):
+                f += code + "\n\n"
+                rendered.append(classname)
 
         # Declared here so `model/__init__.py` can re-export the entities
         # without a hand-maintained list that silently omits tables added in a
@@ -1069,10 +1119,7 @@ class Registry:
                 for group in table.normalisation_groups
                 if len([column for column in group.columns if column not in hard_no_columns]) > 1
             ]
-            table.normalised_tables = [
-                NormalisedTable(parent=table.name, column=column)
-                for column in table.denormalised_columns
-            ]
+            table._rebuild_normalised_tables()
 
     def infer_soft_relationships(self) -> None:
         """Infer view-only business-key relationships across the registry.

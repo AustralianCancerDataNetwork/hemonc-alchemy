@@ -55,8 +55,8 @@ def schema_target(request):
 
 
 def test_all_generated_tables_and_enums_use_the_primary_role():
-    # 22 source tables plus 64 genuine collection maps after scalar corrections.
-    assert len(Base.metadata.tables) == 86
+    # 22 source tables, 64 compatibility maps, and three authored chain tables.
+    assert len(Base.metadata.tables) == 89
     assert {table.schema for table in Base.metadata.tables.values()} == {"primary"}
     for table in Base.metadata.tables.values():
         for column in table.c:
@@ -126,13 +126,13 @@ def test_composite_child_foreign_keys_are_enforced(schema_target):
             **affiliation_key, "affiliation_hemonc": "test", "date_added": datetime.fromisoformat("2026-11-07T00:00:00"), "full_name_hemonc": "test",  # column is timezone-naive
         })
         for name, key, value_column in cases:
-            connection.execute(sa.insert(Base.metadata.tables[f"primary.{name}"]), {**key, value_column: "valid"})
+            connection.execute(sa.insert(Base.metadata.tables[f"primary.{name}"]), {**key, "position": 1, value_column: "valid"})
     for name, key, value_column in cases:
         table = Base.metadata.tables[f"primary.{name}"]
         column = next(column for column in next(iter(table.foreign_key_constraints)).columns if not isinstance(column.type, sa.Enum))
         missing = 999999 if isinstance(column.type, sa.Integer) else "missing parent"
         with pytest.raises(sa.exc.IntegrityError), engine.begin() as connection:
-            connection.execute(sa.insert(table), {**key, column.name: missing, value_column: "invalid"})
+            connection.execute(sa.insert(table), {**key, "position": 1, column.name: missing, value_column: "invalid"})
 
 
 def test_generated_id_inserts_and_queries_use_the_selected_schema(schema_target):

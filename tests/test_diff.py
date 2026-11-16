@@ -114,3 +114,17 @@ class TestDiffRegistriesMetadataCoverage:
 
 if __name__ == "__main__":
     pytest.main([__file__])
+
+
+def test_positional_map_keys_and_chains_are_diffed():
+    from hemonc_alchemy.compiler.chains import CHAIN_DECLARATIONS
+    from hemonc_alchemy.compiler.schema_model import NormalisedTable
+
+    old = TableMeta("drugs", "", "content", "prod", [])
+    new = TableMeta("drugs", "", "content", "prod", [])
+    old.normalised_tables = [NormalisedTable("drugs", "atc")]
+    new.normalised_tables = [NormalisedTable("drugs", "atc", positional=True)]
+    new.chains = list(CHAIN_DECLARATIONS["drugs"])
+    changes = diff_registries(Registry({"drugs": old}), Registry({"drugs": new}))
+    assert any("positional keys changed" in change for change in changes)
+    assert any("authored chains changed" in change for change in changes)
