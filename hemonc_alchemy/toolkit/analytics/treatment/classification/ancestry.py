@@ -20,14 +20,18 @@ from .modality import sig_class_value
 
 # Vocabulary-qualified concept codes remain stable across OMOP builds.
 ENDOCRINE_ROOT_CUI = "44970"  # Endocrine therapeutic
-SUPPORTIVE_ROOT_CUI = "20221"  # Growth factor; deliberately narrower than all supportive care
+SUPPORTIVE_ROOT_CUI = (
+    "20221"  # Growth factor; deliberately narrower than all supportive care
+)
 EXCLUDED_COMPONENT_CLASS_CUIS = frozenset({"45523"})  # Steroid: polyhierarchical
 _ROOT_CUIS = frozenset({ENDOCRINE_ROOT_CUI, SUPPORTIVE_ROOT_CUI})
-_DRUG_SIG_CLASSES = frozenset({
-    Sigs_Class_fieldEnum.IV_INTERMITTENT_CANONICAL_SIG,
-    Sigs_Class_fieldEnum.IV_CONTINUOUS_CANONICAL_SIG,
-    Sigs_Class_fieldEnum.NON_TO_IV_CANONICAL_SIG,
-})
+_DRUG_SIG_CLASSES = frozenset(
+    {
+        Sigs_Class_fieldEnum.IV_INTERMITTENT_CANONICAL_SIG,
+        Sigs_Class_fieldEnum.IV_CONTINUOUS_CANONICAL_SIG,
+        Sigs_Class_fieldEnum.NON_TO_IV_CANONICAL_SIG,
+    }
+)
 
 
 class DrugAncestry(str, Enum):
@@ -54,7 +58,9 @@ class MainClassAncestry:
     resolutions: Mapping[str, MainClassResolution]
     unavailable_reason: str | None = None
 
-    def purity(self, classes: Iterable[str | None], ancestry: DrugAncestry) -> bool | None:
+    def purity(
+        self, classes: Iterable[str | None], ancestry: DrugAncestry
+    ) -> bool | None:
         """True for pure drugs, False for a known exclusion, None for incomplete evidence."""
         classes = frozenset(classes)
         if not classes:
@@ -120,7 +126,10 @@ def compute_main_class_ancestry(
     targets: dict[str, set[str]] = defaultdict(set)
     for source, target, target_class in relationships:
         children[target].add(source)
-        if target_class == "Component Class" and target not in EXCLUDED_COMPONENT_CLASS_CUIS:
+        if (
+            target_class == "Component Class"
+            and target not in EXCLUDED_COMPONENT_CLASS_CUIS
+        ):
             targets[source].add(target)
     endocrine = _descendants(children, ENDOCRINE_ROOT_CUI)
     supportive = _descendants(children, SUPPORTIVE_ROOT_CUI)
@@ -154,30 +163,42 @@ def _ancestry_for_items(items) -> MainClassAncestry:
         session = getattr(state, "session", None)
         if session is not None:
             return main_class_ancestry(session)
-    return MainClassAncestry(MappingProxyType({}), "No attached session or explicit ancestry index")
+    return MainClassAncestry(
+        MappingProxyType({}), "No attached session or explicit ancestry index"
+    )
 
 
-def _purity(items, target: DrugAncestry, ancestry: MainClassAncestry | None) -> bool | None:
+def _purity(
+    items, target: DrugAncestry, ancestry: MainClassAncestry | None
+) -> bool | None:
     items = tuple(items)
     index = ancestry if ancestry is not None else _ancestry_for_items(items)
     return index.purity(_drug_main_classes(items), target)
 
 
-def is_endocrine_regimen(variant, *, ancestry: MainClassAncestry | None = None) -> bool | None:
+def is_endocrine_regimen(
+    variant, *, ancestry: MainClassAncestry | None = None
+) -> bool | None:
     """Whether every drug is endocrine; None means ancestry is unresolved."""
     return _purity(variant.component_sigs, DrugAncestry.ENDOCRINE, ancestry)
 
 
-def is_supportive_regimen(variant, *, ancestry: MainClassAncestry | None = None) -> bool | None:
+def is_supportive_regimen(
+    variant, *, ancestry: MainClassAncestry | None = None
+) -> bool | None:
     """Whether every drug has Growth factor ancestry; None means unresolved."""
     return _purity(variant.component_sigs, DrugAncestry.SUPPORTIVE, ancestry)
 
 
-def is_endocrine_block(events, *, ancestry: MainClassAncestry | None = None) -> bool | None:
+def is_endocrine_block(
+    events, *, ancestry: MainClassAncestry | None = None
+) -> bool | None:
     """Whether this block's own drugs are entirely endocrine; None means unresolved."""
     return _purity(events, DrugAncestry.ENDOCRINE, ancestry)
 
 
-def is_supportive_block(events, *, ancestry: MainClassAncestry | None = None) -> bool | None:
+def is_supportive_block(
+    events, *, ancestry: MainClassAncestry | None = None
+) -> bool | None:
     """Whether this block's own drugs have Growth factor ancestry; None means unresolved."""
     return _purity(events, DrugAncestry.SUPPORTIVE, ancestry)

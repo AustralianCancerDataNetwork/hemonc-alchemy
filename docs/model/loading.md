@@ -101,7 +101,9 @@ The policy treats `NULL`, `None`, `N/A`, `NaN`, `nan`, `null`, `NA`, and `n/a` a
 from orm_loader.loaders import LoadReport
 
 report = LoadReport()
-counts = load_all(session, Variants, Path("data/Tables"), report=report, resolved=database)
+counts = load_all(
+    session, Variants, Path("data/Tables"), report=report, resolved=database
+)
 print(report.rows_read, report.rows_rejected, report.accounted)
 print(report.rejects_path)
 ```
@@ -116,7 +118,9 @@ from orm_loader.conversion import ErrorPolicy
 from hemonc_alchemy.model.ingestion import conversion_policy
 
 strict = replace(conversion_policy(), errors=ErrorPolicy(on_error="raise"))
-counts = load_all(session, Variants, Path("data/Tables"), policy=strict, resolved=database)
+counts = load_all(
+    session, Variants, Path("data/Tables"), policy=strict, resolved=database
+)
 ```
 
 ## Transaction boundaries

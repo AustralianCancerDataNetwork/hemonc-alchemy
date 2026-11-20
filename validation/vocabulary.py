@@ -23,37 +23,60 @@ def export_snapshot(path: Path, schema: str) -> dict:
     if binding is None:
         raise RuntimeError("The omop extra is required for vocabulary validation")
     _, database = get_hemonc_context()
-    engine = schema_aware_bind(database.create_engine(register_claims=False), {"vocab": schema})
+    engine = schema_aware_bind(
+        database.create_engine(register_claims=False), {"vocab": schema}
+    )
     concept = binding.concept.__table__
     relationship = binding.concept_relationship.__table__
-    hemonc_ids = sa.select(concept.c.concept_id).where(concept.c.vocabulary_id == "HemOnc")
-    links = sa.select(relationship).where(
-        relationship.c.concept_id_1.in_(hemonc_ids),
-        relationship.c.relationship_id.in_(["Is a", "Maps to"]),
-    ).subquery("validation_links")
+    hemonc_ids = sa.select(concept.c.concept_id).where(
+        concept.c.vocabulary_id == "HemOnc"
+    )
+    links = (
+        sa.select(relationship)
+        .where(
+            relationship.c.concept_id_1.in_(hemonc_ids),
+            relationship.c.relationship_id.in_(["Is a", "Maps to"]),
+        )
+        .subquery("validation_links")
+    )
     included = hemonc_ids.union(sa.select(links.c.concept_id_2))
     statements = {
-        "concept": sa.select(concept).where(concept.c.concept_id.in_(included)).order_by(concept.c.concept_id),
-        "concept_relationship": sa.select(links).order_by(links.c.concept_id_1, links.c.concept_id_2, links.c.relationship_id),
-        "vocabulary": sa.select(binding.vocabulary.__table__).order_by(binding.vocabulary.vocabulary_id),
+        "concept": sa.select(concept)
+        .where(concept.c.concept_id.in_(included))
+        .order_by(concept.c.concept_id),
+        "concept_relationship": sa.select(links).order_by(
+            links.c.concept_id_1, links.c.concept_id_2, links.c.relationship_id
+        ),
+        "vocabulary": sa.select(binding.vocabulary.__table__).order_by(
+            binding.vocabulary.vocabulary_id
+        ),
     }
     path.parent.mkdir(parents=True, exist_ok=True)
     path.touch(mode=0o600, exist_ok=False)
     counts = Counter()
     try:
         with (
-            engine.connect().execution_options(isolation_level="REPEATABLE READ") as connection,
+            engine.connect().execution_options(
+                isolation_level="REPEATABLE READ"
+            ) as connection,
             gzip.open(path, "wt", encoding="utf-8") as stream,
         ):
             connection.exec_driver_sql("SET TRANSACTION READ ONLY")
             for name, statement in statements.items():
                 for row in connection.execute(statement).mappings().yield_per(10_000):
-                    stream.write(json.dumps({"table": name, "row": canonical(dict(row))}, sort_keys=True) + "\n")
+                    stream.write(
+                        json.dumps(
+                            {"table": name, "row": canonical(dict(row))}, sort_keys=True
+                        )
+                        + "\n"
+                    )
                     counts[name] += 1
     finally:
         engine.dispose()
     if not counts["concept"] or not counts["concept_relationship"]:
-        raise ValueError("The source vocabulary has no HemOnc concepts or mapping/hierarchy relationships")
+        raise ValueError(
+            "The source vocabulary has no HemOnc concepts or mapping/hierarchy relationships"
+        )
     return dict(counts)
 
 
@@ -78,13 +101,29 @@ def load_snapshot(engine: sa.Engine, path: Path) -> tuple[sa.Engine, dict]:
     routed = schema_aware_bind(engine, {"vocab": schema})
     metadata = sa.MetaData()
     for model in [binding.concept, binding.concept_relationship, binding.vocabulary]:
-        sa.Table(model.__tablename__, metadata, *[
-            sa.Column(c.name, c.type.copy(), primary_key=c.primary_key, nullable=c.nullable, autoincrement=False)
-            for c in model.__table__.c
-        ], schema="vocab")
+        sa.Table(
+            model.__tablename__,
+            metadata,
+            *[
+                sa.Column(
+                    c.name,
+                    c.type.copy(),
+                    primary_key=c.primary_key,
+                    nullable=c.nullable,
+                    autoincrement=False,
+                )
+                for c in model.__table__.c
+            ],
+            schema="vocab",
+        )
     metadata.create_all(routed)
-    with routed.begin() as connection, gzip.open(path, "rt", encoding="utf-8") as stream:
-        batches: dict[str, list] = {name: [] for name in ["concept", "concept_relationship", "vocabulary"]}
+    with (
+        routed.begin() as connection,
+        gzip.open(path, "rt", encoding="utf-8") as stream,
+    ):
+        batches: dict[str, list] = {
+            name: [] for name in ["concept", "concept_relationship", "vocabulary"]
+        }
         for line in stream:
             item = json.loads(line)
             name = item["table"]
@@ -99,8 +138,15 @@ def load_snapshot(engine: sa.Engine, path: Path) -> tuple[sa.Engine, dict]:
     with path.open("rb") as stream:
         checksum = hashlib.file_digest(stream, "sha256").hexdigest()
     with routed.connect() as connection:
-        tables = {table.name: table_snapshot(connection, table, {}) for table in metadata.tables.values()}
-    return routed, {"snapshot_sha256": checksum, "tables": tables, "selection": "HemOnc concepts, outgoing Is a/Maps to targets, vocabulary metadata"}
+        tables = {
+            table.name: table_snapshot(connection, table, {})
+            for table in metadata.tables.values()
+        }
+    return routed, {
+        "snapshot_sha256": checksum,
+        "tables": tables,
+        "selection": "HemOnc concepts, outgoing Is a/Maps to targets, vocabulary metadata",
+    }
 
 
 def main(argv=None) -> int:

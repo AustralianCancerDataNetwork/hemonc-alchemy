@@ -75,7 +75,11 @@ class Diagnostic:
 
 def diagnose_drug_components(sigs: Iterable) -> tuple[Diagnostic, ...]:
     """Report routed instructions omitted from drug lists and grids."""
-    skipped = [sig for sig in sigs if route_group(sig.route) is not None and sig.drug_object is None]
+    skipped = [
+        sig
+        for sig in sigs
+        if route_group(sig.route) is not None and sig.drug_object is None
+    ]
     if not skipped:
         return ()
     cuis = tuple(dict.fromkeys(sig.component_cui for sig in skipped))
@@ -89,7 +93,9 @@ def diagnose_drug_components(sigs: Iterable) -> tuple[Diagnostic, ...]:
     )
 
 
-def diagnose_all_days(all_days: str | None, *, sig_id: int | None = None) -> tuple[Diagnostic, ...]:
+def diagnose_all_days(
+    all_days: str | None, *, sig_id: int | None = None
+) -> tuple[Diagnostic, ...]:
     """Findings for one `alldays`/`timing_sequence` expression, from its own tokens.
 
     Reuses `tokenize_all_days`/`parse_token`; never raises -- a token that
@@ -190,7 +196,9 @@ def diagnose_calendar_unit(
     )
 
 
-def diagnose_timing_status(status: str, *, sig_id: int | None = None) -> tuple[Diagnostic, ...]:
+def diagnose_timing_status(
+    status: str, *, sig_id: int | None = None
+) -> tuple[Diagnostic, ...]:
     """One finding from a rolled-out event's own `timing_status`.
 
     A "resolved" status needs no diagnostic; every other documented prefix
@@ -240,20 +248,26 @@ def diagnose_timing_status(status: str, *, sig_id: int | None = None) -> tuple[D
     )
 
 
-def diagnose_variant(variant, *, calendar_anchored: bool = False) -> tuple[Diagnostic, ...]:
+def diagnose_variant(
+    variant, *, calendar_anchored: bool = False
+) -> tuple[Diagnostic, ...]:
     """Every per-sig structured diagnostic for `variant`, independent of rollout.
 
     Reads `variant.component_sigs` directly rather than `schedule_events`, so
     it stays available even for a sig whose `alldays` crashes the shared parser.
     """
-    diagnostics: list[Diagnostic] = list(diagnose_drug_components(variant.component_sigs))
+    diagnostics: list[Diagnostic] = list(
+        diagnose_drug_components(variant.component_sigs)
+    )
     for sig in variant.component_sigs:
         diagnostics.extend(diagnose_all_days(sig.alldays, sig_id=sig.id))
         diagnostics.extend(diagnose_all_days(sig.timing_sequence, sig_id=sig.id))
         diagnostics.extend(diagnose_route(sig.route, sig_id=sig.id))
         diagnostics.extend(
             diagnose_calendar_unit(
-                sig.cycle_length_unit, sig_id=sig.id, calendar_anchored=calendar_anchored
+                sig.cycle_length_unit,
+                sig_id=sig.id,
+                calendar_anchored=calendar_anchored,
             )
         )
     return tuple(diagnostics)

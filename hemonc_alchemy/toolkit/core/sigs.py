@@ -94,7 +94,9 @@ class SigSelectionSpec:
             raise ValueError("At least one condition CUI is required.")
         object.__setattr__(self, "condition_cuis", cuis)
 
-        object.__setattr__(self, "component_terms", _optional_strings(self.component_terms))
+        object.__setattr__(
+            self, "component_terms", _optional_strings(self.component_terms)
+        )
         columns = _optional_strings(self.component_columns)
         if not columns:
             raise ValueError("At least one component search column is required.")
@@ -141,14 +143,12 @@ def sig_search_statement(spec: SigSelectionSpec) -> Select:
     downstream application without importing legacy model adapters.
     """
 
-    stmt = (
-        join_study_references(
-            select(Sigs).select_from(Sigs)
-            .join(sigs_StudyMap, sigs_StudyMap.parent_id == Sigs.id),
-            sigs_StudyMap.study,
-        )
-        .where(Studies.condition_cui.in_(spec.condition_cuis))
-    )
+    stmt = join_study_references(
+        select(Sigs)
+        .select_from(Sigs)
+        .join(sigs_StudyMap, sigs_StudyMap.parent_id == Sigs.id),
+        sigs_StudyMap.study,
+    ).where(Studies.condition_cui.in_(spec.condition_cuis))
 
     if spec.component_terms:
         stmt = _add_component_joins(stmt, spec.component_columns)
@@ -182,9 +182,7 @@ def sig_search_statement(spec: SigSelectionSpec) -> Select:
     elif spec.variant_policy == "none":
         stmt = stmt.where(Sigs.variant_cui.is_(None))
     if spec.study_context is not None:
-        stmt = stmt.where(
-            study_context_predicate(spec.study_context)
-        )
+        stmt = stmt.where(study_context_predicate(spec.study_context))
 
     return stmt.distinct()
 

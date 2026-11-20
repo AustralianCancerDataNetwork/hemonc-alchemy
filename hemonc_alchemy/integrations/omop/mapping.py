@@ -180,9 +180,7 @@ def map_to_standard(
         .select_from(
             source_from.join(
                 relation, relation.concept_id_1 == source.concept_id
-            ).outerjoin(
-                target_from, target.concept_id == relation.concept_id_2
-            )
+            ).outerjoin(target_from, target.concept_id == relation.concept_id_2)
         )
         .where(
             source.vocabulary_id == "HemOnc",
@@ -251,7 +249,8 @@ def map_from_standard(
     """
     values = tuple(
         dict.fromkeys(
-            int(c) for c in ((concept_ids,) if isinstance(concept_ids, int) else concept_ids)
+            int(c)
+            for c in ((concept_ids,) if isinstance(concept_ids, int) else concept_ids)
         )
     )
     if not values or not require_omop_available(session, require_relationships=True):
@@ -272,9 +271,9 @@ def map_from_standard(
             relation.invalid_reason.label("mapping_invalid_reason"),
         )
         .select_from(
-            source_from.join(
-                relation, relation.concept_id_1 == source.concept_id
-            ).join(target_from, target.concept_id == relation.concept_id_2)
+            source_from.join(relation, relation.concept_id_1 == source.concept_id).join(
+                target_from, target.concept_id == relation.concept_id_2
+            )
         )
         .where(
             source.vocabulary_id == "HemOnc",

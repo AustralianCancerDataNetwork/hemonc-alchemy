@@ -46,7 +46,10 @@ def test_condition_lookup_is_composable_and_exact():
 def test_standalone_radiation_filter_uses_normalized_study_links():
     sql = _sql(standalone_radiation_sig_statement([123]))
 
-    assert 'JOIN "primary".sigs_study ON "primary".sigs_study.parent_id = "primary".sigs.id' in sql
+    assert (
+        'JOIN "primary".sigs_study ON "primary".sigs_study.parent_id = "primary".sigs.id'
+        in sql
+    )
     assert "sigs.class_field = 'RAD_SIG'" in sql
     assert "sigs.variant_cui IS NULL" in sql
 
@@ -60,7 +63,10 @@ def test_sig_selection_uses_normalized_links_and_explicit_nonvariant_policy():
     )
     sql = _sql(sig_search_statement(spec))
 
-    assert 'JOIN "primary".sigs_study ON "primary".sigs_study.parent_id = "primary".sigs.id' in sql
+    assert (
+        'JOIN "primary".sigs_study ON "primary".sigs_study.parent_id = "primary".sigs.id'
+        in sql
+    )
     assert "sigs.component ILIKE '%%External beam radiotherapy%%'" in sql
     assert "sigs.variant_cui IS NULL" in sql
     assert "sigs.class_field = 'RAD_SIG'" in sql

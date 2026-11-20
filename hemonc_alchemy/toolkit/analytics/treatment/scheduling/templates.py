@@ -88,7 +88,7 @@ def _cycle_length_days(variant) -> int:
     }
     if len(lengths) != 1:
         raise ValueError("variant has no single resolvable cycle length")
-    (lb, unit), = lengths
+    ((lb, unit),) = lengths
     return _cycle_length_from_bound(lb, unit)
 
 
@@ -99,7 +99,9 @@ def _block_cycle_length_days(block: CycleBlock) -> int:
     return _cycle_length_from_bound(block.cycle_length_lb, block.cycle_length_unit)
 
 
-def _day_by_drug_grid(frame: pd.DataFrame, route: str, cycle_len: int, drugs: list[str]) -> pd.DataFrame:
+def _day_by_drug_grid(
+    frame: pd.DataFrame, route: str, cycle_len: int, drugs: list[str]
+) -> pd.DataFrame:
     """0-indexed day x drug intensity grid, reindexed to a full cycle."""
     matrix = administration_matrix(frame, route)
     matrix = matrix.T if not matrix.empty else pd.DataFrame(index=[])
@@ -107,23 +109,33 @@ def _day_by_drug_grid(frame: pd.DataFrame, route: str, cycle_len: int, drugs: li
     return matrix.reindex(index=range(cycle_len), columns=drugs, fill_value=0.0)
 
 
-def _binary_matrix(frame: pd.DataFrame, route: str, cycle_len: int, drugs: list[str]) -> pd.DataFrame:
+def _binary_matrix(
+    frame: pd.DataFrame, route: str, cycle_len: int, drugs: list[str]
+) -> pd.DataFrame:
     return (_day_by_drug_grid(frame, route, cycle_len, drugs) > 0).astype(int)
 
 
-def _fuzzy_matrix(frame: pd.DataFrame, route: str, cycle_len: int, drugs: list[str]) -> pd.DataFrame:
+def _fuzzy_matrix(
+    frame: pd.DataFrame, route: str, cycle_len: int, drugs: list[str]
+) -> pd.DataFrame:
     """Day x drug decay grid, from `frame`'s already-decayed `intensity` (see `administration_frame`)."""
     return _day_by_drug_grid(frame, route, cycle_len, drugs)
 
 
-def _dose_matrix(events: Iterable[ScheduleEvent], route: str, drugs: list[str]) -> pd.DataFrame:
+def _dose_matrix(
+    events: Iterable[ScheduleEvent], route: str, drugs: list[str]
+) -> pd.DataFrame:
     records = []
     for event in events:
         if event.route_group != route or event.drug_object is None:
             continue
-        dose = f"{event.dose_min};{event.dose_unit}" if event.dose_min is not None else ""
+        dose = (
+            f"{event.dose_min};{event.dose_unit}" if event.dose_min is not None else ""
+        )
         for day in event.days:
-            records.append({"day": day.value - 1, "drug": event.drug_object.drug, "dose": dose})
+            records.append(
+                {"day": day.value - 1, "drug": event.drug_object.drug, "dose": dose}
+            )
     if not records:
         return pd.DataFrame(columns=drugs)
     table = pd.DataFrame.from_records(records).pivot_table(
@@ -132,7 +144,9 @@ def _dose_matrix(events: Iterable[ScheduleEvent], route: str, drugs: list[str]) 
     return table.reindex(columns=drugs, fill_value="")
 
 
-def cycle_template(variant, *, ancestry: MainClassAncestry | None = None) -> CycleTemplate:
+def cycle_template(
+    variant, *, ancestry: MainClassAncestry | None = None
+) -> CycleTemplate:
     """One cycle's drug-by-day grids and identifying fields for `variant`."""
     cycle_len = _cycle_length_days(variant)
     iv_drug = [drug.drug for drug in cancer_services_drugs(variant)]
@@ -160,9 +174,13 @@ def cycle_template(variant, *, ancestry: MainClassAncestry | None = None) -> Cyc
         drug_role={},
         diagnostics=diagnose_drug_components(variant.component_sigs),
         choices=tuple(
-            ChoiceSchedule((event.drug_object.drug,), event.route_group, tuple(choice.options))
+            ChoiceSchedule(
+                (event.drug_object.drug,), event.route_group, tuple(choice.options)
+            )
             for event in schedule_events(variant)
-            if event.drug_object is not None and event.route_group in {"IV", "PO"} and event.choices
+            if event.drug_object is not None
+            and event.route_group in {"IV", "PO"}
+            and event.choices
             for choice in event.choices
         ),
     )
@@ -185,29 +203,39 @@ def _block_drugs(events: Iterable[ScheduleEvent], route: str) -> list:
     return list(drugs.values())
 
 
-def _block_frame(block: CycleBlock, *, decay_days: int, decay_factor: float = DEFAULT_DECAY_FACTOR) -> pd.DataFrame:
+def _block_frame(
+    block: CycleBlock, *, decay_days: int, decay_factor: float = DEFAULT_DECAY_FACTOR
+) -> pd.DataFrame:
     """`administration_frame`'s per-day drug grid, rolled out from one block alone."""
     records = []
-    for event in roll_out_phase([block], 0, decay_days=decay_days, decay_factor=decay_factor):
+    for event in roll_out_phase(
+        [block], 0, decay_days=decay_days, decay_factor=decay_factor
+    ):
         source = event.schedule_event
         if source.route_group is None or source.drug_object is None:
             continue
-        records.append({
-            "route_group": source.route_group,
-            "drug_cui": source.drug_object.drug_cui,
-            "drug": source.drug_object.drug,
-            "day": event.day,
-            "intensity": event.intensity,
-        })
+        records.append(
+            {
+                "route_group": source.route_group,
+                "drug_cui": source.drug_object.drug_cui,
+                "drug": source.drug_object.drug,
+                "day": event.day,
+                "intensity": event.intensity,
+            }
+        )
     if not records:
-        return pd.DataFrame(columns=["route_group", "drug_cui", "drug", "day", "intensity"])
+        return pd.DataFrame(
+            columns=["route_group", "drug_cui", "drug", "day", "intensity"]
+        )
     frame = pd.DataFrame.from_records(records)
-    return frame.groupby(["route_group", "drug_cui", "drug", "day"], as_index=False).agg(
-        intensity=("intensity", "max")
-    )
+    return frame.groupby(
+        ["route_group", "drug_cui", "drug", "day"], as_index=False
+    ).agg(intensity=("intensity", "max"))
 
 
-def _block_template(variant, block: CycleBlock, *, diseases, ancestry: MainClassAncestry | None) -> CycleTemplate:
+def _block_template(
+    variant, block: CycleBlock, *, diseases, ancestry: MainClassAncestry | None
+) -> CycleTemplate:
     """`cycle_template`'s per-variant logic, scoped to one `CycleBlock`'s own events.
 
     Modality (endocrine/supportive) is classified from this block's own drugs, not
@@ -239,22 +267,30 @@ def _block_template(variant, block: CycleBlock, *, diseases, ancestry: MainClass
         drug_role={},
         diagnostics=diagnose_drug_components(event.sig for event in block.events),
         choices=tuple(
-            ChoiceSchedule((event.drug_object.drug,), event.route_group, tuple(choice.options))
+            ChoiceSchedule(
+                (event.drug_object.drug,), event.route_group, tuple(choice.options)
+            )
             for event in block.events
-            if event.drug_object is not None and event.route_group in {"IV", "PO"} and event.choices
+            if event.drug_object is not None
+            and event.route_group in {"IV", "PO"}
+            and event.choices
             for choice in event.choices
         ),
     )
 
 
-def cycle_block_templates(variant, *, ancestry: MainClassAncestry | None = None) -> tuple[CycleBlockTemplate, ...]:
+def cycle_block_templates(
+    variant, *, ancestry: MainClassAncestry | None = None
+) -> tuple[CycleBlockTemplate, ...]:
     """`variant`'s cycle blocks in order, each as a `CycleTemplate` paired with its repeat count."""
     blocks = group_into_blocks(schedule_events(variant))
     diseases = {condition.condition for condition in variant_condition_objects(variant)}
 
     return tuple(
         CycleBlockTemplate(
-            template=_block_template(variant, block, diseases=diseases, ancestry=ancestry),
+            template=_block_template(
+                variant, block, diseases=diseases, ancestry=ancestry
+            ),
             repeat_count=len(block.cycle_numbers),
         )
         for block in blocks

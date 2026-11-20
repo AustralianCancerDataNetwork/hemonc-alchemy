@@ -55,7 +55,9 @@ class TestDiagnoseAllDays:
         # P0-A17: "1,(+1),(+c60)" -- the parser keeps the first indefinite
         # marker and silently drops the second (here, the dose cap).
         diagnostics = diagnose_all_days("1,(+1),(+c60)", sig_id=695)
-        lost = [d for d in diagnostics if d.category == DiagnosticCategory.LOST_QUALIFIER]
+        lost = [
+            d for d in diagnostics if d.category == DiagnosticCategory.LOST_QUALIFIER
+        ]
         assert len(lost) == 1
         assert lost[0].sig_id == 695
         # Token-level granularity: the whole comma-joined expression is one
@@ -101,14 +103,20 @@ class TestDiagnoseCalendarUnit:
         assert diagnostics[0].category == DiagnosticCategory.CALENDAR_APPROXIMATION
 
     def test_month_unit_with_a_start_date_is_not_flagged(self):
-        assert diagnose_calendar_unit(
-            Sigs_Cycle_length_unitEnum.MONTH, sig_id=1, calendar_anchored=True
-        ) == ()
+        assert (
+            diagnose_calendar_unit(
+                Sigs_Cycle_length_unitEnum.MONTH, sig_id=1, calendar_anchored=True
+            )
+            == ()
+        )
 
     def test_day_unit_is_never_flagged(self):
-        assert diagnose_calendar_unit(
-            Sigs_Cycle_length_unitEnum.DAY, sig_id=1, calendar_anchored=False
-        ) == ()
+        assert (
+            diagnose_calendar_unit(
+                Sigs_Cycle_length_unitEnum.DAY, sig_id=1, calendar_anchored=False
+            )
+            == ()
+        )
 
 
 class TestDiagnoseTimingStatus:
@@ -146,22 +154,51 @@ class TestDiagnoseVariant:
         # reads `component_sigs` directly rather than `schedule_events`, so it
         # survives an `alldays` expression that crashes `resolve_all_days`.
         variant = Variants(
-            id=1, variant_cui=1, variant="v", regimen_cui=1, regimen="R", version=1,
-            cyclesigs=0, components=0, portions=0, routes=0, sigs=0, blob_version=0,
-            fullyspecified=True, allsigshavecyclesigs=True, allsigshavedose=True,
-            allsigshavedoseunit=True, allsigshaveduration=True, allsigshavedurationunit=True,
-            allsigshavefrequency=True, allsigshaveroute=True, allsigshaveschedule=True,
-            allsigshavesequence=True, date_added=_D,
+            id=1,
+            variant_cui=1,
+            variant="v",
+            regimen_cui=1,
+            regimen="R",
+            version=1,
+            cyclesigs=0,
+            components=0,
+            portions=0,
+            routes=0,
+            sigs=0,
+            blob_version=0,
+            fullyspecified=True,
+            allsigshavecyclesigs=True,
+            allsigshavedose=True,
+            allsigshavedoseunit=True,
+            allsigshaveduration=True,
+            allsigshavedurationunit=True,
+            allsigshavefrequency=True,
+            allsigshaveroute=True,
+            allsigshaveschedule=True,
+            allsigshavesequence=True,
+            date_added=_D,
         )
         session.add(variant)
         session.flush()
-        session.add(Sigs(
-            seqrelwhat="-",
-            id=19566, variant_cui=1, component_cui=1, component="drug",
-            component_role="primary systemic", portion="1", regimen="R",
-            regimen_cui=1, step_number="1", divided=False, phase_step=1,
-            variant="v", alldays="(1),(2),(3),(4),(5),(6),(7)", date_added=_D,
-        ))
+        session.add(
+            Sigs(
+                seqrelwhat="-",
+                id=19566,
+                variant_cui=1,
+                component_cui=1,
+                component="drug",
+                component_role="primary systemic",
+                portion="1",
+                regimen="R",
+                regimen_cui=1,
+                step_number="1",
+                divided=False,
+                phase_step=1,
+                variant="v",
+                alldays="(1),(2),(3),(4),(5),(6),(7)",
+                date_added=_D,
+            )
+        )
         session.flush()
         session.expire_all()
 
@@ -170,24 +207,55 @@ class TestDiagnoseVariant:
 
     def test_collects_route_and_calendar_findings_across_sigs(self, session):
         variant = Variants(
-            id=2, variant_cui=2, variant="v", regimen_cui=1, regimen="R", version=1,
-            cyclesigs=0, components=0, portions=0, routes=0, sigs=0, blob_version=0,
-            fullyspecified=True, allsigshavecyclesigs=True, allsigshavedose=True,
-            allsigshavedoseunit=True, allsigshaveduration=True, allsigshavedurationunit=True,
-            allsigshavefrequency=True, allsigshaveroute=True, allsigshaveschedule=True,
-            allsigshavesequence=True, date_added=_D,
+            id=2,
+            variant_cui=2,
+            variant="v",
+            regimen_cui=1,
+            regimen="R",
+            version=1,
+            cyclesigs=0,
+            components=0,
+            portions=0,
+            routes=0,
+            sigs=0,
+            blob_version=0,
+            fullyspecified=True,
+            allsigshavecyclesigs=True,
+            allsigshavedose=True,
+            allsigshavedoseunit=True,
+            allsigshaveduration=True,
+            allsigshavedurationunit=True,
+            allsigshavefrequency=True,
+            allsigshaveroute=True,
+            allsigshaveschedule=True,
+            allsigshavesequence=True,
+            date_added=_D,
         )
         session.add(variant)
         session.flush()
-        session.add(Sigs(
-            seqrelwhat="-",
-            id=1, variant_cui=2, component_cui=1, component="drug-a",
-            component_role="primary systemic", portion="1", regimen="R",
-            regimen_cui=1, step_number="1", divided=False, phase_step=1,
-            variant="v", route=Sigs_RouteEnum.NS, alldays="1",
-            cycle_length_lb="1", cycle_length_ub="1",
-            cycle_length_unit=Sigs_Cycle_length_unitEnum.MONTH, date_added=_D,
-        ))
+        session.add(
+            Sigs(
+                seqrelwhat="-",
+                id=1,
+                variant_cui=2,
+                component_cui=1,
+                component="drug-a",
+                component_role="primary systemic",
+                portion="1",
+                regimen="R",
+                regimen_cui=1,
+                step_number="1",
+                divided=False,
+                phase_step=1,
+                variant="v",
+                route=Sigs_RouteEnum.NS,
+                alldays="1",
+                cycle_length_lb="1",
+                cycle_length_ub="1",
+                cycle_length_unit=Sigs_Cycle_length_unitEnum.MONTH,
+                date_added=_D,
+            )
+        )
         session.flush()
         session.expire_all()
 

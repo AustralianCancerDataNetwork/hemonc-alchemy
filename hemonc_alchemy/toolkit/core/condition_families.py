@@ -63,9 +63,15 @@ def compute_condition_families(
     for child, found in parents.items():
         for parent in found:
             children[parent].add(child)
-    in_categories = {cui for cui, found in parents.items() if CATEGORY_CUIS & set(found)}
+    in_categories = {
+        cui for cui, found in parents.items() if CATEGORY_CUIS & set(found)
+    }
     # The root, the categories and anything above a category are never families themselves.
-    structural = {ROOT_CUI} | CATEGORY_CUIS | {a for category in CATEGORY_CUIS for a in _closure(parents, category)}
+    structural = (
+        {ROOT_CUI}
+        | CATEGORY_CUIS
+        | {a for category in CATEGORY_CUIS for a in _closure(parents, category)}
+    )
 
     result: dict[int, frozenset[int]] = {}
     for cui in condition_cuis:
@@ -75,7 +81,11 @@ def compute_condition_families(
             families = _closure(children, cui) & in_categories
         elif not families:
             # Outside every category: its topmost non-structural ancestor(s)-or-self.
-            families = {node for node in lineage - structural if set(parents.get(node, ())) <= structural}
+            families = {
+                node
+                for node in lineage - structural
+                if set(parents.get(node, ())) <= structural
+            }
         result[cui] = frozenset(families)
     return result
 
@@ -95,24 +105,33 @@ def compute_family_members(
 @cached_per_engine
 def condition_families(session: Any) -> dict[int, frozenset[int]]:
     """Each HemOnc condition's families."""
-    return compute_condition_families(condition_mappings(session), condition_parents(session))
+    return compute_condition_families(
+        condition_mappings(session), condition_parents(session)
+    )
 
 
 def family_cuis(session: Any) -> frozenset[int]:
     """Every family that some condition belongs to."""
-    return frozenset(family for found in condition_families(session).values() for family in found)
+    return frozenset(
+        family for found in condition_families(session).values() for family in found
+    )
 
 
 def family_categories(session: Any) -> dict[int, frozenset[int]]:
     """Each family's top-level categories; empty for a family outside every category."""
     parents = condition_parents(session)
-    return {family: frozenset(set(parents.get(family, ())) & CATEGORY_CUIS) for family in family_cuis(session)}
+    return {
+        family: frozenset(set(parents.get(family, ())) & CATEGORY_CUIS)
+        for family in family_cuis(session)
+    }
 
 
 @cached_per_engine
 def family_members(session: Any) -> dict[int, frozenset[int]]:
     """Each family's member conditions."""
-    return compute_family_members(condition_families(session), condition_parents(session))
+    return compute_family_members(
+        condition_families(session), condition_parents(session)
+    )
 
 
 def variant_conditions(session: Any) -> dict[int, frozenset[int]]:
@@ -139,7 +158,9 @@ def variant_families(session: Any) -> dict[int, frozenset[int]]:
     """Latest variants' families, via their studies' conditions; variants with no known condition are omitted."""
     families = condition_families(session)
     result = {
-        cui: frozenset(f for condition in conditions for f in families.get(condition, ()))
+        cui: frozenset(
+            f for condition in conditions for f in families.get(condition, ())
+        )
         for cui, conditions in variant_conditions(session).items()
     }
     return {cui: found for cui, found in result.items() if found}
@@ -170,28 +191,52 @@ def family_anchors(session: Any) -> dict[int, FamilyAnchors]:
     anchors = {family: FamilyAnchors(ids) for family, ids in accepted.items() if ids}
 
     def category_coverage(category: int) -> frozenset[int]:
-        return frozenset(cid for family in anchors if category in parents.get(family, ()) for cid in anchors[family].parent_ids)
+        return frozenset(
+            cid
+            for family in anchors
+            if category in parents.get(family, ())
+            for cid in anchors[family].parent_ids
+        )
 
     up = broader_codes(condition_mappings(session))
-    missing = [family for family in family_cuis(session) if family not in anchors and family in up]
-    standard = standardise_codes(session, {code for family in missing for code in up[family]})
+    missing = [
+        family
+        for family in family_cuis(session)
+        if family not in anchors and family in up
+    ]
+    standard = standardise_codes(
+        session, {code for family in missing for code in up[family]}
+    )
     for family in missing:
         categories = set(parents.get(family, ())) & set(DISJOINT_CATEGORIES)
-        legs = frozenset(cid for code in up[family] if code in standard for cid in standard[code].condition_leg)
+        legs = frozenset(
+            cid
+            for code in up[family]
+            if code in standard
+            for cid in standard[code].condition_leg
+        )
         if not categories or not legs:
             continue
-        excluded = frozenset(cid for category in categories for cid in category_coverage(DISJOINT_CATEGORIES[category]))
+        excluded = frozenset(
+            cid
+            for category in categories
+            for cid in category_coverage(DISJOINT_CATEGORIES[category])
+        )
         anchors[family] = FamilyAnchors(legs, excluded)
     return anchors
 
 
 def family_concept_groups(session: Any) -> dict[int, Any]:
     """Each covered family's omop-alchemy `ResolvedConceptGroup`, built once per vocabulary and cached there."""
-    return resolve_concept_groups(session, family_anchors(session), name_prefix="hemonc_family")
+    return resolve_concept_groups(
+        session, family_anchors(session), name_prefix="hemonc_family"
+    )
 
 
 _INDEX_BY_IDENTITY: dict[str, dict[int, frozenset[int]]] = {}
-_INDEX_BY_ENGINE: WeakKeyDictionary[Any, dict[int, frozenset[int]]] = WeakKeyDictionary()
+_INDEX_BY_ENGINE: WeakKeyDictionary[Any, dict[int, frozenset[int]]] = (
+    WeakKeyDictionary()
+)
 
 
 def _family_index(session: Any) -> dict[int, frozenset[int]]:
@@ -203,14 +248,23 @@ def _family_index(session: Any) -> dict[int, frozenset[int]]:
         for family, group in family_concept_groups(session).items():
             for concept_id in group.ids:
                 index[concept_id].add(family)
-        store[scope] = {concept_id: frozenset(found) for concept_id, found in index.items()}
+        store[scope] = {
+            concept_id: frozenset(found) for concept_id, found in index.items()
+        }
     return store[scope]
 
 
-def families_for_concepts(session: Any, concept_ids: Iterable[int | None]) -> frozenset[int]:
+def families_for_concepts(
+    session: Any, concept_ids: Iterable[int | None]
+) -> frozenset[int]:
     """The families covering any of `concept_ids` (e.g. a patient's `condition_concept_id`s)."""
     index = _family_index(session)
-    return frozenset(family for concept_id in concept_ids if concept_id is not None for family in index.get(concept_id, ()))
+    return frozenset(
+        family
+        for concept_id in concept_ids
+        if concept_id is not None
+        for family in index.get(concept_id, ())
+    )
 
 
 __all__ = [

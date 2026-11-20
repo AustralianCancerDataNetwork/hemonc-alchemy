@@ -192,8 +192,11 @@ class BiomarkerNormaliser:
             return Finding(str(raw), Presence.UNKNOWN, Kind.OTHER, parsed=False)
 
     def normalise(self, source: IndicationSource) -> tuple[Criterion, ...]:
-        return tuple(criterion for slot in source.biomarkers
-                     for criterion in self._slot_criteria(source, slot))
+        return tuple(
+            criterion
+            for slot in source.biomarkers
+            for criterion in self._slot_criteria(source, slot)
+        )
 
     def _slot_criteria(self, source, slot) -> tuple[Criterion, ...]:
         column = f"biomarker{slot.slot}" if slot.slot > 1 else "biomarker"
@@ -201,23 +204,39 @@ class BiomarkerNormaliser:
         pairs = slot.pairs
         aligned = slot.aligned
         if pairs is None:
-            alignment = align_values(("|".join(slot.biomarkers), "|".join(slot.findings)))
+            alignment = align_values(
+                ("|".join(slot.biomarkers), "|".join(slot.findings))
+            )
             pairs = alignment.rows
             aligned = alignment.status != "unaligned"
         if not aligned:
-            return tuple(RawCriterion("biomarker", key, source.raw[key])
-                         for key in (column, f"{column}_finding", f"{column}_type")
-                         if source.raw.get(key))
+            return tuple(
+                RawCriterion("biomarker", key, source.raw[key])
+                for key in (column, f"{column}_finding", f"{column}_type")
+                if source.raw.get(key)
+            )
         group = f"{source.indication_id}:{slot.slot}" if len(pairs) > 1 else None
         criteria = []
         for name, finding in pairs:
             if name is None:
                 if finding:
-                    criteria.append(RawCriterion("biomarker", f"{column}_finding", finding))
+                    criteria.append(
+                        RawCriterion("biomarker", f"{column}_finding", finding)
+                    )
                 continue
             findings = (self.parse_finding(finding),) if finding is not None else ()
-            criteria.append(BiomarkerCriterion("biomarker", column, raw, slot.slot,
-                                               self.canonical_name(name) or name, name, findings, group))
+            criteria.append(
+                BiomarkerCriterion(
+                    "biomarker",
+                    column,
+                    raw,
+                    slot.slot,
+                    self.canonical_name(name) or name,
+                    name,
+                    findings,
+                    group,
+                )
+            )
         return tuple(criteria)
 
     def lint(self, sources: tuple[IndicationSource, ...]) -> "BiomarkerLint":

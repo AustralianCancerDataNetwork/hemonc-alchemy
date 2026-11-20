@@ -19,7 +19,12 @@ if TYPE_CHECKING:
         resolve_all_days as resolve_all_days,
     )
 
-_EAGER = ["HemOncAlchemyConfig", "create_default_hemonc_engine", "create_hemonc_engine", "get_hemonc_context"]
+_EAGER = [
+    "HemOncAlchemyConfig",
+    "create_default_hemonc_engine",
+    "create_hemonc_engine",
+    "get_hemonc_context",
+]
 
 
 def _model():

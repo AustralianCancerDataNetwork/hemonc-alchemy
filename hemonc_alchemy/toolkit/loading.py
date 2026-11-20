@@ -104,7 +104,9 @@ def _resolved_csv_path(data_dir: Path, table_name: str) -> Generator[Path, None,
     """
     real_path, ambiguous = resolve_source_csv(data_dir, table_name)
     if ambiguous:
-        raise ValueError(f"Ambiguous CSV matches for table '{table_name}': {', '.join(ambiguous)}")
+        raise ValueError(
+            f"Ambiguous CSV matches for table '{table_name}': {', '.join(ambiguous)}"
+        )
     if real_path is None:
         raise FileNotFoundError(f"No CSV found for table '{table_name}' in {data_dir}")
 
@@ -124,7 +126,9 @@ def _resolved_csv_path(data_dir: Path, table_name: str) -> Generator[Path, None,
 
         logger.debug(
             "%s: normalising %d source header(s) for load: %s",
-            table_name, len(renames), ", ".join(f"{k!r}->{v!r}" for k, v in renames.items()),
+            table_name,
+            len(renames),
+            ", ".join(f"{k!r}->{v!r}" for k, v in renames.items()),
         )
         with (
             real_path.open(newline="", encoding="utf-8-sig") as source,
@@ -162,10 +166,15 @@ def load_entity(
 
 
 @contextmanager
-def _date_source_csv(path: Path, entity_cls: type[_GeneratedEntity]) -> Generator[Path, None, None]:
+def _date_source_csv(
+    path: Path, entity_cls: type[_GeneratedEntity]
+) -> Generator[Path, None, None]:
     """Retain raw date cells and normalize complete dates for ingestion."""
-    date_columns = [column.name for column in entity_cls.__table__.c
-                    if isinstance(column.type, sa.DateTime)]
+    date_columns = [
+        column.name
+        for column in entity_cls.__table__.c
+        if isinstance(column.type, sa.DateTime)
+    ]
     raw_date_columns = {
         column.name[:-4]
         for column in entity_cls.__table__.c
@@ -181,8 +190,13 @@ def _date_source_csv(path: Path, entity_cls: type[_GeneratedEntity]) -> Generato
             reader = csv.DictReader(source)
             headers = list(reader.fieldnames or ())
             source_columns = {safe_identifier(name).lower(): name for name in headers}
-            raw_headers = [f"{column}_raw" for column in date_columns if column in raw_date_columns]
-            writer_headers = [*headers, *(name for name in raw_headers if name not in headers)]
+            raw_headers = [
+                f"{column}_raw" for column in date_columns if column in raw_date_columns
+            ]
+            writer_headers = [
+                *headers,
+                *(name for name in raw_headers if name not in headers),
+            ]
             with staged.open("w", newline="", encoding="utf-8") as target:
                 writer = csv.DictWriter(target, fieldnames=writer_headers)
                 writer.writeheader()
@@ -216,8 +230,11 @@ def load_all(
     primary_total = load_entity(session, entity_cls, data_dir, **load_csv_kwargs)
     session.flush()
     denorm_totals = load_denormalised(
-        session, entity_cls, data_dir,
-        policy=load_csv_kwargs.get("policy"), quote_mode=load_csv_kwargs.get("quote_mode"),
+        session,
+        entity_cls,
+        data_dir,
+        policy=load_csv_kwargs.get("policy"),
+        quote_mode=load_csv_kwargs.get("quote_mode"),
         chain_report=chain_report,
     )
     return {entity_cls.__tablename__: primary_total, **denorm_totals}
@@ -242,7 +259,9 @@ def _natural_key_columns(entity_cls: type[_GeneratedEntity]) -> list[str]:
     return list(entity_cls.natural_key_columns)
 
 
-def _map_class_for_column(entity_cls: type[_GeneratedEntity], column: str) -> type[_MappedEntity]:
+def _map_class_for_column(
+    entity_cls: type[_GeneratedEntity], column: str
+) -> type[_MappedEntity]:
     """Find the generated map (child) table class for one denormalised
     column via the entity's own declared `{column}_items` relationship,
     rather than re-deriving the compiler's `{Parent}_{Column}Map` naming
@@ -250,7 +269,9 @@ def _map_class_for_column(entity_cls: type[_GeneratedEntity], column: str) -> ty
     """
     rel_name = f"{column}_items"
     # Explicit raiseerr=True picks sqlalchemy's non-Optional inspect() overload.
-    relationship_prop = sa.inspect(entity_cls, raiseerr=True).relationships.get(rel_name)
+    relationship_prop = sa.inspect(entity_cls, raiseerr=True).relationships.get(
+        rel_name
+    )
     if relationship_prop is None:
         raise LookupError(
             f"{entity_cls.__name__} has no relationship '{rel_name}' for denormalised column '{column}'"
@@ -259,31 +280,53 @@ def _map_class_for_column(entity_cls: type[_GeneratedEntity], column: str) -> ty
 
 
 def _read_source_csv(
-    path: Path, entity_cls: type[_GeneratedEntity], policy: ConversionPolicy,
+    path: Path,
+    entity_cls: type[_GeneratedEntity],
+    policy: ConversionPolicy,
     quote_mode: str | None = None,
     parent_ids: SnapshotParentIds | None = None,
 ) -> pd.DataFrame:
     """Read child source values under the same CSV rules as the parent loader."""
-    columns: dict[str, sa.ColumnElement[Any]] = {column.name: column for column in entity_cls.__table__.c}
-    columns.update({name: sa.column(name, sa.String()) for name in entity_cls.denormalised_columns})
-    raw_columns = {name for chain in getattr(entity_cls, "chains", ()) for name in chain["columns"]}
+    columns: dict[str, sa.ColumnElement[Any]] = {
+        column.name: column for column in entity_cls.__table__.c
+    }
+    columns.update(
+        {name: sa.column(name, sa.String()) for name in entity_cls.denormalised_columns}
+    )
+    raw_columns = {
+        name for chain in getattr(entity_cls, "chains", ()) for name in chain["columns"]
+    }
     raw_columns.update(getattr(entity_cls, "opaque_columns", ()))
     columns.update({name: sa.column(name, sa.Text()) for name in raw_columns})
     reader = open_reader(
-        path, columns, quote_mode=quote_mode, skip_malformed=policy.errors.on_error == "reject_row",
+        path,
+        columns,
+        quote_mode=quote_mode,
+        skip_malformed=policy.errors.on_error == "reject_row",
     )
     if parent_ids is not None:
         parent_ids.validate_reader(reader)
     frames = [batch.to_pandas() for batch in reader.batches()]
-    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame(columns=reader.columns)
+    return (
+        pd.concat(frames, ignore_index=True)
+        if frames
+        else pd.DataFrame(columns=reader.columns)
+    )
 
 
 def _identity_value(
-    value: Any, column: sa.Column, *, on_error: Callable[[Any], None],
+    value: Any,
+    column: sa.Column,
+    *,
+    on_error: Callable[[Any], None],
     policy: ConversionPolicy | None = None,
 ) -> object:
     """Compare source and database identities under the file conversion policy."""
-    if value is None or (isinstance(value, float) and pd.isna(value)) or value is pd.NaT:
+    if (
+        value is None
+        or (isinstance(value, float) and pd.isna(value))
+        or value is pd.NaT
+    ):
         return None
     try:
         result = convert_value(value, column, policy or conversion_policy())
@@ -304,7 +347,9 @@ def _identity_result(result: Any, column: sa.Column) -> object:
     return result
 
 
-def _identity_keys(rows, columns, policy: ConversionPolicy, failures: Counter) -> list[tuple | None]:
+def _identity_keys(
+    rows, columns, policy: ConversionPolicy, failures: Counter
+) -> list[tuple | None]:
     """Convert columns in batches; rejected rows have no usable identity."""
     if not rows:
         return []
@@ -319,10 +364,12 @@ def _identity_keys(rows, columns, policy: ConversionPolicy, failures: Counter) -
             was_rejected or failed or (value is None and not column.nullable)
             for was_rejected, failed, value in zip(rejected, bad, values.to_pylist())
         ]
-        keys.append([
-            _identity_result(None if failed else value, column)
-            for value, failed in zip(values.to_pylist(), bad)
-        ])
+        keys.append(
+            [
+                _identity_result(None if failed else value, column)
+                for value, failed in zip(values.to_pylist(), bad)
+            ]
+        )
     return [None if failed else key for key, failed in zip(zip(*keys), rejected)]
 
 
@@ -344,7 +391,9 @@ def _parent_lookup(
     snapshot = session.info.get(("hemonc_snapshot_parent_ids", entity_cls))
     if snapshot is not None:
         if len(snapshot.ids) != len(df):
-            raise ValueError(f"{table.name}: parent and child readers produced different source row counts")
+            raise ValueError(
+                f"{table.name}: parent and child readers produced different source row counts"
+            )
         accepted = set(session.scalars(sa.select(table.c.id)))
         return {
             index: (parent_id,) if parent_id in accepted else None
@@ -370,16 +419,29 @@ def _parent_lookup(
         sa.select(*(table.c[name] for name in key_columns), *identity_columns)
     ).all()
     lookup: dict[tuple[object, ...], tuple | None] = {}
-    parent_keys = _identity_keys([row[len(key_columns):] for row in parent_rows], identity_columns, policy, failures)
+    parent_keys = _identity_keys(
+        [row[len(key_columns) :] for row in parent_rows],
+        identity_columns,
+        policy,
+        failures,
+    )
     for row, key in zip(parent_rows, parent_keys):
         if key in lookup:
             lookup[key] = None
         else:
-            lookup[key] = tuple(row[:len(key_columns)])
+            lookup[key] = tuple(row[: len(key_columns)])
 
-    source_rows = list(df[[column.name for column in identity_columns]].itertuples(index=False, name=None))
+    source_rows = list(
+        df[[column.name for column in identity_columns]].itertuples(
+            index=False, name=None
+        )
+    )
     source_keys = _identity_keys(source_rows, identity_columns, policy, failures)
-    ambiguous = [index for index, key in zip(df.index, source_keys) if key in lookup and lookup[key] is None]
+    ambiguous = [
+        index
+        for index, key in zip(df.index, source_keys)
+        if key in lookup and lookup[key] is None
+    ]
     if ambiguous:
         raise ValueError(
             f"{table.name}: ambiguous parent association for {len(ambiguous)} source rows. "
@@ -412,20 +474,28 @@ def load_denormalised(
     policy = policy or conversion_policy(entity_cls.__table__)
     failures: Counter[str] = Counter()
 
-    if not (entity_cls.denormalised_columns or getattr(entity_cls, "chains", ())
-            or getattr(entity_cls, "opaque_columns", ())):
+    if not (
+        entity_cls.denormalised_columns
+        or getattr(entity_cls, "chains", ())
+        or getattr(entity_cls, "opaque_columns", ())
+    ):
         return {}
 
     with _resolved_csv_path(data_dir, entity_cls.__tablename__) as path:
         df = _read_source_csv(
-            path, entity_cls, policy, quote_mode,
+            path,
+            entity_cls,
+            policy,
+            quote_mode,
             parent_ids=session.info.get(("hemonc_snapshot_parent_ids", entity_cls)),
         )
 
     key_cols = _natural_key_columns(entity_cls)
     is_surrogate = "id" in entity_cls.__table__.c
 
-    if not is_surrogate and (not key_cols or not all(column in df.columns for column in key_cols)):
+    if not is_surrogate and (
+        not key_cols or not all(column in df.columns for column in key_cols)
+    ):
         raise RuntimeError(
             f"{entity_cls.__name__} has denormalised columns but no complete natural key "
             "available in its source CSV."
@@ -450,7 +520,11 @@ def load_denormalised(
             parent_key = parent_lookup.get(index)
             if parent_key is None:
                 continue
-            fixed_fields = {"parent_id": parent_key[0]} if is_surrogate else dict(zip(key_cols, parent_key))
+            fixed_fields = (
+                {"parent_id": parent_key[0]}
+                if is_surrogate
+                else dict(zip(key_cols, parent_key))
+            )
 
             for position, token in enumerate(str(raw).split("|"), 1):
                 token = token.strip()
@@ -472,7 +546,9 @@ def load_denormalised(
                     continue
                 seen.add(dedupe_key)
 
-                position_fields = {"position": position} if "position" in map_cls.__table__.c else {}
+                position_fields = (
+                    {"position": position} if "position" in map_cls.__table__.c else {}
+                )
                 records.append({**fixed_fields, **position_fields, column: value})
 
         # A single bulk insert per column rather than one `session.merge()`
@@ -490,7 +566,9 @@ def load_denormalised(
     results.update(load_chains(session, entity_cls, df, parent_lookup, chain_report))
     session.info[("hemonc_chain_report", entity_cls)] = chain_report
     for column, count in failures.items():
-        logger.warning("CAST %s.%s: %d value(s) failed", entity_cls.__tablename__, column, count)
+        logger.warning(
+            "CAST %s.%s: %d value(s) failed", entity_cls.__tablename__, column, count
+        )
     session.flush()
     session.info.pop(("hemonc_snapshot_parent_ids", entity_cls), None)
     return results

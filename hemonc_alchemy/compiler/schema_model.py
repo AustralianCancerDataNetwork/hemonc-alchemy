@@ -41,9 +41,9 @@ Maturity = Literal["dev", "prod", "prod-"]
 
 # Tokens that mean "not yet assigned" on an identifier column specifically.
 # This is scoped to `_cui`-suffixed columns only
-# 
-# the same words are genuine categorical values elsewhere, e.g. 
-# Authors_Site_typeEnum has a real "TBD" member, so this must not become 
+#
+# the same words are genuine categorical values elsewhere, e.g.
+# Authors_Site_typeEnum has a real "TBD" member, so this must not become
 # a blanket na_values addition.
 _IDENTIFIER_PLACEHOLDER_TOKENS = {"tba", "tbd", "cbd", "pending"}
 
@@ -74,7 +74,9 @@ def _clean_identifier_placeholders(series: pd.Series, col_name: str) -> pd.Serie
     """
     if not col_name.endswith("_cui"):
         return series
-    is_placeholder = series.astype(str).str.strip().str.lower().isin(_IDENTIFIER_PLACEHOLDER_TOKENS)
+    is_placeholder = (
+        series.astype(str).str.strip().str.lower().isin(_IDENTIFIER_PLACEHOLDER_TOKENS)
+    )
     cleaned = series.where(~is_placeholder)
     coerced = pd.to_numeric(cleaned, errors="coerce")
     if coerced.notna().sum() >= cleaned.notna().sum():
@@ -164,7 +166,9 @@ class EnumSpec:
     def _repr_html_(self) -> str:
         preview = ", ".join(f"<code>{escape(v)}</code>" for v in self.values[:8])
         more = f" <i>(+{len(self.values) - 8} more)</i>" if len(self.values) > 8 else ""
-        enum_cls = f"{escape(self.tablename)}_{safe_identifier(self.name).capitalize()}Enum"
+        enum_cls = (
+            f"{escape(self.tablename)}_{safe_identifier(self.name).capitalize()}Enum"
+        )
         return (
             f'<div style="border:1px solid #ddd; padding:6px; margin:4px 0; background:#fafafa">'
             f"<b>Enum:</b> <code>{escape(self.name)}</code> "
@@ -217,7 +221,9 @@ class ColumnSpec:
         )
 
     def _repr_html_(self) -> str:
-        flags: list[str] = ["NULL" if self.nullable else "<b style='color:#b00'>NOT NULL</b>"]
+        flags: list[str] = [
+            "NULL" if self.nullable else "<b style='color:#b00'>NOT NULL</b>"
+        ]
         if self.enum:
             flags.append(f"enum=<code>{escape(self.enum)}</code>")
         return (
@@ -245,7 +251,7 @@ class ColumnSpec:
         """
         Whether this column is the (natural) primary key on the generated
         class — i.e. declared as PK *and* the table isn't using a surrogate
-        `id` PK instead. 
+        `id` PK instead.
         """
         is_natural_pk = self.name in table.pk_columns
         return is_natural_pk and not table.uses_surrogate_pk
@@ -260,9 +266,9 @@ class ColumnSpec:
     def sa_python_type(self, table: TableMeta, *, force_not_null: bool = False) -> str:
         """`force_not_null` overrides `effective_nullable`'s parent-relative PK
         check: needed when rendering a denormalised column onto its own
-        generated map/child table where the column is always part of *that* 
-        table's composite primary key regardless of whether it's a natural key 
-        column on `table` (the parent). 
+        generated map/child table where the column is always part of *that*
+        table's composite primary key regardless of whether it's a natural key
+        column on `table` (the parent).
         """
         t = self.type.lower()
         if t == "boolean":
@@ -298,7 +304,9 @@ class ColumnSpec:
         if t == "text":
             return "Text"
         if t == "enum":
-            enum_cls = f"{table.classname}_{safe_identifier(self.name).capitalize()}Enum"
+            enum_cls = (
+                f"{table.classname}_{safe_identifier(self.name).capitalize()}Enum"
+            )
             return f"hemonc_enum({enum_cls})"
         return "String(255)"
 
@@ -367,7 +375,11 @@ class NormalisedTable:
 
     @classmethod
     def from_dict(cls, raw: dict) -> NormalisedTable:
-        return cls(parent=raw["parent"], column=raw["column"], positional=raw.get("positional", False))
+        return cls(
+            parent=raw["parent"],
+            column=raw["column"],
+            positional=raw.get("positional", False),
+        )
 
 
 @dataclass
@@ -461,11 +473,14 @@ class TableMeta:
         repeated values in a declared key.  Such a key remains useful for
         lookups, but cannot be enforced as a database primary key.
         """
-        return bool(self.pk_columns) and all(
-            column in self.columns
-            and not self.columns[column].nullable
-            for column in self.pk_columns
-        ) and not self.natural_key_has_duplicates
+        return (
+            bool(self.pk_columns)
+            and all(
+                column in self.columns and not self.columns[column].nullable
+                for column in self.pk_columns
+            )
+            and not self.natural_key_has_duplicates
+        )
 
     @property
     def uses_surrogate_pk(self) -> bool:
@@ -496,7 +511,8 @@ class TableMeta:
             denormalised_columns=list(raw.get("denormalised_columns", [])),
             derived_columns=list(raw.get("derived_columns", [])),
             normalisation_groups=[
-                NormalisationGroup.from_dict(g) for g in raw.get("normalisation_groups", [])
+                NormalisationGroup.from_dict(g)
+                for g in raw.get("normalisation_groups", [])
             ],
             chains=[ChainSpec.from_dict(chain) for chain in raw.get("chains", [])],
             opaque_columns=list(raw.get("opaque_columns", [])),
@@ -504,7 +520,9 @@ class TableMeta:
             normalised_tables=[
                 NormalisedTable.from_dict(nt) for nt in raw.get("normalised_tables", [])
             ],
-            soft_relationships=[ForeignLikeRef(**r) for r in raw.get("soft_relationships", [])],
+            soft_relationships=[
+                ForeignLikeRef(**r) for r in raw.get("soft_relationships", [])
+            ],
             soft_m2m_relationships=[
                 SoftManyToManyRef(**r) for r in raw.get("soft_m2m_relationships", [])
             ],
@@ -515,7 +533,9 @@ class TableMeta:
         )
 
     @staticmethod
-    def _relationship_name(base: str, target_table: str, counts: Counter, suffix: str) -> str:
+    def _relationship_name(
+        base: str, target_table: str, counts: Counter, suffix: str
+    ) -> str:
         if counts[base] > 1:
             return f"{base}_{target_table}_{suffix}"
         return f"{base}_{suffix}"
@@ -524,19 +544,25 @@ class TableMeta:
         if self.uses_surrogate_pk:
             return f"{self.classname}.id == {map_table}.c.parent_id"
 
-        pk_conds = [f"{self.classname}.{pk} == {map_table}.c.{pk}" for pk in self.pk_columns]
+        pk_conds = [
+            f"{self.classname}.{pk} == {map_table}.c.{pk}" for pk in self.pk_columns
+        ]
         if len(pk_conds) == 1:
             return pk_conds[0]
         return f"sa.and_({', '.join(pk_conds)})"
 
     @staticmethod
-    def _map_secondary_join(rel: SoftManyToManyRef, target_cls: str, map_expression: str) -> str:
+    def _map_secondary_join(
+        rel: SoftManyToManyRef, target_cls: str, map_expression: str
+    ) -> str:
         if rel.target_table == "studies" and rel.map_column == "study":
             return (
                 f"sa.or_({target_cls}.study == {map_expression}.c.study, "
                 f"{target_cls}.study + '--' + {target_cls}.substudy == {map_expression}.c.study)"
             )
-        return f"{target_cls}.{rel.target_column} == {map_expression}.c.{rel.map_column}"
+        return (
+            f"{target_cls}.{rel.target_column} == {map_expression}.c.{rel.map_column}"
+        )
 
     def enrich_field_metadata(self, df_dict: pd.DataFrame) -> set[str]:
         """Enrich this table and return the columns contributed by the sheet.
@@ -547,7 +573,9 @@ class TableMeta:
         ``safe_identifier``.
         """
         df_dict = norm_cols(df_dict)
-        dictionary_columns = {str(column).strip().casefold(): column for column in df_dict.columns}
+        dictionary_columns = {
+            str(column).strip().casefold(): column for column in df_dict.columns
+        }
         variable_column = next(
             (
                 column
@@ -562,7 +590,11 @@ class TableMeta:
         enriched_columns: set[str] = set()
 
         for _, row in df_dict.iterrows():
-            val = row[variable_column] if variable_column and pd.notna(row[variable_column]) else ""
+            val = (
+                row[variable_column]
+                if variable_column and pd.notna(row[variable_column])
+                else ""
+            )
             r = str(val).strip()
 
             if not r:
@@ -580,7 +612,9 @@ class TableMeta:
             allowed_fmt = str(row.get(allowed_values_column, "")).strip().lower()
 
             if col_name not in self.columns:
-                self.columns[col_name] = ColumnSpec(name=col_name, type=type_str, nullable=True)
+                self.columns[col_name] = ColumnSpec(
+                    name=col_name, type=type_str, nullable=True
+                )
 
             enum_values: list[str] = []
             if "enum" in type_str.lower():
@@ -589,12 +623,23 @@ class TableMeta:
                     enum_values = [v.strip() for v in raw.split(";") if v.strip()]
 
             if enum_values:
-                self.enums[col_name] = EnumSpec(name=col_name, tablename=self.name, values=enum_values)
+                self.enums[col_name] = EnumSpec(
+                    name=col_name, tablename=self.name, values=enum_values
+                )
                 self.columns[col_name].type = "Enum"
 
-            is_multi = "yes" in multival.lower() or "pipe" in allowed_fmt or "semicolon" in allowed_fmt
+            is_multi = (
+                "yes" in multival.lower()
+                or "pipe" in allowed_fmt
+                or "semicolon" in allowed_fmt
+            )
 
-            if is_multi and "html" not in col_name and col_name not in self.pk_columns and "alldays" not in col_name:
+            if (
+                is_multi
+                and "html" not in col_name
+                and col_name not in self.pk_columns
+                and "alldays" not in col_name
+            ):
                 self.denormalised_columns.append(col_name)
 
         return enriched_columns
@@ -637,7 +682,9 @@ class TableMeta:
             is_nullable = bool(s_typed.isna().any())
 
             if safe_col not in self.columns:
-                self.columns[safe_col] = ColumnSpec(name=safe_col, type=inferred_type, nullable=is_nullable)
+                self.columns[safe_col] = ColumnSpec(
+                    name=safe_col, type=inferred_type, nullable=is_nullable
+                )
             else:
                 self.columns[safe_col].type = inferred_type
                 self.columns[safe_col].nullable = is_nullable
@@ -674,10 +721,14 @@ class TableMeta:
         self.derived_columns = sorted(set(self.derived_columns))
         self.source_defined_keys = list(dict.fromkeys(self.source_defined_keys))
 
-        if self.pk_columns and all(column in df_data.columns for column in self.pk_columns):
+        if self.pk_columns and all(
+            column in df_data.columns for column in self.pk_columns
+        ):
             key_frame = df_data[self.pk_columns].copy()
             for column in self.pk_columns:
-                key_frame[column] = _clean_identifier_placeholders(key_frame[column], column)
+                key_frame[column] = _clean_identifier_placeholders(
+                    key_frame[column], column
+                )
             self.natural_key_has_duplicates = bool(key_frame.duplicated().any())
 
         self._declare_chains(df_data, groups)
@@ -700,31 +751,53 @@ class TableMeta:
         chained = {column for chain in self.chains for column in chain.columns}
         # The variants blob map is keyed by value, not position.
         unordered = chained | ({"blob"} if self.name == "variants" else set())
-        self.normalised_tables = [NormalisedTable(self.name, column, positional=column not in unordered)
-                                  for column in self.denormalised_columns]
+        self.normalised_tables = [
+            NormalisedTable(self.name, column, positional=column not in unordered)
+            for column in self.denormalised_columns
+        ]
 
     def _declare_chains(self, df_data: pd.DataFrame, inferred: list[list[str]]) -> None:
         """Declare chains from author guidance; inference only raises diagnostics."""
         self.chains = list(CHAIN_DECLARATIONS.get(self.name, ()))
-        self.opaque_columns = ["blob"] if self.name == "variants" and "blob" in self.columns else []
-        self.normalisation_groups = [NormalisationGroup(columns=list(chain.columns)) for chain in self.chains]
+        self.opaque_columns = (
+            ["blob"] if self.name == "variants" and "blob" in self.columns else []
+        )
+        self.normalisation_groups = [
+            NormalisationGroup(columns=list(chain.columns)) for chain in self.chains
+        ]
         declared = [set(chain.columns) for chain in self.chains]
         for group in inferred:
             if not any(set(group) <= columns for columns in declared):
-                logging.getLogger(__name__).warning("%s: inferred undeclared pipe group %s", self.name, group)
-        frame = df_data.rename(columns=lambda column: safe_identifier(column).lower()).fillna("")
+                logging.getLogger(__name__).warning(
+                    "%s: inferred undeclared pipe group %s", self.name, group
+                )
+        frame = df_data.rename(
+            columns=lambda column: safe_identifier(column).lower()
+        ).fillna("")
         for chain in self.chains:
             missing = set(chain.columns) - set(frame.columns)
             if missing:
                 logging.getLogger(__name__).warning(
-                    "%s.%s: missing declared columns %s", self.name, chain.name, sorted(missing)
+                    "%s.%s: missing declared columns %s",
+                    self.name,
+                    chain.name,
+                    sorted(missing),
                 )
-            unaligned = [index + 2 for index, row in enumerate(frame.to_dict("records"))
-                         if align_values(tuple(str(row.get(column, "")) for column in chain.columns)).status == "unaligned"]
+            unaligned = [
+                index + 2
+                for index, row in enumerate(frame.to_dict("records"))
+                if align_values(
+                    tuple(str(row.get(column, "")) for column in chain.columns)
+                ).status
+                == "unaligned"
+            ]
             if unaligned:
                 logging.getLogger(__name__).warning(
                     "%s.%s slot=%s: declared chain contradicted at source rows %s",
-                    self.name, chain.name, chain.slot, unaligned,
+                    self.name,
+                    chain.name,
+                    chain.slot,
+                    unaligned,
                 )
 
     def _retype_denormalised_columns(self, df_data: pd.DataFrame) -> None:
@@ -749,13 +822,16 @@ class TableMeta:
             if spec is None or spec.type == "Enum":
                 continue
 
-            matching = [c for c in df_data.columns if safe_identifier(c).lower() == col_name]
+            matching = [
+                c for c in df_data.columns if safe_identifier(c).lower() == col_name
+            ]
             if not matching:
                 continue
 
             raw = df_data[matching[0]].dropna().astype(str)
             exploded = pd.Series(
-                [part.strip() for value in raw for part in value.split("|")], dtype="object"
+                [part.strip() for value in raw for part in value.split("|")],
+                dtype="object",
             )
             if exploded.empty:
                 continue
@@ -777,7 +853,11 @@ class TableMeta:
         class_name = nt.classname
         table_name = nt.name
 
-        lines: list[str] = [f"class {class_name}(EntityBase, Base):", f"    __tablename__ = '{table_name}'", ""]
+        lines: list[str] = [
+            f"class {class_name}(EntityBase, Base):",
+            f"    __tablename__ = '{table_name}'",
+            "",
+        ]
 
         if parent.uses_surrogate_pk:
             lines.append("    __table_args__ = {'schema': 'primary'}")
@@ -789,7 +869,9 @@ class TableMeta:
                 col = parent.columns[pk]
                 py_type = col.sa_python_type(parent)
                 sa_type = col.sa_column_type(parent)
-                lines.append(f"    {pk}: Mapped[{py_type}] = mapped_column({sa_type}, primary_key=True)")
+                lines.append(
+                    f"    {pk}: Mapped[{py_type}] = mapped_column({sa_type}, primary_key=True)"
+                )
 
             # Parent columns are emitted in name order; DuckDB requires the
             # referenced composite key to use that exact database key order.
@@ -805,16 +887,22 @@ class TableMeta:
 
         col_name = nt.column
         col_spec = parent.columns[col_name]
-        
+
         py_type = col_spec.sa_python_type(parent, force_not_null=True)
         sa_type = col_spec.sa_column_type(parent)
 
         if nt.positional:
-            lines.append("    position: Mapped[int] = mapped_column(BigInteger, primary_key=True)")
+            lines.append(
+                "    position: Mapped[int] = mapped_column(BigInteger, primary_key=True)"
+            )
         value_key = "False" if nt.positional else "True"
-        lines.append(f"    {col_name}: Mapped[{py_type}] = mapped_column({sa_type}, primary_key={value_key}, nullable=False)")
+        lines.append(
+            f"    {col_name}: Mapped[{py_type}] = mapped_column({sa_type}, primary_key={value_key}, nullable=False)"
+        )
         lines.append("")
-        lines.append(f"    parent: Mapped['{parent.classname}'] = sa_relationship(back_populates='{nt.column}_items')")
+        lines.append(
+            f"    parent: Mapped['{parent.classname}'] = sa_relationship(back_populates='{nt.column}_items')"
+        )
 
         return "\n".join(lines)
 
@@ -873,13 +961,19 @@ class TableMeta:
         lines.append(f"class {class_name}(EntityBase, Base):")
         lines.append(f"    __tablename__ = '{self.name}'")
         if self.uses_surrogate_pk:
-            lines.append("    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)")
+            lines.append(
+                "    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)"
+            )
             lines.append("")
         lines.append(f"    filename = '{self.filename}'")
         lines.append(f"    natural_key_columns = {self.pk_columns!r}")
-        lines.append(f"    source_defined_keys: list[str] = {self.source_defined_keys!r}")
+        lines.append(
+            f"    source_defined_keys: list[str] = {self.source_defined_keys!r}"
+        )
         lines.append(f"    identity_keys: list[str] = {self.identity_keys!r}")
-        lines.append(f"    denormalised_columns: list[str] = {self.denormalised_columns!r}")
+        lines.append(
+            f"    denormalised_columns: list[str] = {self.denormalised_columns!r}"
+        )
         lines.append(f"    derived_columns: list[str] = {self.derived_columns!r}")
         lines.extend(render_source_metadata(self))
         lines.append("")
@@ -898,7 +992,9 @@ class TableMeta:
         if self.uses_surrogate_pk and self.natural_key_is_usable:
             uniq_cols = ", ".join(f"'{c}'" for c in self.pk_columns)
             lines.append("    __table_args__ = (")
-            lines.append(f"        sa.UniqueConstraint({uniq_cols}, name='uq_{self.name}_natural_key'),")
+            lines.append(
+                f"        sa.UniqueConstraint({uniq_cols}, name='uq_{self.name}_natural_key'),"
+            )
             lines.append("        {'schema': 'primary'},")
             lines.append("    )")
             lines.append("")
@@ -906,12 +1002,17 @@ class TableMeta:
             lines.append("    __table_args__ = {'schema': 'primary'}")
 
         for column_spec in sorted(self.columns.values(), key=lambda c: c.name):
-            if column_spec.name in self.denormalised_columns or column_spec.name in self.derived_columns:
+            if (
+                column_spec.name in self.denormalised_columns
+                or column_spec.name in self.derived_columns
+            ):
                 continue
             lines.append(column_spec.sa_column_line(self))
 
         for column in self.raw_date_columns:
-            lines.append(f"    {column}_raw: Mapped[Optional[str]] = mapped_column(Text, nullable=True)")
+            lines.append(
+                f"    {column}_raw: Mapped[Optional[str]] = mapped_column(Text, nullable=True)"
+            )
 
         lines.append("")
         lines.append("    normalisation_groups: list[list[str]] = [")
@@ -928,12 +1029,19 @@ class TableMeta:
             )
 
         soft_rel_counts = Counter(rel.local_column for rel in self.soft_relationships)
-        for rel in sorted(self.soft_relationships, key=lambda rel: (rel.local_column, rel.target_table, rel.target_column)):
+        for rel in sorted(
+            self.soft_relationships,
+            key=lambda rel: (rel.local_column, rel.target_table, rel.target_column),
+        ):
             target_cls = registry.tables[rel.target_table].classname
-            rel_name = self._relationship_name(rel.local_column, rel.target_table, soft_rel_counts, "obj")
+            rel_name = self._relationship_name(
+                rel.local_column, rel.target_table, soft_rel_counts, "obj"
+            )
             join_expr = f"{self.classname}.{rel.local_column} == foreign({target_cls}.{rel.target_column})"
 
-            lines.append(f"    {rel_name}: Mapped[Optional['{target_cls}']] = sa_relationship(")
+            lines.append(
+                f"    {rel_name}: Mapped[Optional['{target_cls}']] = sa_relationship("
+            )
             lines.append(f"        '{target_cls}',")
             lines.append(f'        primaryjoin="{join_expr}",')
             lines.append("        lazy='selectin',")
@@ -941,8 +1049,18 @@ class TableMeta:
             lines.append("    )")
             lines.append("")
 
-        soft_m2m_counts = Counter(m2m_rel.map_column for m2m_rel in self.soft_m2m_relationships)
-        for m2m_rel in sorted(self.soft_m2m_relationships, key=lambda rel: (rel.map_table, rel.map_column, rel.target_table, rel.target_column)):
+        soft_m2m_counts = Counter(
+            m2m_rel.map_column for m2m_rel in self.soft_m2m_relationships
+        )
+        for m2m_rel in sorted(
+            self.soft_m2m_relationships,
+            key=lambda rel: (
+                rel.map_table,
+                rel.map_column,
+                rel.target_table,
+                rel.target_column,
+            ),
+        ):
             target_cls = registry.tables[m2m_rel.target_table].classname
             map_table = m2m_rel.map_table
             map_column = m2m_rel.map_column
@@ -953,9 +1071,13 @@ class TableMeta:
 
             map_expression = f"Base.metadata.tables['primary.{map_table}']"
             primary_join = self._map_primary_join(map_expression)
-            secondary_join = self._map_secondary_join(m2m_rel, target_cls, map_expression)
+            secondary_join = self._map_secondary_join(
+                m2m_rel, target_cls, map_expression
+            )
 
-            lines.append(f"    {rel_name}: Mapped[list['{target_cls}']] = sa_relationship(")
+            lines.append(
+                f"    {rel_name}: Mapped[list['{target_cls}']] = sa_relationship("
+            )
             lines.append(f"        '{target_cls}',")
             lines.append(f"        secondary=lambda: {map_expression},")
             lines.append(f"        primaryjoin=lambda: {primary_join},")
@@ -983,7 +1105,11 @@ class Registry:
 
     @classmethod
     def from_dict(cls, raw: dict) -> Registry:
-        return cls(tables={name: TableMeta.from_dict(meta) for name, meta in raw["tables"].items()})
+        return cls(
+            tables={
+                name: TableMeta.from_dict(meta) for name, meta in raw["tables"].items()
+            }
+        )
 
     def get(self, name: str) -> TableMeta:
         return self.tables[name]
@@ -1018,7 +1144,9 @@ class Registry:
                 df_dict = pd.read_excel(xls, sheet_name=table_name)
                 df_dict.columns = [str(c).strip() for c in df_dict.columns]
                 df_dict = norm_cols(df_dict)
-                self._dictionary_enriched_columns[table_name] = meta.enrich_field_metadata(df_dict)
+                self._dictionary_enriched_columns[table_name] = (
+                    meta.enrich_field_metadata(df_dict)
+                )
             else:
                 print(f"Warning: no dictionary sheet for table '{table_name}'")
 
@@ -1054,7 +1182,9 @@ class Registry:
             )
 
             if ambiguous:
-                print(f"Warning: ambiguous CSV matches for table '{table_name}': {', '.join(ambiguous)}")
+                print(
+                    f"Warning: ambiguous CSV matches for table '{table_name}': {', '.join(ambiguous)}"
+                )
                 continue
 
             if data_path is None:
@@ -1084,7 +1214,12 @@ class Registry:
                 f += enum.enum_class(table) + "\n\n"
                 enum_labels.append(enum.enum_type(table))
         import_lines = ",\n    ".join(sorted(enum_labels))
-        return f, f"from .enums import (\n    {import_lines},\n)" if enum_labels else "# no enums generated"
+        return (
+            f,
+            f"from .enums import (\n    {import_lines},\n)"
+            if enum_labels
+            else "# no enums generated",
+        )
 
     def render_sa_models(self) -> tuple[str, str]:
         """Render the ORM model module and companion enum module content."""
@@ -1140,14 +1275,27 @@ class Registry:
         for table_name, hard_no_columns in overrides.items():
             table = self.tables[table_name]
             table.denormalised_columns = [
-                column for column in table.denormalised_columns if column not in hard_no_columns
+                column
+                for column in table.denormalised_columns
+                if column not in hard_no_columns
             ]
             table.normalisation_groups = [
                 NormalisationGroup(
-                    columns=[column for column in group.columns if column not in hard_no_columns]
+                    columns=[
+                        column
+                        for column in group.columns
+                        if column not in hard_no_columns
+                    ]
                 )
                 for group in table.normalisation_groups
-                if len([column for column in group.columns if column not in hard_no_columns]) > 1
+                if len(
+                    [
+                        column
+                        for column in group.columns
+                        if column not in hard_no_columns
+                    ]
+                )
+                > 1
             ]
             table._rebuild_normalised_tables()
 
@@ -1186,10 +1334,14 @@ class Registry:
             for col in table.columns:
                 if col in denormalised:
                     continue
-                for (target_table, target_key) in unique_index:
+                for target_table, target_key in unique_index:
                     if col == target_key and table.name != target_table:
                         table.soft_relationships.append(
-                            ForeignLikeRef(local_column=col, target_table=target_table, target_column=target_key)
+                            ForeignLikeRef(
+                                local_column=col,
+                                target_table=target_table,
+                                target_column=target_key,
+                            )
                         )
 
         for table in self.tables.values():
@@ -1197,7 +1349,7 @@ class Registry:
                 col = nt.column
                 map_table = nt.name
 
-                for (target_table, target_key) in relationship_index:
+                for target_table, target_key in relationship_index:
                     if col == target_key and table.name != target_table:
                         table.soft_m2m_relationships.append(
                             SoftManyToManyRef(

@@ -13,11 +13,28 @@ jobs:
   label-gate:
     uses: AustralianCancerDataNetwork/cava-devops/.github/workflows/label-gate.yml@main
 
-  default:
-    uses: AustralianCancerDataNetwork/cava-devops/.github/workflows/build-test.yml@main
+  ruff:
+    uses: AustralianCancerDataNetwork/cava-devops/.github/workflows/ruff.yml@main
     with:
       python-version: "3.12"
+
+  ty:
+    uses: AustralianCancerDataNetwork/cava-devops/.github/workflows/ty.yml@main
+    with:
+      python-version: "3.12"
+      # Generated model and loader code is not yet clean under ty.
       ty-src: hemonc_alchemy/cli.py hemonc_alchemy/config.py hemonc_alchemy/bootstrap.py hemonc_alchemy/integrations
+
+  lint-imports:
+    uses: AustralianCancerDataNetwork/cava-devops/.github/workflows/lint-imports.yml@main
+    with:
+      python-version: "3.12"
+
+  nodb:
+    uses: AustralianCancerDataNetwork/cava-devops/.github/workflows/build-test-nodb.yml@main
+    with:
+      python-version: "3.12"
+      exclude-markers: db_dialect or duckdb or postgres
 
   duckdb:
     uses: AustralianCancerDataNetwork/cava-devops/.github/workflows/build-test-duckdb.yml@main
@@ -26,20 +43,14 @@ jobs:
       markers: duckdb
 
   postgres:
-    uses: AustralianCancerDataNetwork/cava-devops/.github/workflows/build-test-postgres.yml@main
+    uses: AustralianCancerDataNetwork/cava-devops/.github/workflows/build-test-postgres-v3.yml@main
     with:
       python-version: "3.12"
       postgres-db: test
       postgres-user: test
       postgres-password: test
-      # The generated model and loader use dynamic SQLAlchemy/pandas types
-      # that are not yet clean under ty. Keep the shared check focused on the
-      # typed public/configuration boundary until those surfaces are annotated.
-      ty-src: hemonc_alchemy/cli.py hemonc_alchemy/config.py hemonc_alchemy/bootstrap.py hemonc_alchemy/integrations
+      markers: postgres
       setup-commands: |
-        # This shared workflow runs bare pytest. Environment addopts follow
-        # project addopts, so this explicitly selects our PostgreSQL axis.
-        echo 'PYTEST_ADDOPTS=-m postgres' >> "$GITHUB_ENV"
         echo 'HEMONC_REQUIRE_POSTGRES=1' >> "$GITHUB_ENV"
         mkdir -p "$HOME/.config/omop"
         install -m 600 .github/config.postgres.toml "$HOME/.config/omop/config.toml"
@@ -50,11 +61,11 @@ jobs:
   build-test:
     # Retain the organization-required check name while requiring every axis.
     name: build-test / test
-    needs: [default, duckdb, postgres, installed-wheel]
+    needs: [ruff, ty, lint-imports, nodb, duckdb, postgres, installed-wheel]
     if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
       - name: Require all validation jobs
         env:
-          ALL_SUCCEEDED: ${{ needs.default.result == 'success' && needs.duckdb.result == 'success' && needs.postgres.result == 'success' && needs.installed-wheel.result == 'success' }}
+          ALL_SUCCEEDED: ${{ !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') && !contains(needs.*.result, 'skipped') }}
         run: test "$ALL_SUCCEEDED" = true

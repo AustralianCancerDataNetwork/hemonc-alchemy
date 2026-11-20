@@ -3,9 +3,9 @@ Base class for all hemonc-alchemy entity tables.
 
 Mirrors ``omop_alchemy.cdm.base.CDMTableBase``
 
-This class does NOT provide pipe-delimited denormalisation / explode handling 
-(a HemOnc sig/regimen row can expand into N child rows), and natural-key-based 
-FK resolution at load time for surrogate-PK tables 
+This class does NOT provide pipe-delimited denormalisation / explode handling
+(a HemOnc sig/regimen row can expand into N child rows), and natural-key-based
+FK resolution at load time for surrogate-PK tables
 
 This is handled in `toolkit/loading.py` (`load_denormalised`).
 """
@@ -31,10 +31,16 @@ class Base(so.DeclarativeBase):
 
 
 @sa.event.listens_for(so.Session, "after_soft_rollback")
-def _discard_snapshot_parent_ids(session: so.Session, previous_transaction: Any) -> None:
+def _discard_snapshot_parent_ids(
+    session: so.Session, previous_transaction: Any
+) -> None:
     """A rolled-back load must not retain source-to-ID bindings for reuse."""
     for key in list(session.info):
-        if isinstance(key, tuple) and len(key) == 2 and key[0] == "hemonc_snapshot_parent_ids":
+        if (
+            isinstance(key, tuple)
+            and len(key) == 2
+            and key[0] == "hemonc_snapshot_parent_ids"
+        ):
             del session.info[key]
 
 
@@ -61,24 +67,34 @@ class EntityBase(Base, FileLoadableTableInterface, SerialisableTableInterface):
     def load_file(cls, session: so.Session, path: Path, **kwargs: Any) -> int:
         snapshot_key = ("hemonc_snapshot_parent_ids", cls)
         session.info.pop(snapshot_key, None)
-        policy = kwargs.get("policy") or conversion_policy(cast(sa.Table, cls.__table__))
+        policy = kwargs.get("policy") or conversion_policy(
+            cast(sa.Table, cls.__table__)
+        )
         kwargs["policy"] = policy
         reader = kwargs.get("reader")
         if reader is None:
             reader = open_reader(
-                path, cls.model_columns(),
+                path,
+                cls.model_columns(),
                 chunksize=kwargs.pop("chunksize", None),
                 quote_mode=kwargs.pop("quote_mode", None),
                 skip_malformed=policy.errors.on_error == "reject_row",
             )
         column = cls.__table__.c.get("id")
-        if column is not None and column.primary_key and column.autoincrement is True and "id" not in reader.columns:
+        if (
+            column is not None
+            and column.primary_key
+            and column.autoincrement is True
+            and "id" not in reader.columns
+        ):
             reader = GeneratedIdReader(reader, cls, session)
         kwargs["reader"] = reader
         # SQLAlchemy's generated class descriptors are broader than upstream's protocol.
         total = super().load_file(session, path, **kwargs)  # ty: ignore[invalid-argument-type]
         if isinstance(reader, GeneratedIdReader) and (
-            getattr(cls, "denormalised_columns", ()) or getattr(cls, "chains", ()) or getattr(cls, "opaque_columns", ())
+            getattr(cls, "denormalised_columns", ())
+            or getattr(cls, "chains", ())
+            or getattr(cls, "opaque_columns", ())
         ):
             session.info[snapshot_key] = reader.parent_ids
         return total
@@ -86,7 +102,11 @@ class EntityBase(Base, FileLoadableTableInterface, SerialisableTableInterface):
     @classmethod
     def load_csv(cls, session: so.Session, path: Path, **kwargs: Any) -> int:
         """Compatibility alias; use load_file for new code."""
-        warnings.warn("load_csv() is deprecated; use load_file()", DeprecationWarning, stacklevel=2)
+        warnings.warn(
+            "load_csv() is deprecated; use load_file()",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         return cls.load_file(session, path, **kwargs)
 
 
@@ -94,7 +114,8 @@ def register_enum_casts() -> None:
     """Compatibility hook: HemOnc file loads now install a local conversion policy."""
     warnings.warn(
         "register_enum_casts() is unnecessary; file loads use an explicit HemOnc policy",
-        DeprecationWarning, stacklevel=2,
+        DeprecationWarning,
+        stacklevel=2,
     )
 
 
@@ -102,8 +123,8 @@ def is_concrete_entity(obj: object) -> bool:
     """
     True for a real, mapped entity class (not `Base` itself, and not an
     abstract class like `EntityBase`)
-    
-    This is required because SQLAlchemy only ever checks a class's 
+
+    This is required because SQLAlchemy only ever checks a class's
     own `__dict__` when deciding whether to map it
     """
     return (

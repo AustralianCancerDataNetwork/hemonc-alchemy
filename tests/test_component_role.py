@@ -42,7 +42,10 @@ class TestResolveRole:
         assert resolve_role(set()) is ComponentRole.UNTAGGED
 
     def test_defining_wins_when_both_present(self):
-        assert resolve_role({"Targeted therapy of", "Immunosuppressor of"}) is ComponentRole.DEFINING
+        assert (
+            resolve_role({"Targeted therapy of", "Immunosuppressor of"})
+            is ComponentRole.DEFINING
+        )
 
 
 class TestIsDefining:
@@ -60,11 +63,20 @@ class TestIsDefining:
 
 def _empty_template(iv_drug: list[str], po_drug: list[str]) -> CycleTemplate:
     return CycleTemplate(
-        id="t", common_name="t", cycle_len=1, diseases=set(),
-        iv_drug=iv_drug, po_drug=po_drug,
-        binary_iv=pd.DataFrame(), binary_po=pd.DataFrame(), binary_fuzzy=pd.DataFrame(),
-        dose_iv=pd.DataFrame(), dose_po=pd.DataFrame(),
-        endocrine_regimen=False, supportive_regimen=False, drug_role={},
+        id="t",
+        common_name="t",
+        cycle_len=1,
+        diseases=set(),
+        iv_drug=iv_drug,
+        po_drug=po_drug,
+        binary_iv=pd.DataFrame(),
+        binary_po=pd.DataFrame(),
+        binary_fuzzy=pd.DataFrame(),
+        dose_iv=pd.DataFrame(),
+        dose_po=pd.DataFrame(),
+        endocrine_regimen=False,
+        supportive_regimen=False,
+        drug_role={},
     )
 
 
@@ -73,56 +85,150 @@ def session():
     if load_omop_binding() is None:
         pytest.skip("the optional omop extra is not installed")
     engine = create_default_hemonc_engine(
-        "sqlite://", connect_args={"check_same_thread": False}, poolclass=sa.pool.StaticPool
+        "sqlite://",
+        connect_args={"check_same_thread": False},
+        poolclass=sa.pool.StaticPool,
     )
     Base.metadata.create_all(engine)
 
     omop_metadata = sa.MetaData()
     concept = sa.Table(
-        "concept", omop_metadata,
+        "concept",
+        omop_metadata,
         sa.Column("concept_id", sa.Integer, primary_key=True),
-        sa.Column("concept_name", sa.String), sa.Column("domain_id", sa.String),
-        sa.Column("vocabulary_id", sa.String), sa.Column("concept_class_id", sa.String),
-        sa.Column("standard_concept", sa.String), sa.Column("concept_code", sa.String),
-        sa.Column("valid_start_date", sa.Date), sa.Column("valid_end_date", sa.Date),
+        sa.Column("concept_name", sa.String),
+        sa.Column("domain_id", sa.String),
+        sa.Column("vocabulary_id", sa.String),
+        sa.Column("concept_class_id", sa.String),
+        sa.Column("standard_concept", sa.String),
+        sa.Column("concept_code", sa.String),
+        sa.Column("valid_start_date", sa.Date),
+        sa.Column("valid_end_date", sa.Date),
         sa.Column("invalid_reason", sa.String),
     )
     relationship = sa.Table(
-        "concept_relationship", omop_metadata,
-        sa.Column("concept_id_1", sa.Integer), sa.Column("concept_id_2", sa.Integer),
-        sa.Column("relationship_id", sa.String), sa.Column("valid_start_date", sa.Date),
-        sa.Column("valid_end_date", sa.Date), sa.Column("invalid_reason", sa.String),
+        "concept_relationship",
+        omop_metadata,
+        sa.Column("concept_id_1", sa.Integer),
+        sa.Column("concept_id_2", sa.Integer),
+        sa.Column("relationship_id", sa.String),
+        sa.Column("valid_start_date", sa.Date),
+        sa.Column("valid_end_date", sa.Date),
+        sa.Column("invalid_reason", sa.String),
     )
     with engine.connect() as connection:
         omop_metadata.create_all(connection)
-        connection.execute(concept.insert(), [
-            {"concept_id": 1, "concept_name": "Cyclophosphamide and Prednisone", "domain_id": "Regimen", "vocabulary_id": "HemOnc", "concept_class_id": "Regimen", "concept_code": "1001", "invalid_reason": None},
-            {"concept_id": 2, "concept_name": "Unrelated regimen", "domain_id": "Regimen", "vocabulary_id": "HemOnc", "concept_class_id": "Regimen", "concept_code": "9999", "invalid_reason": None},
-            {"concept_id": 10, "concept_name": "Cyclophosphamide", "domain_id": "Drug", "vocabulary_id": "HemOnc", "concept_class_id": "Component", "concept_code": "2001", "invalid_reason": None},
-            {"concept_id": 11, "concept_name": "Prednisone", "domain_id": "Drug", "vocabulary_id": "HemOnc", "concept_class_id": "Component", "concept_code": "2002", "invalid_reason": None},
-            {"concept_id": 12, "concept_name": "Vincristine", "domain_id": "Drug", "vocabulary_id": "HemOnc", "concept_class_id": "Component", "concept_code": "2003", "invalid_reason": None},
-        ])
-        connection.execute(relationship.insert(), [
-            {"concept_id_1": 10, "concept_id_2": 1, "relationship_id": "Cytotoxic chemo of"},
-            {"concept_id_1": 11, "concept_id_2": 1, "relationship_id": "Steroid tx of"},
-            # Same drug, tagged for a different regimen -- must not leak into regimen 1001's resolution.
-            {"concept_id_1": 10, "concept_id_2": 2, "relationship_id": "Immunosuppressor of"},
-        ])
+        connection.execute(
+            concept.insert(),
+            [
+                {
+                    "concept_id": 1,
+                    "concept_name": "Cyclophosphamide and Prednisone",
+                    "domain_id": "Regimen",
+                    "vocabulary_id": "HemOnc",
+                    "concept_class_id": "Regimen",
+                    "concept_code": "1001",
+                    "invalid_reason": None,
+                },
+                {
+                    "concept_id": 2,
+                    "concept_name": "Unrelated regimen",
+                    "domain_id": "Regimen",
+                    "vocabulary_id": "HemOnc",
+                    "concept_class_id": "Regimen",
+                    "concept_code": "9999",
+                    "invalid_reason": None,
+                },
+                {
+                    "concept_id": 10,
+                    "concept_name": "Cyclophosphamide",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "HemOnc",
+                    "concept_class_id": "Component",
+                    "concept_code": "2001",
+                    "invalid_reason": None,
+                },
+                {
+                    "concept_id": 11,
+                    "concept_name": "Prednisone",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "HemOnc",
+                    "concept_class_id": "Component",
+                    "concept_code": "2002",
+                    "invalid_reason": None,
+                },
+                {
+                    "concept_id": 12,
+                    "concept_name": "Vincristine",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "HemOnc",
+                    "concept_class_id": "Component",
+                    "concept_code": "2003",
+                    "invalid_reason": None,
+                },
+            ],
+        )
+        connection.execute(
+            relationship.insert(),
+            [
+                {
+                    "concept_id_1": 10,
+                    "concept_id_2": 1,
+                    "relationship_id": "Cytotoxic chemo of",
+                },
+                {
+                    "concept_id_1": 11,
+                    "concept_id_2": 1,
+                    "relationship_id": "Steroid tx of",
+                },
+                # Same drug, tagged for a different regimen -- must not leak into regimen 1001's resolution.
+                {
+                    "concept_id_1": 10,
+                    "concept_id_2": 2,
+                    "relationship_id": "Immunosuppressor of",
+                },
+            ],
+        )
         connection.commit()
 
     with so.Session(schema_aware_bind(engine, {"vocab": None})) as s:
-        s.add_all([
-            Drugs(id=1, date_added=_D, drug="Cyclophosphamide", drug_cui=2001, investigational=False, multiagent=False),
-            Drugs(id=2, date_added=_D, drug="Prednisone", drug_cui=2002, investigational=False, multiagent=False),
-            Drugs(id=3, date_added=_D, drug="Vincristine", drug_cui=2003, investigational=False, multiagent=False),
-        ])
+        s.add_all(
+            [
+                Drugs(
+                    id=1,
+                    date_added=_D,
+                    drug="Cyclophosphamide",
+                    drug_cui=2001,
+                    investigational=False,
+                    multiagent=False,
+                ),
+                Drugs(
+                    id=2,
+                    date_added=_D,
+                    drug="Prednisone",
+                    drug_cui=2002,
+                    investigational=False,
+                    multiagent=False,
+                ),
+                Drugs(
+                    id=3,
+                    date_added=_D,
+                    drug="Vincristine",
+                    drug_cui=2003,
+                    investigational=False,
+                    multiagent=False,
+                ),
+            ]
+        )
         s.commit()
         yield s
 
 
 class TestAttachComponentRoles:
     def test_classifies_each_drug_for_its_own_regimen(self, session):
-        template = _empty_template(iv_drug=["Cyclophosphamide"], po_drug=["Prednisone", "Vincristine"])
+        template = _empty_template(
+            iv_drug=["Cyclophosphamide"], po_drug=["Prednisone", "Vincristine"]
+        )
         enriched = attach_component_roles(session, 1001, template)
         assert enriched.drug_role == {
             "Cyclophosphamide": ComponentRole.DEFINING,

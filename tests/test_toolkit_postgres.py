@@ -34,7 +34,10 @@ def test_condition_component_and_normalized_sig_links(imported_hemonc_session):
         .order_by(Conditions.condition_cui)
         .limit(1)
     ).one()
-    assert [row.condition_cui for row in conditions_by_names(imported_hemonc_session, condition_name)] == [condition_cui]
+    assert [
+        row.condition_cui
+        for row in conditions_by_names(imported_hemonc_session, condition_name)
+    ] == [condition_cui]
 
     hits = search_components(imported_hemonc_session, "cisplatin")
     assert hits
@@ -59,10 +62,15 @@ def test_condition_component_and_normalized_sig_links(imported_hemonc_session):
     assert sigs
     assert sig_study_tokens(sigs[0])
     assert sig_study_objects(sigs[0])
-    assert any(condition.condition_cui == rt_cui for condition in sig_condition_objects(sigs[0]))
+    assert any(
+        condition.condition_cui == rt_cui
+        for condition in sig_condition_objects(sigs[0])
+    )
 
 
-def test_selection_executes_category_mapping_and_version_policies(imported_hemonc_session):
+def test_selection_executes_category_mapping_and_version_policies(
+    imported_hemonc_session,
+):
     scope = imported_hemonc_session.execute(
         sa.select(Studies.condition_cui, Drugs.main_class)
         .join(variants_StudyMap, variants_StudyMap.study == Studies.study)
@@ -96,7 +104,10 @@ def test_study_variant_links_prefer_highest_version(imported_hemonc_session):
         .join(variants_StudyMap, variants_StudyMap.study == Studies.study)
         .join(Variants, variants_StudyMap.parent_id == Variants.id)
         .group_by(Studies.study)
-        .having(sa.func.count(sa.distinct(Variants.variant_cui)) < sa.func.count(Variants.id))
+        .having(
+            sa.func.count(sa.distinct(Variants.variant_cui))
+            < sa.func.count(Variants.id)
+        )
         .limit(1)
     ).scalar_one_or_none()
     if duplicate is None:

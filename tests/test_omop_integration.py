@@ -38,45 +38,108 @@ def _sqlite_omop_session():
     )
     metadata = sa.MetaData()
     concept = sa.Table(
-        "concept", metadata,
+        "concept",
+        metadata,
         sa.Column("concept_id", sa.Integer, primary_key=True),
-        sa.Column("concept_name", sa.String), sa.Column("domain_id", sa.String),
-        sa.Column("vocabulary_id", sa.String), sa.Column("concept_class_id", sa.String),
-        sa.Column("standard_concept", sa.String), sa.Column("concept_code", sa.String),
-        sa.Column("valid_start_date", sa.Date), sa.Column("valid_end_date", sa.Date),
+        sa.Column("concept_name", sa.String),
+        sa.Column("domain_id", sa.String),
+        sa.Column("vocabulary_id", sa.String),
+        sa.Column("concept_class_id", sa.String),
+        sa.Column("standard_concept", sa.String),
+        sa.Column("concept_code", sa.String),
+        sa.Column("valid_start_date", sa.Date),
+        sa.Column("valid_end_date", sa.Date),
         sa.Column("invalid_reason", sa.String),
     )
     relationship = sa.Table(
-        "concept_relationship", metadata,
-        sa.Column("concept_id_1", sa.Integer), sa.Column("concept_id_2", sa.Integer),
-        sa.Column("relationship_id", sa.String), sa.Column("valid_start_date", sa.Date),
-        sa.Column("valid_end_date", sa.Date), sa.Column("invalid_reason", sa.String),
+        "concept_relationship",
+        metadata,
+        sa.Column("concept_id_1", sa.Integer),
+        sa.Column("concept_id_2", sa.Integer),
+        sa.Column("relationship_id", sa.String),
+        sa.Column("valid_start_date", sa.Date),
+        sa.Column("valid_end_date", sa.Date),
+        sa.Column("invalid_reason", sa.String),
     )
     vocabulary = sa.Table(
-        "vocabulary", metadata,
+        "vocabulary",
+        metadata,
         sa.Column("vocabulary_id", sa.String, primary_key=True),
-        sa.Column("vocabulary_name", sa.String), sa.Column("vocabulary_reference", sa.String),
-        sa.Column("vocabulary_version", sa.String), sa.Column("vocabulary_concept_id", sa.Integer),
+        sa.Column("vocabulary_name", sa.String),
+        sa.Column("vocabulary_reference", sa.String),
+        sa.Column("vocabulary_version", sa.String),
+        sa.Column("vocabulary_concept_id", sa.Integer),
     )
     with engine.connect() as connection:
         metadata.create_all(connection)
-        connection.execute(concept.insert(), [
-            {"concept_id": 1, "concept_name": "Classical Hodgkin lymphoma", "domain_id": "Condition", "vocabulary_id": "HemOnc", "concept_class_id": "Condition", "concept_code": "614", "invalid_reason": None},
-            {"concept_id": 2, "concept_name": "Hodgkin disease", "domain_id": "Condition", "vocabulary_id": "SNOMED", "concept_class_id": "Disorder", "standard_concept": "S", "concept_code": "118599009", "invalid_reason": None},
-            {"concept_id": 3, "concept_name": "Cisplatin", "domain_id": "Drug", "vocabulary_id": "HemOnc", "concept_class_id": "Component", "concept_code": "105", "invalid_reason": None},
-            {"concept_id": 4, "concept_name": "cisplatin", "domain_id": "Drug", "vocabulary_id": "RxNorm", "concept_class_id": "Ingredient", "standard_concept": "S", "concept_code": "2555", "invalid_reason": None},
-            {"concept_id": 5, "concept_name": "Retired source", "domain_id": "Condition", "vocabulary_id": "HemOnc", "concept_class_id": "Condition", "concept_code": "999", "invalid_reason": "D"},
-        ])
-        connection.execute(relationship.insert(), [
-            {"concept_id_1": 1, "concept_id_2": 2, "relationship_id": "Maps to"},
-            {"concept_id_1": 3, "concept_id_2": 4, "relationship_id": "Maps to"},
-            {"concept_id_1": 5, "concept_id_2": 2, "relationship_id": "Maps to"},
-        ])
-        connection.execute(vocabulary.insert(), [
-            {"vocabulary_id": "HemOnc", "vocabulary_version": "test-hemonc"},
-            {"vocabulary_id": "SNOMED", "vocabulary_version": "test-snomed"},
-            {"vocabulary_id": "RxNorm", "vocabulary_version": "test-rxnorm"},
-        ])
+        connection.execute(
+            concept.insert(),
+            [
+                {
+                    "concept_id": 1,
+                    "concept_name": "Classical Hodgkin lymphoma",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "HemOnc",
+                    "concept_class_id": "Condition",
+                    "concept_code": "614",
+                    "invalid_reason": None,
+                },
+                {
+                    "concept_id": 2,
+                    "concept_name": "Hodgkin disease",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED",
+                    "concept_class_id": "Disorder",
+                    "standard_concept": "S",
+                    "concept_code": "118599009",
+                    "invalid_reason": None,
+                },
+                {
+                    "concept_id": 3,
+                    "concept_name": "Cisplatin",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "HemOnc",
+                    "concept_class_id": "Component",
+                    "concept_code": "105",
+                    "invalid_reason": None,
+                },
+                {
+                    "concept_id": 4,
+                    "concept_name": "cisplatin",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm",
+                    "concept_class_id": "Ingredient",
+                    "standard_concept": "S",
+                    "concept_code": "2555",
+                    "invalid_reason": None,
+                },
+                {
+                    "concept_id": 5,
+                    "concept_name": "Retired source",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "HemOnc",
+                    "concept_class_id": "Condition",
+                    "concept_code": "999",
+                    "invalid_reason": "D",
+                },
+            ],
+        )
+        connection.execute(
+            relationship.insert(),
+            [
+                {"concept_id_1": 1, "concept_id_2": 2, "relationship_id": "Maps to"},
+                {"concept_id_1": 3, "concept_id_2": 4, "relationship_id": "Maps to"},
+                {"concept_id_1": 5, "concept_id_2": 2, "relationship_id": "Maps to"},
+            ],
+        )
+        connection.execute(
+            vocabulary.insert(),
+            [
+                {"vocabulary_id": "HemOnc", "vocabulary_version": "test-hemonc"},
+                {"vocabulary_id": "SNOMED", "vocabulary_version": "test-snomed"},
+                {"vocabulary_id": "RxNorm", "vocabulary_version": "test-rxnorm"},
+            ],
+        )
         connection.commit()
     return engine, sa.orm.Session(schema_aware_bind(engine, {"vocab": None}))
 
@@ -126,7 +189,9 @@ def test_omop_availability_routes_to_attached_vocabulary_schema():
     )
     with engine.begin() as connection:
         connection.execute(sa.text("ATTACH DATABASE ':memory:' AS omop"))
-        connection.execute(sa.text("CREATE TABLE omop.concept (concept_id INTEGER PRIMARY KEY)"))
+        connection.execute(
+            sa.text("CREATE TABLE omop.concept (concept_id INTEGER PRIMARY KEY)")
+        )
     session = sa.orm.Session(engine)
     try:
         missing_map = omop_availability(session)
@@ -151,18 +216,24 @@ def test_omop_queries_report_unrouted_and_wrong_schema_and_work_when_routed():
     )
     with engine.begin() as connection:
         connection.execute(sa.text("ATTACH DATABASE ':memory:' AS omop"))
-        connection.execute(sa.text(
-            "CREATE TABLE omop.concept (concept_id INTEGER PRIMARY KEY, concept_code TEXT, "
-            "concept_name TEXT, vocabulary_id TEXT, domain_id TEXT, concept_class_id TEXT, "
-            "standard_concept TEXT, invalid_reason TEXT)"
-        ))
-        connection.execute(sa.text(
-            "INSERT INTO omop.concept VALUES (105, '105', 'Cisplatin', 'HemOnc', 'Drug', "
-            "'Component', NULL, NULL)"
-        ))
+        connection.execute(
+            sa.text(
+                "CREATE TABLE omop.concept (concept_id INTEGER PRIMARY KEY, concept_code TEXT, "
+                "concept_name TEXT, vocabulary_id TEXT, domain_id TEXT, concept_class_id TEXT, "
+                "standard_concept TEXT, invalid_reason TEXT)"
+            )
+        )
+        connection.execute(
+            sa.text(
+                "INSERT INTO omop.concept VALUES (105, '105', 'Cisplatin', 'HemOnc', 'Drug', "
+                "'Component', NULL, NULL)"
+            )
+        )
     session = sa.orm.Session(engine)
     try:
-        with pytest.raises(OmopUnavailableError, match="schema tag 'vocab' is unmapped"):
+        with pytest.raises(
+            OmopUnavailableError, match="schema tag 'vocab' is unmapped"
+        ):
             resolve_hemonc_concepts(session, (105,))
 
         schema_aware_bind(session, {"vocab": "nonexistent_schema"})
@@ -174,9 +245,13 @@ def test_omop_queries_report_unrouted_and_wrong_schema_and_work_when_routed():
         assert [item.hemonc_cui for item in resolved] == ["105"]
 
         session.commit()
-        assert [item.hemonc_cui for item in resolve_hemonc_concepts(session, (105,))] == ["105"]
+        assert [
+            item.hemonc_cui for item in resolve_hemonc_concepts(session, (105,))
+        ] == ["105"]
         session.rollback()
-        assert [item.hemonc_cui for item in resolve_hemonc_concepts(session, (105,))] == ["105"]
+        assert [
+            item.hemonc_cui for item in resolve_hemonc_concepts(session, (105,))
+        ] == ["105"]
     finally:
         session.close()
         engine.dispose()
@@ -192,13 +267,19 @@ def test_cached_per_engine_partitions_connection_schema_maps():
         return session.get_bind().get_execution_options().get("schema_translate_map")
 
     try:
-        with engine.connect().execution_options(
-            schema_translate_map={"vocab": "omop"}
-        ) as good_connection, sa.orm.Session(bind=good_connection) as good_session:
+        with (
+            engine.connect().execution_options(
+                schema_translate_map={"vocab": "omop"}
+            ) as good_connection,
+            sa.orm.Session(bind=good_connection) as good_session,
+        ):
             assert cached_map(good_session) == {"vocab": "omop"}
-        with engine.connect().execution_options(
-            schema_translate_map={"vocab": "nonexistent_schema"}
-        ) as bad_connection, sa.orm.Session(bind=bad_connection) as bad_session:
+        with (
+            engine.connect().execution_options(
+                schema_translate_map={"vocab": "nonexistent_schema"}
+            ) as bad_connection,
+            sa.orm.Session(bind=bad_connection) as bad_session,
+        ):
             assert cached_map(bad_session) == {"vocab": "nonexistent_schema"}
         assert len(calls) == 2
     finally:
@@ -225,7 +306,11 @@ def test_present_omop_preserves_identifiers_and_mapping_rows():
         assert report.resolved_cuis == 1
         assert report.mapped_cuis == 1
         assert report.unmatched_cuis == ("999",)
-        assert {v.vocabulary_id for v in vocabulary_versions(session)} == {"HemOnc", "SNOMED", "RxNorm"}
+        assert {v.vocabulary_id for v in vocabulary_versions(session)} == {
+            "HemOnc",
+            "SNOMED",
+            "RxNorm",
+        }
     finally:
         session.close()
         engine.dispose()
@@ -237,18 +322,24 @@ def test_snomed_to_condition_is_the_reverse_of_condition_to_snomed():
     engine, session = _sqlite_omop_session()
     try:
         # A non-Condition HemOnc source mapped onto the same SNOMED concept must not leak through.
-        session.execute(sa.text(
-            "INSERT INTO concept (concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, concept_code)"
-            " VALUES (6, 'Stray drug', 'Drug', 'HemOnc', 'Component', '777')"
-        ))
-        session.execute(sa.text(
-            "INSERT INTO concept_relationship (concept_id_1, concept_id_2, relationship_id) VALUES (6, 2, 'Maps to')"
-        ))
+        session.execute(
+            sa.text(
+                "INSERT INTO concept (concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, concept_code)"
+                " VALUES (6, 'Stray drug', 'Drug', 'HemOnc', 'Component', '777')"
+            )
+        )
+        session.execute(
+            sa.text(
+                "INSERT INTO concept_relationship (concept_id_1, concept_id_2, relationship_id) VALUES (6, 2, 'Maps to')"
+            )
+        )
         session.commit()
         snomed_concept_id = condition_to_snomed(session, [614])[0].target.concept_id
         back = snomed_to_condition(session, [snomed_concept_id])
         assert [m.hemonc_cui for m in back] == ["614"]
-        assert {m.hemonc_cui for m in map_from_standard(session, [snomed_concept_id])} == {"614", "777"}
+        assert {
+            m.hemonc_cui for m in map_from_standard(session, [snomed_concept_id])
+        } == {"614", "777"}
         assert snomed_to_condition(session, [999999]) == []
     finally:
         session.close()
@@ -285,33 +376,66 @@ def test_biosimilars_and_combinations_share_one_canonical_drug_identity():
     try:
         # HemOnc: Rituximab (1), Rituximab-abbs (2), Rituximab and hyaluronidase human (3), Ziv-aflibercept (4);
         # RxNorm ingredients: rituximab (11), hyaluronidase (12), aflibercept (13).
-        drugs = [(101, "Rituximab", "446"), (102, "Rituximab-abbs", "445"), (103, "Rituximab and hyaluronidase human", "447"),
-                 (104, "Ziv-aflibercept", "500")]
-        ingredients = [(111, "rituximab ingredient"), (112, "hyaluronidase"), (113, "aflibercept")]
+        drugs = [
+            (101, "Rituximab", "446"),
+            (102, "Rituximab-abbs", "445"),
+            (103, "Rituximab and hyaluronidase human", "447"),
+            (104, "Ziv-aflibercept", "500"),
+        ]
+        ingredients = [
+            (111, "rituximab ingredient"),
+            (112, "hyaluronidase"),
+            (113, "aflibercept"),
+        ]
         for cid, name, code in drugs:
-            session.execute(sa.text(
-                "INSERT INTO concept (concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, concept_code)"
-                " VALUES (:i, :n, 'Drug', 'HemOnc', 'Component', :c)"), {"i": cid, "n": name, "c": code})
+            session.execute(
+                sa.text(
+                    "INSERT INTO concept (concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, concept_code)"
+                    " VALUES (:i, :n, 'Drug', 'HemOnc', 'Component', :c)"
+                ),
+                {"i": cid, "n": name, "c": code},
+            )
         for cid, name in ingredients:
-            session.execute(sa.text(
-                "INSERT INTO concept (concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, standard_concept, concept_code)"
-                " VALUES (:i, :n, 'Drug', 'RxNorm', 'Ingredient', 'S', :c)"), {"i": cid, "n": name, "c": str(cid)})
-        for source, target in [(101, 111), (102, 111), (103, 111), (103, 112), (104, 113)]:
-            session.execute(sa.text(
-                "INSERT INTO concept_relationship (concept_id_1, concept_id_2, relationship_id) VALUES (:a, :b, 'Maps to')"),
-                {"a": source, "b": target})
-        session.execute(sa.text(
-            "INSERT INTO concept_relationship (concept_id_1, concept_id_2, relationship_id) VALUES (102, 101, 'Biosimilar of')"))
+            session.execute(
+                sa.text(
+                    "INSERT INTO concept (concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, standard_concept, concept_code)"
+                    " VALUES (:i, :n, 'Drug', 'RxNorm', 'Ingredient', 'S', :c)"
+                ),
+                {"i": cid, "n": name, "c": str(cid)},
+            )
+        for source, target in [
+            (101, 111),
+            (102, 111),
+            (103, 111),
+            (103, 112),
+            (104, 113),
+        ]:
+            session.execute(
+                sa.text(
+                    "INSERT INTO concept_relationship (concept_id_1, concept_id_2, relationship_id) VALUES (:a, :b, 'Maps to')"
+                ),
+                {"a": source, "b": target},
+            )
+        session.execute(
+            sa.text(
+                "INSERT INTO concept_relationship (concept_id_1, concept_id_2, relationship_id) VALUES (102, 101, 'Biosimilar of')"
+            )
+        )
         session.commit()
 
         assert canonical_drug_names(session, [111, 112, 113, 999]) == {
-            111: "Rituximab", 112: "Hyaluronidase", 113: "Ziv-aflibercept",
+            111: "Rituximab",
+            112: "Hyaluronidase",
+            113: "Ziv-aflibercept",
         }
         # Asked alone, rituximab keeps its label: the combination still counts as multi-ingredient.
         assert canonical_drug_names(session, [111]) == {111: "Rituximab"}
         names = hemonc_drug_canonical_names(session)
         assert names["Rituximab-abbs"] == ("Rituximab",)
-        assert names["Rituximab and hyaluronidase human"] == ("Hyaluronidase", "Rituximab")
+        assert names["Rituximab and hyaluronidase human"] == (
+            "Hyaluronidase",
+            "Rituximab",
+        )
         assert names["Ziv-aflibercept"] == ("Ziv-aflibercept",)
     finally:
         session.close()
@@ -336,18 +460,41 @@ def ancestry_vocabulary():
         (18, "103", "Component", "HemOnc", None),
         (19, "104", "Component", "HemOnc", "D"),
     ]
-    session.execute(binding.concept.__table__.insert(), [
-        {"concept_id": cid, "concept_code": code, "concept_name": code,
-         "concept_class_id": cls, "vocabulary_id": vocab, "domain_id": "Drug", "invalid_reason": invalid}
-        for cid, code, cls, vocab, invalid in records
-    ])
-    session.execute(binding.concept_relationship.__table__.insert(), [
-        {"concept_id_1": source, "concept_id_2": target, "relationship_id": "Is a", "invalid_reason": invalid}
-        for source, target, invalid in [
-            (12, 10, None), (14, 12, None), (15, 13, "D"),
-            (16, 12, None), (18, 17, None), (19, 12, None), (3, 13, None),
-        ]
-    ])
+    session.execute(
+        binding.concept.__table__.insert(),
+        [
+            {
+                "concept_id": cid,
+                "concept_code": code,
+                "concept_name": code,
+                "concept_class_id": cls,
+                "vocabulary_id": vocab,
+                "domain_id": "Drug",
+                "invalid_reason": invalid,
+            }
+            for cid, code, cls, vocab, invalid in records
+        ],
+    )
+    session.execute(
+        binding.concept_relationship.__table__.insert(),
+        [
+            {
+                "concept_id_1": source,
+                "concept_id_2": target,
+                "relationship_id": "Is a",
+                "invalid_reason": invalid,
+            }
+            for source, target, invalid in [
+                (12, 10, None),
+                (14, 12, None),
+                (15, 13, "D"),
+                (16, 12, None),
+                (18, 17, None),
+                (19, 12, None),
+                (3, 13, None),
+            ]
+        ],
+    )
     session.commit()
     try:
         yield engine, session
@@ -359,32 +506,54 @@ def ancestry_vocabulary():
 def _source_drug_session(rows):
     engine = create_default_hemonc_engine("sqlite://", poolclass=StaticPool)
     metadata = sa.MetaData()
-    drugs = sa.Table("drugs", metadata, sa.Column("main_class", sa.String), sa.Column("drug_cui", sa.Integer))
+    drugs = sa.Table(
+        "drugs",
+        metadata,
+        sa.Column("main_class", sa.String),
+        sa.Column("drug_cui", sa.Integer),
+    )
     metadata.create_all(engine)
     with engine.begin() as conn:
-        conn.execute(drugs.insert(), [{"main_class": cls, "drug_cui": cui} for cls, cui in rows])
+        conn.execute(
+            drugs.insert(), [{"main_class": cls, "drug_cui": cui} for cls, cui in rows]
+        )
     return engine, sa.orm.Session(engine)
 
 
-def test_runtime_ancestry_joins_separate_databases_and_filters_active_edges(ancestry_vocabulary):
+def test_runtime_ancestry_joins_separate_databases_and_filters_active_edges(
+    ancestry_vocabulary,
+):
     _, vocabulary = ancestry_vocabulary
-    source_engine, source = _source_drug_session([
-        ("Hormone", 100), ("Invalid edge", 101), ("Wrong vocabulary", 102),
-        ("Invalid target", 103), ("Invalid source", 104), ("Other", 105),
-    ])
+    source_engine, source = _source_drug_session(
+        [
+            ("Hormone", 100),
+            ("Invalid edge", 101),
+            ("Wrong vocabulary", 102),
+            ("Invalid target", 103),
+            ("Invalid source", 104),
+            ("Other", 105),
+        ]
+    )
     try:
         index = main_class_ancestry(source, omop_session=vocabulary)
         assert index.unavailable_reason is None
         assert index.resolutions["Hormone"].status is DrugAncestry.ENDOCRINE
         assert index.resolutions["Other"].status is DrugAncestry.OTHER
-        for cls in ("Invalid edge", "Wrong vocabulary", "Invalid target", "Invalid source"):
+        for cls in (
+            "Invalid edge",
+            "Wrong vocabulary",
+            "Invalid target",
+            "Invalid source",
+        ):
             assert index.resolutions[cls].status is DrugAncestry.UNRESOLVED
     finally:
         source.close()
         source_engine.dispose()
 
 
-def test_runtime_ancestry_cache_is_scoped_to_both_engines_and_can_be_cleared(ancestry_vocabulary):
+def test_runtime_ancestry_cache_is_scoped_to_both_engines_and_can_be_cleared(
+    ancestry_vocabulary,
+):
     vocabulary_engine, vocabulary = ancestry_vocabulary
     source_engine, source = _source_drug_session([("Same label", 100)])
     other_engine, other_source = _source_drug_session([("Same label", 105)])
@@ -399,11 +568,17 @@ def test_runtime_ancestry_cache_is_scoped_to_both_engines_and_can_be_cleared(anc
             assert "nonexistent_schema" in wrong_index.unavailable_reason
         wrong_connection.close()
         with sa.orm.Session(bind=vocabulary.connection()) as same_engine_session:
-            assert main_class_ancestry(source, omop_session=same_engine_session) is index
+            assert (
+                main_class_ancestry(source, omop_session=same_engine_session) is index
+            )
         other = main_class_ancestry(other_source, omop_session=vocabulary)
         assert other is not index
         assert other.resolutions["Same label"].status is DrugAncestry.OTHER
-        vocabulary.execute(sa.text("UPDATE concept_relationship SET concept_id_2=11 WHERE concept_id_1=12"))
+        vocabulary.execute(
+            sa.text(
+                "UPDATE concept_relationship SET concept_id_2=11 WHERE concept_id_1=12"
+            )
+        )
         vocabulary.commit()
         assert main_class_ancestry(source, omop_session=vocabulary) is index
         main_class_ancestry.cache_clear()
@@ -417,11 +592,15 @@ def test_runtime_ancestry_cache_is_scoped_to_both_engines_and_can_be_cleared(anc
         other_engine.dispose()
 
 
-def test_runtime_ancestry_missing_roots_is_not_a_negative_classification(ancestry_vocabulary):
+def test_runtime_ancestry_missing_roots_is_not_a_negative_classification(
+    ancestry_vocabulary,
+):
     _, vocabulary = ancestry_vocabulary
     source_engine, source = _source_drug_session([("Hormone", 100)])
     try:
-        vocabulary.execute(sa.text("UPDATE concept SET invalid_reason='D' WHERE concept_code='44970'"))
+        vocabulary.execute(
+            sa.text("UPDATE concept SET invalid_reason='D' WHERE concept_code='44970'")
+        )
         vocabulary.commit()
         index = main_class_ancestry(source, omop_session=vocabulary)
         assert "44970" in index.unavailable_reason
@@ -454,13 +633,31 @@ def test_runtime_ancestry_distinguishes_vocabulary_engines(ancestry_vocabulary):
     other_engine, other_vocabulary = _sqlite_omop_session()
     binding = load_omop_binding()
     try:
-        other_vocabulary.execute(binding.concept.__table__.insert(), [
-            dict(row) for row in vocabulary.execute(sa.text("SELECT * FROM concept WHERE concept_id >= 10")).mappings()
-        ])
-        other_vocabulary.execute(binding.concept_relationship.__table__.insert(), [
-            dict(row) for row in vocabulary.execute(sa.text("SELECT * FROM concept_relationship WHERE relationship_id='Is a'")).mappings()
-        ])
-        other_vocabulary.execute(sa.text("UPDATE concept_relationship SET concept_id_2=11 WHERE concept_id_1=12"))
+        other_vocabulary.execute(
+            binding.concept.__table__.insert(),
+            [
+                dict(row)
+                for row in vocabulary.execute(
+                    sa.text("SELECT * FROM concept WHERE concept_id >= 10")
+                ).mappings()
+            ],
+        )
+        other_vocabulary.execute(
+            binding.concept_relationship.__table__.insert(),
+            [
+                dict(row)
+                for row in vocabulary.execute(
+                    sa.text(
+                        "SELECT * FROM concept_relationship WHERE relationship_id='Is a'"
+                    )
+                ).mappings()
+            ],
+        )
+        other_vocabulary.execute(
+            sa.text(
+                "UPDATE concept_relationship SET concept_id_2=11 WHERE concept_id_1=12"
+            )
+        )
         other_vocabulary.commit()
         endocrine = main_class_ancestry(source, omop_session=vocabulary)
         supportive = main_class_ancestry(source, omop_session=other_vocabulary)
@@ -485,8 +682,16 @@ def test_runtime_ancestry_retries_after_missing_relationships(ancestry_vocabular
         assert "concept_relationship" in missing.unavailable_reason
         assert "maps to the default schema" in missing.unavailable_reason
         assert vocabulary.scalar(sa.text("SELECT count(*) FROM concept")) > 0
-        vocabulary.execute(sa.text("CREATE TABLE concept_relationship (concept_id_1 INTEGER, concept_id_2 INTEGER, relationship_id TEXT, invalid_reason TEXT, valid_start_date DATE, valid_end_date DATE)"))
-        vocabulary.execute(sa.text("INSERT INTO concept_relationship (concept_id_1,concept_id_2,relationship_id) VALUES (12,10,'Is a'),(14,12,'Is a')"))
+        vocabulary.execute(
+            sa.text(
+                "CREATE TABLE concept_relationship (concept_id_1 INTEGER, concept_id_2 INTEGER, relationship_id TEXT, invalid_reason TEXT, valid_start_date DATE, valid_end_date DATE)"
+            )
+        )
+        vocabulary.execute(
+            sa.text(
+                "INSERT INTO concept_relationship (concept_id_1,concept_id_2,relationship_id) VALUES (12,10,'Is a'),(14,12,'Is a')"
+            )
+        )
         vocabulary.commit()
         restored = main_class_ancestry(source, omop_session=vocabulary)
         assert restored.unavailable_reason is None

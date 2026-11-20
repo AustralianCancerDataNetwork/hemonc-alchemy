@@ -1,13 +1,13 @@
 """
-Checks whether HemOnc's declared identity (sourced from data dictionary) 
-for a table holds up in the real data, plus a couple of small enumerator 
+Checks whether HemOnc's declared identity (sourced from data dictionary)
+for a table holds up in the real data, plus a couple of small enumerator
 health checks.
 
-A "natural key" (or business key) is the column(s) that the data dictionary 
-says is enough to uniquely identify a row of a table. 
+A "natural key" (or business key) is the column(s) that the data dictionary
+says is enough to uniquely identify a row of a table.
 
-This is different from the surrogate `id` a content table gets in the 
-generated model: the surrogate id is just a database convenience, but the 
+This is different from the surrogate `id` a content table gets in the
+generated model: the surrogate id is just a database convenience, but the
 natural key is the stated claim about what makes a row distinct.
 
 This module re-derives the declared key for every table in the dictionary,
@@ -15,15 +15,15 @@ then checks whether it's actually unique in the current CSV snapshot. When
 it isn't, it may be a sign the real data doesn't behave the way its own
 declared key implies.
 
-A "sparse key" means one or more of the composite key columns is blank for 
-some real rows. This is fine in principle, but doesn't meet sqlalchemy's 
+A "sparse key" means one or more of the composite key columns is blank for
+some real rows. This is fine in principle, but doesn't meet sqlalchemy's
 strict uniqueness requirement, so the audit flags it as a warning.
 
 There are some already-understood edge case (see `TABLE_DECISIONS` below
 for the ones already reviewed and accepted).
 
-`enum_threshold_warnings` flags enum columns getting close to the point 
-where they'd stop being treated as an enum at all, and `enum_collision_warnings` 
+`enum_threshold_warnings` flags enum columns getting close to the point
+where they'd stop being treated as an enum at all, and `enum_collision_warnings`
 flags enum values that look distinct but collapse to same generated member name.
 """
 
@@ -52,9 +52,9 @@ from .infer import (
 from .schema_model import Registry
 
 # these table-specific decisions are reviewed and accepted exceptions to the
-# audit's default "hard failure" rules. 
+# audit's default "hard failure" rules.
 
-# TODO: review at source to confirm these are still valid, and remove them if 
+# TODO: review at source to confirm these are still valid, and remove them if
 # they are no longer needed.
 
 TABLE_DECISIONS: dict[str, dict[str, str]] = {
@@ -73,14 +73,18 @@ STATUS_NOTES: dict[str, str] = {
     "IGNORE_ON_LOAD": "Reviewed and treated as a source-data issue safe to ignore or dedupe on load.",
 }
 
-HARD_FAILURE_STATUSES: frozenset[str] = frozenset({
-    "AMBIGUOUS_CSV_MATCH",
-    "MISSING_KEY_COLUMNS",
-    "DUPLICATE_BUSINESS_KEYS",
-})
+HARD_FAILURE_STATUSES: frozenset[str] = frozenset(
+    {
+        "AMBIGUOUS_CSV_MATCH",
+        "MISSING_KEY_COLUMNS",
+        "DUPLICATE_BUSINESS_KEYS",
+    }
+)
+
 
 def has_hard_failures(results: list[AuditResult]) -> bool:
     return any(r.status in HARD_FAILURE_STATUSES for r in results)
+
 
 @dataclass
 class AuditResult:
@@ -128,7 +132,9 @@ def canonical_key_value(value: Any) -> str:
     return text.casefold()
 
 
-def extract_duplicate_examples(df: pd.DataFrame, key_columns: list[str], limit: int = 5) -> list[dict[str, Any]]:
+def extract_duplicate_examples(
+    df: pd.DataFrame, key_columns: list[str], limit: int = 5
+) -> list[dict[str, Any]]:
     if df.empty:
         return []
 
@@ -136,7 +142,9 @@ def extract_duplicate_examples(df: pd.DataFrame, key_columns: list[str], limit: 
         df.groupby(key_columns, dropna=False)
         .size()
         .reset_index(name="count")
-        .sort_values(["count", *key_columns], ascending=[False, *([True] * len(key_columns))])
+        .sort_values(
+            ["count", *key_columns], ascending=[False, *([True] * len(key_columns))]
+        )
     )
     examples: list[dict[str, Any]] = []
     for _, row in counts.head(limit).iterrows():
@@ -153,7 +161,9 @@ def canonical_key_frame(df: pd.DataFrame, key_columns: list[str]) -> pd.DataFram
     return keyed
 
 
-def audit_table(kind: str, raw_table_name: str, maturity: str, unique_key_raw: str, data_dir: Path) -> AuditResult:
+def audit_table(
+    kind: str, raw_table_name: str, maturity: str, unique_key_raw: str, data_dir: Path
+) -> AuditResult:
     table_name = safe_identifier(raw_table_name)
     key_columns = parse_unique_key(unique_key_raw)
     csv_path, ambiguous_matches = resolve_source_csv(data_dir, table_name)
@@ -202,7 +212,9 @@ def audit_table(kind: str, raw_table_name: str, maturity: str, unique_key_raw: s
     df = pd.read_csv(csv_path)
     normalized_df = df.rename(columns=lambda c: safe_identifier(c).lower())
     source_row_count = len(normalized_df)
-    missing_key_columns = [col for col in key_columns if col not in normalized_df.columns]
+    missing_key_columns = [
+        col for col in key_columns if col not in normalized_df.columns
+    ]
 
     if missing_key_columns:
         return replace(
@@ -213,7 +225,9 @@ def audit_table(kind: str, raw_table_name: str, maturity: str, unique_key_raw: s
             exact_duplicate_rows_removed=0,
             missing_key_columns=missing_key_columns,
             status="MISSING_KEY_COLUMNS",
-            notes=[f"Declared key columns missing from CSV: {', '.join(missing_key_columns)}"],
+            notes=[
+                f"Declared key columns missing from CSV: {', '.join(missing_key_columns)}"
+            ],
         )
 
     notes: list[str] = []
@@ -229,10 +243,10 @@ def audit_table(kind: str, raw_table_name: str, maturity: str, unique_key_raw: s
     has_null_key_part = key_df.isna().any(axis=1)
     rows_with_null_key_parts = int(has_null_key_part.sum())
 
-    # Rows with a null key part are excluded from the duplicate check 
-    # because a business key that's partly unassigned (e.g. `sigs.variant_cui` 
-    # before it is linked to its eventual variant) isn't comparable to another 
-    # row with the same gap, matching standard SQL UNIQUE-constraint semantics 
+    # Rows with a null key part are excluded from the duplicate check
+    # because a business key that's partly unassigned (e.g. `sigs.variant_cui`
+    # before it is linked to its eventual variant) isn't comparable to another
+    # row with the same gap, matching standard SQL UNIQUE-constraint semantics
     # where NULLs never collide
 
     # Keying only the fully-populated rows reclassifies partial nulls as
@@ -245,14 +259,20 @@ def audit_table(kind: str, raw_table_name: str, maturity: str, unique_key_raw: s
 
     if duplicate_business_keys > 0:
         status = "DUPLICATE_BUSINESS_KEYS"
-        notes.append("Declared business keys are not unique under case/numeric-canonical comparison.")
+        notes.append(
+            "Declared business keys are not unique under case/numeric-canonical comparison."
+        )
     elif rows_with_null_key_parts > 0:
         status = "SPARSE_KEY_ROWS"
-        notes.append("Declared business key includes nullable dimensions in current data.")
+        notes.append(
+            "Declared business key includes nullable dimensions in current data."
+        )
     else:
         status = "OK"
 
-    duplicate_examples = extract_duplicate_examples(keyed_df.loc[duplicate_mask, key_columns], key_columns)
+    duplicate_examples = extract_duplicate_examples(
+        keyed_df.loc[duplicate_mask, key_columns], key_columns
+    )
 
     return replace(
         base,
@@ -304,8 +324,12 @@ def load_overview_rows(dictionary_path: Path) -> list[tuple[str, str, str, str]]
         if not normalized_name:
             continue
 
-        maturity = "" if pd.isna(row.get(MATURITY_COL)) else str(row[MATURITY_COL]).strip()
-        unique_key_raw = "" if pd.isna(row.get(UNIQUE_COL)) else str(row[UNIQUE_COL]).strip()
+        maturity = (
+            "" if pd.isna(row.get(MATURITY_COL)) else str(row[MATURITY_COL]).strip()
+        )
+        unique_key_raw = (
+            "" if pd.isna(row.get(UNIQUE_COL)) else str(row[UNIQUE_COL]).strip()
+        )
 
         if normalized_name in overview_overrides:
             overview_ambiguous.add(normalized_name)
@@ -316,7 +340,10 @@ def load_overview_rows(dictionary_path: Path) -> list[tuple[str, str, str, str]]
     for normalized_name in overview_ambiguous:
         overview_overrides.pop(normalized_name, None)
 
-    overview_sheets = [("content", "Content", CONTENT_COL), ("lookup", "Lookup", LOOKUP_COL)]
+    overview_sheets = [
+        ("content", "Content", CONTENT_COL),
+        ("lookup", "Lookup", LOOKUP_COL),
+    ]
 
     for kind, sheet_name, name_col in overview_sheets:
         df = pd.read_excel(dictionary_path, sheet_name=sheet_name)
@@ -325,8 +352,14 @@ def load_overview_rows(dictionary_path: Path) -> list[tuple[str, str, str, str]]
                 continue
 
             raw_name = str(row[name_col]).strip()
-            maturity = "" if pd.isna(row.get(MATURITY_COL)) else str(row.get(MATURITY_COL)).strip()
-            unique_key_raw = "" if pd.isna(row.get(UNIQUE_COL)) else str(row.get(UNIQUE_COL)).strip()
+            maturity = (
+                ""
+                if pd.isna(row.get(MATURITY_COL))
+                else str(row.get(MATURITY_COL)).strip()
+            )
+            unique_key_raw = (
+                "" if pd.isna(row.get(UNIQUE_COL)) else str(row.get(UNIQUE_COL)).strip()
+            )
             override = overview_overrides.get(safe_identifier(raw_name))
             if override is not None:
                 maturity, unique_key_raw = override
@@ -337,7 +370,10 @@ def load_overview_rows(dictionary_path: Path) -> list[tuple[str, str, str, str]]
 
 def run_audit(data_dir: Path) -> list[AuditResult]:
     overview_rows = load_overview_rows(data_dir / DICTIONARY_FILENAME)
-    results = [audit_table(kind, raw_name, maturity, unique_key_raw, data_dir) for kind, raw_name, maturity, unique_key_raw in overview_rows]
+    results = [
+        audit_table(kind, raw_name, maturity, unique_key_raw, data_dir)
+        for kind, raw_name, maturity, unique_key_raw in overview_rows
+    ]
     results = apply_review_decisions(results)
     return sorted(results, key=lambda r: (r.kind, r.table_name))
 
@@ -412,7 +448,9 @@ def build_report(results: list[AuditResult], data_dir: Path) -> str:
     lines.append("## Summary")
     lines.append("")
     lines.append(f"- `OK`: {status_counts['OK']}")
-    for status in sorted((hard_failures | reviewed_statuses | warning_statuses) - {"OK"}):
+    for status in sorted(
+        (hard_failures | reviewed_statuses | warning_statuses) - {"OK"}
+    ):
         if status_counts[status]:
             lines.append(f"- `{status}`: {status_counts[status]}")
     lines.append("")
@@ -444,7 +482,9 @@ def build_report(results: list[AuditResult], data_dir: Path) -> str:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Audit overview-declared natural keys against current CSV data.")
+    parser = argparse.ArgumentParser(
+        description="Audit overview-declared natural keys against current CSV data."
+    )
     parser.add_argument("data_dir", type=Path)
     parser.add_argument("--output", type=Path, default=None)
     args = parser.parse_args()

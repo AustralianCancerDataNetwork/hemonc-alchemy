@@ -49,7 +49,8 @@ def studies_with_standalone_radiation_sigs_statement(
     """
     return (
         join_study_references(
-            select(Studies.id).select_from(Sigs)
+            select(Studies.id)
+            .select_from(Sigs)
             .join(sigs_StudyMap, sigs_StudyMap.parent_id == Sigs.id),
             sigs_StudyMap.study,
         )

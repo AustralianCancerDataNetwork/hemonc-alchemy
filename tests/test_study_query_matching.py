@@ -24,11 +24,15 @@ from hemonc_alchemy.toolkit.core.catalogue.variants import variant_identity_stat
 from hemonc_alchemy.toolkit.core.sigs import SigSelectionSpec, sig_search_statement
 
 
-@pytest.fixture(params=[
-    "sqlite",
-    pytest.param("duckdb", marks=[pytest.mark.duckdb, pytest.mark.db_dialect]),
-    pytest.param("postgresql", marks=[pytest.mark.postgres, pytest.mark.db_dialect]),
-])
+@pytest.fixture(
+    params=[
+        "sqlite",
+        pytest.param("duckdb", marks=[pytest.mark.duckdb, pytest.mark.db_dialect]),
+        pytest.param(
+            "postgresql", marks=[pytest.mark.postgres, pytest.mark.db_dialect]
+        ),
+    ]
+)
 def study_session(request):
     backend = request.param
     if backend == "postgresql":
@@ -66,7 +70,9 @@ def study_session(request):
         "conditions": "(1),(2),(3)",
         "regimens": "(10)",
     }
-    with engine.connect().execution_options(schema_translate_map={"primary": schema}) as conn:
+    with engine.connect().execution_options(
+        schema_translate_map={"primary": schema}
+    ) as conn:
         for table, columns in definitions.items():
             conn.exec_driver_sql(f"CREATE TEMPORARY TABLE {table} ({columns})")
         for table, values in inserts.items():
@@ -78,12 +84,16 @@ def study_session(request):
 
 
 def test_sig_search_matches_qualified_substudy(study_session):
-    statement = sig_search_statement(SigSelectionSpec.for_conditions([1])).with_only_columns(Sigs.id)
+    statement = sig_search_statement(
+        SigSelectionSpec.for_conditions([1])
+    ).with_only_columns(Sigs.id)
     assert set(study_session.scalars(statement)) == {1, 2}
 
 
 def test_standalone_radiation_studies_match_qualified_substudy(study_session):
-    assert list(study_session.scalars(studies_with_standalone_radiation_sigs_statement([1]))) == [1]
+    assert list(
+        study_session.scalars(studies_with_standalone_radiation_sigs_statement([1]))
+    ) == [1]
 
 
 def test_component_selection_matches_qualified_substudy(study_session):
@@ -94,131 +104,212 @@ def test_component_selection_matches_qualified_substudy(study_session):
 
 
 def test_generated_study_relationships_resolve_qualified_and_bare_tokens(study_session):
-    study_session.execute(sa.text(
-        "INSERT INTO variants VALUES (3,102,1,10,'Regimen','Variant Y')"
-    ))
+    study_session.execute(
+        sa.text("INSERT INTO variants VALUES (3,102,1,10,'Regimen','Variant Y')")
+    )
     study_session.execute(sa.text("INSERT INTO variants_study VALUES (3,'Trial')"))
-    study_session.execute(sa.text(
-        "INSERT INTO sigs VALUES (4,NULL,9,'Trial bare','RAD_SIG','Trial')"
-    ))
+    study_session.execute(
+        sa.text("INSERT INTO sigs VALUES (4,NULL,9,'Trial bare','RAD_SIG','Trial')")
+    )
     study_session.execute(sa.text("INSERT INTO sigs_study VALUES (4,'Trial')"))
-    study_session.execute(sa.text("INSERT INTO variant_eligibility VALUES (1,100,1),(2,101,1)"))
-    study_session.execute(sa.text(
-        "INSERT INTO variant_eligibility_study VALUES (1,'Trial--A'),(2,'Trial')"
-    ))
+    study_session.execute(
+        sa.text("INSERT INTO variant_eligibility VALUES (1,100,1),(2,101,1)")
+    )
+    study_session.execute(
+        sa.text(
+            "INSERT INTO variant_eligibility_study VALUES (1,'Trial--A'),(2,'Trial')"
+        )
+    )
     for model, qualified_id, bare_id in (
         (Sigs, 1, 4),
         (Variants, 1, 3),
         (VariantEligibility, 1, 2),
     ):
-        qualified = study_session.scalar(sa.select(model).options(
-            load_only(model.id), selectinload(model.study_objects).load_only(
-                Studies.id, Studies.study, Studies.substudy,
-            ), raiseload("*"),
-        ).where(model.id == qualified_id))
-        bare = study_session.scalar(sa.select(model).options(
-            load_only(model.id), selectinload(model.study_objects).load_only(
-                Studies.id, Studies.study, Studies.substudy,
-            ), raiseload("*"),
-        ).where(model.id == bare_id))
+        qualified = study_session.scalar(
+            sa.select(model)
+            .options(
+                load_only(model.id),
+                selectinload(model.study_objects).load_only(
+                    Studies.id,
+                    Studies.study,
+                    Studies.substudy,
+                ),
+                raiseload("*"),
+            )
+            .where(model.id == qualified_id)
+        )
+        bare = study_session.scalar(
+            sa.select(model)
+            .options(
+                load_only(model.id),
+                selectinload(model.study_objects).load_only(
+                    Studies.id,
+                    Studies.study,
+                    Studies.substudy,
+                ),
+                raiseload("*"),
+            )
+            .where(model.id == bare_id)
+        )
         # Trial--A is studies 1-2 only; bare Trial is every Trial row, never Trial X.
         assert {row.id for row in qualified.study_objects} == {1, 2}
         assert {row.id for row in bare.study_objects} == {1, 2, 3}
 
 
 @pytest.mark.parametrize("path", ["variants", "associations", "sigs", "components"])
-@pytest.mark.parametrize("condition,context,expected", [
-    (1, "palliative", []),  # Same study/substudy, different condition.
-    (2, "adjuvant", []),
-    (1, "neoadjuvant", []),  # Same study/condition, different substudy.
-    (1, "adjuvant", [100]),
-    (3, "adjuvant", [101]),  # NULL substudy codes must match each other.
-])
-def test_context_belongs_to_the_matched_study_row(study_session, path, condition, context, expected):
-    assert list(study_session.scalars(_context_statement(path, condition, context))) == expected
+@pytest.mark.parametrize(
+    "condition,context,expected",
+    [
+        (1, "palliative", []),  # Same study/substudy, different condition.
+        (2, "adjuvant", []),
+        (1, "neoadjuvant", []),  # Same study/condition, different substudy.
+        (1, "adjuvant", [100]),
+        (3, "adjuvant", [101]),  # NULL substudy codes must match each other.
+    ],
+)
+def test_context_belongs_to_the_matched_study_row(
+    study_session, path, condition, context, expected
+):
+    assert (
+        list(study_session.scalars(_context_statement(path, condition, context)))
+        == expected
+    )
 
 
 def _context_statement(path, condition, context):
     if path == "variants":
-        statement = variant_identity_statement(CatalogueSpec(
-            condition_cuis=(condition,), study_context=context,
-        )).with_only_columns(Variants.variant_cui)
+        statement = variant_identity_statement(
+            CatalogueSpec(
+                condition_cuis=(condition,),
+                study_context=context,
+            )
+        ).with_only_columns(Variants.variant_cui)
     elif path == "associations":
-        statement = study_association_statement(CatalogueSpec(
-            condition_cuis=(condition,), study_context=context,
-        )).with_only_columns(Variants.variant_cui)
+        statement = study_association_statement(
+            CatalogueSpec(
+                condition_cuis=(condition,),
+                study_context=context,
+            )
+        ).with_only_columns(Variants.variant_cui)
     elif path == "sigs":
-        statement = sig_search_statement(SigSelectionSpec.for_conditions(
-            [condition], study_context=context,
-        )).with_only_columns(Sigs.variant_cui).where(Sigs.variant_cui.is_not(None))
+        statement = (
+            sig_search_statement(
+                SigSelectionSpec.for_conditions(
+                    [condition],
+                    study_context=context,
+                )
+            )
+            .with_only_columns(Sigs.variant_cui)
+            .where(Sigs.variant_cui.is_not(None))
+        )
     else:
-        statement = build_component_statement(TreatmentSelectionSpec.for_conditions(
-            [condition], study_context=context,
-        )).with_only_columns(Variants.variant_cui)
+        statement = build_component_statement(
+            TreatmentSelectionSpec.for_conditions(
+                [condition],
+                study_context=context,
+            )
+        ).with_only_columns(Variants.variant_cui)
     return statement
 
 
 @pytest.mark.parametrize("path", ["variants", "associations", "sigs", "components"])
-@pytest.mark.parametrize("result_cui,study_cui,result_name,result_condition,expected", [
-    (None, 12, "Trial X", 3, [101]),
-    (None, None, "Trial X", 3, [101]),
-    (None, None, "Unrelated trial", 3, []),
-    (99, 12, "Trial X", 3, []),
-    (None, 12, "Trial X", 1, []),
-])
+@pytest.mark.parametrize(
+    "result_cui,study_cui,result_name,result_condition,expected",
+    [
+        (None, 12, "Trial X", 3, [101]),
+        (None, None, "Trial X", 3, [101]),
+        (None, None, "Unrelated trial", 3, []),
+        (99, 12, "Trial X", 3, []),
+        (None, 12, "Trial X", 1, []),
+    ],
+)
 def test_context_name_fallback_requires_missing_result_cui_and_matching_grain(
-    study_session, path, result_cui, study_cui, result_name, result_condition, expected,
+    study_session,
+    path,
+    result_cui,
+    study_cui,
+    result_name,
+    result_condition,
+    expected,
 ):
-    study_session.execute(sa.text("UPDATE studies SET study_cui=:cui WHERE id=4"), {"cui": study_cui})
-    study_session.execute(sa.text(
-        "UPDATE study_results SET study_cui=:cui,study=:name,condition_cui=:condition "
-        "WHERE study='Trial X'"
-    ), {"cui": result_cui, "name": result_name, "condition": result_condition})
-    assert list(study_session.scalars(_context_statement(path, 3, "adjuvant"))) == expected
+    study_session.execute(
+        sa.text("UPDATE studies SET study_cui=:cui WHERE id=4"), {"cui": study_cui}
+    )
+    study_session.execute(
+        sa.text(
+            "UPDATE study_results SET study_cui=:cui,study=:name,condition_cui=:condition "
+            "WHERE study='Trial X'"
+        ),
+        {"cui": result_cui, "name": result_name, "condition": result_condition},
+    )
+    assert (
+        list(study_session.scalars(_context_statement(path, 3, "adjuvant"))) == expected
+    )
 
 
-@pytest.mark.parametrize("study_biomarker,result_biomarker,expected", [
-    (None, None, [1]),
-    ("HER2-mutated", "HER2-mutated", [1]),
-    ("HER2-mutated", "ERBB3-mutated", []),
-    (None, "HER2-mutated", []),
-    ("HER2-mutated", None, []),
-])
+@pytest.mark.parametrize(
+    "study_biomarker,result_biomarker,expected",
+    [
+        (None, None, [1]),
+        ("HER2-mutated", "HER2-mutated", [1]),
+        ("HER2-mutated", "ERBB3-mutated", []),
+        (None, "HER2-mutated", []),
+        ("HER2-mutated", None, []),
+    ],
+)
 def test_context_stays_with_its_biomarker_cohort(
-    study_session, study_biomarker, result_biomarker, expected,
+    study_session,
+    study_biomarker,
+    result_biomarker,
+    expected,
 ):
-    study_session.execute(sa.text(
-        "UPDATE studies SET biomarker_finding=:finding WHERE id=1"
-    ), {"finding": study_biomarker})
-    study_session.execute(sa.text(
-        "UPDATE study_results SET biomarker_finding=:finding "
-        "WHERE study_cui=11 AND substudy_cui=111 AND condition_cui=1"
-    ), {"finding": result_biomarker})
+    study_session.execute(
+        sa.text("UPDATE studies SET biomarker_finding=:finding WHERE id=1"),
+        {"finding": study_biomarker},
+    )
+    study_session.execute(
+        sa.text(
+            "UPDATE study_results SET biomarker_finding=:finding "
+            "WHERE study_cui=11 AND substudy_cui=111 AND condition_cui=1"
+        ),
+        {"finding": result_biomarker},
+    )
     statement = sa.select(Studies.id).where(
-        Studies.id == 1, study_context_predicate("adjuvant"),
+        Studies.id == 1,
+        study_context_predicate("adjuvant"),
     )
     assert list(study_session.scalars(statement)) == expected
 
 
 @pytest.mark.parametrize("path", ["variants", "associations", "sigs", "components"])
-@pytest.mark.parametrize("stored,selected,expected", [
-    ("consolidation|maintenance", "consolidation", [100]),
-    ("consolidation|maintenance", "maintenance", [100]),
-    ("consolidation|maintenance|salvage", "maintenance", [100]),
-    ("consolidation|maintenance", "maint", []),
-    ("maintenance extended|consolidation", "maintenance", []),
-    ("consolidation|maintenance", "maintenance extended", []),
-    ("dose 10%|dose_20|path/a", "dose 10%", [100]),
-    ("dose 100|doseX20|pathXa", "dose 10%", []),
-    ("dose 100|doseX20|pathXa", "dose_20", []),
-    ("dose 10%|dose_20|path/a", "dose_20", [100]),
-    ("dose 10%|dose_20|path/a", "path/a", [100]),
-    ("consolidation|maintenance", "consolidation|maintenance", [100]),
-    ("induction|consolidation|maintenance", "consolidation|maintenance", []),
-])
-def test_study_context_matches_whole_pipe_tokens(study_session, path, stored, selected, expected):
-    study_session.execute(sa.text(
-        "UPDATE study_results SET context=:context "
-        "WHERE study_cui=11 AND substudy_cui=111 AND condition_cui=1"
-    ), {"context": stored})
-    assert list(study_session.scalars(_context_statement(path, 1, selected))) == expected
+@pytest.mark.parametrize(
+    "stored,selected,expected",
+    [
+        ("consolidation|maintenance", "consolidation", [100]),
+        ("consolidation|maintenance", "maintenance", [100]),
+        ("consolidation|maintenance|salvage", "maintenance", [100]),
+        ("consolidation|maintenance", "maint", []),
+        ("maintenance extended|consolidation", "maintenance", []),
+        ("consolidation|maintenance", "maintenance extended", []),
+        ("dose 10%|dose_20|path/a", "dose 10%", [100]),
+        ("dose 100|doseX20|pathXa", "dose 10%", []),
+        ("dose 100|doseX20|pathXa", "dose_20", []),
+        ("dose 10%|dose_20|path/a", "dose_20", [100]),
+        ("dose 10%|dose_20|path/a", "path/a", [100]),
+        ("consolidation|maintenance", "consolidation|maintenance", [100]),
+        ("induction|consolidation|maintenance", "consolidation|maintenance", []),
+    ],
+)
+def test_study_context_matches_whole_pipe_tokens(
+    study_session, path, stored, selected, expected
+):
+    study_session.execute(
+        sa.text(
+            "UPDATE study_results SET context=:context "
+            "WHERE study_cui=11 AND substudy_cui=111 AND condition_cui=1"
+        ),
+        {"context": stored},
+    )
+    assert (
+        list(study_session.scalars(_context_statement(path, 1, selected))) == expected
+    )

@@ -50,15 +50,25 @@ from hemonc_alchemy.toolkit.loading import (
 _REAL_DATA_DIR = Path(os.environ.get("HEMONC_DATA_DIR", "data/Tables"))
 
 
-@pytest.mark.parametrize("model,positions,expected_studies", [
-    (Sigs, [1688, 1689, 8876, 8877], [
-        {"GELTAMO-2006", "ORCHARRD", "SHEBA-07-4466-AN-CTIL"},
-        {"ORCHARRD", "SHEBA-07-4466-AN-CTIL"},
-        {"RTOG 0825", "AVAglio"}, {"RTOG 0825", "AVAglio"},
-    ]),
-    (VariantEligibility, [210, 211], [{"APOLLO", "KarMMa-3"}, {"EQUULEUS--pom"}]),
-])
-def test_real_source_study_collections_remain_attached_to_each_occurrence(tmp_path, model, positions, expected_studies):
+@pytest.mark.parametrize(
+    "model,positions,expected_studies",
+    [
+        (
+            Sigs,
+            [1688, 1689, 8876, 8877],
+            [
+                {"GELTAMO-2006", "ORCHARRD", "SHEBA-07-4466-AN-CTIL"},
+                {"ORCHARRD", "SHEBA-07-4466-AN-CTIL"},
+                {"RTOG 0825", "AVAglio"},
+                {"RTOG 0825", "AVAglio"},
+            ],
+        ),
+        (VariantEligibility, [210, 211], [{"APOLLO", "KarMMa-3"}, {"EQUULEUS--pom"}]),
+    ],
+)
+def test_real_source_study_collections_remain_attached_to_each_occurrence(
+    tmp_path, model, positions, expected_studies
+):
     source = _REAL_DATA_DIR / f"{model.__tablename__}.csv"
     with source.open(newline="", encoding="utf-8-sig") as handle:
         rows = list(csv.reader(handle))
@@ -67,17 +77,30 @@ def test_real_source_study_collections_remain_attached_to_each_occurrence(tmp_pa
         writer.writerow(rows[0])
         writer.writerows(rows[position] for position in positions)
     engine = create_default_hemonc_engine("sqlite:///:memory:")
-    tables = [model.__table__, *[rel.mapper.class_.__table__ for rel in sa.inspect(model).relationships
-                               if rel.key.endswith("_items")]]
+    tables = [
+        model.__table__,
+        *[
+            rel.mapper.class_.__table__
+            for rel in sa.inspect(model).relationships
+            if rel.key.endswith("_items")
+        ],
+    ]
     Base.metadata.create_all(engine, tables=tables)
     try:
         with so.Session(engine) as session:
             counts = load_all(session, model, tmp_path)
             assert counts[model.__tablename__] == len(positions)
-            parents = session.scalars(sa.select(model).options(
-                so.raiseload("*"), so.selectinload(model.study_items).raiseload("*"),
-            ).order_by(model.id)).all()
-            assert [{item.study for item in parent.study_items} for parent in parents] == expected_studies
+            parents = session.scalars(
+                sa.select(model)
+                .options(
+                    so.raiseload("*"),
+                    so.selectinload(model.study_items).raiseload("*"),
+                )
+                .order_by(model.id)
+            ).all()
+            assert [
+                {item.study for item in parent.study_items} for parent in parents
+            ] == expected_studies
     finally:
         engine.dispose()
 
@@ -89,14 +112,23 @@ def test_reference_semicolon_names_are_scalar_and_keep_their_cuis(tmp_path):
         writer = csv.writer(handle)
         writer.writerows([rows[0], rows[1954]])
     engine = create_default_hemonc_engine("sqlite:///:memory:")
-    Base.metadata.create_all(engine, tables=[Refs.__table__, Refs.title_items.property.mapper.class_.__table__])
+    Base.metadata.create_all(
+        engine,
+        tables=[Refs.__table__, Refs.title_items.property.mapper.class_.__table__],
+    )
     try:
         with so.Session(engine) as session:
             assert load_all(session, Refs, tmp_path)["refs"] == 1
-            record = session.execute(sa.select(Refs.study, Refs.study_cui, Refs.reference, Refs.reference_cui)).one()
+            record = session.execute(
+                sa.select(
+                    Refs.study, Refs.study_cui, Refs.reference, Refs.reference_cui
+                )
+            ).one()
             assert tuple(record) == (
-                "GEICAM/2003-11; CIBOMA/2004-01", 25246,
-                "GEICAM/2003-11; CIBOMA/2004-01::00", 25252,
+                "GEICAM/2003-11; CIBOMA/2004-01",
+                25246,
+                "GEICAM/2003-11; CIBOMA/2004-01::00",
+                25252,
             )
     finally:
         engine.dispose()
@@ -106,10 +138,9 @@ def test_surrogate_identity_treats_invalid_datetime_placeholder_as_null():
     column = sa.Column("date_added", sa.DateTime)
     failures = []
 
-    assert _identity_value(
-        "Uncertain date", column, on_error=failures.append
-    ) is None
+    assert _identity_value("Uncertain date", column, on_error=failures.append) is None
     assert failures == ["Uncertain date"]
+
 
 pytestmark = [
     pytest.mark.skipif(
@@ -133,16 +164,22 @@ def session():
 class TestFilenameResolution:
     def test_loads_table_whose_real_filename_does_not_match_tablename(self, session):
         # canonicaltriples is backed by canonical_triples.csv.
-        Base.metadata.create_all(session.get_bind(), tables=[Canonicaltriples.__table__])
+        Base.metadata.create_all(
+            session.get_bind(), tables=[Canonicaltriples.__table__]
+        )
 
         total = load_entity(session, Canonicaltriples, _REAL_DATA_DIR)
         assert total > 0
 
-        count = session.execute(sa.text("SELECT COUNT(*) FROM canonicaltriples")).scalar()
+        count = session.execute(
+            sa.text("SELECT COUNT(*) FROM canonicaltriples")
+        ).scalar()
         assert count == total
 
         sample = session.execute(
-            sa.text("SELECT class_1, relationship, class_2 FROM canonicaltriples LIMIT 1")
+            sa.text(
+                "SELECT class_1, relationship, class_2 FROM canonicaltriples LIMIT 1"
+            )
         ).first()
         assert sample is not None
         assert all(v for v in sample)
@@ -170,7 +207,7 @@ class TestHeaderNormalisation:
             "class,seq.rel.when,parameter-based,already_fine\n1,2,3,4\n"
         )
         assert _header_renames(csv_path) == {
-            "class": "class_field",          # Python keyword
+            "class": "class_field",  # Python keyword
             "seq.rel.when": "seqrelwhen",
             "parameter-based": "parameterbased",
         }
@@ -199,7 +236,7 @@ class TestHeaderNormalisation:
         source = tmp_path / "clean.csv"
         source.write_text("unit,concept_code\nmg,1\n")
         with _resolved_csv_path(tmp_path, "clean") as resolved:
-            assert resolved == source          # no copy, no symlink
+            assert resolved == source  # no copy, no symlink
 
     def test_units_loads_with_its_hyphenated_headers(self, session):
         """The original failure, end to end on the real extract."""
@@ -223,7 +260,10 @@ class TestDenormalisedLoadingNaturalKey:
         Base.metadata.create_all(
             session.get_bind(),
             tables=[Canonicaltriples.__table__]
-            + [rel.mapper.class_.__table__ for rel in sa.inspect(Canonicaltriples).relationships],
+            + [
+                rel.mapper.class_.__table__
+                for rel in sa.inspect(Canonicaltriples).relationships
+            ],
         )
 
         load_entity(session, Canonicaltriples, _REAL_DATA_DIR)
@@ -234,11 +274,15 @@ class TestDenormalisedLoadingNaturalKey:
         assert set(results) == {"class_1_provenance", "class_2_provenance"}
         assert all(count > 0 for count in results.values())
 
-        count = session.execute(sa.text("SELECT COUNT(*) FROM canonicaltriples_class_1_provenance")).scalar()
+        count = session.execute(
+            sa.text("SELECT COUNT(*) FROM canonicaltriples_class_1_provenance")
+        ).scalar()
         assert count == results["class_1_provenance"]
 
     @pytest.mark.parametrize("include_rejected", [False, True])
-    def test_casts_enum_natural_key_before_child_insert(self, tmp_path, include_rejected):
+    def test_casts_enum_natural_key_before_child_insert(
+        self, tmp_path, include_rejected
+    ):
         csv_path = tmp_path / "canonicaltriples.csv"
         csv_path.write_text(
             "class_1,relationship,class_2,date_added,in_ohdsi,internal,used_in,"
@@ -248,12 +292,17 @@ class TestDenormalisedLoadingNaturalKey:
 
         if include_rejected:
             with csv_path.open("a") as handle:
-                handle.write("Regimen,is_a,Context,2020-01-01,invalid-boolean,0,x,rejected\n")
+                handle.write(
+                    "Regimen,is_a,Context,2020-01-01,invalid-boolean,0,x,rejected\n"
+                )
 
         engine = create_default_hemonc_engine("sqlite:///:memory:")
         Base.metadata.create_all(
             engine,
-            tables=[Canonicaltriples.__table__, canonicaltriples_Class_1_provenanceMap.__table__],
+            tables=[
+                Canonicaltriples.__table__,
+                canonicaltriples_Class_1_provenanceMap.__table__,
+            ],
         )
         with so.Session(engine) as session:
             report = LoadReport()
@@ -327,7 +376,10 @@ class TestLoadAll:
         Base.metadata.create_all(
             session.get_bind(),
             tables=[Canonicaltriples.__table__]
-            + [rel.mapper.class_.__table__ for rel in sa.inspect(Canonicaltriples).relationships],
+            + [
+                rel.mapper.class_.__table__
+                for rel in sa.inspect(Canonicaltriples).relationships
+            ],
         )
 
         results = load_all(session, Canonicaltriples, _REAL_DATA_DIR)
@@ -336,7 +388,9 @@ class TestLoadAll:
         assert results["class_1_provenance"] > 0
         assert results["class_2_provenance"] > 0
 
-        count = session.execute(sa.text("SELECT COUNT(*) FROM canonicaltriples")).scalar()
+        count = session.execute(
+            sa.text("SELECT COUNT(*) FROM canonicaltriples")
+        ).scalar()
         assert count == results["canonicaltriples"]
 
 
@@ -355,8 +409,12 @@ class TestSurrogatePkEndToEnd:
     def test_primary_and_denorm_load_with_correct_linkage(self, pg_load_engine):
         from hemonc_alchemy.model.entities import variants_StudyMap
 
-        map_tables = [rel.mapper.class_.__table__ for rel in sa.inspect(Variants).relationships]
-        Base.metadata.create_all(pg_load_engine, tables=[Variants.__table__, *map_tables])
+        map_tables = [
+            rel.mapper.class_.__table__ for rel in sa.inspect(Variants).relationships
+        ]
+        Base.metadata.create_all(
+            pg_load_engine, tables=[Variants.__table__, *map_tables]
+        )
         with so.Session(pg_load_engine) as session:
             results = load_all(session, Variants, _REAL_DATA_DIR)
             session.commit()
@@ -364,9 +422,13 @@ class TestSurrogatePkEndToEnd:
             assert set(results) >= {"variants", "blob", "study", "tracer"}
             assert all(count > 0 for count in results.values())
             orphaned = session.scalar(
-                sa.select(sa.func.count()).select_from(variants_StudyMap.__table__.outerjoin(
-                    Variants.__table__, Variants.id == variants_StudyMap.parent_id
-                )).where(Variants.id.is_(None))
+                sa.select(sa.func.count())
+                .select_from(
+                    variants_StudyMap.__table__.outerjoin(
+                        Variants.__table__, Variants.id == variants_StudyMap.parent_id
+                    )
+                )
+                .where(Variants.id.is_(None))
             )
             assert orphaned == 0
 

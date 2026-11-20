@@ -26,7 +26,9 @@ def main(argv=None) -> int:
     if left.get("vocabulary") is None or right.get("vocabulary") is None:
         failed.append("vocabulary_snapshot_required")
     for name, report in [("left", left), ("right", right)]:
-        if set(report["tables"]) != {table.name for table in Base.metadata.tables.values()}:
+        if set(report["tables"]) != {
+            table.name for table in Base.metadata.tables.values()
+        }:
             failed.append(f"{name}.all_tables_required")
         if set(report["loads"]) != set(report["source"]["files"]):
             failed.append(f"{name}.all_source_reports_required")
@@ -35,12 +37,15 @@ def main(argv=None) -> int:
         if not REQUIRED_QUERIES <= report["queries"].keys():
             failed.append(f"{name}.all_representative_queries_required")
     receipt = {
-        "passed": not failed, "differences": failed,
+        "passed": not failed,
+        "differences": failed,
         "source_id": left["source"]["id"],
         "loadable_sources": len(left["source"]["files"]),
         "tables_compared": len(left["tables"]),
-        "rows": {"left": sum(t["rows"] for t in left["tables"].values()),
-                 "right": sum(t["rows"] for t in right["tables"].values())},
+        "rows": {
+            "left": sum(t["rows"] for t in left["tables"].values()),
+            "right": sum(t["rows"] for t in right["tables"].values()),
+        },
     }
     args.output.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n")
     print(json.dumps(receipt, indent=2))

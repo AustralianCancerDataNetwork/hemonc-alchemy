@@ -138,7 +138,9 @@ def group_into_blocks(events: Iterable[ScheduleEvent]) -> list[CycleBlock]:
 
     grouped: dict[tuple[Any, ...], list[ScheduleEvent]] = {}
     for event in events:
-        cycle_numbers, indefinite, optional_cycles = _timing_numbers(event.timing_sequence)
+        cycle_numbers, indefinite, optional_cycles = _timing_numbers(
+            event.timing_sequence
+        )
         key = (
             event.cycle_length_lb,
             event.cycle_length_ub,
@@ -173,14 +175,21 @@ def group_into_blocks(events: Iterable[ScheduleEvent]) -> list[CycleBlock]:
     )
 
 
-def _overlap_conflict(block: CycleBlock, overlaps: list[AnchoredBlock]) -> UnresolvedTiming | None:
+def _overlap_conflict(
+    block: CycleBlock, overlaps: list[AnchoredBlock]
+) -> UnresolvedTiming | None:
     length = (block.cycle_length_lb, block.cycle_length_ub, block.cycle_length_unit)
-    shared = set().union(*(
-        prior.block.cycle_numbers & block.cycle_numbers for prior in overlaps
-    ))
+    shared = set().union(
+        *(prior.block.cycle_numbers & block.cycle_numbers for prior in overlaps)
+    )
     if len(shared) > 1 and any(
-        (prior.block.cycle_length_lb, prior.block.cycle_length_ub, prior.block.cycle_length_unit)
-        != length for prior in overlaps
+        (
+            prior.block.cycle_length_lb,
+            prior.block.cycle_length_ub,
+            prior.block.cycle_length_unit,
+        )
+        != length
+        for prior in overlaps
     ):
         return UnresolvedTiming(
             f"cycle lengths differ across shared cycles {min(shared)}-{max(shared)}"
@@ -262,9 +271,9 @@ def anchor_blocks(
                     )
                 )
                 continue
-            shared = set().union(*(
-                prior.block.cycle_numbers & block.cycle_numbers for prior in overlaps
-            ))
+            shared = set().union(
+                *(prior.block.cycle_numbers & block.cycle_numbers for prior in overlaps)
+            )
             anchored.append(
                 AnchoredBlock(
                     block=block,
@@ -277,9 +286,13 @@ def anchor_blocks(
             continue
 
         previous = ordered[index - 1]
-        if previous.last_cycle is not None and block.first_cycle == previous.last_cycle + 1:
+        if (
+            previous.last_cycle is not None
+            and block.first_cycle == previous.last_cycle + 1
+        ):
             predecessors = [
-                prior.block for prior in anchored
+                prior.block
+                for prior in anchored
                 if prior.block.last_cycle == previous.last_cycle
             ]
             lengths = {
@@ -434,7 +447,9 @@ def _block_start(
             try:
                 cycle_delta = anchor_cycle - min(candidate.cycle_numbers)
                 implied.add(
-                    _advance(candidate_start, candidate, cycle_delta, selection=selection)
+                    _advance(
+                        candidate_start, candidate, cycle_delta, selection=selection
+                    )
                 )
             except ValueError:
                 continue
@@ -535,7 +550,9 @@ def _unresolved_block_events(
     decay_factor: float,
 ) -> list[TimedEvent]:
     output = []
-    cycle_numbers: list[int | None] = cast(list[int | None], sorted(block.cycle_numbers)) or [None]
+    cycle_numbers: list[int | None] = cast(
+        list[int | None], sorted(block.cycle_numbers)
+    ) or [None]
     for event in block.events:
         series = _event_series(event, decay_days=decay_days, decay_factor=decay_factor)
         if event.choices:
@@ -657,8 +674,11 @@ def roll_out_phase(
                 end = _advance(
                     start,
                     block,
-                    1 if block.timing_indefinite is not None
-                    else cast(int, block.last_cycle) - cast(int, anchored_block.anchor_cycle) + 1,
+                    1
+                    if block.timing_indefinite is not None
+                    else cast(int, block.last_cycle)
+                    - cast(int, anchored_block.anchor_cycle)
+                    + 1,
                     selection=cycle_length_selection,
                 )
             except (TypeError, ValueError):
@@ -729,7 +749,11 @@ def _phase_order(
         return [(phase, events, status) for phase, events in groups], status
 
     if len(set(phase_steps.values())) != len(phase_steps):
-        tied = [str(phase) for phase, step in phase_steps.items() if list(phase_steps.values()).count(step) > 1]
+        tied = [
+            str(phase)
+            for phase, step in phase_steps.items()
+            if list(phase_steps.values()).count(step) > 1
+        ]
         reason = "phase_step tie between " + ", ".join(tied)
         status = f"unresolved: {reason}"
         return [(phase, events, status) for phase, events in groups], status
@@ -745,13 +769,15 @@ def _combine_status(*statuses: str) -> str:
     if any(status.startswith("unresolved:") for status in statuses):
         reasons = [
             reason
-            for status in statuses if status.startswith("unresolved:")
+            for status in statuses
+            if status.startswith("unresolved:")
             for reason in status.removeprefix("unresolved: ").split("; ")
         ]
         return "unresolved: " + "; ".join(dict.fromkeys(reasons))
     fallbacks = [
         reason
-        for status in statuses if status.startswith("resolved_via_fallback:")
+        for status in statuses
+        if status.startswith("resolved_via_fallback:")
         for reason in status.removeprefix("resolved_via_fallback: ").split("; ")
     ]
     if fallbacks:
@@ -770,7 +796,11 @@ def _optional_cycle_status(cycles: Iterable[int]) -> str:
 
 def _phase_end_failure(blocks: Iterable[CycleBlock]) -> str:
     continuing = next(
-        (block.timing_indefinite for block in blocks if block.timing_indefinite is not None),
+        (
+            block.timing_indefinite
+            for block in blocks
+            if block.timing_indefinite is not None
+        ),
         None,
     )
     if continuing is None:
@@ -825,14 +855,17 @@ def roll_out_variant(
     known_steps = sorted(step for step in phase_steps if step is not None)
     missing_steps = (
         sorted(set(range(known_steps[0], known_steps[-1] + 1)) - phase_steps)
-        if known_steps else []
+        if known_steps
+        else []
     )
 
     for phase, phase_events, phase_status in ordered:
         current_step = phase_events[0].phase_step
-        missing_before = [
-            step for step in missing_steps if step < current_step
-        ] if current_step is not None else []
+        missing_before = (
+            [step for step in missing_steps if step < current_step]
+            if current_step is not None
+            else []
+        )
         if timeline_failure is None and missing_before:
             missing = ", ".join(map(str, missing_before))
             timeline_failure = (
@@ -840,9 +873,9 @@ def roll_out_variant(
                 f"(no sigs for step {missing})"
             )
         blocks = group_into_blocks(phase_events)
-        optional_cycles = sorted({
-            cycle for block in blocks for cycle in block.optional_cycles
-        })
+        optional_cycles = sorted(
+            {cycle for block in blocks for cycle in block.optional_cycles}
+        )
         phase_anchored = anchor_blocks(blocks, preceding_cycle=previous_last_cycle)
         timed = roll_out_phase(
             phase_anchored,
@@ -897,7 +930,9 @@ def roll_out_variant(
                 )
             )
 
-        phase_end = _phase_end(phase_anchored, phase_start, selection=cycle_length_selection)
+        phase_end = _phase_end(
+            phase_anchored, phase_start, selection=cycle_length_selection
+        )
         if phase_end is None and timeline_failure is None:
             timeline_failure = _phase_end_failure(blocks)
         if phase_end is not None and timeline_failure is None:
@@ -913,8 +948,11 @@ def roll_out_variant(
         schedule_event = timed_event.schedule_event
         sig_class = sig_class_value(schedule_event.sig)
         modality = (
-            "radiation" if sig_class == RAD_SIG_CLASS_VALUE
-            else "systemic" if sig_class is not None else None
+            "radiation"
+            if sig_class == RAD_SIG_CLASS_VALUE
+            else "systemic"
+            if sig_class is not None
+            else None
         )
         if systemic_only and modality == "radiation":
             continue
@@ -950,13 +988,32 @@ def roll_out_variant(
             }
         )
     columns = [
-        "variant_cui", "variant", "phase", "phase_step", "cycle_number",
-        "sig_id", "timing_sequence", "cycle_length_lb", "cycle_length_ub",
-        "cycle_length_unit", "cycle_length_selection",
-        "route_group", "modality", "component_cui", "component",
-        "drug_cui", "drug", "day", "elapsed_day", "phase_elapsed_day",
-        "calendar_date", "intensity", "optional", "day_indefinite",
-        "cycle_indefinite", "timing_status",
+        "variant_cui",
+        "variant",
+        "phase",
+        "phase_step",
+        "cycle_number",
+        "sig_id",
+        "timing_sequence",
+        "cycle_length_lb",
+        "cycle_length_ub",
+        "cycle_length_unit",
+        "cycle_length_selection",
+        "route_group",
+        "modality",
+        "component_cui",
+        "component",
+        "drug_cui",
+        "drug",
+        "day",
+        "elapsed_day",
+        "phase_elapsed_day",
+        "calendar_date",
+        "intensity",
+        "optional",
+        "day_indefinite",
+        "cycle_indefinite",
+        "timing_status",
     ]
     frame = pd.DataFrame.from_records(records, columns=columns)
     if order_status != "resolved" and frame.empty:

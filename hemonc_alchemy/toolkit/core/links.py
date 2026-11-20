@@ -43,9 +43,13 @@ def study_variant_objects(study):
         current = latest.get(variant_cui)
         candidate_key = (getattr(variant, "version", -1), getattr(variant, "id", -1))
         current_key = (
-            getattr(current, "version", -1),
-            getattr(current, "id", -1),
-        ) if current is not None else None
+            (
+                getattr(current, "version", -1),
+                getattr(current, "id", -1),
+            )
+            if current is not None
+            else None
+        )
         if current_key is None or candidate_key > current_key:
             latest[variant_cui] = variant
     return list(latest.values())
@@ -60,7 +64,10 @@ def variant_condition_objects(variant):
     )
     return dedupe_by(
         conditions,
-        lambda condition: (getattr(condition, "condition_cui", None), getattr(condition, "condition", None)),
+        lambda condition: (
+            getattr(condition, "condition_cui", None),
+            getattr(condition, "condition", None),
+        ),
     )
 
 
@@ -96,7 +103,9 @@ def sig_variant_context(sig) -> Variants | None:
         return None
     return (
         session.execute(
-            select(Variants).where(Variants.variant_cui == variant_cui).order_by(Variants.version.desc(), Variants.id.desc())
+            select(Variants)
+            .where(Variants.variant_cui == variant_cui)
+            .order_by(Variants.version.desc(), Variants.id.desc())
         )
         .scalars()
         .first()
@@ -116,12 +125,18 @@ def sig_study_objects(sig) -> list[Studies]:
     if variant is not None:
         for study_map_row in variant.study_items:
             # cast: attached in model.relationships, so invisible statically.
-            study_objects = cast(list[Studies], getattr(study_map_row, "study_objects", ()))
+            study_objects = cast(
+                list[Studies], getattr(study_map_row, "study_objects", ())
+            )
             studies.extend(study_objects)
 
     return dedupe_by(
         studies,
-        lambda study: (getattr(study, "id", None), getattr(study, "study", None), getattr(study, "condition_cui", None)),
+        lambda study: (
+            getattr(study, "id", None),
+            getattr(study, "study", None),
+            getattr(study, "condition_cui", None),
+        ),
     )
 
 
@@ -134,5 +149,8 @@ def sig_condition_objects(sig):
     conditions.extend(study_condition_object(study) for study in sig_study_objects(sig))
     return dedupe_by(
         conditions,
-        lambda condition: (getattr(condition, "condition_cui", None), getattr(condition, "condition", None)),
+        lambda condition: (
+            getattr(condition, "condition_cui", None),
+            getattr(condition, "condition", None),
+        ),
     )

@@ -22,21 +22,34 @@ from hemonc_alchemy.model.entities import (
 )
 
 
-@pytest.fixture(params=[
-    "sqlite",
-    pytest.param("duckdb", marks=[pytest.mark.duckdb, pytest.mark.db_dialect]),
-    pytest.param("postgresql", marks=[pytest.mark.postgres, pytest.mark.db_dialect]),
-])
+@pytest.fixture(
+    params=[
+        "sqlite",
+        pytest.param("duckdb", marks=[pytest.mark.duckdb, pytest.mark.db_dialect]),
+        pytest.param(
+            "postgresql", marks=[pytest.mark.postgres, pytest.mark.db_dialect]
+        ),
+    ]
+)
 def target(request, tmp_path):
     if request.param == "postgresql":
         db = request.getfixturevalue("pg_db")
-        with isolated_test_schema(db.committing_engine, prefix="hemonc_bootstrap") as schema:
+        with isolated_test_schema(
+            db.committing_engine, prefix="hemonc_bootstrap"
+        ) as schema:
             yield replace(db.resolved, schema_name=schema)
         return
     schema = "hemonc" if request.param == "duckdb" else None
     config = StackConfig.for_session(
-        connections={"local": {"dialect": request.param, "database_name": str(tmp_path / "snapshot.db")}},
-        databases={"local": {"kind": "generic", "connection": "local", "schema_name": schema}},
+        connections={
+            "local": {
+                "dialect": request.param,
+                "database_name": str(tmp_path / "snapshot.db"),
+            }
+        },
+        databases={
+            "local": {"kind": "generic", "connection": "local", "schema_name": schema}
+        },
     )
     yield Resolver(config).resolve_database("local")
 
@@ -62,8 +75,13 @@ def test_fresh_import_and_rebuild_preserve_unrelated_tables(target, extract):
     assert counts["hemonc_classes"]["secondary_home_as_string"] == 2
     engine = create_hemonc_engine(target)
     metadata = sa.MetaData()
-    preserved = [sa.Table(name, metadata, sa.Column("value", sa.Integer), schema="primary") for name in ["concept", "_staging_unrelated"]]
-    stale = sa.Table("_staging_units", metadata, sa.Column("value", sa.Integer), schema="primary")
+    preserved = [
+        sa.Table(name, metadata, sa.Column("value", sa.Integer), schema="primary")
+        for name in ["concept", "_staging_unrelated"]
+    ]
+    stale = sa.Table(
+        "_staging_units", metadata, sa.Column("value", sa.Integer), schema="primary"
+    )
     try:
         metadata.create_all(engine)
         with engine.begin() as connection:
@@ -76,12 +94,24 @@ def test_fresh_import_and_rebuild_preserve_unrelated_tables(target, extract):
         repeated = bootstrap.bootstrap_database(target, extract, rebuild=True)
         assert repeated == counts
         with engine.connect() as connection:
-            assert connection.scalar(sa.select(sa.func.count()).select_from(HemoncClasses)) == 1
-            assert connection.scalar(sa.select(sa.func.count()).select_from(hemonc_classes_Secondary_home_as_stringMap)) == 2
+            assert (
+                connection.scalar(sa.select(sa.func.count()).select_from(HemoncClasses))
+                == 1
+            )
+            assert (
+                connection.scalar(
+                    sa.select(sa.func.count()).select_from(
+                        hemonc_classes_Secondary_home_as_stringMap
+                    )
+                )
+                == 2
+            )
             for table in preserved:
                 assert connection.scalar(sa.select(table.c.value)) == 42
             schema = engine.get_execution_options()["schema_translate_map"]["primary"]
-            assert stale.name not in sa.inspect(connection).get_table_names(schema=schema)
+            assert stale.name not in sa.inspect(connection).get_table_names(
+                schema=schema
+            )
     finally:
         engine.dispose()
 
@@ -91,13 +121,19 @@ def test_missing_sources_do_not_reset_an_existing_target(target, extract):
     with pytest.raises(FileNotFoundError):
         bootstrap.bootstrap_database(target, extract / "absent", rebuild=True)
     with pytest.raises(ValueError, match="Unknown source tables"):
-        bootstrap.bootstrap_database(target, extract, rebuild=True, table_names=["not_a_table"])
+        bootstrap.bootstrap_database(
+            target, extract, rebuild=True, table_names=["not_a_table"]
+        )
     with pytest.raises(FileNotFoundError, match="No source CSV for drugs"):
-        bootstrap.bootstrap_database(target, extract, rebuild=True, table_names=["drugs"])
+        bootstrap.bootstrap_database(
+            target, extract, rebuild=True, table_names=["drugs"]
+        )
     (extract / "units.csv").rename(extract / "units_first.csv")
     (extract / "units_second.csv").write_text((extract / "units_first.csv").read_text())
     with pytest.raises(ValueError, match="Ambiguous source CSVs for units"):
-        bootstrap.bootstrap_database(target, extract, rebuild=True, table_names=["units"])
+        bootstrap.bootstrap_database(
+            target, extract, rebuild=True, table_names=["units"]
+        )
     engine = create_hemonc_engine(target)
     try:
         with engine.connect() as connection:
@@ -109,15 +145,32 @@ def test_missing_sources_do_not_reset_an_existing_target(target, extract):
 def test_cli_resolves_active_config_and_ignores_legacy_database_url(tmp_path, extract):
     config = tmp_path / "config.toml"
     config.write_text(
-        '[connections.local]\ndialect="sqlite"\ndatabase_name="' + str(tmp_path / "cli.db") + '"\n'
+        '[connections.local]\ndialect="sqlite"\ndatabase_name="'
+        + str(tmp_path / "cli.db")
+        + '"\n'
         '[databases.local]\nkind="generic"\nconnection="local"\n'
         '[tools.hemonc_alchemy]\nhemonc_db="local"\n'
     )
     config.chmod(0o600)
-    environment = {**os.environ, "OA_CONFIG_PATH": str(config), "DATABASE_URL": "not-a-database-url"}
+    environment = {
+        **os.environ,
+        "OA_CONFIG_PATH": str(config),
+        "DATABASE_URL": "not-a-database-url",
+    }
     result = subprocess.run(
-        [sys.executable, "-m", "hemonc_alchemy.bootstrap", "--data-dir", str(extract), "--table", "units"],
-        env=environment, check=True, capture_output=True, text=True,
+        [
+            sys.executable,
+            "-m",
+            "hemonc_alchemy.bootstrap",
+            "--data-dir",
+            str(extract),
+            "--table",
+            "units",
+        ],
+        env=environment,
+        check=True,
+        capture_output=True,
+        text=True,
     )
     assert "HemOnc target: local" in result.stdout
 
@@ -132,8 +185,12 @@ def test_devcontainer_seed_preserves_existing_configuration(tmp_path, seed):
         command = bin_dir / name
         command.write_text("#!/bin/sh\nexit 0\n")
         command.chmod(0o755)
-    environment = {**os.environ, "PATH": str(bin_dir) + os.pathsep + os.environ["PATH"],
-                   "OA_CONFIG_PATH": str(config), "OA_CONFIG_SEED": str(root / ".devcontainer" / seed)}
+    environment = {
+        **os.environ,
+        "PATH": str(bin_dir) + os.pathsep + os.environ["PATH"],
+        "OA_CONFIG_PATH": str(config),
+        "OA_CONFIG_SEED": str(root / ".devcontainer" / seed),
+    }
     command = ["/bin/bash", str(root / ".devcontainer/post-create.sh")]
     subprocess.run(command, env=environment, cwd=root, check=True, capture_output=True)
     assert config.read_bytes() == (root / ".devcontainer" / seed).read_bytes()
@@ -156,9 +213,13 @@ def test_duckdb_compose_and_seed_are_independent_of_postgres():
         assert package.omop_db == "cdm_db"
         if seed == "config.duckdb.toml":
             target = resolver.resolve_database(package.hemonc_db)
-            file_name = seed_config["connections"]["devcontainer_duckdb"]["database_name"]
+            file_name = seed_config["connections"]["devcontainer_duckdb"][
+                "database_name"
+            ]
             assert Path(file_name).stem != target.schema_name
-        assert resolver.resolve_database(package.hemonc_db).connection.addresses_same_database_as(
+        assert resolver.resolve_database(
+            package.hemonc_db
+        ).connection.addresses_same_database_as(
             resolver.resolve_database(package.omop_db).connection
         )
 

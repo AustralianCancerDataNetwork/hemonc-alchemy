@@ -16,30 +16,52 @@ from hemonc_alchemy.model.base import Base
 from hemonc_alchemy.model.entities import HemoncClasses
 
 
-@pytest.fixture(params=[
-    "sqlite",
-    pytest.param("duckdb_default", marks=[pytest.mark.duckdb, pytest.mark.db_dialect]),
-    pytest.param("duckdb_named", marks=[pytest.mark.duckdb, pytest.mark.db_dialect]),
-    pytest.param("postgresql_default", marks=[pytest.mark.postgres, pytest.mark.db_dialect]),
-    pytest.param("postgresql_named", marks=[pytest.mark.postgres, pytest.mark.db_dialect]),
-])
+@pytest.fixture(
+    params=[
+        "sqlite",
+        pytest.param(
+            "duckdb_default", marks=[pytest.mark.duckdb, pytest.mark.db_dialect]
+        ),
+        pytest.param(
+            "duckdb_named", marks=[pytest.mark.duckdb, pytest.mark.db_dialect]
+        ),
+        pytest.param(
+            "postgresql_default", marks=[pytest.mark.postgres, pytest.mark.db_dialect]
+        ),
+        pytest.param(
+            "postgresql_named", marks=[pytest.mark.postgres, pytest.mark.db_dialect]
+        ),
+    ]
+)
 def schema_target(request):
     with ExitStack() as stack:
         if request.param == "sqlite":
             config = StackConfig.for_session(
-                connections={"local": {"dialect": "sqlite", "database_name": ":memory:"}},
+                connections={
+                    "local": {"dialect": "sqlite", "database_name": ":memory:"}
+                },
                 databases={"local": {"kind": "generic", "connection": "local"}},
             )
             resolved = Resolver(config).resolve_database("local")
             physical = "main"
         else:
-            db = request.getfixturevalue("pg_db" if request.param.startswith("postgresql") else "duckdb_db")
-            physical = stack.enter_context(isolated_test_schema(db.committing_engine, prefix="hemonc_schema"))
-            resolved = ResolvedDatabase(name="hemonc_schema_test", connection=db.resolved.connection, schema_name=physical)
+            db = request.getfixturevalue(
+                "pg_db" if request.param.startswith("postgresql") else "duckdb_db"
+            )
+            physical = stack.enter_context(
+                isolated_test_schema(db.committing_engine, prefix="hemonc_schema")
+            )
+            resolved = ResolvedDatabase(
+                name="hemonc_schema_test",
+                connection=db.resolved.connection,
+                schema_name=physical,
+            )
         if request.param == "postgresql_default":
             # The connection's default schema is itself isolated from other tests.
             resolved = replace(resolved, schema_name=None)
-            engine = resolved.create_engine(connect_args={"options": f"-csearch_path={physical}"})
+            engine = resolved.create_engine(
+                connect_args={"options": f"-csearch_path={physical}"}
+            )
         elif request.param == "duckdb_default":
             resolved = replace(resolved, schema_name=None)
             physical = "main"
@@ -48,9 +70,11 @@ def schema_target(request):
             engine = create_hemonc_engine(resolved)
         stack.callback(engine.dispose)
         if request.param == "sqlite":
+
             @sa.event.listens_for(engine, "connect")
             def enable_foreign_keys(connection, _):
                 connection.execute("PRAGMA foreign_keys=ON")
+
         yield engine, physical
 
 
@@ -64,13 +88,19 @@ def test_all_generated_tables_and_enums_use_the_primary_role():
                 assert column.type.schema == "primary"
         for fk in table.foreign_key_constraints:
             assert fk.referred_table.schema == "primary"
-            assert [element.column.name for element in fk.elements] == [column.name for column in fk.referred_table.primary_key]
+            assert [element.column.name for element in fk.elements] == [
+                column.name for column in fk.referred_table.primary_key
+            ]
 
 
 def test_url_engine_keeps_explicit_schema_routes_and_execution_options():
-    engine = create_default_hemonc_engine("sqlite://", execution_options={
-        "schema_translate_map": {"primary": "temp", "vocab": "omop"}, "stream_results": True,
-    })
+    engine = create_default_hemonc_engine(
+        "sqlite://",
+        execution_options={
+            "schema_translate_map": {"primary": "temp", "vocab": "omop"},
+            "stream_results": True,
+        },
+    )
     try:
         options = engine.get_execution_options()
         assert options["schema_translate_map"] == {"primary": "temp", "vocab": "omop"}
@@ -99,8 +129,15 @@ def test_full_schema_creates_drops_and_recreates_in_the_selected_schema(schema_t
     Base.metadata.create_all(engine)
     assert expected <= set(sa.inspect(engine).get_table_names(schema=schema))
     if engine.dialect.name == "postgresql":
-        enum_names = {column.type.name for table in Base.metadata.tables.values() for column in table.c if isinstance(column.type, sa.Enum)}
-        assert enum_names <= {enum["name"] for enum in sa.inspect(engine).get_enums(schema=schema)}
+        enum_names = {
+            column.type.name
+            for table in Base.metadata.tables.values()
+            for column in table.c
+            if isinstance(column.type, sa.Enum)
+        }
+        assert enum_names <= {
+            enum["name"] for enum in sa.inspect(engine).get_enums(schema=schema)
+        }
     Base.metadata.drop_all(engine)
     assert not expected.intersection(sa.inspect(engine).get_table_names(schema=schema))
     Base.metadata.create_all(engine)
@@ -119,26 +156,54 @@ def test_composite_child_foreign_keys_are_enforced(schema_target):
         ("affiliations_affiliation_journal", affiliation_key, "affiliation_journal"),
     ]
     with engine.begin() as connection:
-        connection.execute(sa.insert(Base.metadata.tables["primary.canonicaltriples"]), {
-            **canonical_key, "date_added": "2026-11-07", "in_ohdsi": False, "internal": False, "used_in": "test",
-        })
-        connection.execute(sa.insert(Base.metadata.tables["primary.affiliations"]), {
-            **affiliation_key, "affiliation_hemonc": "test", "date_added": datetime.fromisoformat("2026-11-07T00:00:00"), "full_name_hemonc": "test",  # column is timezone-naive
-        })
+        connection.execute(
+            sa.insert(Base.metadata.tables["primary.canonicaltriples"]),
+            {
+                **canonical_key,
+                "date_added": "2026-11-07",
+                "in_ohdsi": False,
+                "internal": False,
+                "used_in": "test",
+            },
+        )
+        connection.execute(
+            sa.insert(Base.metadata.tables["primary.affiliations"]),
+            {
+                **affiliation_key,
+                "affiliation_hemonc": "test",
+                "date_added": datetime.fromisoformat("2026-11-07T00:00:00"),
+                "full_name_hemonc": "test",  # column is timezone-naive
+            },
+        )
         for name, key, value_column in cases:
-            connection.execute(sa.insert(Base.metadata.tables[f"primary.{name}"]), {**key, "position": 1, value_column: "valid"})
+            connection.execute(
+                sa.insert(Base.metadata.tables[f"primary.{name}"]),
+                {**key, "position": 1, value_column: "valid"},
+            )
     for name, key, value_column in cases:
         table = Base.metadata.tables[f"primary.{name}"]
-        column = next(column for column in next(iter(table.foreign_key_constraints)).columns if not isinstance(column.type, sa.Enum))
+        column = next(
+            column
+            for column in next(iter(table.foreign_key_constraints)).columns
+            if not isinstance(column.type, sa.Enum)
+        )
         missing = 999999 if isinstance(column.type, sa.Integer) else "missing parent"
         with pytest.raises(sa.exc.IntegrityError), engine.begin() as connection:
-            connection.execute(sa.insert(table), {**key, "position": 1, column.name: missing, value_column: "invalid"})
+            connection.execute(
+                sa.insert(table),
+                {**key, "position": 1, column.name: missing, value_column: "invalid"},
+            )
 
 
 def test_generated_id_inserts_and_queries_use_the_selected_schema(schema_target):
     engine, schema = schema_target
     HemoncClasses.__table__.create(engine)
-    record = {"class_type": "READY_FOR_CORE", "description": "schema route", "primary_table": "test", "in_ohdsi": False}
+    record = {
+        "class_type": "READY_FOR_CORE",
+        "description": "schema route",
+        "primary_table": "test",
+        "in_ohdsi": False,
+    }
     if engine.dialect.name == "sqlite":
         record["id"] = 1
     with engine.begin() as connection:
@@ -147,5 +212,11 @@ def test_generated_id_inserts_and_queries_use_the_selected_schema(schema_target)
     assert "hemonc_classes" in sa.inspect(engine).get_table_names(schema=schema)
     if engine.dialect.name != "sqlite":
         # These are valid strings but invalid labels; the database must reject them.
-        with pytest.raises((sa.exc.IntegrityError, sa.exc.DataError)), engine.begin() as connection:
-            connection.execute(sa.insert(HemoncClasses.__table__), {**record, "class_type": "NOT_A_MEMBER"})
+        with (
+            pytest.raises((sa.exc.IntegrityError, sa.exc.DataError)),
+            engine.begin() as connection,
+        ):
+            connection.execute(
+                sa.insert(HemoncClasses.__table__),
+                {**record, "class_type": "NOT_A_MEMBER"},
+            )

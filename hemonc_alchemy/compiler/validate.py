@@ -23,7 +23,9 @@ def validate_registry(registry: Registry) -> list[str]:
     errors: list[str] = []
 
     dictionary_sheets: set[str] = getattr(registry, "_dictionary_sheets", set())
-    enriched_columns: dict[str, set[str]] = getattr(registry, "_dictionary_enriched_columns", {})
+    enriched_columns: dict[str, set[str]] = getattr(
+        registry, "_dictionary_enriched_columns", {}
+    )
     for table_name in sorted(dictionary_sheets):
         if not enriched_columns.get(table_name):
             errors.append(
@@ -44,7 +46,9 @@ def validate_registry(registry: Registry) -> list[str]:
             if pk == "id" and uses_surrogate:
                 continue
             if pk not in meta.columns:
-                errors.append(f"{name}: declared pk_column '{pk}' does not exist among its generated columns")
+                errors.append(
+                    f"{name}: declared pk_column '{pk}' does not exist among its generated columns"
+                )
 
         if not uses_surrogate and not meta.natural_key_is_usable:
             errors.append(
@@ -54,27 +58,37 @@ def validate_registry(registry: Registry) -> list[str]:
 
         for col_name in meta.enums:
             if col_name not in meta.columns:
-                errors.append(f"{name}: enum declared for column '{col_name}' but no such column exists")
+                errors.append(
+                    f"{name}: enum declared for column '{col_name}' but no such column exists"
+                )
 
         for rel in meta.soft_relationships:
             if rel.target_table not in registry.tables:
-                errors.append(f"{name}: soft relationship targets unknown table '{rel.target_table}'")
+                errors.append(
+                    f"{name}: soft relationship targets unknown table '{rel.target_table}'"
+                )
 
         for m2m_rel in meta.soft_m2m_relationships:
             if m2m_rel.target_table not in registry.tables:
-                errors.append(f"{name}: soft m2m relationship targets unknown table '{m2m_rel.target_table}'")
+                errors.append(
+                    f"{name}: soft m2m relationship targets unknown table '{m2m_rel.target_table}'"
+                )
 
         # A column repeated within a group, or spread across two, would
         # generate a malformed or ambiguous child table. Has happened.
         seen_in_group: dict[str, int] = {}
         for group in meta.normalisation_groups:
             if len(group.columns) != len(set(group.columns)):
-                errors.append(f"{name}: normalisation group {group.columns!r} repeats a column")
+                errors.append(
+                    f"{name}: normalisation group {group.columns!r} repeats a column"
+                )
             for col in group.columns:
                 seen_in_group[col] = seen_in_group.get(col, 0) + 1
         for col, count in seen_in_group.items():
             if count > 1:
-                errors.append(f"{name}.{col}: appears in {count} normalisation groups, expected at most 1")
+                errors.append(
+                    f"{name}.{col}: appears in {count} normalisation groups, expected at most 1"
+                )
 
     return errors
 
@@ -137,7 +151,9 @@ def validate_all(
     return errors
 
 
-def validate_or_raise(registry: Registry, entities_path: Path, enums_path: Path) -> None:
+def validate_or_raise(
+    registry: Registry, entities_path: Path, enums_path: Path
+) -> None:
     """Raise HemOncValidationError with every failure listed, if any."""
     errors = validate_all(registry, entities_path, enums_path)
     if errors:

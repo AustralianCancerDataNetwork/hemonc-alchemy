@@ -30,6 +30,7 @@ def with_cache_clear[**P, T](
     clear: Callable[[], None],
 ) -> Callable[[Callable[P, T]], CacheClearable[P, T]]:
     """Attach a typed cache invalidator while preserving the call signature."""
+
     def decorate(fn: Callable[P, T]) -> CacheClearable[P, T]:
         decorated = cast(CacheClearable[P, T], fn)
         decorated.cache_clear = clear
@@ -40,7 +41,9 @@ def with_cache_clear[**P, T](
 
 def cached_per_engine[T](fn: Callable[[Any], T]) -> CacheClearable[[Any], T]:
     """Cache `fn(session)` per engine and schema map."""
-    store: WeakKeyDictionary[Any, dict[tuple[tuple[str, str | None], ...], T]] = WeakKeyDictionary()
+    store: WeakKeyDictionary[Any, dict[tuple[tuple[str, str | None], ...], T]] = (
+        WeakKeyDictionary()
+    )
 
     @with_cache_clear(store.clear)
     @wraps(fn)

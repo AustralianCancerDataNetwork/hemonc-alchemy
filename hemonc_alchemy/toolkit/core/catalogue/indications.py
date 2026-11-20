@@ -23,7 +23,10 @@ def indication_statement(spec: IndicationSpec = DEFAULT_INDICATION_SPEC):
             Regimens,
             Regimens.regimen_cui == indications_RegimenLinks.regimen_cui,
         )
-        .where(indications_RegimenLinks.parent_id == Indications.id, indications_RegimenLinks.aligned.is_(True))
+        .where(
+            indications_RegimenLinks.parent_id == Indications.id,
+            indications_RegimenLinks.aligned.is_(True),
+        )
         .scalar_subquery()
     )
     statement = select(

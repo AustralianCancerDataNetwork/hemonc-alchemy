@@ -45,11 +45,11 @@ def category_expression(
             raise ValueError(f"Category mapping for {column_name!r} must not be empty.")
         column = getattr(components.c, column_name)
         expressions.append(
-            sa.case(
-                *[(column == source, target) for source, target in mapping.items()]
-            )
+            sa.case(*[(column == source, target) for source, target in mapping.items()])
         )
-    expression = expressions[0] if len(expressions) == 1 else sa.func.coalesce(*expressions)
+    expression = (
+        expressions[0] if len(expressions) == 1 else sa.func.coalesce(*expressions)
+    )
     return expression.label("broad_category")
 
 
@@ -84,7 +84,8 @@ def build_component_statement(
     ]
     stmt = (
         join_mapped_studies(
-            select(*columns).select_from(Variants)
+            select(*columns)
+            .select_from(Variants)
             .join(Sigs, Sigs.variant_cui == Variants.variant_cui)
             .join(variants_StudyMap, variants_StudyMap.parent_id == Variants.id)
         )
@@ -110,9 +111,7 @@ def build_component_statement(
         phase = coerce_enum_value(Sigs_PhaseEnum, spec.phase, "sig phase")
         stmt = stmt.where(Sigs.phase == phase)
     if spec.study_context is not None:
-        stmt = stmt.where(
-            study_context_predicate(spec.study_context)
-        )
+        stmt = stmt.where(study_context_predicate(spec.study_context))
     return stmt
 
 
@@ -126,9 +125,5 @@ def component_search_predicate(
         raise ValueError(f"Unknown component search column(s): {unknown}")
     columns = [getattr(components.c, name) for name in requirement.columns]
     return sa.or_(
-        *[
-            column.ilike(f"%{term}%")
-            for term in requirement.terms
-            for column in columns
-        ]
+        *[column.ilike(f"%{term}%") for term in requirement.terms for column in columns]
     )

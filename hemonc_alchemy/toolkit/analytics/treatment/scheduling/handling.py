@@ -28,7 +28,7 @@ class ResolvedSchedule:
     until progression, say. When it is set, `days` is only the part that was
     written down explicitly, not the full course.
 
-    `choices` holds valid `Choice` tokens to capture a dose given on one of 
+    `choices` holds valid `Choice` tokens to capture a dose given on one of
     several alternative days.
     """
 
@@ -67,14 +67,22 @@ def apply_sig_to_series(
         d0 = day.value
 
         for offset in range(decay_days + 1):
-            value = base if offset == 0 else max(base * math.exp(-decay_factor * offset), _DECAY_FLOOR)
+            value = (
+                base
+                if offset == 0
+                else max(base * math.exp(-decay_factor * offset), _DECAY_FLOOR)
+            )
             series[d0 + offset] = max(series[d0 + offset], value)
 
 
 def tokenize_all_days(value: str | None) -> list[str]:
     if not value:
         return []
-    return [match.group(0).strip() for match in TOKEN_RE.finditer(value) if match.group(0).strip()]
+    return [
+        match.group(0).strip()
+        for match in TOKEN_RE.finditer(value)
+        if match.group(0).strip()
+    ]
 
 
 def parse_choice(token: str) -> Choice:
@@ -84,8 +92,8 @@ def parse_choice(token: str) -> Choice:
 def parse_scalar_list(token: str):
     # '|' means "any of the following days, unspecified which".
     # Each '|' is resolved against its own comma-separated fragment, e.g.
-    # "1,8|9" is day 1 plus a choice of day 8 or 9. 
-    # TBC: seek confirmation of expansion rules - current implementation 
+    # "1,8|9" is day 1 plus a choice of day 8 or 9.
+    # TBC: seek confirmation of expansion rules - current implementation
     # based on data not specifications.
     first_pipe = token.find("|")
     if first_pipe != -1 and "," in token[first_pipe:]:
@@ -117,11 +125,15 @@ def parse_range(token: str):
     body = token[1:-1]
     parts = [part.strip() for part in body.split(",")]
     if len(parts) != 3:
-        logger.warning("Unparseable range token %r (expected 3 comma-separated parts)", token)
+        logger.warning(
+            "Unparseable range token %r (expected 3 comma-separated parts)", token
+        )
         return []
 
     start_text, end_text, step = parts
-    start: int | str = int(start_text) if start_text.lstrip("-").isdigit() else start_text
+    start: int | str = (
+        int(start_text) if start_text.lstrip("-").isdigit() else start_text
+    )
     end: int | str = int(end_text) if end_text.lstrip("-").isdigit() else end_text
     return [Range(start, end, int(step))]
 
@@ -175,7 +187,8 @@ def expand(parsed) -> ResolvedSchedule:
             if indefinite is not None:
                 logger.warning(
                     "Multiple indefinite-dosing markers in one schedule; keeping the first (%r), dropping %r",
-                    indefinite, item,
+                    indefinite,
+                    item,
                 )
             else:
                 indefinite = item
@@ -184,7 +197,9 @@ def expand(parsed) -> ResolvedSchedule:
                     item,
                 )
 
-    return ResolvedSchedule(days=tuple(days), indefinite=indefinite, choices=tuple(choices))
+    return ResolvedSchedule(
+        days=tuple(days), indefinite=indefinite, choices=tuple(choices)
+    )
 
 
 def resolve_all_days(all_days: str | None) -> ResolvedSchedule:
@@ -195,7 +210,7 @@ def resolve_all_days(all_days: str | None) -> ResolvedSchedule:
 
     See tokens.py for the notation. Check the result's `indefinite` before
     treating `days` as the whole schedule, and its `choices` before treating
-    `days` as completely resolved. If `alldays` is None or empty, the result 
+    `days` as completely resolved. If `alldays` is None or empty, the result
     is an empty schedule with no indefinite marker.
     """
     parsed = []

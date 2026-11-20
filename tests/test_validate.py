@@ -26,8 +26,12 @@ from hemonc_alchemy.compiler.validate import (
 
 def _table(**overrides: Any) -> TableMeta:
     base: dict[str, Any] = {
-        "name": "drugs", "description": "d", "kind": "content", "maturity": "prod",
-        "pk_columns": [], "columns": {"atc": ColumnSpec(name="atc", type="string")},
+        "name": "drugs",
+        "description": "d",
+        "kind": "content",
+        "maturity": "prod",
+        "pk_columns": [],
+        "columns": {"atc": ColumnSpec(name="atc", type="string")},
     }
     base.update(overrides)
     return TableMeta(**base)
@@ -51,7 +55,9 @@ class TestNormalisationGroupInvariant:
 
     def test_clean_groups_pass(self):
         table = _table()
-        table.normalisation_groups = [NormalisationGroup(columns=["atc_class", "atc_code"])]
+        table.normalisation_groups = [
+            NormalisationGroup(columns=["atc_class", "atc_code"])
+        ]
         assert validate_registry(Registry(tables={"drugs": table})) == []
 
     def test_dictionary_sheet_without_enrichment_is_rejected(self):
@@ -61,7 +67,9 @@ class TestNormalisationGroupInvariant:
 
         errors = validate_registry(registry)
 
-        assert any("dictionary sheet exists but contributed no" in error for error in errors)
+        assert any(
+            "dictionary sheet exists but contributed no" in error for error in errors
+        )
 
 
 class TestSourceRegressions:
@@ -72,13 +80,23 @@ class TestSourceRegressions:
     """
 
     def test_losing_all_columns_since_the_last_run_is_an_error(self):
-        previous = Registry(tables={"canonicaltriples": _table(
-            name="canonicaltriples", columns={"class_1": ColumnSpec(name="class_1", type="string")},
-            source_filename="canonical.triples.csv",
-        )})
-        current = Registry(tables={"canonicaltriples": _table(
-            name="canonicaltriples", columns={},
-        )})
+        previous = Registry(
+            tables={
+                "canonicaltriples": _table(
+                    name="canonicaltriples",
+                    columns={"class_1": ColumnSpec(name="class_1", type="string")},
+                    source_filename="canonical.triples.csv",
+                )
+            }
+        )
+        current = Registry(
+            tables={
+                "canonicaltriples": _table(
+                    name="canonicaltriples",
+                    columns={},
+                )
+            }
+        )
         errors = validate_source_regressions(current, previous)
         assert len(errors) == 1
         assert "canonicaltriples" in errors[0]
@@ -112,10 +130,17 @@ class TestSourceRegressions:
         enums = tmp_path / "enums.py"
         entities.write_text("x = 1\n")
         enums.write_text("y = 2\n")
-        previous = Registry(tables={"variantblob": _table(
-            name="variantblob", columns={"blob": ColumnSpec(name="blob", type="string")},
-        )})
-        current = Registry(tables={"variantblob": _table(name="variantblob", columns={})})
+        previous = Registry(
+            tables={
+                "variantblob": _table(
+                    name="variantblob",
+                    columns={"blob": ColumnSpec(name="blob", type="string")},
+                )
+            }
+        )
+        current = Registry(
+            tables={"variantblob": _table(name="variantblob", columns={})}
+        )
         errors = validate_all(current, entities, enums, previous=previous)
         assert any("variantblob" in e for e in errors)
 
@@ -124,7 +149,9 @@ class TestSourceRegressions:
         enums = tmp_path / "enums.py"
         entities.write_text("x = 1\n")
         enums.write_text("y = 2\n")
-        current = Registry(tables={"variantblob": _table(name="variantblob", columns={})})
+        current = Registry(
+            tables={"variantblob": _table(name="variantblob", columns={})}
+        )
         assert validate_all(current, entities, enums) == []
 
 

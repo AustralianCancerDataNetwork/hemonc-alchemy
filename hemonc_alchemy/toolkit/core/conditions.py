@@ -40,11 +40,15 @@ def conditions_by_names(
     arbitrary row being selected.
     """
     requested = _as_names(names)
-    rows = session.execute(
-        select(Conditions)
-        .where(Conditions.condition.in_(requested))
-        .order_by(Conditions.condition_cui)
-    ).scalars().all()
+    rows = (
+        session.execute(
+            select(Conditions)
+            .where(Conditions.condition.in_(requested))
+            .order_by(Conditions.condition_cui)
+        )
+        .scalars()
+        .all()
+    )
     by_name: dict[str, list[Conditions]] = {}
     for row in rows:
         by_name.setdefault(row.condition, []).append(row)
@@ -61,4 +65,6 @@ def condition_cuis_by_names(
     names: str | Iterable[str],
 ) -> list[int]:
     """Resolve exact condition names to distinct condition CUIs."""
-    return list(dict.fromkeys(row.condition_cui for row in conditions_by_names(session, names)))
+    return list(
+        dict.fromkeys(row.condition_cui for row in conditions_by_names(session, names))
+    )

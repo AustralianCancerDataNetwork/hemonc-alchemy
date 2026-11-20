@@ -52,9 +52,7 @@ def variant_identity_statement(spec: CatalogueSpec):
         if spec.condition_cuis is not None:
             evidence = evidence.where(Studies.condition_cui.in_(spec.condition_cuis))
         if spec.study_context is not None:
-            evidence = evidence.where(
-                study_context_predicate(spec.study_context)
-            )
+            evidence = evidence.where(study_context_predicate(spec.study_context))
         statement = statement.where(exists(evidence))
     return statement
 

@@ -16,7 +16,7 @@ from hemonc_alchemy import resolve_all_days
 
 resolved = resolve_all_days("1,8,15,(+n)")
 [day.value for day in resolved.days]  # [1, 8, 15]
-resolved.indefinite.kind             # "+n"
+resolved.indefinite.kind  # "+n"
 ```
 
 The continuation marker means the written days are only part of the course. Optional days carry `Day.optional=True`. Unreadable tokens are logged and dropped; an empty day list can indicate an unresolved schedule.
@@ -25,8 +25,8 @@ A pipe means a choice of days, with no selected alternative:
 
 ```python
 resolved = resolve_all_days("7|8|9|10|11|12|13|14|15")
-resolved.days                # ()
-resolved.choices[0].options   # [7, 8, 9, 10, 11, 12, 13, 14, 15]
+resolved.days  # ()
+resolved.choices[0].options  # [7, 8, 9, 10, 11, 12, 13, 14, 15]
 ```
 
 A numeric continuation such as `(+2)` records an interval of two days in `alldays`, or two cycles in `timing_sequence`. Continuation markers retain the interval without generating future events.
@@ -81,7 +81,17 @@ from datetime import date
 from hemonc_alchemy.toolkit.analytics.treatment.scheduling import roll_out_variant
 
 timeline = roll_out_variant(variant, start_date=date(2026, 1, 1), decay_days=0)
-timeline[["sig_id", "phase", "cycle_number", "day", "elapsed_day", "calendar_date", "timing_status"]]
+timeline[
+    [
+        "sig_id",
+        "phase",
+        "cycle_number",
+        "day",
+        "elapsed_day",
+        "calendar_date",
+        "timing_status",
+    ]
+]
 ```
 
 ### Days and dates

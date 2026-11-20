@@ -67,7 +67,14 @@ def _make_variant(session, variant_cui: int) -> Variants:
     return variant
 
 
-def _make_sig(session, *, variant_cui: int, component_cui: int, class_field: str, component_role: str) -> Sigs:
+def _make_sig(
+    session,
+    *,
+    variant_cui: int,
+    component_cui: int,
+    class_field: str,
+    component_role: str,
+) -> Sigs:
     sig = Sigs(
         seqrelwhat="-",
         id=component_cui,
@@ -170,9 +177,19 @@ class TestClassificationAgainstRealJoins:
         # variant_cui must not show up.
         v1 = _make_variant(session, variant_cui=400)
         _make_variant(session, variant_cui=401)
-        _make_sig(session, variant_cui=400, component_cui=4, class_field="rad sig", component_role="locoregional")
         _make_sig(
-            session, variant_cui=401, component_cui=5, class_field="rad sig", component_role="locoregional"
+            session,
+            variant_cui=400,
+            component_cui=4,
+            class_field="rad sig",
+            component_role="locoregional",
+        )
+        _make_sig(
+            session,
+            variant_cui=401,
+            component_cui=5,
+            class_field="rad sig",
+            component_role="locoregional",
         )
         session.expire_all()
 
@@ -185,8 +202,13 @@ def test_sig_variant_object_uses_current_version_without_ambiguity(session):
     historical.version = 0
     current = _make_variant(session, variant_cui=101)
     current.variant_cui = 100
-    sig = _make_sig(session, variant_cui=100, component_cui=1,
-                    class_field="rad sig", component_role="locoregional")
+    sig = _make_sig(
+        session,
+        variant_cui=100,
+        component_cui=1,
+        class_field="rad sig",
+        component_role="locoregional",
+    )
     session.expire_all()
     assert sig.variant_object.id == current.id
     assert sig.variant_object.version == 1
@@ -200,18 +222,29 @@ def test_reverse_study_links_resolve_substudies_and_keep_linked_history(session)
     historical.variant_cui = 100
     historical.version = 0
     common = {
-        "condition": "Condition", "condition_cui": 1, "phase": "NS",
+        "condition": "Condition",
+        "condition_cui": 1,
+        "phase": "NS",
         "date_added": datetime(2020, 1, 1, tzinfo=UTC),
-        "reg_study": False, "sact": True, "study_design_imputed": False, "unreg_study": True,
+        "reg_study": False,
+        "sact": True,
+        "study_design_imputed": False,
+        "unreg_study": True,
     }
     part_a = Studies(id=1, study="Trial", substudy="A", **common)
     part_b = Studies(id=2, study="Trial", substudy="B", **common)
     historical_study = Studies(id=3, study="Historical only", **common)
-    session.add_all([
-        part_a, part_b, historical_study,
-        variants_StudyMap(parent_id=current.id, position=1, study="Trial--A"),
-        variants_StudyMap(parent_id=historical.id, position=1, study="Historical only"),
-    ])
+    session.add_all(
+        [
+            part_a,
+            part_b,
+            historical_study,
+            variants_StudyMap(parent_id=current.id, position=1, study="Trial--A"),
+            variants_StudyMap(
+                parent_id=historical.id, position=1, study="Historical only"
+            ),
+        ]
+    )
     session.flush()
     session.expire_all()
 

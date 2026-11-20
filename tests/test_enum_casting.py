@@ -34,7 +34,11 @@ pytestmark = pytest.mark.skipif(
 
 class TestEnumPolicy:
     def test_real_parent_and_child_columns_use_the_policy(self):
-        for table, column in [("canonicaltriples", "class_1"), ("drugs", "class_type"), ("indications_biomarker2", "biomarker2")]:
+        for table, column in [
+            ("canonicaltriples", "class_1"),
+            ("drugs", "class_type"),
+            ("indications_biomarker2", "biomarker2"),
+        ]:
             col = Base.metadata.tables[f"primary.{table}"].c[column]
             policy = conversion_policy()
             assert convert_value(col.type.enums[0], col, policy) == col.type.enums[0]
@@ -46,7 +50,11 @@ class TestEnumPolicy:
 
     def test_unmatched_value_raises_for_the_caller_to_handle(self):
         with pytest.raises(ValueError):
-            convert_value("not a real class", Canonicaltriples.__table__.c.class_1, conversion_policy())
+            convert_value(
+                "not a real class",
+                Canonicaltriples.__table__.c.class_1,
+                conversion_policy(),
+            )
 
 
 @pytest.fixture
@@ -82,7 +90,9 @@ class TestLoadEntityEndToEnd:
         sqlite_session.commit()
 
         assert total == expected
-        rows = sqlite_session.execute(sa.select(Canonicaltriples.class_1)).scalars().all()
+        rows = (
+            sqlite_session.execute(sa.select(Canonicaltriples.class_1)).scalars().all()
+        )
         assert len(rows) == expected
         assert all(isinstance(v, Canonicaltriples_Class_1Enum) for v in rows)
         # Confirms real, differently-cased source values ("Procedure") did
@@ -103,8 +113,13 @@ class TestLoadEntityEndToEnd:
         sqlite_session.commit()
 
         assert total == 2
-        rows = sqlite_session.execute(sa.select(Canonicaltriples.class_1)).scalars().all()
-        assert set(rows) == {Canonicaltriples_Class_1Enum.PROCEDURE, Canonicaltriples_Class_1Enum.REGIMEN}
+        rows = (
+            sqlite_session.execute(sa.select(Canonicaltriples.class_1)).scalars().all()
+        )
+        assert set(rows) == {
+            Canonicaltriples_Class_1Enum.PROCEDURE,
+            Canonicaltriples_Class_1Enum.REGIMEN,
+        }
 
 
 @pytest.mark.skipif(
@@ -118,7 +133,9 @@ class TestSurrogatePkEnumColumn:
     surrogate-PK loading story (see test_loading.py).
     """
 
-    def test_nullable_enum_column_casts_correctly_on_real_postgres(self, pg_load_engine):
+    def test_nullable_enum_column_casts_correctly_on_real_postgres(
+        self, pg_load_engine
+    ):
         Base.metadata.create_all(pg_load_engine, tables=[Drugs.__table__])
         with so.Session(pg_load_engine) as session:
             total = load_entity(session, Drugs, _REAL_DATA_DIR)
