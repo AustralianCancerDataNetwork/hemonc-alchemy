@@ -1489,6 +1489,7 @@
 
 <h1 id="core-queries-and-links">Core queries and links<a class="headerlink" href="#core-queries-and-links" title="Permanent link">&para;</a></h1>
 <p>Use <code>toolkit.core</code> to resolve condition names, search treatment components, select sigs by condition, and follow links between records.</p>
+<p><code>parse_source_date()</code> reports the year, month, day and precision supplied by a source cell. It accepts partial ISO dates, full dates, <code>yyyymmdd</code>, <code>dd-mon-yyyy</code>, HTML <code>&lt;time datetime&gt;</code> cells and <code>Withdrawn on &lt;date&gt;</code> values. It returns <code>None</code> for free text and never fills missing month or day values.</p>
 <h2 id="resolve-names-to-cuis">Resolve names to CUIs<a class="headerlink" href="#resolve-names-to-cuis" title="Permanent link">&para;</a></h2>
 <p>Look up a condition by name and use its HemOnc CUI in subsequent queries:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.toolkit.core.conditions</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
