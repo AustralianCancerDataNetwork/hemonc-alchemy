@@ -52,7 +52,9 @@ class HemOncEnumHandler(EnumHandler):
                     label = member.name if member else None
             labels.append(label)
             invalid.append(value is not None and label is None)
-        return Interpretation(pa.array(labels, pa.string()), pa.array(invalid, pa.bool_()))
+        return Interpretation(
+            pa.array(labels, pa.string()), pa.array(invalid, pa.bool_())
+        )
 
 
 @dataclass(frozen=True)
@@ -70,8 +72,15 @@ class NullableHandler(ColumnHandler):
         values, invalid = self.handler.interpret(arr, sa_type, nulls)
         count = pc.sum(invalid).as_py() or 0  # ty: ignore[unresolved-attribute]  # Arrow registers compute kernels dynamically.
         if count:
-            logger.warning("CAST %s.%s: %d value(s) failed; stored as NULL", self.table_name, self.column_name, count)
-        return Interpretation(pc.if_else(invalid, None, values), pa.repeat(False, len(values)))  # ty: ignore[unresolved-attribute]
+            logger.warning(
+                "CAST %s.%s: %d value(s) failed; stored as NULL",
+                self.table_name,
+                self.column_name,
+                count,
+            )
+        return Interpretation(
+            pc.if_else(invalid, None, values), pa.repeat(False, len(values))
+        )  # ty: ignore[unresolved-attribute]
 
 
 def conversion_policy(table: sa.Table | None = None) -> ConversionPolicy:
@@ -84,19 +93,31 @@ def conversion_policy(table: sa.Table | None = None) -> ConversionPolicy:
     policy = ConversionPolicy(
         enum=HemOncEnumHandler(),
         errors=ErrorPolicy(on_error="reject_row"),
-        nulls=NullPolicy(text_markers=frozenset({"NULL", "None", "N/A", "NaN", "nan", "null", "NA", "n/a"})),
+        nulls=NullPolicy(
+            text_markers=frozenset(
+                {"NULL", "None", "N/A", "NaN", "nan", "null", "NA", "n/a"}
+            )
+        ),
     )
     if table is None:
         return policy
-    return replace(policy, columns={
-        (table.name, column.name): NullableHandler(
-            policy.for_column(column.type, table.name, column.name), table.name, column.name
-        )
-        for column in table.c if column.nullable
-    })
+    return replace(
+        policy,
+        columns={
+            (table.name, column.name): NullableHandler(
+                policy.for_column(column.type, table.name, column.name),
+                table.name,
+                column.name,
+            )
+            for column in table.c
+            if column.nullable
+        },
+    )
 
 
-def interpret_values(values: Any, column: sa.Column, policy: ConversionPolicy) -> Interpretation:
+def interpret_values(
+    values: Any, column: sa.Column, policy: ConversionPolicy
+) -> Interpretation:
     """Interpret a source/database column with the file policy, retaining failures."""
     values = [value.name if isinstance(value, Enum) else value for value in values]
     table_name = column.table.name if column.table is not None else None
@@ -129,12 +150,18 @@ class SnapshotParentIds:
     def from_reader(cls, reader: FileReader) -> SnapshotParentIds:
         with reader.path.open("rb") as handle:
             digest = file_digest(handle, "sha256").hexdigest()
-        return cls(digest, getattr(reader, "quote_mode", None), getattr(reader, "skip_malformed", False))
+        return cls(
+            digest,
+            getattr(reader, "quote_mode", None),
+            getattr(reader, "skip_malformed", False),
+        )
 
     def validate_reader(self, reader: FileReader) -> None:
         current = self.from_reader(reader)
         if (self.source_digest, self.quote_mode, self.skip_malformed) != (
-            current.source_digest, current.quote_mode, current.skip_malformed,
+            current.source_digest,
+            current.quote_mode,
+            current.skip_malformed,
         ):
             raise ValueError(
                 "Child loading requires the unchanged parent source and the same CSV reading options; "
@@ -162,7 +189,10 @@ class GeneratedIdReader(FileReader):
         self.session = session
         self.engine = session.get_bind(mapper=model).engine
         table = model.__table__
-        if session.scalar(sa.select(sa.literal(1)).select_from(table).limit(1)) is not None:
+        if (
+            session.scalar(sa.select(sa.literal(1)).select_from(table).limit(1))
+            is not None
+        ):
             raise ValueError(
                 f"{table.name}: ID-less snapshots require an empty target; "
                 "use a fresh database or supply stable IDs explicitly"

@@ -49,7 +49,9 @@ def standardise_codes(
 
     concept = binding.concept
     sources = session.execute(
-        sa.select(concept.concept_code, concept.concept_id, concept.standard_concept).where(
+        sa.select(
+            concept.concept_code, concept.concept_id, concept.standard_concept
+        ).where(
             concept.vocabulary_id == vocabulary_id,
             concept.concept_code.in_(values),
             concept.is_valid_expr(),
@@ -60,7 +62,9 @@ def standardise_codes(
     source_ids = tuple(int(row.concept_id) for row in sources)
 
     # Standard concepts come back as self-maps, so one query covers both cases.
-    mapping = standard_concept_mapping_select(StandardConceptMappingSpec(source_concept_ids=source_ids)).subquery()
+    mapping = standard_concept_mapping_select(
+        StandardConceptMappingSpec(source_concept_ids=source_ids)
+    ).subquery()
     target = aliased(concept, name="mapping_target")
     legs: dict[int, set[int]] = defaultdict(set)
     for row in session.execute(
@@ -93,7 +97,9 @@ def standardise_codes(
     }
 
 
-def concept_labels(session: Any, concept_ids: Iterable[int]) -> dict[int, tuple[str, str]]:
+def concept_labels(
+    session: Any, concept_ids: Iterable[int]
+) -> dict[int, tuple[str, str]]:
     """Each concept's (concept_code, concept_name), for human-readable output."""
 
     values = tuple(dict.fromkeys(int(value) for value in concept_ids))
@@ -104,9 +110,14 @@ def concept_labels(session: Any, concept_ids: Iterable[int]) -> dict[int, tuple[
         return {}
     concept = binding.concept
     rows = session.execute(
-        sa.select(concept.concept_id, concept.concept_code, concept.concept_name).where(concept.concept_id.in_(values))
+        sa.select(concept.concept_id, concept.concept_code, concept.concept_name).where(
+            concept.concept_id.in_(values)
+        )
     ).all()
-    return {int(row.concept_id): (str(row.concept_code), str(row.concept_name)) for row in rows}
+    return {
+        int(row.concept_id): (str(row.concept_code), str(row.concept_name))
+        for row in rows
+    }
 
 
 def subsumption_pairs(session: Any, concept_ids: Iterable[int]) -> set[tuple[int, int]]:
@@ -129,4 +140,9 @@ def subsumption_pairs(session: Any, concept_ids: Iterable[int]) -> set[tuple[int
     return {(int(row[0]), int(row[1])) for row in rows}
 
 
-__all__ = ["StandardisedCode", "concept_labels", "standardise_codes", "subsumption_pairs"]
+__all__ = [
+    "StandardisedCode",
+    "concept_labels",
+    "standardise_codes",
+    "subsumption_pairs",
+]

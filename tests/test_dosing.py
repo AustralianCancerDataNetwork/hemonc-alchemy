@@ -49,12 +49,28 @@ def session():
 
 def _variant(session, variant_cui: int = 1, version: int = 1) -> Variants:
     variant = Variants(
-        id=variant_cui, variant_cui=variant_cui, variant="v", regimen_cui=1,
-        regimen="R", version=version, cyclesigs=0, components=0, portions=0,
-        routes=0, sigs=0, blob_version=0, fullyspecified=True,
-        allsigshavecyclesigs=True, allsigshavedose=True, allsigshavedoseunit=True,
-        allsigshaveduration=True, allsigshavedurationunit=True, allsigshavefrequency=True,
-        allsigshaveroute=True, allsigshaveschedule=True, allsigshavesequence=True,
+        id=variant_cui,
+        variant_cui=variant_cui,
+        variant="v",
+        regimen_cui=1,
+        regimen="R",
+        version=version,
+        cyclesigs=0,
+        components=0,
+        portions=0,
+        routes=0,
+        sigs=0,
+        blob_version=0,
+        fullyspecified=True,
+        allsigshavecyclesigs=True,
+        allsigshavedose=True,
+        allsigshavedoseunit=True,
+        allsigshaveduration=True,
+        allsigshavedurationunit=True,
+        allsigshavefrequency=True,
+        allsigshaveroute=True,
+        allsigshaveschedule=True,
+        allsigshavesequence=True,
         date_added=_D,
     )
     session.add(variant)
@@ -66,14 +82,26 @@ class TestDosingInstructions:
     def test_one_row_per_sig_uncollapsed(self, session):
         variant = _variant(session, variant_cui=1)
         for sig_id in (1, 2):
-            session.add(Sigs(
-                seqrelwhat="-",
-                id=sig_id, variant_cui=1, component_cui=10, component="cisplatin",
-                component_role="primary systemic", portion="1", regimen="R",
-                regimen_cui=1, step_number="1", divided=False, phase_step=1,
-                variant="v", route=Sigs_RouteEnum.INTRAVENOUS, alldays="1",
-                date_added=_D,
-            ))
+            session.add(
+                Sigs(
+                    seqrelwhat="-",
+                    id=sig_id,
+                    variant_cui=1,
+                    component_cui=10,
+                    component="cisplatin",
+                    component_role="primary systemic",
+                    portion="1",
+                    regimen="R",
+                    regimen_cui=1,
+                    step_number="1",
+                    divided=False,
+                    phase_step=1,
+                    variant="v",
+                    route=Sigs_RouteEnum.INTRAVENOUS,
+                    alldays="1",
+                    date_added=_D,
+                )
+            )
         session.flush()
         session.expire_all()
 
@@ -84,24 +112,46 @@ class TestDosingInstructions:
         variant = _variant(session, variant_cui=2)
         sig = Sigs(
             seqrelwhat="-",
-            id=10, variant_cui=2, component_cui=100, component="cytarabine",
-            subcomponent_cui=200, subcomponent=Sigs_SubcomponentEnum.DECITABINE,
-            component_role="primary systemic", phase=Sigs_PhaseEnum.INDUCTION,
-            phase_step=1, portion="1", regimen="R", regimen_cui=1,
-            step_number="1 of 2", divided=False, route=Sigs_RouteEnum.INTRAVENOUS,
-            doseminnum="100", dosemaxnum="200", doseunit="mg/m^2",
-            dosecapnum=400.0, dosecapunit=Sigs_DosecapunitEnum.MG,
-            targetlevel="2-4", targetleveltype=Sigs_TargetleveltypeEnum.TROUGH,
+            id=10,
+            variant_cui=2,
+            component_cui=100,
+            component="cytarabine",
+            subcomponent_cui=200,
+            subcomponent=Sigs_SubcomponentEnum.DECITABINE,
+            component_role="primary systemic",
+            phase=Sigs_PhaseEnum.INDUCTION,
+            phase_step=1,
+            portion="1",
+            regimen="R",
+            regimen_cui=1,
+            step_number="1 of 2",
+            divided=False,
+            route=Sigs_RouteEnum.INTRAVENOUS,
+            doseminnum="100",
+            dosemaxnum="200",
+            doseunit="mg/m^2",
+            dosecapnum=400.0,
+            dosecapunit=Sigs_DosecapunitEnum.MG,
+            targetlevel="2-4",
+            targetleveltype=Sigs_TargetleveltypeEnum.TROUGH,
             targetlevelunit=Sigs_TargetlevelunitEnum.NG_ML,
             frequency=Sigs_FrequencyEnum.ONCE_PER_DAY,
-            durationminnum="24", durationmaxnum="24", durationunit=Sigs_DurationunitEnum.HOUR,
-            alldays="1,8,15", timing_sequence="1,2,3",
-            cycle_length_lb="21", cycle_length_ub="21",
+            durationminnum="24",
+            durationmaxnum="24",
+            durationunit=Sigs_DurationunitEnum.HOUR,
+            alldays="1,8,15",
+            timing_sequence="1,2,3",
+            cycle_length_lb="21",
+            cycle_length_ub="21",
             cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
             sequence=Sigs_SequenceEnum.FIRST,
-            variant="v", date_added=_D,
+            variant="v",
+            date_added=_D,
             cyclesigs_note="see protocol note; increase as tolerated",
-            study_items=[sigs_StudyMap(position=1, study="study-a"), sigs_StudyMap(position=2, study="study-b")],
+            study_items=[
+                sigs_StudyMap(position=1, study="study-a"),
+                sigs_StudyMap(position=2, study="study-b"),
+            ],
         )
         session.add(sig)
         session.flush()
@@ -145,10 +195,21 @@ class TestDosingInstructions:
         variant = _variant(session, variant_cui=3)
         sig = Sigs(
             seqrelwhat="-",
-            id=20, variant_cui=3, component_cui=1, component="drug",
-            component_role="primary systemic", portion="1", regimen="R",
-            regimen_cui=1, step_number="1", divided=False, phase_step=1,
-            variant="v", route=None, alldays=None, date_added=_D,
+            id=20,
+            variant_cui=3,
+            component_cui=1,
+            component="drug",
+            component_role="primary systemic",
+            portion="1",
+            regimen="R",
+            regimen_cui=1,
+            step_number="1",
+            divided=False,
+            phase_step=1,
+            variant="v",
+            route=None,
+            alldays=None,
+            date_added=_D,
         )
         session.add(sig)
         session.flush()
@@ -168,10 +229,21 @@ class TestDosingInstructions:
         variant = _variant(session, variant_cui=4)
         sig = Sigs(
             seqrelwhat="-",
-            id=30, variant_cui=4, component_cui=1, component="drug",
-            component_role="primary systemic", portion="1", regimen="R",
-            regimen_cui=1, step_number="1", divided=False, phase_step=1,
-            variant="v", doseminnum="NS", dosemaxnum="1,000,000", date_added=_D,
+            id=30,
+            variant_cui=4,
+            component_cui=1,
+            component="drug",
+            component_role="primary systemic",
+            portion="1",
+            regimen="R",
+            regimen_cui=1,
+            step_number="1",
+            divided=False,
+            phase_step=1,
+            variant="v",
+            doseminnum="NS",
+            dosemaxnum="1,000,000",
+            date_added=_D,
         )
         session.add(sig)
         session.flush()
@@ -187,10 +259,20 @@ class TestDosingInstructions:
         variant = _variant(session, variant_cui=5)
         sig = Sigs(
             seqrelwhat="-",
-            id=40, variant_cui=5, component_cui=1, component="drug",
-            component_role="primary systemic", portion="1", regimen="R",
-            regimen_cui=1, step_number="1", divided=False, phase_step=1,
-            variant="v", alldays="(1),(2),(3),(4),(5),(6),(7)", date_added=_D,
+            id=40,
+            variant_cui=5,
+            component_cui=1,
+            component="drug",
+            component_role="primary systemic",
+            portion="1",
+            regimen="R",
+            regimen_cui=1,
+            step_number="1",
+            divided=False,
+            phase_step=1,
+            variant="v",
+            alldays="(1),(2),(3),(4),(5),(6),(7)",
+            date_added=_D,
         )
         session.add(sig)
         session.flush()

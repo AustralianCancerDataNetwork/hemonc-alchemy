@@ -61,8 +61,8 @@ def test_modality_labels_are_declared():
 @pytest.mark.parametrize(
     ("cyclesigs", "expected"),
     [
-        ("3-week cycles", (None, "open")),                  # plural: repeats
-        ("9-week cycle", (1, "single")),                    # singular: one cycle
+        ("3-week cycles", (None, "open")),  # plural: repeats
+        ("9-week cycle", (1, "single")),  # singular: one cycle
         ("3-week cycle for four cycles", (4, "fixed")),
         ("3-week cycle for 35 cycles", (35, "fixed")),
         ("3-week cycle for four to six cycles", (6, "range")),
@@ -74,7 +74,7 @@ def test_modality_labels_are_declared():
         ("Duration of each cycle not specified", (None, "unspecified")),
         ("Evaluation occurs during week 30", (None, "other")),
         (None, (None, None)),
-        (float("nan"), (None, None)),                       # pandas missing value
+        (float("nan"), (None, None)),  # pandas missing value
     ],
 )
 def test_parse_course(cyclesigs, expected):
@@ -82,8 +82,13 @@ def test_parse_course(cyclesigs, expected):
 
 
 def test_parse_course_caps_are_declared():
-    for value in ["3-week cycles", "One course", "Three courses",
-                  "Evaluation during week 5", "Duration not specified"]:
+    for value in [
+        "3-week cycles",
+        "One course",
+        "Three courses",
+        "Evaluation during week 5",
+        "Duration not specified",
+    ]:
         _, cap = taxonomy.parse_course(value)
         assert cap in taxonomy.CAPS
 

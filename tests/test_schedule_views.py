@@ -39,12 +39,28 @@ def session():
 
 def _variant(session, variant_cui: int, version: int = 1) -> Variants:
     variant = Variants(
-        id=variant_cui, variant_cui=variant_cui, variant=f"v{variant_cui}",
-        regimen_cui=1, regimen="R", version=version, cyclesigs=0, components=0, portions=0,
-        routes=0, sigs=0, blob_version=0, fullyspecified=True,
-        allsigshavecyclesigs=True, allsigshavedose=True, allsigshavedoseunit=True,
-        allsigshaveduration=True, allsigshavedurationunit=True, allsigshavefrequency=True,
-        allsigshaveroute=True, allsigshaveschedule=True, allsigshavesequence=True,
+        id=variant_cui,
+        variant_cui=variant_cui,
+        variant=f"v{variant_cui}",
+        regimen_cui=1,
+        regimen="R",
+        version=version,
+        cyclesigs=0,
+        components=0,
+        portions=0,
+        routes=0,
+        sigs=0,
+        blob_version=0,
+        fullyspecified=True,
+        allsigshavecyclesigs=True,
+        allsigshavedose=True,
+        allsigshavedoseunit=True,
+        allsigshaveduration=True,
+        allsigshavedurationunit=True,
+        allsigshavefrequency=True,
+        allsigshaveroute=True,
+        allsigshaveschedule=True,
+        allsigshavesequence=True,
         date_added=_D,
     )
     session.add(variant)
@@ -54,15 +70,21 @@ def _variant(session, variant_cui: int, version: int = 1) -> Variants:
 
 def _drug(session, drug_cui: int, name: str) -> Drugs:
     drug = Drugs(
-        id=drug_cui, drug_cui=drug_cui, drug=name,
-        investigational=False, multiagent=False, date_added=_D,
+        id=drug_cui,
+        drug_cui=drug_cui,
+        drug=name,
+        investigational=False,
+        multiagent=False,
+        date_added=_D,
     )
     session.add(drug)
     session.flush()
     return drug
 
 
-def _sig(session, *, sig_id, variant_cui, drug_cui, route, alldays, **overrides) -> Sigs:
+def _sig(
+    session, *, sig_id, variant_cui, drug_cui, route, alldays, **overrides
+) -> Sigs:
     timing_sequence = overrides.pop("timing_sequence", None)
     cycle_length_lb = overrides.pop("cycle_length_lb", None)
     cycle_length_ub = overrides.pop("cycle_length_ub", None)
@@ -73,13 +95,27 @@ def _sig(session, *, sig_id, variant_cui, drug_cui, route, alldays, **overrides)
     assert not overrides
     sig = Sigs(
         seqrelwhat="-",
-        id=sig_id, variant_cui=variant_cui, component_cui=drug_cui, component=component,
-        class_field="iv intermittent canonical sig", component_role="primary systemic",
-        portion="1", regimen="R", regimen_cui=1, step_number="1", divided=False,
-        phase=phase, phase_step=phase_step, variant=f"v{variant_cui}", route=route,
-        alldays=alldays, timing_sequence=timing_sequence,
-        cycle_length_lb=cycle_length_lb, cycle_length_ub=cycle_length_ub,
-        cycle_length_unit=cycle_length_unit, date_added=_D,
+        id=sig_id,
+        variant_cui=variant_cui,
+        component_cui=drug_cui,
+        component=component,
+        class_field="iv intermittent canonical sig",
+        component_role="primary systemic",
+        portion="1",
+        regimen="R",
+        regimen_cui=1,
+        step_number="1",
+        divided=False,
+        phase=phase,
+        phase_step=phase_step,
+        variant=f"v{variant_cui}",
+        route=route,
+        alldays=alldays,
+        timing_sequence=timing_sequence,
+        cycle_length_lb=cycle_length_lb,
+        cycle_length_ub=cycle_length_ub,
+        cycle_length_unit=cycle_length_unit,
+        date_added=_D,
     )
     session.add(sig)
     session.flush()
@@ -87,13 +123,21 @@ def _sig(session, *, sig_id, variant_cui, drug_cui, route, alldays, **overrides)
 
 
 @pytest.mark.parametrize("timing_sequence, cycle_count", [(None, 1), ("1,2", 2)])
-def test_mixed_fixed_and_choice_days_remain_visible(session, timing_sequence, cycle_count):
+def test_mixed_fixed_and_choice_days_remain_visible(
+    session, timing_sequence, cycle_count
+):
     variant = _variant(session, 1)
     _drug(session, 1, "cisplatin")
     _sig(
-        session, sig_id=1, variant_cui=1, drug_cui=1,
-        route="INTRAVENOUS", alldays="1,8|9", timing_sequence=timing_sequence,
-        cycle_length_lb="21", cycle_length_ub="21",
+        session,
+        sig_id=1,
+        variant_cui=1,
+        drug_cui=1,
+        route="INTRAVENOUS",
+        alldays="1,8|9",
+        timing_sequence=timing_sequence,
+        cycle_length_lb="21",
+        cycle_length_ub="21",
         cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
     )
     session.expire_all()
@@ -105,7 +149,9 @@ def test_mixed_fixed_and_choice_days_remain_visible(session, timing_sequence, cy
     assert len(fixed) == len(choices) == cycle_count
     assert {event.source_day for event in fixed} == {1}
     assert all("choice of days 8|9" in event.timing_status for event in choices)
-    assert all(event.elapsed_day is None and event.calendar_date is None for event in choices)
+    assert all(
+        event.elapsed_day is None and event.calendar_date is None for event in choices
+    )
     assert all("choice of days" not in event.timing_status for event in fixed)
     assert any("choice of days 8|9" in finding.message for finding in view.diagnostics)
 
@@ -114,7 +160,14 @@ class TestBuildScheduleView:
     def test_every_event_carries_its_source_instruction(self, session):
         variant = _variant(session, 1)
         _drug(session, 1, "cisplatin")
-        _sig(session, sig_id=1, variant_cui=1, drug_cui=1, route="INTRAVENOUS", alldays="1,8,15")
+        _sig(
+            session,
+            sig_id=1,
+            variant_cui=1,
+            drug_cui=1,
+            route="INTRAVENOUS",
+            alldays="1,8,15",
+        )
         session.expire_all()
 
         view = build_schedule_view(variant)
@@ -131,7 +184,14 @@ class TestBuildScheduleView:
         # never appears in `roll_out_variant`'s frame.
         variant = _variant(session, 2)
         _drug(session, 1, "drug-a")
-        _sig(session, sig_id=1, variant_cui=2, drug_cui=1, route="INTRAVENOUS", alldays="1")
+        _sig(
+            session,
+            sig_id=1,
+            variant_cui=2,
+            drug_cui=1,
+            route="INTRAVENOUS",
+            alldays="1",
+        )
         _sig(session, sig_id=2, variant_cui=2, drug_cui=1, route="NS", alldays=None)
         session.expire_all()
 
@@ -147,13 +207,21 @@ class TestBuildScheduleView:
             for d in view.diagnostics
         )
 
-    def test_source_day_zero_is_preserved_and_elapsed_zero_displays_as_one(self, session):
+    def test_source_day_zero_is_preserved_and_elapsed_zero_displays_as_one(
+        self, session
+    ):
         variant = _variant(session, 3)
         _drug(session, 1, "drug-a")
         _sig(
-            session, sig_id=1, variant_cui=3, drug_cui=1, route="INTRAVENOUS",
-            alldays="1", timing_sequence="1",
-            cycle_length_lb="21", cycle_length_ub="21",
+            session,
+            sig_id=1,
+            variant_cui=3,
+            drug_cui=1,
+            route="INTRAVENOUS",
+            alldays="1",
+            timing_sequence="1",
+            cycle_length_lb="21",
+            cycle_length_ub="21",
             cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
         )
         session.expire_all()
@@ -169,22 +237,40 @@ class TestBuildScheduleView:
         _drug(session, 1, "oral-drug")
         _drug(session, 2, "iv-drug")
         _sig(session, sig_id=1, variant_cui=4, drug_cui=1, route="ORAL", alldays="1")
-        _sig(session, sig_id=2, variant_cui=4, drug_cui=2, route="INTRAVENOUS", alldays="1")
+        _sig(
+            session,
+            sig_id=2,
+            variant_cui=4,
+            drug_cui=2,
+            route="INTRAVENOUS",
+            alldays="1",
+        )
         session.expire_all()
 
         view = build_schedule_view(variant)
-        settings = {event.instruction.sig_id: event.administration_setting for event in view.events}
+        settings = {
+            event.instruction.sig_id: event.administration_setting
+            for event in view.events
+        }
         assert settings == {1: "home", 2: "clinic"}
         # The actual source route stays available too, not collapsed into the setting.
         assert view.events[0].instruction.route is not None
 
-    def test_decay_days_is_forced_to_zero_regardless_of_the_toolkit_default(self, session):
+    def test_decay_days_is_forced_to_zero_regardless_of_the_toolkit_default(
+        self, session
+    ):
         variant = _variant(session, 5)
         _drug(session, 1, "drug-a")
         _sig(
-            session, sig_id=1, variant_cui=5, drug_cui=1, route="INTRAVENOUS",
-            alldays="1", timing_sequence="1,2",
-            cycle_length_lb="7", cycle_length_ub="7",
+            session,
+            sig_id=1,
+            variant_cui=5,
+            drug_cui=1,
+            route="INTRAVENOUS",
+            alldays="1",
+            timing_sequence="1,2",
+            cycle_length_lb="7",
+            cycle_length_ub="7",
             cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
         )
         session.expire_all()
@@ -198,13 +284,25 @@ class TestBuildScheduleView:
     def test_radiation_and_unclassified_sigs_are_preserved(self, session):
         variant = _variant(session, 6)
         _sig(
-            session, sig_id=1, variant_cui=6, drug_cui=999, route="NS", alldays="1",
+            session,
+            sig_id=1,
+            variant_cui=6,
+            drug_cui=999,
+            route="NS",
+            alldays="1",
             component="radiotherapy",
         )
         session.flush()
         session.query(Sigs).filter_by(id=1).update({"class_field": "rad sig"})
         _drug(session, 1, "unclassified-drug")
-        _sig(session, sig_id=2, variant_cui=6, drug_cui=1, route="INTRAVENOUS", alldays="1")
+        _sig(
+            session,
+            sig_id=2,
+            variant_cui=6,
+            drug_cui=1,
+            route="INTRAVENOUS",
+            alldays="1",
+        )
         session.query(Sigs).filter_by(id=2).update({"class_field": None})
         session.expire_all()
 
@@ -213,12 +311,21 @@ class TestBuildScheduleView:
         assert modalities[1] == "radiation"
         assert modalities[2] is None
 
-    def test_event_limit_overflow_returns_an_explicit_bounded_result(self, session, monkeypatch):
+    def test_event_limit_overflow_returns_an_explicit_bounded_result(
+        self, session, monkeypatch
+    ):
         import hemonc_alchemy.toolkit.analytics.treatment.scheduling.views as views_module
 
         variant = _variant(session, 7)
         _drug(session, 1, "drug-a")
-        _sig(session, sig_id=1, variant_cui=7, drug_cui=1, route="INTRAVENOUS", alldays="1")
+        _sig(
+            session,
+            sig_id=1,
+            variant_cui=7,
+            drug_cui=1,
+            route="INTRAVENOUS",
+            alldays="1",
+        )
         session.expire_all()
 
         monkeypatch.setattr(views_module, "EVENT_LIMIT", 0)
@@ -232,13 +339,19 @@ class TestBuildScheduleView:
             d.category == DiagnosticCategory.LIMIT_EXCEEDED for d in view.diagnostics
         )
 
-    def test_a_crashing_day_expression_returns_a_bounded_result_not_a_raise(self, session):
+    def test_a_crashing_day_expression_returns_a_bounded_result_not_a_raise(
+        self, session
+    ):
         # P0-A18's standalone regression sigs, here attached to a variant:
         # the shared parser's `parse_optional` raises a bare `ValueError`.
         variant = _variant(session, 8)
         _drug(session, 1, "drug-a")
         _sig(
-            session, sig_id=1, variant_cui=8, drug_cui=1, route="INTRAVENOUS",
+            session,
+            sig_id=1,
+            variant_cui=8,
+            drug_cui=1,
+            route="INTRAVENOUS",
             alldays="(1),(2),(3),(4),(5),(6),(7)",
         )
         session.expire_all()
@@ -255,25 +368,37 @@ class TestBuildScheduleView:
         _drug(session, 1, "induction-drug")
         _drug(session, 2, "maintenance-drug")
         _sig(
-            session, sig_id=1, variant_cui=9, drug_cui=1, route="INTRAVENOUS",
-            alldays="1", timing_sequence="1,2",
-            cycle_length_lb="14", cycle_length_ub="14",
+            session,
+            sig_id=1,
+            variant_cui=9,
+            drug_cui=1,
+            route="INTRAVENOUS",
+            alldays="1",
+            timing_sequence="1,2",
+            cycle_length_lb="14",
+            cycle_length_ub="14",
             cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
-            phase=Sigs_PhaseEnum.INDUCTION, phase_step=1,
+            phase=Sigs_PhaseEnum.INDUCTION,
+            phase_step=1,
         )
         _sig(
-            session, sig_id=2, variant_cui=9, drug_cui=2, route="INTRAVENOUS",
-            alldays="1", timing_sequence="1",
-            cycle_length_lb="21", cycle_length_ub="21",
+            session,
+            sig_id=2,
+            variant_cui=9,
+            drug_cui=2,
+            route="INTRAVENOUS",
+            alldays="1",
+            timing_sequence="1",
+            cycle_length_lb="21",
+            cycle_length_ub="21",
             cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
-            phase=Sigs_PhaseEnum.MAINTENANCE, phase_step=2,
+            phase=Sigs_PhaseEnum.MAINTENANCE,
+            phase_step=2,
         )
         session.expire_all()
 
         view = build_schedule_view(variant)
-        maintenance_event = next(
-            e for e in view.events if e.instruction.sig_id == 2
-        )
+        maintenance_event = next(e for e in view.events if e.instruction.sig_id == 2)
         assert maintenance_event.elapsed_day == 28
         assert maintenance_event.phase_elapsed_day == 0
         assert maintenance_event.phase_display_day == 1
@@ -281,7 +406,14 @@ class TestBuildScheduleView:
     def test_policy_is_echoed_back(self, session):
         variant = _variant(session, 10)
         _drug(session, 1, "drug-a")
-        _sig(session, sig_id=1, variant_cui=10, drug_cui=1, route="INTRAVENOUS", alldays="1")
+        _sig(
+            session,
+            sig_id=1,
+            variant_cui=10,
+            drug_cui=1,
+            route="INTRAVENOUS",
+            alldays="1",
+        )
         session.expire_all()
 
         policy = SchedulePolicy(cycle_length_selection="ub")
@@ -297,7 +429,14 @@ class TestBuildScheduleViews:
         for cui in range(1, MAX_COMPARED_VARIANTS + 2):
             variant = _variant(session, cui)
             _drug(session, cui, f"drug-{cui}")
-            _sig(session, sig_id=cui, variant_cui=cui, drug_cui=cui, route="INTRAVENOUS", alldays="1")
+            _sig(
+                session,
+                sig_id=cui,
+                variant_cui=cui,
+                drug_cui=cui,
+                route="INTRAVENOUS",
+                alldays="1",
+            )
             variants.append(variant)
         session.expire_all()
 
@@ -309,7 +448,14 @@ class TestBuildScheduleViews:
         for cui in range(1, MAX_COMPARED_VARIANTS + 1):
             variant = _variant(session, cui)
             _drug(session, cui, f"drug-{cui}")
-            _sig(session, sig_id=cui, variant_cui=cui, drug_cui=cui, route="INTRAVENOUS", alldays="1")
+            _sig(
+                session,
+                sig_id=cui,
+                variant_cui=cui,
+                drug_cui=cui,
+                route="INTRAVENOUS",
+                alldays="1",
+            )
             variants.append(variant)
         session.expire_all()
 
@@ -321,20 +467,27 @@ class TestRealVariantReconciliation:
     """Source rows from the configured HemOnc database (see schedule-samples.json)."""
 
     @pytest.mark.postgres
-    def test_variant_130784_surfaces_its_two_unrepresented_radiation_sigs(self, latest_imported_variant):
+    def test_variant_130784_surfaces_its_two_unrepresented_radiation_sigs(
+        self, latest_imported_variant
+    ):
         # P0-A15: six source sigs, only four represented; sigs 5505/5506 have
         # no day expression and must show up as unplaced, not vanish.
         variant = latest_imported_variant(130784)
         view = build_schedule_view(variant)
         assert not view.bounded
         assert len(view.events) == 31
-        assert {u.instruction.sig_id for u in view.unplaced_instructions} == {5505, 5506}
+        assert {u.instruction.sig_id for u in view.unplaced_instructions} == {
+            5505,
+            5506,
+        }
         assert view.coverage.total_instructions == 6
         assert view.coverage.represented_instructions == 4
         assert view.coverage.unplaced_instructions == 2
 
     @pytest.mark.postgres
-    def test_variant_129553_surfaces_its_unrepresented_ns_route_sig(self, latest_imported_variant):
+    def test_variant_129553_surfaces_its_unrepresented_ns_route_sig(
+        self, latest_imported_variant
+    ):
         # P0-A16: sig 260 has route/day "NS"; only sig 259 reaches the projection.
         variant = latest_imported_variant(129553)
         view = build_schedule_view(variant)
@@ -347,7 +500,9 @@ class TestRealVariantReconciliation:
         )
 
     @pytest.mark.postgres
-    def test_variant_129505_decay_override_matches_the_captured_sample(self, latest_imported_variant):
+    def test_variant_129505_decay_override_matches_the_captured_sample(
+        self, latest_imported_variant
+    ):
         # P0-A08: with decay_days=0 the sample recorded exactly 4 events for
         # sigs 35/36; the toolkit's own default (decay_days=2) gives 8.
         variant = latest_imported_variant(129505)
@@ -356,24 +511,38 @@ class TestRealVariantReconciliation:
         assert {e.instruction.sig_id for e in view.events} == {35, 36}
 
 
-@pytest.mark.parametrize("days,cycles", [
-    ("[1,100000000000000000000,1]", "1"),
-    ("1", "[1,1000000000,1]"),
-    ("[1,101,1]", "[1,100,1]"),
-])
+@pytest.mark.parametrize(
+    "days,cycles",
+    [
+        ("[1,100000000000000000000,1]", "1"),
+        ("1", "[1,1000000000,1]"),
+        ("[1,101,1]", "[1,100,1]"),
+    ],
+)
 def test_limit_is_checked_before_rollout(session, monkeypatch, days, cycles):
     from hemonc_alchemy.toolkit.analytics.treatment.scheduling import views
 
     variant = _variant(session, 11)
-    _sig(session, sig_id=1, variant_cui=11, drug_cui=1, route="INTRAVENOUS",
-         alldays=days, timing_sequence=cycles)
+    _sig(
+        session,
+        sig_id=1,
+        variant_cui=11,
+        drug_cui=1,
+        route="INTRAVENOUS",
+        alldays=days,
+        timing_sequence=cycles,
+    )
+
     def forbidden_rollout(*args, **kwargs):
         pytest.fail("Over-limit source reached rollout")
+
     monkeypatch.setattr(views, "roll_out_variant", forbidden_rollout)
     result = build_schedule_view(variant)
     assert result.bounded
     assert result.coverage.represented_instructions is None
-    assert any(d.category == DiagnosticCategory.LIMIT_EXCEEDED for d in result.diagnostics)
+    assert any(
+        d.category == DiagnosticCategory.LIMIT_EXCEEDED for d in result.diagnostics
+    )
 
 
 def test_limit_allows_exact_boundary_and_counts_across_sigs(session, monkeypatch):
@@ -381,20 +550,45 @@ def test_limit_allows_exact_boundary_and_counts_across_sigs(session, monkeypatch
 
     monkeypatch.setattr(views, "EVENT_LIMIT", 4)
     variant = _variant(session, 12)
-    _sig(session, sig_id=1, variant_cui=12, drug_cui=1, route="INTRAVENOUS",
-         alldays="1,8", timing_sequence="1,2")
+    _sig(
+        session,
+        sig_id=1,
+        variant_cui=12,
+        drug_cui=1,
+        route="INTRAVENOUS",
+        alldays="1,8",
+        timing_sequence="1,2",
+    )
     assert len(build_schedule_view(variant).events) == 4
-    _sig(session, sig_id=2, variant_cui=12, drug_cui=1, route="INTRAVENOUS",
-         alldays="1", timing_sequence="1")
+    _sig(
+        session,
+        sig_id=2,
+        variant_cui=12,
+        drug_cui=1,
+        route="INTRAVENOUS",
+        alldays="1",
+        timing_sequence="1",
+    )
     session.expire_all()
     assert build_schedule_view(variant).bounded
 
 
 def test_calendar_overflow_preserves_source_fallback(session):
     variant = _variant(session, 13)
-    _sig(session, sig_id=1, variant_cui=13, drug_cui=1, route="INTRAVENOUS",
-         alldays="1,8", timing_sequence="1,2", cycle_length_lb="21", cycle_length_ub="21",
-         cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY)
+    _sig(
+        session,
+        sig_id=1,
+        variant_cui=13,
+        drug_cui=1,
+        route="INTRAVENOUS",
+        alldays="1,8",
+        timing_sequence="1,2",
+        cycle_length_lb="21",
+        cycle_length_ub="21",
+        cycle_length_unit=Sigs_Cycle_length_unitEnum.DAY,
+    )
     result = build_schedule_view(variant, SchedulePolicy(start_date=date(9999, 12, 31)))
     assert result.bounded
-    assert any(d.category == DiagnosticCategory.UNRESOLVED_TIMING for d in result.diagnostics)
+    assert any(
+        d.category == DiagnosticCategory.UNRESOLVED_TIMING for d in result.diagnostics
+    )

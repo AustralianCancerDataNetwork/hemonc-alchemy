@@ -15,7 +15,9 @@ DEFAULT_COMPONENT_COLUMNS = COMPONENT_SEARCH_COLUMNS
 
 
 def _required_strings(values: Iterable[str]) -> tuple[str, ...]:
-    result = tuple(dict.fromkeys(value.strip() for value in values if value and value.strip()))
+    result = tuple(
+        dict.fromkeys(value.strip() for value in values if value and value.strip())
+    )
     if not result:
         raise ValueError("At least one non-empty string is required.")
     return result
@@ -41,7 +43,10 @@ class ComponentRequirement:
     ) -> ComponentRequirement:
         if isinstance(terms, str):
             terms = (terms,)
-        return cls(tuple(terms), tuple(columns) if columns is not None else DEFAULT_COMPONENT_COLUMNS)
+        return cls(
+            tuple(terms),
+            tuple(columns) if columns is not None else DEFAULT_COMPONENT_COLUMNS,
+        )
 
 
 @dataclass(frozen=True)
@@ -66,8 +71,12 @@ class TreatmentSelectionSpec:
     """A standalone description of a model-level variant selection query."""
 
     condition_cuis: tuple[int, ...]
-    component_requirements: tuple[ComponentRequirement, ...] = field(default_factory=tuple)
-    category_requirements: tuple[CategoryRequirement, ...] = field(default_factory=tuple)
+    component_requirements: tuple[ComponentRequirement, ...] = field(
+        default_factory=tuple
+    )
+    category_requirements: tuple[CategoryRequirement, ...] = field(
+        default_factory=tuple
+    )
     regimens: tuple[str, ...] = field(default_factory=tuple)
     phase: str | None = None
     study_context: str | None = None
@@ -78,7 +87,9 @@ class TreatmentSelectionSpec:
         if not cuis:
             raise ValueError("At least one condition CUI is required.")
         object.__setattr__(self, "condition_cuis", cuis)
-        object.__setattr__(self, "regimens", _required_strings(self.regimens) if self.regimens else ())
+        object.__setattr__(
+            self, "regimens", _required_strings(self.regimens) if self.regimens else ()
+        )
         if self.version_policy not in {"all", "latest"}:
             raise ValueError("Version policy must be 'all' or 'latest'.")
 

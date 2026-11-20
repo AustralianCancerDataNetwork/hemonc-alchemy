@@ -86,4 +86,6 @@ def create_default_hemonc_engine(url: str | sa.URL, **kwargs: Any) -> sa.Engine:
     """
     options = dict(kwargs.pop("execution_options", {}))
     mapping = {"primary": None, **(options.get("schema_translate_map") or {})}
-    return sa.create_engine(url, execution_options={**options, "schema_translate_map": mapping}, **kwargs)
+    return sa.create_engine(
+        url, execution_options={**options, "schema_translate_map": mapping}, **kwargs
+    )

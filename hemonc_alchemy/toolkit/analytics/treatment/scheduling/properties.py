@@ -241,11 +241,13 @@ def administration_frame(
     records: list[dict] = []
 
     for variant in variants:
-        records.extend(_rollout_frame_records(
-            variant,
-            decay_days=decay_days,
-            decay_factor=decay_factor,
-        ))
+        records.extend(
+            _rollout_frame_records(
+                variant,
+                decay_days=decay_days,
+                decay_factor=decay_factor,
+            )
+        )
 
     if not records:
         return pd.DataFrame(columns=_FRAME_COLUMNS)
@@ -254,21 +256,26 @@ def administration_frame(
 
     # One drug can be dosed by several sigs in the same variant, and their
     # decay tails can land on the same day; keep the strongest.
-    grouped = (
-        frame.groupby(
-            [
-                "variant_cui", "variant", "route_group", "drug_cui", "drug",
-                "day", "elapsed_day",
-            ],
-            as_index=False,
-            dropna=False,
-        )
-        .agg(intensity=("intensity", "max"), optional=("optional", "all"),
-             indefinite=("indefinite", "first"),
-             cycle_indefinite=("cycle_indefinite", "first"),
-             timing_status=("timing_status", "first"))
+    grouped = frame.groupby(
+        [
+            "variant_cui",
+            "variant",
+            "route_group",
+            "drug_cui",
+            "drug",
+            "day",
+            "elapsed_day",
+        ],
+        as_index=False,
+        dropna=False,
+    ).agg(
+        intensity=("intensity", "max"),
+        optional=("optional", "all"),
+        indefinite=("indefinite", "first"),
+        cycle_indefinite=("cycle_indefinite", "first"),
+        timing_status=("timing_status", "first"),
     )
-    return grouped[_FRAME_COLUMNS].sort_values(                                         # type: ignore[call-overload],  # mypy doesn't know about `sort_values` returning a DataFrame
+    return grouped[_FRAME_COLUMNS].sort_values(  # type: ignore[call-overload],  # mypy doesn't know about `sort_values` returning a DataFrame
         ["variant_cui", "route_group", "drug", "elapsed_day", "day"], ignore_index=True
     )
 

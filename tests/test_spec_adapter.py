@@ -62,7 +62,9 @@ class TestHemoncTableSpecs:
 
     def test_dev_maturity_is_not_required(self):
         registry = _toy_registry()
-        registry.tables["widgets"] = TableMeta(**{**vars(registry.tables["widgets"]), "maturity": "dev"})
+        registry.tables["widgets"] = TableMeta(
+            **{**vars(registry.tables["widgets"]), "maturity": "dev"}
+        )
         specs = hemonc_table_specs(registry)
         assert specs["widgets"].is_required is False
 
@@ -107,13 +109,17 @@ class TestValidateWithOrmLoader:
 
         models = concrete_entities(entities)
         if not models:
-            pytest.skip("model/entities.py has no generated classes yet -- run `hemonc-alchemy regen` first")
+            pytest.skip(
+                "model/entities.py has no generated classes yet -- run `hemonc-alchemy regen` first"
+            )
 
         from pathlib import Path
 
         from hemonc_alchemy.compiler.schema_model import load_registry_json
 
-        registry_path = Path(__file__).parent.parent / "hemonc_alchemy" / "schema" / "registry.json"
+        registry_path = (
+            Path(__file__).parent.parent / "hemonc_alchemy" / "schema" / "registry.json"
+        )
         if not registry_path.exists():
             pytest.skip("no registry.json -- run `hemonc-alchemy regen` first")
 

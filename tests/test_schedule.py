@@ -38,9 +38,18 @@ class TestRouteGroup:
         rows carried a full concept name that the abbreviation-only enum had
         no member for, so they cast to None and never reached route_group.
         """
-        for route in ("Intravenous", "Oral", "Subcutaneous", "Intracavitary",
-                      "Intrathecal", "Intramuscular", "Intra-arterial",
-                      "Intravesical", "Topical", "by scarification"):
+        for route in (
+            "Intravenous",
+            "Oral",
+            "Subcutaneous",
+            "Intracavitary",
+            "Intrathecal",
+            "Intramuscular",
+            "Intra-arterial",
+            "Intravesical",
+            "Topical",
+            "by scarification",
+        ):
             assert route_group(route) is not None, route
 
     def test_case_insensitive(self):
@@ -81,7 +90,9 @@ class TestResolveAllDays:
         assert resolved.days == (Day(1), Day(8), Day(15))
         assert resolved.indefinite == Indefinite(kind="+n", max_days=None)
         assert bool(resolved) is True
-        assert any("Indefinite-dosing marker" in record.message for record in caplog.records)
+        assert any(
+            "Indefinite-dosing marker" in record.message for record in caplog.records
+        )
         assert all(record.levelno < logging.WARNING for record in caplog.records)
 
     def test_known_numeric_markers_do_not_warn(self, caplog):
@@ -97,7 +108,10 @@ class TestResolveAllDays:
         resolved = resolve_all_days("1,(+0)")
         assert resolved.days == (Day(1),)
         assert resolved.indefinite is None
-        assert any("Unparseable indefinite-dosing token" in message for message in caplog.messages)
+        assert any(
+            "Unparseable indefinite-dosing token" in message
+            for message in caplog.messages
+        )
 
     def test_unspecified_scalar_is_dropped_with_warning(self, caplog):
         resolved = resolve_all_days("NS")
@@ -154,4 +168,6 @@ class TestChoice:
         resolved = resolve_all_days("1,2,3|4,5,6")
         assert resolved.days == (Day(1), Day(2), Day(5), Day(6))
         assert resolved.choices == (Choice([3, 4]),)
-        assert any("Ambiguous choice notation" in message for message in caplog.messages)
+        assert any(
+            "Ambiguous choice notation" in message for message in caplog.messages
+        )

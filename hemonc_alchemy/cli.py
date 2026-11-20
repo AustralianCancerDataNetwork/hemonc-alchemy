@@ -277,7 +277,6 @@ def lint_indications_command(
     from .toolkit.core.indications.normalisers.lint import lint_indications
 
     if database_url:
-
         engine = create_default_hemonc_engine(
             database_url, connect_args={"options": "-csearch_path=public,omop"}
         )

@@ -2,8 +2,8 @@
 
 Resolved per (drug, regimen) pair from HemOnc role relationships
 
-Note: the same drug (e.g. Prednisone) anchors some regimens and has an incidental 
-role in others. This module holds the pure classification rule only; 
+Note: the same drug (e.g. Prednisone) anchors some regimens and has an incidental
+role in others. This module holds the pure classification rule only;
 
 fetching the underlying relationships needs OMOP and lives in
 `integrations.omop.component_role`.
@@ -13,26 +13,30 @@ from __future__ import annotations
 
 from enum import Enum
 
-_DEFINING_RELATIONSHIPS = frozenset({
-    "Cytotoxic chemo of",
-    "Targeted therapy of",
-    "Immunotherapy of",
-    "Local therapy of",
-    "Endocrine tx of",
-    "Antineoplastic of",
-    "Radiotherapy of",
-    "AB-drug cjgt of",
-    "Radioconjugate of",
-    "Pept-drug cjgt of",
-})
+_DEFINING_RELATIONSHIPS = frozenset(
+    {
+        "Cytotoxic chemo of",
+        "Targeted therapy of",
+        "Immunotherapy of",
+        "Local therapy of",
+        "Endocrine tx of",
+        "Antineoplastic of",
+        "Radiotherapy of",
+        "AB-drug cjgt of",
+        "Radioconjugate of",
+        "Pept-drug cjgt of",
+    }
+)
 
-_ADJUNCT_RELATIONSHIPS = frozenset({
-    "Steroid tx of",
-    "Supportive med of",
-    "Immunosuppressor of",
-    "Growth factor of",
-    "Anticoag tx of",
-})
+_ADJUNCT_RELATIONSHIPS = frozenset(
+    {
+        "Steroid tx of",
+        "Supportive med of",
+        "Immunosuppressor of",
+        "Growth factor of",
+        "Anticoag tx of",
+    }
+)
 
 
 class ComponentRole(str, Enum):

@@ -48,25 +48,35 @@ def _aligned_records(table, chain, raw, parent_id, counts):
     alignment = align_values(tuple(raw[column] for column in chain["columns"]))
     if alignment.status == "empty":
         return []
-    setattr(counts, f"rows_{alignment.status}", getattr(counts, f"rows_{alignment.status}") + 1)
+    setattr(
+        counts,
+        f"rows_{alignment.status}",
+        getattr(counts, f"rows_{alignment.status}") + 1,
+    )
     counts.repeats_kept += alignment.repeats_kept
     if alignment.status == "unaligned":
         counts.unaligned_parent_ids.append(parent_id)
         values = (None,) * len(chain["fields"])
         return [_chain_record(table, chain, values, (parent_id, 0), counts)]
-    return [_chain_record(table, chain, values, (parent_id, position), counts)
-            for position, values in enumerate(alignment.rows, 1)]
+    return [
+        _chain_record(table, chain, values, (parent_id, position), counts)
+        for position, values in enumerate(alignment.rows, 1)
+    ]
 
 
-def load_chains(session, entity_cls, frame, parent_lookup, report: ChainLoadReport) -> dict[str, int]:
+def load_chains(
+    session, entity_cls, frame, parent_lookup, report: ChainLoadReport
+) -> dict[str, int]:
     """Store raw chains/opaque fields, aligned links and unaligned markers.
 
     Chains currently belong to surrogate-key source tables. Parent IDs come
     from the same accepted-row lookup used by the compatibility map loader.
     """
     chains = getattr(entity_cls, "chains", ())
-    raw_columns = sorted({column for chain in chains for column in chain["columns"]}
-                         | set(getattr(entity_cls, "opaque_columns", ())))
+    raw_columns = sorted(
+        {column for chain in chains for column in chain["columns"]}
+        | set(getattr(entity_cls, "opaque_columns", ()))
+    )
     if not raw_columns:
         return {}
     parents = []
@@ -76,13 +86,20 @@ def load_chains(session, entity_cls, frame, parent_lookup, report: ChainLoadRepo
         if key is None:
             continue
         raw = {column: row.get(column) for column in raw_columns}
-        parents.append({"_chain_parent_id": key[0], **{f"{column}_raw": value for column, value in raw.items()}})
+        parents.append(
+            {
+                "_chain_parent_id": key[0],
+                **{f"{column}_raw": value for column, value in raw.items()},
+            }
+        )
         for chain in chains:
             name = f"{entity_cls.__tablename__}_{chain['name']}"
             label = f"{name}:{chain['slot']}" if chain["slot"] is not None else name
             counts = report.chains.setdefault(label, ChainCounts())
             table = Base.metadata.tables[f"primary.{name}"]
-            records.setdefault(name, []).extend(_aligned_records(table, chain, raw, key[0], counts))
+            records.setdefault(name, []).extend(
+                _aligned_records(table, chain, raw, key[0], counts)
+            )
     _store_raw_parents(session, entity_cls, raw_columns, parents)
     for name, values in records.items():
         if values:
@@ -95,7 +112,9 @@ def _store_raw_parents(session, entity_cls, raw_columns, parents):
         return
     parent = entity_cls.__table__
     statement = sa.update(parent).where(parent.c.id == sa.bindparam("_chain_parent_id"))
-    statement = statement.values({f"{column}_raw": sa.bindparam(f"{column}_raw") for column in raw_columns})
+    statement = statement.values(
+        {f"{column}_raw": sa.bindparam(f"{column}_raw") for column in raw_columns}
+    )
     session.connection().execute(statement, parents)
     for instance in session.identity_map.values():
         if isinstance(instance, entity_cls):

@@ -4,13 +4,13 @@ model needs: what SQL type it should be, whether it's really an enum,
 whether it should be exploded into its own table, and what actually
 identifies a row.
 
-Most of this works from the real CSV data, in combination with the 
-data dictionary declared types 
+Most of this works from the real CSV data, in combination with the
+data dictionary declared types
 
 Handling notes:
 
 - if a plain string column only holds a handful of distinct values it is treated as an enum candidate)
-- a pipe-delimited free text field is denormalised into a child table 
+- a pipe-delimited free text field is denormalised into a child table
 - type detection reads the live data
 - unique keys and identity keys are parsed from the data dictionary, which may have added annotations that need handling
 
@@ -133,6 +133,7 @@ def detect_numeric(series: pd.Series) -> str | None:
 @dataclass
 class EnumInfo:
     """Represents an enum candidate inferred from observed data values."""
+
     kind: str  # "normal" | "relationship"
     values: list[str]
 
@@ -170,19 +171,17 @@ def detect_enum(col_name: str, series: pd.Series) -> EnumInfo | None:
     return EnumInfo(kind="normal", values=uniques)
 
 
-
-
 def parse_unique_key(value: str) -> list[str]:
     """
     Parse a workbook `Unique Key` or `Identity Key` cell into column names.
 
-    These cells are written for a human reader, not a parser 
-    
-    things like `a + b + c`, `name or person_cui`, or `study_id (see note)` 
-    show up in the real dictionary. 
-    
-    This is intentionally permissive about the `+`/`or` join syntax, and 
-    strips parenthetical text before tokenizing so explanatory asides 
+    These cells are written for a human reader, not a parser
+
+    things like `a + b + c`, `name or person_cui`, or `study_id (see note)`
+    show up in the real dictionary.
+
+    This is intentionally permissive about the `+`/`or` join syntax, and
+    strips parenthetical text before tokenizing so explanatory asides
     or an inline list of alternatives like `"(Addition|Change|Deletion)"`
     don't get treated as column names.
     """

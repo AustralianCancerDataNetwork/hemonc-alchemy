@@ -17,9 +17,25 @@ class DateParts:
     precision: str
 
 
-_HTML_DATETIME = re.compile(r'<time\b[^>]*\bdatetime=["\']([^"\']+)["\']', re.IGNORECASE)
+_HTML_DATETIME = re.compile(
+    r'<time\b[^>]*\bdatetime=["\']([^"\']+)["\']', re.IGNORECASE
+)
 _DATE = re.compile(r"(?<!\d)(\d{4})(?:-(\d{1,2})(?:-(\d{1,2}))?)?(?!\d)")
-_MONTHS = ("", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+_MONTHS = (
+    "",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+)
 
 
 def parse_source_date(raw: object) -> DateParts | None:
@@ -34,7 +50,7 @@ def parse_source_date(raw: object) -> DateParts | None:
     if wrapped:
         value = wrapped.group(1).strip()
     elif value.casefold().startswith("withdrawn on "):
-        value = value[len("withdrawn on "):].strip()
+        value = value[len("withdrawn on ") :].strip()
 
     iso_datetime = re.fullmatch(r"(\d{4}-\d{1,2}-\d{1,2})(?:[T ][^ ]+)?", value)
     if iso_datetime:
@@ -48,8 +64,11 @@ def parse_source_date(raw: object) -> DateParts | None:
     named = re.fullmatch(r"(\d{1,2})-([A-Za-z]{3})-(\d{4})", value)
     if named:
         try:
-            month = next(index for index, name in enumerate(_MONTHS)
-                         if name.casefold() == named.group(2).casefold())
+            month = next(
+                index
+                for index, name in enumerate(_MONTHS)
+                if name.casefold() == named.group(2).casefold()
+            )
             return _validated_date(int(named.group(3)), month, int(named.group(1)))
         except (StopIteration, ValueError):
             return None
@@ -62,7 +81,11 @@ def parse_source_date(raw: object) -> DateParts | None:
         return DateParts(int(year), None, None, "year")
     if day is None:
         month_value = int(month)
-        return DateParts(int(year), month_value, None, "month") if 1 <= month_value <= 12 else None
+        return (
+            DateParts(int(year), month_value, None, "month")
+            if 1 <= month_value <= 12
+            else None
+        )
     return _validated_date(int(year), int(month), int(day))
 
 

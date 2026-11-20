@@ -20,7 +20,9 @@ class TestNullSafeDuplicateDetection:
     what SPARSE_KEY_ROWS is for.
     """
 
-    def test_rows_with_shared_null_key_part_are_sparse_not_duplicate(self, tmp_path: Path):
+    def test_rows_with_shared_null_key_part_are_sparse_not_duplicate(
+        self, tmp_path: Path
+    ):
         csv = tmp_path / "sigs.csv"
         csv.write_text(
             "variant_cui,component_cui,doseminnum\n"
@@ -28,11 +30,19 @@ class TestNullSafeDuplicateDetection:
             ",162,50\n"  # same as row above but variant_cui is null in both
             "9,162,50\n"
         )
-        result = audit_table("content", "sigs", "prod", "variant_cui + component_cui + doseminnum", tmp_path)
+        result = audit_table(
+            "content",
+            "sigs",
+            "prod",
+            "variant_cui + component_cui + doseminnum",
+            tmp_path,
+        )
         assert result.status == "SPARSE_KEY_ROWS"
         assert result.duplicate_business_keys == 0
 
-    def test_genuine_duplicate_among_fully_keyed_rows_still_flagged(self, tmp_path: Path):
+    def test_genuine_duplicate_among_fully_keyed_rows_still_flagged(
+        self, tmp_path: Path
+    ):
         csv = tmp_path / "contexttable.csv"
         csv.write_text(
             "contextraw\n"
@@ -44,15 +54,11 @@ class TestNullSafeDuplicateDetection:
         assert result.status == "DUPLICATE_BUSINESS_KEYS"
         assert result.duplicate_business_keys == 1
 
-    def test_null_key_part_alongside_genuine_duplicate_still_catches_the_duplicate(self, tmp_path: Path):
+    def test_null_key_part_alongside_genuine_duplicate_still_catches_the_duplicate(
+        self, tmp_path: Path
+    ):
         csv = tmp_path / "t.csv"
-        csv.write_text(
-            "k,other\n"
-            ",1\n"
-            ",2\n"
-            "same,3\n"
-            "same,4\n"
-        )
+        csv.write_text("k,other\n,1\n,2\nsame,3\nsame,4\n")
         result = audit_table("content", "t", "prod", "k", tmp_path)
         assert result.status == "DUPLICATE_BUSINESS_KEYS"
         assert result.duplicate_business_keys == 1

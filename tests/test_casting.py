@@ -21,10 +21,15 @@ pytestmark = pytest.mark.skipif(
 class TestConversionPolicy:
     def test_bad_value_is_rejected_not_defaulted(self):
         with pytest.raises(ValueError):
-            convert_value("not-a-number", Units.__table__.c.concept_code, conversion_policy())
+            convert_value(
+                "not-a-number", Units.__table__.c.concept_code, conversion_policy()
+            )
 
     def test_good_value_casts_cleanly(self):
-        assert convert_value("134444", Units.__table__.c.concept_code, conversion_policy()) == 134444
+        assert (
+            convert_value("134444", Units.__table__.c.concept_code, conversion_policy())
+            == 134444
+        )
 
 
 @pytest.fixture
@@ -92,7 +97,10 @@ class TestLoadCsvEndToEnd:
         assert report.rejects_path.is_file()
         assert total == 1
 
-        rows = {row.unit: row.concept_code for row in session.execute(sa.select(Units)).scalars()}
+        rows = {
+            row.unit: row.concept_code
+            for row in session.execute(sa.select(Units)).scalars()
+        }
         assert rows == {"mg": 134444}
         assert "bad_unit" not in rows
 

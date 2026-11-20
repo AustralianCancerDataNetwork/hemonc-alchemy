@@ -35,7 +35,10 @@ MAX_COMPARED_VARIANTS = 4
 CycleLengthSelection = Literal["lb", "ub", "mean"]
 AdministrationSetting = Literal["clinic", "home"]
 
-_ADMINISTRATION_SETTING: dict[str, AdministrationSetting] = {"IV": "clinic", "PO": "home"}
+_ADMINISTRATION_SETTING: dict[str, AdministrationSetting] = {
+    "IV": "clinic",
+    "PO": "home",
+}
 
 
 @dataclass(frozen=True)
@@ -173,7 +176,9 @@ def _bounded_view(
         diagnostics=tuple(diagnostics),
         assumptions=(),
         coverage=ScheduleCoverage(
-            total_instructions=total, represented_instructions=None, unplaced_instructions=None
+            total_instructions=total,
+            represented_instructions=None,
+            unplaced_instructions=None,
         ),
         bounded=True,
     )
@@ -212,17 +217,24 @@ def _timing_status_diagnostics(frame: pd.DataFrame) -> list[Diagnostic]:
 
 
 def _assumptions(diagnostics: list[Diagnostic]) -> tuple[str, ...]:
-    return tuple(sorted(
-        {
-            diagnostic.message
-            for diagnostic in diagnostics
-            if diagnostic.category
-            in (DiagnosticCategory.OPTIONAL_CYCLE_ASSUMPTION, DiagnosticCategory.CALENDAR_APPROXIMATION)
-        }
-    ))
+    return tuple(
+        sorted(
+            {
+                diagnostic.message
+                for diagnostic in diagnostics
+                if diagnostic.category
+                in (
+                    DiagnosticCategory.OPTIONAL_CYCLE_ASSUMPTION,
+                    DiagnosticCategory.CALENDAR_APPROXIMATION,
+                )
+            }
+        )
+    )
 
 
-def _roll_out_or_diagnose(variant, policy: SchedulePolicy) -> tuple[pd.DataFrame | None, Diagnostic | None]:
+def _roll_out_or_diagnose(
+    variant, policy: SchedulePolicy
+) -> tuple[pd.DataFrame | None, Diagnostic | None]:
     try:
         if _exceeds_expansion_limit(variant):
             return None, Diagnostic(
@@ -279,7 +291,11 @@ def _expression_size(value: str | None) -> int:
         for item in parse_token(token):
             if isinstance(item, (Day, Choice)):
                 count += 1
-            elif isinstance(item, Range) and isinstance(item.start, int) and isinstance(item.end, int):
+            elif (
+                isinstance(item, Range)
+                and isinstance(item.start, int)
+                and isinstance(item.end, int)
+            ):
                 # range raises for step=0, just as the normal expansion does.
                 try:
                     count += len(range(item.start, item.end + 1, item.step))
@@ -302,7 +318,9 @@ def _exceeds_expansion_limit(variant) -> bool:
     return False
 
 
-def build_schedule_view(variant, policy: SchedulePolicy = DEFAULT_SCHEDULE_POLICY) -> ScheduleView:
+def build_schedule_view(
+    variant, policy: SchedulePolicy = DEFAULT_SCHEDULE_POLICY
+) -> ScheduleView:
     """Roll `variant` out into one `ScheduleView`, reconciled against its source sigs.
 
     Always calls `roll_out_variant(..., decay_days=0, systemic_only=False)`:

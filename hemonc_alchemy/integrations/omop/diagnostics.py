@@ -97,7 +97,9 @@ def coverage_report(
         target_concept_class=target_concept_class,
         include_invalid=include_invalid,
     )
-    counts = Counter(mapping.hemonc_cui for mapping in mappings if mapping.target is not None)
+    counts = Counter(
+        mapping.hemonc_cui for mapping in mappings if mapping.target is not None
+    )
     mapped = set(counts)
     requested_set = set(requested)
     resolved_set = {concept.hemonc_cui for concept in resolved}
@@ -107,7 +109,9 @@ def coverage_report(
     elif target_vocabulary is not None:
         vocabulary_ids.extend(target_vocabulary)
     return MappingCoverage(
-        target_vocabulary=target_vocabulary if isinstance(target_vocabulary, str) else None,
+        target_vocabulary=target_vocabulary
+        if isinstance(target_vocabulary, str)
+        else None,
         requested_cuis=len(requested_set),
         resolved_cuis=len(resolved_set & requested_set),
         mapped_cuis=len(mapped & requested_set),
@@ -176,9 +180,15 @@ def biomarker_qualifier_diagnostics(
     result = []
     for cui, name in names.items():
         rows = by_cui.get(str(cui), [])
-        target_names = tuple(sorted({row.target.concept_name for row in rows if row.target}))
-        target_ids = tuple(sorted({row.target.concept_id for row in rows if row.target}))
-        if not target_names or all(str(name).lower() not in target.lower() for target in target_names):
+        target_names = tuple(
+            sorted({row.target.concept_name for row in rows if row.target})
+        )
+        target_ids = tuple(
+            sorted({row.target.concept_id for row in rows if row.target})
+        )
+        if not target_names or all(
+            str(name).lower() not in target.lower() for target in target_names
+        ):
             result.append(
                 BiomarkerMappingDiagnostic(
                     hemonc_cui=str(cui),

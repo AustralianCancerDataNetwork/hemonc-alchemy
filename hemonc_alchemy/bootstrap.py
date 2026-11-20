@@ -20,7 +20,11 @@ from .toolkit.loading import load_all
 
 def _source_models(data_dir: Path, table_names: list[str] | None) -> list[Any]:
     generated = cast(list[Any], concrete_entities(entities))
-    models = {model.__tablename__: model for model in generated if getattr(model, "filename", None)}
+    models = {
+        model.__tablename__: model
+        for model in generated
+        if getattr(model, "filename", None)
+    }
     selected = table_names if table_names is not None else sorted(models)
     unknown = set(selected) - models.keys()
     if unknown:
@@ -47,9 +51,13 @@ def _prepare_target(engine: sa.Engine, *, rebuild: bool) -> None:
             connection.execute(sa.schema.CreateSchema(schema, if_not_exists=True))
         present = set(sa.inspect(connection).get_table_names(schema=schema))
         if names.intersection(present) and not rebuild:
-            raise ValueError("The target already contains HemOnc tables; use --rebuild only for a disposable target")
+            raise ValueError(
+                "The target already contains HemOnc tables; use --rebuild only for a disposable target"
+            )
         if rebuild:
-            for name in sorted({f"_staging_{name}" for name in names}.intersection(present)):
+            for name in sorted(
+                {f"_staging_{name}" for name in names}.intersection(present)
+            ):
                 table = sa.Table(name, sa.MetaData(), schema="primary")
                 connection.execute(sa.schema.DropTable(table, if_exists=True))
                 if engine.dialect.name == "duckdb":
@@ -61,7 +69,10 @@ def _prepare_target(engine: sa.Engine, *, rebuild: bool) -> None:
 
 
 def bootstrap_database(
-    resolved: ResolvedDatabase, data_dir: Path, *, rebuild: bool = False,
+    resolved: ResolvedDatabase,
+    data_dir: Path,
+    *,
+    rebuild: bool = False,
     table_names: list[str] | None = None,
 ) -> dict[str, dict[str, int]]:
     """Load available sources; an explicit rebuild resets only HemOnc tables.
@@ -77,8 +88,12 @@ def bootstrap_database(
         with Session(engine) as session:
             for model in models:
                 counts[model.__tablename__] = load_all(
-                    session, model, data_dir, chunksize=100_000,
-                    resolved=resolved, staging_schema_tag="primary",
+                    session,
+                    model,
+                    data_dir,
+                    chunksize=100_000,
+                    resolved=resolved,
+                    staging_schema_tag="primary",
                 )
                 session.commit()
         return counts
@@ -88,13 +103,28 @@ def bootstrap_database(
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--data-dir", type=Path, default=Path(os.getenv("HEMONC_DATA_DIR", "data/Tables")))
-    parser.add_argument("--table", action="append", dest="tables", help="Source table to import; repeat to select several")
-    parser.add_argument("--rebuild", action="store_true", help="Reset HemOnc tables in the selected disposable target")
+    parser.add_argument(
+        "--data-dir",
+        type=Path,
+        default=Path(os.getenv("HEMONC_DATA_DIR", "data/Tables")),
+    )
+    parser.add_argument(
+        "--table",
+        action="append",
+        dest="tables",
+        help="Source table to import; repeat to select several",
+    )
+    parser.add_argument(
+        "--rebuild",
+        action="store_true",
+        help="Reset HemOnc tables in the selected disposable target",
+    )
     args = parser.parse_args(argv)
     _, resolved = get_hemonc_context()
     print(f"HemOnc target: {resolved.name}")
-    counts = bootstrap_database(resolved, args.data_dir, rebuild=args.rebuild, table_names=args.tables)
+    counts = bootstrap_database(
+        resolved, args.data_dir, rebuild=args.rebuild, table_names=args.tables
+    )
     for name, totals in counts.items():
         print(name, totals)
     return 0

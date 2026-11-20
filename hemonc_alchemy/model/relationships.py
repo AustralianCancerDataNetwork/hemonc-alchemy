@@ -74,7 +74,9 @@ Drugs.sigs = relationship(
 
 Sigs.variant_object = relationship(
     Variants,
-    primaryjoin=and_(foreign(Sigs.variant_cui) == Variants.variant_cui, Variants.version == 1),
+    primaryjoin=and_(
+        foreign(Sigs.variant_cui) == Variants.variant_cui, Variants.version == 1
+    ),
     viewonly=True,
     lazy="select",
 )
@@ -135,18 +137,26 @@ def study_context_predicate(context):
     if context is not None and "|" not in context:
         delimited_contexts = literal("|") + StudyResults.context + literal("|")
         context_matches = or_(
-            context_matches, delimited_contexts.contains(f"|{context}|", autoescape=True),
+            context_matches,
+            delimited_contexts.contains(f"|{context}|", autoescape=True),
         )
-    return exists(select(1).where(
-        or_(
-            StudyResults.study_cui == Studies.study_cui,
-            and_(StudyResults.study_cui.is_(None), StudyResults.study == Studies.study),
-        ),
-        StudyResults.substudy_cui.is_not_distinct_from(Studies.substudy_cui),
-        StudyResults.condition_cui.is_not_distinct_from(Studies.condition_cui),
-        StudyResults.biomarker_finding.is_not_distinct_from(Studies.biomarker_finding),
-        context_matches,
-    ))
+    return exists(
+        select(1).where(
+            or_(
+                StudyResults.study_cui == Studies.study_cui,
+                and_(
+                    StudyResults.study_cui.is_(None),
+                    StudyResults.study == Studies.study,
+                ),
+            ),
+            StudyResults.substudy_cui.is_not_distinct_from(Studies.substudy_cui),
+            StudyResults.condition_cui.is_not_distinct_from(Studies.condition_cui),
+            StudyResults.biomarker_finding.is_not_distinct_from(
+                Studies.biomarker_finding
+            ),
+            context_matches,
+        )
+    )
 
 
 variants_StudyMap.variant_objects = relationship(

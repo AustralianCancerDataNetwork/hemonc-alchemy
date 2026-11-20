@@ -95,18 +95,35 @@ def _biomarker_slots(row, mapped) -> tuple[BiomarkerSource, ...]:
     for slot in (1, 2, 3, 4):
         links = mapped.get((row.id, slot), ())
         if links:
-            slots.append(BiomarkerSource(
-                slot,
-                tuple(link.biomarker for link in links if link.biomarker is not None),
-                tuple(link.biomarker_finding for link in links if link.biomarker_finding is not None),
-                tuple((link.biomarker, link.biomarker_finding) for link in links if link.aligned),
-                all(link.aligned for link in links),
-                tuple(link.biomarker_type for link in links),
-            ))
+            slots.append(
+                BiomarkerSource(
+                    slot,
+                    tuple(
+                        link.biomarker for link in links if link.biomarker is not None
+                    ),
+                    tuple(
+                        link.biomarker_finding
+                        for link in links
+                        if link.biomarker_finding is not None
+                    ),
+                    tuple(
+                        (link.biomarker, link.biomarker_finding)
+                        for link in links
+                        if link.aligned
+                    ),
+                    all(link.aligned for link in links),
+                    tuple(link.biomarker_type for link in links),
+                )
+            )
         elif slot == 1:
             # Scalar/raw-only manually constructed parents remain supported.
-            slots.append(BiomarkerSource(1, _split(row["biomarker_raw"] or row["biomarker"]),
-                                         _split(row["biomarker_finding_raw"] or row["biomarker_finding"])))
+            slots.append(
+                BiomarkerSource(
+                    1,
+                    _split(row["biomarker_raw"] or row["biomarker"]),
+                    _split(row["biomarker_finding_raw"] or row["biomarker_finding"]),
+                )
+            )
         else:
             slots.append(BiomarkerSource(slot, (), (), ()))
     return tuple(slots)
@@ -127,8 +144,11 @@ def load_indication_sources(
     for link in session.execute(
         select(indications_BiomarkerSlots.__table__)
         .where(indications_BiomarkerSlots.parent_id.in_(ids))
-        .order_by(indications_BiomarkerSlots.parent_id, indications_BiomarkerSlots.slot,
-                  indications_BiomarkerSlots.position)
+        .order_by(
+            indications_BiomarkerSlots.parent_id,
+            indications_BiomarkerSlots.slot,
+            indications_BiomarkerSlots.position,
+        )
     ).mappings():
         mapped.setdefault((link.parent_id, link.slot), []).append(link)
     regimens = {}
@@ -138,8 +158,14 @@ def load_indication_sources(
         .order_by(indications_RegimenLinks.parent_id, indications_RegimenLinks.position)
     ).mappings():
         regimens.setdefault(link.parent_id, []).append(
-            RegimenLink(link.regimen, link.regimen_cui_raw, link.regimen_cui,
-                        link.with_field, link.position, link.aligned)
+            RegimenLink(
+                link.regimen,
+                link.regimen_cui_raw,
+                link.regimen_cui,
+                link.with_field,
+                link.position,
+                link.aligned,
+            )
         )
 
     child_values = _load_child_values(session, ids)
@@ -171,7 +197,11 @@ def load_indication_sources(
                 else "",
                 row["withdrawn"],
                 tuple(slots),
-                tuple(link.code for link in regimens.get(row.id, ()) if link.aligned and link.code is not None),
+                tuple(
+                    link.code
+                    for link in regimens.get(row.id, ())
+                    if link.aligned and link.code is not None
+                ),
                 MappingProxyType(raw),
                 raw.get("stage"),
                 raw.get("status"),

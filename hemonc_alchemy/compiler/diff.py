@@ -12,11 +12,17 @@ def _collection_changes(name: str, old: TableMeta, new: TableMeta) -> list[str]:
     old_maps = {(table.name, table.positional) for table in old.normalised_tables}
     new_maps = {(table.name, table.positional) for table in new.normalised_tables}
     if old_maps != new_maps:
-        changes.append(f"{name}: collection tables/positional keys changed {sorted(old_maps)!r} -> {sorted(new_maps)!r}")
+        changes.append(
+            f"{name}: collection tables/positional keys changed {sorted(old_maps)!r} -> {sorted(new_maps)!r}"
+        )
     if old.opaque_columns != new.opaque_columns:
-        changes.append(f"{name}: opaque source fields changed {old.opaque_columns!r} -> {new.opaque_columns!r}")
+        changes.append(
+            f"{name}: opaque source fields changed {old.opaque_columns!r} -> {new.opaque_columns!r}"
+        )
     if old.chains != new.chains:
-        changes.append(f"{name}: authored chains changed {old.chains!r} -> {new.chains!r}")
+        changes.append(
+            f"{name}: authored chains changed {old.chains!r} -> {new.chains!r}"
+        )
     return changes
 
 
@@ -58,7 +64,7 @@ def load_previous_registry_from_git(path: Path, ref: str = "HEAD") -> Registry |
 def diff_registries(old: Registry, new: Registry) -> list[str]:
     """
     Human-readable list of schema changes between two registries.
-    table presence, column presence, column type, nullability, 
+    table presence, column presence, column type, nullability,
     and primary-key composition.
     """
     changes: list[str] = []
@@ -76,13 +82,21 @@ def diff_registries(old: Registry, new: Registry) -> list[str]:
         new_meta = new.tables[name]
         changes.extend(_collection_changes(name, old_meta, new_meta))
         if old_meta.description != new_meta.description:
-            changes.append(f"{name}: description changed {old_meta.description!r} -> {new_meta.description!r}")
+            changes.append(
+                f"{name}: description changed {old_meta.description!r} -> {new_meta.description!r}"
+            )
         if old_meta.maturity != new_meta.maturity:
-            changes.append(f"{name}: maturity changed {old_meta.maturity!r} -> {new_meta.maturity!r}")
+            changes.append(
+                f"{name}: maturity changed {old_meta.maturity!r} -> {new_meta.maturity!r}"
+            )
         if old_meta.pk_columns != new_meta.pk_columns:
-            changes.append(f"{name}: primary key changed {old_meta.pk_columns!r} -> {new_meta.pk_columns!r}")
+            changes.append(
+                f"{name}: primary key changed {old_meta.pk_columns!r} -> {new_meta.pk_columns!r}"
+            )
         if old_meta.use_surrogate_pk != new_meta.use_surrogate_pk:
-            changes.append(f"{name}: use_surrogate_pk changed {old_meta.use_surrogate_pk!r} -> {new_meta.use_surrogate_pk!r}")
+            changes.append(
+                f"{name}: use_surrogate_pk changed {old_meta.use_surrogate_pk!r} -> {new_meta.use_surrogate_pk!r}"
+            )
 
         old_cols = set(old_meta.columns)
         new_cols = set(new_meta.columns)
@@ -95,12 +109,22 @@ def diff_registries(old: Registry, new: Registry) -> list[str]:
             old_col = old_meta.columns[col_name]
             new_col = new_meta.columns[col_name]
             if old_col.type != new_col.type:
-                changes.append(f"{name}.{col_name}: type changed {old_col.type!r} -> {new_col.type!r}")
+                changes.append(
+                    f"{name}.{col_name}: type changed {old_col.type!r} -> {new_col.type!r}"
+                )
             if old_col.nullable != new_col.nullable:
-                changes.append(f"{name}.{col_name}: nullable changed {old_col.nullable!r} -> {new_col.nullable!r}")
+                changes.append(
+                    f"{name}.{col_name}: nullable changed {old_col.nullable!r} -> {new_col.nullable!r}"
+                )
 
-        old_enums = {col: tuple(sorted(v.strip().lower() for v in e.values)) for col, e in old_meta.enums.items()}
-        new_enums = {col: tuple(sorted(v.strip().lower() for v in e.values)) for col, e in new_meta.enums.items()}
+        old_enums = {
+            col: tuple(sorted(v.strip().lower() for v in e.values))
+            for col, e in old_meta.enums.items()
+        }
+        new_enums = {
+            col: tuple(sorted(v.strip().lower() for v in e.values))
+            for col, e in new_meta.enums.items()
+        }
         for col in sorted(set(old_enums) - set(new_enums)):
             changes.append(f"{name}.{col}: enum removed")
         for col in sorted(set(new_enums) - set(old_enums)):
@@ -125,26 +149,42 @@ def diff_registries(old: Registry, new: Registry) -> list[str]:
         old_groups = {tuple(sorted(g.columns)) for g in old_meta.normalisation_groups}
         new_groups = {tuple(sorted(g.columns)) for g in new_meta.normalisation_groups}
         if old_groups != new_groups:
-            changes.append(f"{name}: normalisation groups changed {sorted(old_groups)!r} -> {sorted(new_groups)!r}")
+            changes.append(
+                f"{name}: normalisation groups changed {sorted(old_groups)!r} -> {sorted(new_groups)!r}"
+            )
 
-        old_soft = {(r.local_column, r.target_table, r.target_column) for r in old_meta.soft_relationships}
-        new_soft = {(r.local_column, r.target_table, r.target_column) for r in new_meta.soft_relationships}
+        old_soft = {
+            (r.local_column, r.target_table, r.target_column)
+            for r in old_meta.soft_relationships
+        }
+        new_soft = {
+            (r.local_column, r.target_table, r.target_column)
+            for r in new_meta.soft_relationships
+        }
         if old_soft != new_soft:
-            changes.append(f"{name}: soft relationships changed {sorted(old_soft)!r} -> {sorted(new_soft)!r}")
+            changes.append(
+                f"{name}: soft relationships changed {sorted(old_soft)!r} -> {sorted(new_soft)!r}"
+            )
 
         old_m2m = {
-            (r.map_table, r.map_column, r.target_table, r.target_column) for r in old_meta.soft_m2m_relationships
+            (r.map_table, r.map_column, r.target_table, r.target_column)
+            for r in old_meta.soft_m2m_relationships
         }
         new_m2m = {
-            (r.map_table, r.map_column, r.target_table, r.target_column) for r in new_meta.soft_m2m_relationships
+            (r.map_table, r.map_column, r.target_table, r.target_column)
+            for r in new_meta.soft_m2m_relationships
         }
         if old_m2m != new_m2m:
-            changes.append(f"{name}: soft m2m relationships changed {sorted(old_m2m)!r} -> {sorted(new_m2m)!r}")
+            changes.append(
+                f"{name}: soft m2m relationships changed {sorted(old_m2m)!r} -> {sorted(new_m2m)!r}"
+            )
 
     return changes
 
 
-def diff_or_raise(registry_json_path: Path, new_registry: Registry, ref: str = "HEAD") -> list[str]:
+def diff_or_raise(
+    registry_json_path: Path, new_registry: Registry, ref: str = "HEAD"
+) -> list[str]:
     """
     Compare `new_registry` against what's committed at `ref`.
 

@@ -53,7 +53,9 @@ def catalogue_session(request):
         else create_default_hemonc_engine("sqlite://")
     )
     with engine.connect() as conn:
-        conn.execution_options(schema_translate_map={"primary": "pg_temp" if postgres else "temp"})
+        conn.execution_options(
+            schema_translate_map={"primary": "pg_temp" if postgres else "temp"}
+        )
         transaction = conn.begin()
         for name, columns in TABLES.items():
             conn.exec_driver_sql(f"CREATE TEMPORARY TABLE {name} ({columns})")
@@ -224,12 +226,25 @@ def test_invalid_query_policy():
 
 
 def test_regulatory_queries_require_aligned_resolved_chains(catalogue_session):
-    catalogue_session.execute(sa.text("INSERT INTO indications_regimen_links VALUES (3,10,false),(3,NULL,true),(1,10,true)"))
+    catalogue_session.execute(
+        sa.text(
+            "INSERT INTO indications_regimen_links VALUES (3,10,false),(3,NULL,true),(1,10,true)"
+        )
+    )
     rows = {row.record_id: row for row in list_indications(catalogue_session).items}
-    assert rows[1].linked_regimen_count == 1  # Repeated occurrences count as one resolved regimen.
+    assert (
+        rows[1].linked_regimen_count == 1
+    )  # Repeated occurrences count as one resolved regimen.
     assert rows[3].linked_regimen_count == 0
     filtered = list_indications(catalogue_session, IndicationSpec(regimen_cuis=(10,)))
     assert [row.record_id for row in filtered.items] == [1]
-    evidence = catalogue_session.execute(condition_regimen_association_statement(
-        CatalogueSpec(regimen_cuis=(10,), basis="regulatory"))).mappings().all()
+    evidence = (
+        catalogue_session.execute(
+            condition_regimen_association_statement(
+                CatalogueSpec(regimen_cuis=(10,), basis="regulatory")
+            )
+        )
+        .mappings()
+        .all()
+    )
     assert [row["evidence_id"] for row in evidence] == [1]

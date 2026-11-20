@@ -11,7 +11,10 @@ from .schema import schema_aware_bind
 
 
 def resolve_concept_groups(
-    session: Any, anchors: Mapping[int, Any], *, name_prefix: str,
+    session: Any,
+    anchors: Mapping[int, Any],
+    *,
+    name_prefix: str,
 ) -> dict[int, Any]:
     """Resolve named source groups using OMOP Alchemy's vocabulary cache."""
     session = schema_aware_bind(session)
@@ -21,7 +24,9 @@ def resolve_concept_groups(
     )
 
     return {
-        cui: resolve_concept_group(session, ConceptGroupSpec(name=f"{name_prefix}:{cui}", unit=found))
+        cui: resolve_concept_group(
+            session, ConceptGroupSpec(name=f"{name_prefix}:{cui}", unit=found)
+        )
         for cui, found in anchors.items()
     }
 

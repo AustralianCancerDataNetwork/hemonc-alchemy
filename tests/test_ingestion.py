@@ -30,18 +30,28 @@ from hemonc_alchemy.toolkit.loading import (
 )
 
 
-@pytest.fixture(params=[
-    "sqlite",
-    pytest.param("duckdb", marks=[pytest.mark.duckdb, pytest.mark.db_dialect]),
-    pytest.param("duckdb_memory", marks=[pytest.mark.duckdb, pytest.mark.db_dialect]),
-    pytest.param("postgresql", marks=[pytest.mark.postgres, pytest.mark.db_dialect]),
-])
+@pytest.fixture(
+    params=[
+        "sqlite",
+        pytest.param("duckdb", marks=[pytest.mark.duckdb, pytest.mark.db_dialect]),
+        pytest.param(
+            "duckdb_memory", marks=[pytest.mark.duckdb, pytest.mark.db_dialect]
+        ),
+        pytest.param(
+            "postgresql", marks=[pytest.mark.postgres, pytest.mark.db_dialect]
+        ),
+    ]
+)
 def database(request, tmp_path):
     if request.param == "postgresql":
         db = request.getfixturevalue("pg_db")
         yield request.getfixturevalue("pg_load_engine"), db.resolved
         return
-    path = ":memory:" if request.param == "duckdb_memory" else str(tmp_path / f"ingestion.{request.param}")
+    path = (
+        ":memory:"
+        if request.param == "duckdb_memory"
+        else str(tmp_path / f"ingestion.{request.param}")
+    )
     dialect = request.param.split("_")[0]
     stack = StackConfig.for_session(
         connections={"local": {"dialect": dialect, "database_name": path}},
@@ -84,7 +94,10 @@ class SmallBatches(FileReader):
 
 def test_idless_snapshot_attaches_sparse_parents_and_refuses_reload(database, tmp_path):
     engine, resolved = database
-    tables = [HemoncClasses.__table__, hemonc_classes_Secondary_home_as_stringMap.__table__]
+    tables = [
+        HemoncClasses.__table__,
+        hemonc_classes_Secondary_home_as_stringMap.__table__,
+    ]
     Base.metadata.create_all(engine, tables=tables)
     snapshot(tmp_path)
     with Session(engine) as session:
@@ -92,11 +105,16 @@ def test_idless_snapshot_attaches_sparse_parents_and_refuses_reload(database, tm
         session.commit()
         assert counts["hemonc_classes"] == 2
         assert counts["secondary_home_as_string"] == 3
-        children = session.execute(sa.select(
-            HemoncClasses.description,
-            hemonc_classes_Secondary_home_as_stringMap.secondary_home_as_string,
-        ).join(hemonc_classes_Secondary_home_as_stringMap,
-               HemoncClasses.id == hemonc_classes_Secondary_home_as_stringMap.parent_id)).all()
+        children = session.execute(
+            sa.select(
+                HemoncClasses.description,
+                hemonc_classes_Secondary_home_as_stringMap.secondary_home_as_string,
+            ).join(
+                hemonc_classes_Secondary_home_as_stringMap,
+                HemoncClasses.id
+                == hemonc_classes_Secondary_home_as_stringMap.parent_id,
+            )
+        ).all()
         assert set(children) == {
             ("Clinical Trial Registry", "studies$registry"),
             ("Clinical Trial Registry", "studies$trial"),
@@ -104,7 +122,9 @@ def test_idless_snapshot_attaches_sparse_parents_and_refuses_reload(database, tm
         }
         with pytest.raises(ValueError, match="require an empty target"):
             load_entity(session, HemoncClasses, tmp_path, resolved=resolved)
-        assert session.scalar(sa.select(sa.func.count()).select_from(HemoncClasses)) == 2
+        assert (
+            session.scalar(sa.select(sa.func.count()).select_from(HemoncClasses)) == 2
+        )
 
 
 def test_generated_ids_across_batches_leave_native_sequence_ready(database, tmp_path):
@@ -115,29 +135,53 @@ def test_generated_ids_across_batches_leave_native_sequence_ready(database, tmp_
     path = snapshot(tmp_path)
     reader = SmallBatches(open_reader(path, HemoncClasses.model_columns()))
     with Session(engine) as session:
-        assert HemoncClasses.load_file(session, path, reader=reader, resolved=resolved) == 2
-        rows = session.execute(sa.select(HemoncClasses.__table__).order_by(HemoncClasses.id)).mappings().all()
+        assert (
+            HemoncClasses.load_file(session, path, reader=reader, resolved=resolved)
+            == 2
+        )
+        rows = (
+            session.execute(
+                sa.select(HemoncClasses.__table__).order_by(HemoncClasses.id)
+            )
+            .mappings()
+            .all()
+        )
         assert [r["id"] for r in rows] == [1, 2]
         if engine.dialect.name != "sqlite":
             record = dict(rows[0])
             del record["id"]
             record["description"] = "Subsequent ORM insert"
-            assert session.scalar(sa.insert(HemoncClasses.__table__).returning(HemoncClasses.id), record) == 3
+            assert (
+                session.scalar(
+                    sa.insert(HemoncClasses.__table__).returning(HemoncClasses.id),
+                    record,
+                )
+                == 3
+            )
 
 
 @pytest.mark.parametrize("split_load", [False, True])
-def test_snapshot_children_follow_assigned_ids_for_duplicates_and_rejected_parents(database, tmp_path, split_load):
+def test_snapshot_children_follow_assigned_ids_for_duplicates_and_rejected_parents(
+    database, tmp_path, split_load
+):
     from orm_loader.loaders import open_reader
 
     engine, resolved = database
-    Base.metadata.create_all(engine, tables=[
-        HemoncClasses.__table__, hemonc_classes_Secondary_home_as_stringMap.__table__,
-    ])
+    Base.metadata.create_all(
+        engine,
+        tables=[
+            HemoncClasses.__table__,
+            hemonc_classes_Secondary_home_as_stringMap.__table__,
+        ],
+    )
     path = snapshot(tmp_path)
     header, first, last = path.read_text().splitlines()
     second = first.replace("studies$registry|studies$trial", "studies$other")
-    rejected = first.replace("ready for core,ready for core", "INVALID,ready for core").replace(
-        "studies$registry|studies$trial", "rejected$child",
+    rejected = first.replace(
+        "ready for core,ready for core", "INVALID,ready for core"
+    ).replace(
+        "studies$registry|studies$trial",
+        "rejected$child",
     )
     # Same scalar values, differing children; a complete duplicate; a rejected
     # parent in the middle; another accepted row after the reserved-ID gap.
@@ -145,22 +189,35 @@ def test_snapshot_children_follow_assigned_ids_for_duplicates_and_rejected_paren
     with Session(engine) as session:
         if split_load:
             with _resolved_csv_path(tmp_path, "hemonc_classes") as source:
-                reader = SmallBatches(open_reader(source, HemoncClasses.model_columns(), skip_malformed=True))
-                assert HemoncClasses.load_file(session, source, reader=reader, resolved=resolved) == 4
+                reader = SmallBatches(
+                    open_reader(
+                        source, HemoncClasses.model_columns(), skip_malformed=True
+                    )
+                )
+                assert (
+                    HemoncClasses.load_file(
+                        session, source, reader=reader, resolved=resolved
+                    )
+                    == 4
+                )
             session.commit()
             counts = load_denormalised(session, HemoncClasses, tmp_path)
         else:
             counts = load_all(session, HemoncClasses, tmp_path, resolved=resolved)
             assert counts["hemonc_classes"] == 4
         assert counts["secondary_home_as_string"] == 6
-        children = session.execute(sa.select(
-            hemonc_classes_Secondary_home_as_stringMap.parent_id,
-            hemonc_classes_Secondary_home_as_stringMap.secondary_home_as_string,
-        )).all()
+        children = session.execute(
+            sa.select(
+                hemonc_classes_Secondary_home_as_stringMap.parent_id,
+                hemonc_classes_Secondary_home_as_stringMap.secondary_home_as_string,
+            )
+        ).all()
         assert set(children) == {
-            (1, "studies$registry"), (1, "studies$trial"),
+            (1, "studies$registry"),
+            (1, "studies$trial"),
             (2, "studies$other"),
-            (3, "studies$registry"), (3, "studies$trial"),
+            (3, "studies$registry"),
+            (3, "studies$trial"),
             (5, "studies$other"),
         }
 
@@ -185,30 +242,52 @@ def test_separate_session_refuses_ambiguous_parent_fallback(database, tmp_path):
     with Session(engine) as session:
         load_entity(session, HemoncClasses, tmp_path, resolved=resolved)
         session.commit()
-    with Session(engine) as session, pytest.raises(ValueError, match="ambiguous parent association"):
+    with (
+        Session(engine) as session,
+        pytest.raises(ValueError, match="ambiguous parent association"),
+    ):
         load_denormalised(session, HemoncClasses, tmp_path)
 
 
-def test_supplied_ids_disambiguate_parents_without_attaching_rejected_rows(database, tmp_path):
+def test_supplied_ids_disambiguate_parents_without_attaching_rejected_rows(
+    database, tmp_path
+):
     engine, resolved = database
-    Base.metadata.create_all(engine, tables=[
-        HemoncClasses.__table__, hemonc_classes_Secondary_home_as_stringMap.__table__,
-    ])
+    Base.metadata.create_all(
+        engine,
+        tables=[
+            HemoncClasses.__table__,
+            hemonc_classes_Secondary_home_as_stringMap.__table__,
+        ],
+    )
     path = snapshot(tmp_path)
     header, first, _ = path.read_text().splitlines()
     second = first.replace("studies$registry|studies$trial", "studies$other")
-    rejected = first.replace("clinical trial,,,ready", "clinical trial,INVALID,,ready").replace(
-        "studies$registry|studies$trial", "rejected$child",
+    rejected = first.replace(
+        "clinical trial,,,ready", "clinical trial,INVALID,,ready"
+    ).replace(
+        "studies$registry|studies$trial",
+        "rejected$child",
     )
     path.write_text(f"id,{header}\n101,{first}\n202,{second}\n101,{rejected}\n")
     with Session(engine) as session:
-        counts = load_all(session, HemoncClasses, tmp_path, resolved=resolved, policy=conversion_policy())
+        counts = load_all(
+            session,
+            HemoncClasses,
+            tmp_path,
+            resolved=resolved,
+            policy=conversion_policy(),
+        )
         assert counts["hemonc_classes"] == 2
         assert counts["secondary_home_as_string"] == 3
-        assert set(session.execute(sa.select(
-            hemonc_classes_Secondary_home_as_stringMap.parent_id,
-            hemonc_classes_Secondary_home_as_stringMap.secondary_home_as_string,
-        ))) == {(101, "studies$registry"), (101, "studies$trial"), (202, "studies$other")}
+        assert set(
+            session.execute(
+                sa.select(
+                    hemonc_classes_Secondary_home_as_stringMap.parent_id,
+                    hemonc_classes_Secondary_home_as_stringMap.secondary_home_as_string,
+                )
+            )
+        ) == {(101, "studies$registry"), (101, "studies$trial"), (202, "studies$other")}
 
 
 def test_rollback_discards_snapshot_bindings(database, tmp_path):
@@ -230,43 +309,68 @@ def test_child_load_refuses_changed_csv_options(database, tmp_path):
     HemoncClasses.__table__.create(engine)
     snapshot(tmp_path)
     with Session(engine) as session:
-        load_entity(session, HemoncClasses, tmp_path, resolved=resolved, quote_mode="csv")
+        load_entity(
+            session, HemoncClasses, tmp_path, resolved=resolved, quote_mode="csv"
+        )
         with pytest.raises(ValueError, match="same CSV reading options"):
             load_denormalised(session, HemoncClasses, tmp_path, quote_mode="literal")
 
 
 def test_nullable_conversion_keeps_children_attached(database, tmp_path):
     engine, resolved = database
-    Base.metadata.create_all(engine, tables=[
-        HemoncClasses.__table__, hemonc_classes_Secondary_home_as_stringMap.__table__,
-    ])
+    Base.metadata.create_all(
+        engine,
+        tables=[
+            HemoncClasses.__table__,
+            hemonc_classes_Secondary_home_as_stringMap.__table__,
+        ],
+    )
     path = snapshot(tmp_path)
-    path.write_text(path.read_text().replace("clinical trial,,,ready", "clinical trial,NOT_A_DOMAIN,,ready"))
+    path.write_text(
+        path.read_text().replace(
+            "clinical trial,,,ready", "clinical trial,NOT_A_DOMAIN,,ready"
+        )
+    )
     with Session(engine) as session:
         counts = load_all(session, HemoncClasses, tmp_path, resolved=resolved)
         assert counts["hemonc_classes"] == 2
-        assert session.scalars(sa.select(HemoncClasses.omopdomain_id)).all() == [None, None]
+        assert session.scalars(sa.select(HemoncClasses.omopdomain_id)).all() == [
+            None,
+            None,
+        ]
         assert counts["secondary_home_as_string"] == 3
 
 
 @pytest.mark.parametrize("malformed", ["extra_field", "missing_field"])
-def test_malformed_rows_are_rejected_by_parent_and_child_readers(database, tmp_path, malformed):
+def test_malformed_rows_are_rejected_by_parent_and_child_readers(
+    database, tmp_path, malformed
+):
     engine, resolved = database
-    Base.metadata.create_all(engine, tables=[
-        HemoncClasses.__table__, hemonc_classes_Secondary_home_as_stringMap.__table__,
-    ])
+    Base.metadata.create_all(
+        engine,
+        tables=[
+            HemoncClasses.__table__,
+            hemonc_classes_Secondary_home_as_stringMap.__table__,
+        ],
+    )
     path = snapshot(tmp_path)
     lines = path.read_text().splitlines()
     rejected = lines[1].replace("studies$registry|studies$trial", "rejected$child")
-    rejected = rejected + ",extra" if malformed == "extra_field" else rejected.rsplit(",", 1)[0]
+    rejected = (
+        rejected + ",extra"
+        if malformed == "extra_field"
+        else rejected.rsplit(",", 1)[0]
+    )
     path.write_text("\n".join([*lines[:2], rejected, lines[2]]) + "\n")
     with Session(engine) as session:
         counts = load_all(session, HemoncClasses, tmp_path, resolved=resolved)
         assert counts["hemonc_classes"] == 2
         assert counts["secondary_home_as_string"] == 3
-        children = session.scalars(sa.select(
-            hemonc_classes_Secondary_home_as_stringMap.secondary_home_as_string,
-        )).all()
+        children = session.scalars(
+            sa.select(
+                hemonc_classes_Secondary_home_as_stringMap.secondary_home_as_string,
+            )
+        ).all()
         assert set(children) == {"studies$registry", "studies$trial", "studies$other"}
 
 
@@ -274,24 +378,45 @@ def test_malformed_rows_are_rejected_by_parent_and_child_readers(database, tmp_p
 @pytest.mark.parametrize("quote_mode", ["csv", "literal"])
 def test_child_conversion_obeys_error_policy(database, tmp_path, on_error, quote_mode):
     engine, resolved = database
-    Base.metadata.create_all(engine, tables=[
-        Drugs.__table__, drugs_Canmed_major_class_cuiMap.__table__, drugs_CanmedPairs.__table__,
-    ])
+    Base.metadata.create_all(
+        engine,
+        tables=[
+            Drugs.__table__,
+            drugs_Canmed_major_class_cuiMap.__table__,
+            drugs_CanmedPairs.__table__,
+        ],
+    )
     (tmp_path / "drugs.csv").write_text(
         "drug,drug_cui,date_added,investigational,multiagent,canmed_major_class_cui\n"
-        '\"Example drug\",101,2023-06-02,FALSE,FALSE,not-a-number|123\n'
+        '"Example drug",101,2023-06-02,FALSE,FALSE,not-a-number|123\n'
     )
     policy = replace(conversion_policy(), errors=ErrorPolicy(on_error=on_error))
     with Session(engine) as session:
         if on_error == "raise":
             with pytest.raises(ValueError, match="not-a-number"):
-                load_all(session, Drugs, tmp_path, resolved=resolved, policy=policy, quote_mode=quote_mode)
+                load_all(
+                    session,
+                    Drugs,
+                    tmp_path,
+                    resolved=resolved,
+                    policy=policy,
+                    quote_mode=quote_mode,
+                )
         else:
-            counts = load_all(session, Drugs, tmp_path, resolved=resolved, policy=policy, quote_mode=quote_mode)
+            counts = load_all(
+                session,
+                Drugs,
+                tmp_path,
+                resolved=resolved,
+                policy=policy,
+                quote_mode=quote_mode,
+            )
             assert counts["canmed_major_class_cui"] == 1
-            assert session.scalars(sa.select(
-                drugs_Canmed_major_class_cuiMap.canmed_major_class_cui,
-            )).all() == [123]
+            assert session.scalars(
+                sa.select(
+                    drugs_Canmed_major_class_cuiMap.canmed_major_class_cui,
+                )
+            ).all() == [123]
 
 
 def test_policy_preserves_compiler_enum_collision_equivalence():
@@ -299,7 +424,10 @@ def test_policy_preserves_compiler_enum_collision_equivalence():
         CPS_AT_LEAST_10 = "cps at least 10"
 
     column = sa.Column("label", sa.Enum(Labels))
-    assert convert_value("CPS at least 10%", column, conversion_policy()) == "CPS_AT_LEAST_10"
+    assert (
+        convert_value("CPS at least 10%", column, conversion_policy())
+        == "CPS_AT_LEAST_10"
+    )
 
 
 def test_explicit_policy_can_keep_text_null_markers():
@@ -319,14 +447,20 @@ def test_strict_policy_aborts_before_merging(tmp_path):
     Units.__table__.create(engine)
     with Session(engine) as session:
         with pytest.raises(ConversionError):
-            Units.load_file(session, path, policy=replace(conversion_policy(), errors=ErrorPolicy()))
+            Units.load_file(
+                session, path, policy=replace(conversion_policy(), errors=ErrorPolicy())
+            )
         assert session.scalar(sa.select(sa.func.count()).select_from(Units)) == 0
-        assert not any(n.startswith("_staging_") for n in sa.inspect(engine).get_table_names())
+        assert not any(
+            n.startswith("_staging_") for n in sa.inspect(engine).get_table_names()
+        )
 
 
 def test_compatibility_hooks_do_not_require_legacy_upstream_modules(tmp_path):
     path = tmp_path / "units.csv"
-    path.write_text("unit,unit_type,concept_code,date_added,fixed,parameterbased,timebased\nmg,u,1,2020-01-01,1,0,0\n")
+    path.write_text(
+        "unit,unit_type,concept_code,date_added,fixed,parameterbased,timebased\nmg,u,1,2020-01-01,1,0,0\n"
+    )
     engine = create_default_hemonc_engine("sqlite:///:memory:")
     Units.__table__.create(engine)
     with pytest.warns(DeprecationWarning, match="unnecessary"):
@@ -345,4 +479,7 @@ def test_primary_commit_survives_child_load_failure(tmp_path):
             load_all(session, HemoncClasses, tmp_path)
         session.rollback()
     with engine.connect() as connection:
-        assert connection.scalar(sa.select(sa.func.count()).select_from(HemoncClasses)) == 2
+        assert (
+            connection.scalar(sa.select(sa.func.count()).select_from(HemoncClasses))
+            == 2
+        )

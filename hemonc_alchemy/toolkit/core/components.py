@@ -108,7 +108,11 @@ def component_search_statement(
             drugs_Canmed_minor_classMap,
             drugs_Canmed_minor_classMap.parent_id == Drugs.id,
         )
-        .where(sa.or_(*_search_expressions(_as_terms(search_terms), _search_columns(columns))))
+        .where(
+            sa.or_(
+                *_search_expressions(_as_terms(search_terms), _search_columns(columns))
+            )
+        )
         .distinct()
     )
 
@@ -131,7 +135,11 @@ def component_cui_subquery(
             drugs_Canmed_minor_classMap,
             drugs_Canmed_minor_classMap.parent_id == Drugs.id,
         )
-        .where(sa.or_(*_search_expressions(_as_terms(search_terms), _search_columns(columns))))
+        .where(
+            sa.or_(
+                *_search_expressions(_as_terms(search_terms), _search_columns(columns))
+            )
+        )
         .distinct()
         .subquery("matching_component_cuis")
     )

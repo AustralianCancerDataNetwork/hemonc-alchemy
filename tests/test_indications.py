@@ -90,7 +90,10 @@ def test_duplicate_names_keep_their_distinct_findings():
         source(BiomarkerSource(1, ("ER", "ER"), ("positive", "unknown")))
     )
     assert [item.biomarker for item in criteria] == ["ER", "ER"]
-    assert [item.findings[0].presence for item in criteria] == [Presence.PRESENT, Presence.UNKNOWN]
+    assert [item.findings[0].presence for item in criteria] == [
+        Presence.PRESENT,
+        Presence.UNKNOWN,
+    ]
     assert [item.findings[0].raw for item in criteria] == ["positive", "unknown"]
 
 
@@ -351,16 +354,38 @@ def test_sqlite_loader_reads_four_slots_and_regimen_links_in_fixed_queries():
                 biomarker_finding="negative",
             )
         )
-        connection.execute(indications_BiomarkerSlots.__table__.insert(), [
-            {"parent_id": 1, "slot": slot, "position": 1, "aligned": True,
-             "biomarker": name, "biomarker_finding": finding}
-            for slot, name, finding in ((2, "PR", "negative"), (3, "HER2", "negative"), (4, "ROS1", "positive"))
-        ])
-        connection.execute(indications_RegimenLinks.__table__.insert(), {
-            "parent_id": 1, "position": 1, "aligned": True, "regimen_cui": 77, "regimen_cui_raw": "77",
-        })
         connection.execute(
-            indications_ContextMap.__table__.insert().values(parent_id=1, position=1, context="1L")
+            indications_BiomarkerSlots.__table__.insert(),
+            [
+                {
+                    "parent_id": 1,
+                    "slot": slot,
+                    "position": 1,
+                    "aligned": True,
+                    "biomarker": name,
+                    "biomarker_finding": finding,
+                }
+                for slot, name, finding in (
+                    (2, "PR", "negative"),
+                    (3, "HER2", "negative"),
+                    (4, "ROS1", "positive"),
+                )
+            ],
+        )
+        connection.execute(
+            indications_RegimenLinks.__table__.insert(),
+            {
+                "parent_id": 1,
+                "position": 1,
+                "aligned": True,
+                "regimen_cui": 77,
+                "regimen_cui_raw": "77",
+            },
+        )
+        connection.execute(
+            indications_ContextMap.__table__.insert().values(
+                parent_id=1, position=1, context="1L"
+            )
         )
         connection.execute(
             indications_DemographicsMap.__table__.insert().values(
@@ -378,7 +403,9 @@ def test_sqlite_loader_reads_four_slots_and_regimen_links_in_fixed_queries():
             (indications_Risk_stratificationMap, "risk_stratification", "high risk"),
         ):
             connection.execute(
-                table.__table__.insert().values(parent_id=1, position=1, **{column: value})
+                table.__table__.insert().values(
+                    parent_id=1, position=1, **{column: value}
+                )
             )
 
     calls = []
@@ -448,7 +475,9 @@ def test_distributions_contain_source_indications_without_proposal_data(tmp_path
         wheel_members = set(archive.namelist())
     sdist = next(tmp_path.glob("*.tar.gz"))
     with tarfile.open(sdist, "r:gz") as archive:
-        sdist_members = {name.split("/", 1)[1] for name in archive.getnames() if "/" in name}
+        sdist_members = {
+            name.split("/", 1)[1] for name in archive.getnames() if "/" in name
+        }
 
     required_source = {
         "hemonc_alchemy/toolkit/core/indications/loader.py",
@@ -466,15 +495,25 @@ def test_distributions_contain_source_indications_without_proposal_data(tmp_path
         assert required_source <= members
         assert set(files) <= members
         assert not any("/indication_vocabulary/" in name for name in members)
-        assert not any(name.startswith("scripts/indication_vocabulary/") for name in members)
+        assert not any(
+            name.startswith("scripts/indication_vocabulary/") for name in members
+        )
         assert members.isdisjoint(forbidden)
 
 
-@pytest.mark.parametrize("raw,expected", [
-    ("TRUE", True), (" true ", True), ("2001-07-06", True),
-    ("FALSE", False), (" false ", False), ("", False), ("  ", False),
-    ("Unclassified marker", True),
-])
+@pytest.mark.parametrize(
+    "raw,expected",
+    [
+        ("TRUE", True),
+        (" true ", True),
+        ("2001-07-06", True),
+        ("FALSE", False),
+        (" false ", False),
+        ("", False),
+        ("  ", False),
+        ("Unclassified marker", True),
+    ],
+)
 def test_withdrawal_flag_conservatively_excludes_non_false_markers(raw, expected):
     from hemonc_alchemy.toolkit.core.indications.resolver import _withdrawn
 
@@ -485,19 +524,30 @@ def test_alemtuzumab_authorisation_and_withdrawal_notice_stay_excluded(monkeypat
     from hemonc_alchemy.toolkit.core.indications import resolver
 
     original_raw = {
-        "withdrawn": "TRUE", "date": "2001-07-06",
+        "withdrawn": "TRUE",
+        "date": "2001-07-06",
         "string": "Initial authorisation for CLL.",
     }
     notice_raw = {
-        "withdrawn": "2001-07-06", "date": "2012-08-08",
+        "withdrawn": "2001-07-06",
+        "date": "2012-08-08",
         "string": "Authorisation withdrawn at the manufacturer's request.",
     }
     original = replace(
-        source(), indication_id=1, component="Alemtuzumab", regulator="EMA",
-        condition="Chronic lymphocytic leukemia", withdrawn_raw="TRUE", raw=original_raw,
+        source(),
+        indication_id=1,
+        component="Alemtuzumab",
+        regulator="EMA",
+        condition="Chronic lymphocytic leukemia",
+        withdrawn_raw="TRUE",
+        raw=original_raw,
     )
-    notice = replace(original, indication_id=2, withdrawn_raw="2001-07-06", raw=notice_raw)
-    monkeypatch.setattr(resolver, "load_indication_sources", lambda session, spec: (original, notice))
+    notice = replace(
+        original, indication_id=2, withdrawn_raw="2001-07-06", raw=notice_raw
+    )
+    monkeypatch.setattr(
+        resolver, "load_indication_sources", lambda session, spec: (original, notice)
+    )
 
     resolved = resolver.resolve_indications(None, normalisers=())
     assert [item.withdrawn for item in resolved] == [True, True]

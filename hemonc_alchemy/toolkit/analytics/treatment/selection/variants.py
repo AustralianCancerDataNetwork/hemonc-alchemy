@@ -123,5 +123,7 @@ def select_variants(
     return list(
         session.execute(
             build_variant_statement(spec, category_mapping=category_mapping)
-        ).unique().scalars()
+        )
+        .unique()
+        .scalars()
     )

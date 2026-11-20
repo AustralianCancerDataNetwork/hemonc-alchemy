@@ -26,7 +26,9 @@ def sig_class_value(sig_or_value):
 
 def has_radiation_sig(variant) -> bool:
     """Whether any of a variant's component sigs are a radiation sig."""
-    return any(sig_class_value(sig) == RAD_SIG_CLASS_VALUE for sig in variant.component_sigs)
+    return any(
+        sig_class_value(sig) == RAD_SIG_CLASS_VALUE for sig in variant.component_sigs
+    )
 
 
 def has_non_radiation_sig(variant) -> bool:
@@ -37,8 +39,7 @@ def has_non_radiation_sig(variant) -> bool:
     classification.
     """
     return any(
-        (value := sig_class_value(sig)) is not None
-        and value != RAD_SIG_CLASS_VALUE
+        (value := sig_class_value(sig)) is not None and value != RAD_SIG_CLASS_VALUE
         for sig in variant.component_sigs
     )
 

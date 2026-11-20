@@ -83,20 +83,103 @@ def test_beacopp_14_cycle_template(variant_129853):
     assert template.common_name == "BEACOPP-14"
     assert template.cycle_len == 14
     assert template.diseases == {"Classical Hodgkin lymphoma"}
-    assert template.iv_drug == ["Bleomycin", "Cyclophosphamide", "Doxorubicin", "Etoposide", "Vincristine"]
+    assert template.iv_drug == [
+        "Bleomycin",
+        "Cyclophosphamide",
+        "Doxorubicin",
+        "Etoposide",
+        "Vincristine",
+    ]
     assert template.po_drug == ["Prednisone", "Procarbazine"]
     assert template.endocrine_regimen is False
     assert template.supportive_regimen is False
 
-    assert template.binary_iv["Cyclophosphamide"].tolist() == [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    assert template.binary_iv["Etoposide"].tolist() == [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    assert template.binary_iv["Bleomycin"].tolist() == [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
+    assert template.binary_iv["Cyclophosphamide"].tolist() == [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+    ]
+    assert template.binary_iv["Etoposide"].tolist() == [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+    ]
+    assert template.binary_iv["Bleomycin"].tolist() == [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+    ]
     # PO drugs run days 1-7 only, per the live sigs; the cycle continues to day 14 undosed.
-    assert template.binary_po["Prednisone"].tolist() == [1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]
-    assert template.binary_po["Procarbazine"].tolist() == [1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]
+    assert template.binary_po["Prednisone"].tolist() == [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+    ]
+    assert template.binary_po["Procarbazine"].tolist() == [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+    ]
 
     fuzzy = template.binary_fuzzy
-    assert list(fuzzy.columns) == template.iv_drug  # decay is IV-only, matching RG_uniq's Binary_fuzzy
+    assert (
+        list(fuzzy.columns) == template.iv_drug
+    )  # decay is IV-only, matching RG_uniq's Binary_fuzzy
     assert fuzzy["Cyclophosphamide"].iloc[0] == pytest.approx(1.0)
     assert fuzzy["Cyclophosphamide"].iloc[1] == pytest.approx(0.606531, abs=1e-6)
     assert fuzzy["Etoposide"].iloc[3] == pytest.approx(0.606531, abs=1e-6)
@@ -111,7 +194,15 @@ def test_beacopp_14_cycle_template(variant_129853):
 
     assert template.dose_po.loc[0, "Prednisone"] == "80;mg/m^2"
     assert template.dose_po.loc[0, "Procarbazine"] == "100;mg/m^2"
-    assert list(template.dose_po.index) == [0, 1, 2, 3, 4, 5, 6]  # RG_uniq's own Dose_PO is truncated the same way
+    assert list(template.dose_po.index) == [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+    ]  # RG_uniq's own Dose_PO is truncated the same way
 
 
 def test_degarelix_monotherapy_cycle_template(variant_131601):
@@ -147,7 +238,9 @@ def test_eltrombopag_monotherapy_cycle_template(variant_131885):
     assert template.iv_drug == []
     assert template.po_drug == ["Eltrombopag"]
     assert template.endocrine_regimen is False
-    assert template.supportive_regimen is True  # a megakaryocyte growth factor, per drugs.main_class
+    assert (
+        template.supportive_regimen is True
+    )  # a megakaryocyte growth factor, per drugs.main_class
 
     assert template.binary_po["Eltrombopag"].tolist() == [1] * 14
     assert template.dose_po.loc[0, "Eltrombopag"] == "50;mg"
@@ -217,9 +310,17 @@ def test_a_cmf_cycle_block_templates(variant_129540):
     assert second.cycle_len == 28
     assert second.iv_drug == ["Cyclophosphamide", "Fluorouracil", "Methotrexate"]
     assert second.po_drug == []
-    assert second.binary_iv["Cyclophosphamide"].tolist() == [1] + [0] * 6 + [1] + [0] * 20
-    assert second.binary_iv["Fluorouracil"].tolist() == second.binary_iv["Cyclophosphamide"].tolist()
-    assert second.binary_iv["Methotrexate"].tolist() == second.binary_iv["Cyclophosphamide"].tolist()
+    assert (
+        second.binary_iv["Cyclophosphamide"].tolist() == [1] + [0] * 6 + [1] + [0] * 20
+    )
+    assert (
+        second.binary_iv["Fluorouracil"].tolist()
+        == second.binary_iv["Cyclophosphamide"].tolist()
+    )
+    assert (
+        second.binary_iv["Methotrexate"].tolist()
+        == second.binary_iv["Cyclophosphamide"].tolist()
+    )
     # RG_uniq's own dose for this row is 500;mg/m^2 Cyclophosphamide -- this DB's live sig reads 600;mg/m^2.
     assert second.dose_iv.loc[0, "Cyclophosphamide"] == "600;mg/m^2"
     assert second.dose_iv.loc[7, "Cyclophosphamide"] == "600;mg/m^2"

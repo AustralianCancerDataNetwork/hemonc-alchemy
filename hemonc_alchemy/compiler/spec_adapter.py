@@ -52,9 +52,9 @@ def hemonc_table_specs(registry: SchemaRegistry) -> dict[str, TableSpec]:
 def hemonc_field_specs(registry: SchemaRegistry) -> dict[str, dict[str, FieldSpec]]:
     """
     Build one FieldSpec per column that gets rendered onto the generated class
-     
-    Denormalised/derived columns are skipped since they don't become scalar 
-    columns at all, and a surrogate-PK table's real primary key is the 
+
+    Denormalised/derived columns are skipped since they don't become scalar
+    columns at all, and a surrogate-PK table's real primary key is the
     generated `id` column rather than its natural key.
     """
     out: dict[str, dict[str, FieldSpec]] = {}
@@ -68,7 +68,10 @@ def hemonc_field_specs(registry: SchemaRegistry) -> dict[str, dict[str, FieldSpe
 
         fields: dict[str, FieldSpec] = {}
         for col_name, col in meta.columns.items():
-            if col_name in meta.denormalised_columns or col_name in meta.derived_columns:
+            if (
+                col_name in meta.denormalised_columns
+                or col_name in meta.derived_columns
+            ):
                 continue
             fields[col_name] = FieldSpec(
                 table_name=table_name,
@@ -130,6 +133,8 @@ def validate_with_orm_loader(
     """
     Run orm_loader's validators against the generated model.
     """
-    registry = build_model_registry(schema_registry, models, model_version=model_version)
+    registry = build_model_registry(
+        schema_registry, models, model_version=model_version
+    )
     runner = ValidationRunner(validators=always_on_validators())
     return runner.run(registry)

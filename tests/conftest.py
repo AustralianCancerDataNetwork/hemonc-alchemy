@@ -16,18 +16,25 @@ def imported_hemonc_engine():
     if not alias:
         pytest.skip("HEMONC_IMPORTED_TEST_DB must name an imported test database")
     database = Resolver(load_stack_config()).resolve_database(alias)
-    if not database.connection.test_only or database.connection.dialect_name != "postgresql":
-        pytest.fail("HEMONC_IMPORTED_TEST_DB must resolve to a test-only PostgreSQL connection")
+    if (
+        not database.connection.test_only
+        or database.connection.dialect_name != "postgresql"
+    ):
+        pytest.fail(
+            "HEMONC_IMPORTED_TEST_DB must resolve to a test-only PostgreSQL connection"
+        )
     engine = database.create_engine(
         register_claims=False,
         connect_args={"options": "-cdefault_transaction_read_only=on"},
     )
     # The validation importer places its official OMOP slice beside source tables
     # in the same disposable schema, so both are removed by that lifecycle.
-    engine = engine.execution_options(schema_translate_map={
-        **engine.get_execution_options().get("schema_translate_map", {}),
-        "vocab": database.schema_name,
-    })
+    engine = engine.execution_options(
+        schema_translate_map={
+            **engine.get_execution_options().get("schema_translate_map", {}),
+            "vocab": database.schema_name,
+        }
+    )
     try:
         yield engine
     finally:

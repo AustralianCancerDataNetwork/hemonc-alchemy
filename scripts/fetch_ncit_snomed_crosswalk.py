@@ -21,19 +21,31 @@ from ohdsi_umls_bridge.config import UMLSConfig
 from ohdsi_umls_bridge.service import UMLSService
 
 
-async def fetch(ncit_codes: list[str]) -> tuple[dict[str, list[dict[str, str]]], str | None]:
+async def fetch(
+    ncit_codes: list[str],
+) -> tuple[dict[str, list[dict[str, str]]], str | None]:
     config = Resolver(load_stack_config()).resolve_package_config(UMLSConfig)
-    adapter = AsyncUMLSAdapter(api_key=config.api_key or "", release=config.release, timeout=config.timeout, retries=config.retries)
+    adapter = AsyncUMLSAdapter(
+        api_key=config.api_key or "",
+        release=config.release,
+        timeout=config.timeout,
+        retries=config.retries,
+    )
     service = UMLSService(config, adapter)
     crosswalk: dict[str, list[dict[str, str]]] = {}
     release = None
-    items = [{"item_id": code, "kind": "ncit_code", "value": code} for code in ncit_codes]
+    items = [
+        {"item_id": code, "kind": "ncit_code", "value": code} for code in ncit_codes
+    ]
     for start in range(0, len(items), config.batch_limit):
-        response = await service.resolve_batch(items[start:start + config.batch_limit], target_sources=["SNOMEDCT_US"])
+        response = await service.resolve_batch(
+            items[start : start + config.batch_limit], target_sources=["SNOMEDCT_US"]
+        )
         for result in response["results"]:
             crosswalk[result["item_id"]] = [
                 {"code": entry["ui"], "name": entry["name"]}
-                for entry in result.get("crosswalks", []) if not entry.get("obsolete")
+                for entry in result.get("crosswalks", [])
+                if not entry.get("obsolete")
             ]
             for hit in result.get("search_results", []):
                 found = re.search(r"/content/([^/]+)/", hit.get("uri", ""))
@@ -45,11 +57,17 @@ def main(data_dir: Path) -> None:
     conditions = pd.read_csv(data_dir / "conditions.csv", dtype=str)
     codes = sorted(set(conditions["map_NCIT"].dropna()))
     crosswalk, release = asyncio.run(fetch(codes))
-    payload = {"umls_release": release, "fetched": datetime.now(UTC).date().isoformat(), "crosswalk": crosswalk}
+    payload = {
+        "umls_release": release,
+        "fetched": datetime.now(UTC).date().isoformat(),
+        "crosswalk": crosswalk,
+    }
     out = data_dir / "ncit_snomed_crosswalk.json"
     out.write_text(json.dumps(payload, indent=1, sort_keys=True), encoding="utf-8")
     hits = sum(1 for entries in crosswalk.values() if entries)
-    print(f"Wrote {out}: {len(crosswalk)} NCIt codes, {hits} with an active SNOMED crosswalk (UMLS {release}).")
+    print(
+        f"Wrote {out}: {len(crosswalk)} NCIt codes, {hits} with an active SNOMED crosswalk (UMLS {release})."
+    )
 
 
 if __name__ == "__main__":

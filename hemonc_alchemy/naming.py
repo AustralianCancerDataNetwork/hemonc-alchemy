@@ -100,7 +100,9 @@ def resolve_source_csv(
     csvs = [p for p in sorted(data_dir.glob("*.csv")) if "beta" not in p.stem.lower()]
 
     if alias:
-        declared = [p for p in csvs if collapse_separators(p.stem) == collapse_separators(alias)]
+        declared = [
+            p for p in csvs if collapse_separators(p.stem) == collapse_separators(alias)
+        ]
         if len(declared) == 1:
             return declared[0], []
         if len(declared) > 1:

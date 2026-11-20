@@ -36,28 +36,54 @@ def main(argv=None) -> int:
             "Registry,clinical trial,ready for core,ready for core,studies$registry|studies$trial,FALSE\n"
         )
         config = StackConfig.for_session(
-            connections={"local": {"dialect": args.backend, "database_name": str(root / "snapshot.db")}},
-            databases={"local": {"kind": "generic", "connection": "local", "schema_name": "hemonc" if args.backend == "duckdb" else None}},
+            connections={
+                "local": {
+                    "dialect": args.backend,
+                    "database_name": str(root / "snapshot.db"),
+                }
+            },
+            databases={
+                "local": {
+                    "kind": "generic",
+                    "connection": "local",
+                    "schema_name": "hemonc" if args.backend == "duckdb" else None,
+                }
+            },
         )
         database = Resolver(config).resolve_database("local")
         counts = bootstrap_database(database, root)
-        assert counts == {"hemonc_classes": {"hemonc_classes": 1, "secondary_home_as_string": 2}}
+        assert counts == {
+            "hemonc_classes": {"hemonc_classes": 1, "secondary_home_as_string": 2}
+        }
         assert bootstrap_database(database, root, rebuild=True) == counts
         engine = create_hemonc_engine(database)
         try:
             schema = engine.get_execution_options()["schema_translate_map"]["primary"]
             expected = {table.name for table in Base.metadata.tables.values()}
-            assert len(expected) == 89  # 22 source tables, 64 collection maps and 3 chain tables.
+            assert (
+                len(expected) == 89
+            )  # 22 source tables, 64 collection maps and 3 chain tables.
             assert expected <= set(sa.inspect(engine).get_table_names(schema=schema))
             with Session(engine) as session:
-                rows = session.execute(sa.select(
-                    HemoncClasses.description, hemonc_classes_Secondary_home_as_stringMap.secondary_home_as_string,
-                ).join(hemonc_classes_Secondary_home_as_stringMap,
-                       HemoncClasses.id == hemonc_classes_Secondary_home_as_stringMap.parent_id)).all()
-                assert set(rows) == {("Registry", "studies$registry"), ("Registry", "studies$trial")}
+                rows = session.execute(
+                    sa.select(
+                        HemoncClasses.description,
+                        hemonc_classes_Secondary_home_as_stringMap.secondary_home_as_string,
+                    ).join(
+                        hemonc_classes_Secondary_home_as_stringMap,
+                        HemoncClasses.id
+                        == hemonc_classes_Secondary_home_as_stringMap.parent_id,
+                    )
+                ).all()
+                assert set(rows) == {
+                    ("Registry", "studies$registry"),
+                    ("Registry", "studies$trial"),
+                }
         finally:
             engine.dispose()
-    print(f"PASS: installed wheel, {args.backend}, all {len(expected)} tables, import/rebuild and child linkage")
+    print(
+        f"PASS: installed wheel, {args.backend}, all {len(expected)} tables, import/rebuild and child linkage"
+    )
     return 0
 
 

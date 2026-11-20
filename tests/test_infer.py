@@ -19,10 +19,13 @@ from hemonc_alchemy.compiler.infer import (
 from hemonc_alchemy.compiler.schema_model import _clean_identifier_placeholders
 
 
-@pytest.mark.parametrize("value", [
-    "GEICAM/2003-11; CIBOMA/2004-01",
-    "(three times per week; increased as tolerated)",
-])
+@pytest.mark.parametrize(
+    "value",
+    [
+        "GEICAM/2003-11; CIBOMA/2004-01",
+        "(three times per week; increased as tolerated)",
+    ],
+)
 def test_semicolons_in_names_and_notes_do_not_imply_a_collection(value):
     assert not looks_denormalised_text(pd.Series([None, value]))
 
@@ -38,7 +41,9 @@ class TestParseUniqueKey:
         assert parse_unique_key("study_id (see note)") == ["study_id"]
 
     def test_strips_parenthetical_alternatives(self):
-        assert parse_unique_key("Date + Type + Affected Table + (Addition|Change|Deletion)") == [
+        assert parse_unique_key(
+            "Date + Type + Affected Table + (Addition|Change|Deletion)"
+        ) == [
             "date",
             "type",
             "affected",
@@ -170,7 +175,9 @@ class TestSeparatorInsensitiveResolution:
     `canonical_triples` no longer normalised onto `canonicaltriples`.
     """
 
-    def test_underscored_filename_resolves_against_dotted_dictionary_name(self, tmp_path: Path):
+    def test_underscored_filename_resolves_against_dotted_dictionary_name(
+        self, tmp_path: Path
+    ):
         (tmp_path / "canonical_triples.csv").write_text("a,b\n1,2\n")
         path, ambiguous = resolve_source_csv(
             tmp_path, "canonicaltriples", source_name="canonical.triples"
@@ -182,7 +189,9 @@ class TestSeparatorInsensitiveResolution:
     def test_dotted_filename_still_resolves(self, tmp_path: Path):
         """The previous drop's convention must keep working."""
         (tmp_path / "variant.blob.csv").write_text("a,b\n1,2\n")
-        path, _ = resolve_source_csv(tmp_path, "variantblob", source_name="variant.blob")
+        path, _ = resolve_source_csv(
+            tmp_path, "variantblob", source_name="variant.blob"
+        )
         assert path is not None and path.name == "variant.blob.csv"
 
     def test_collapse_does_not_reach_a_genuine_rename(self, tmp_path: Path):

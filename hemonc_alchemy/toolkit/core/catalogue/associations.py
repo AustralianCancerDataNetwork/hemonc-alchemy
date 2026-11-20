@@ -42,9 +42,7 @@ def study_association_statement(spec: CatalogueSpec):
     if spec.condition_cuis is not None:
         statement = statement.where(Studies.condition_cui.in_(spec.condition_cuis))
     if spec.study_context is not None:
-        statement = statement.where(
-            study_context_predicate(spec.study_context)
-        )
+        statement = statement.where(study_context_predicate(spec.study_context))
     return statement.distinct()
 
 

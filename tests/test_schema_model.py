@@ -61,7 +61,9 @@ class TestDenormalisedColumnDedup:
 
         assert meta.denormalised_columns == ["atc"]
         for group in meta.normalisation_groups:
-            assert len(group.columns) == len(set(group.columns)), f"malformed self-pair: {group.columns}"
+            assert len(group.columns) == len(set(group.columns)), (
+                f"malformed self-pair: {group.columns}"
+            )
 
     def test_hard_multival_override_removes_map_but_keeps_scalar_column(self):
         meta = TableMeta(
@@ -154,7 +156,9 @@ class TestDictionaryFieldEnrichment:
             },
         )
         registry = Registry(tables={"drugs": meta})
-        pd.DataFrame({"drug": ["cisplatin"]}).to_csv(tmp_path / "drugs.csv", index=False)
+        pd.DataFrame({"drug": ["cisplatin"]}).to_csv(
+            tmp_path / "drugs.csv", index=False
+        )
         registry.finalise_table_metadata_from_data(tmp_path)
 
         warnings = dictionary_only_column_warnings(registry)
@@ -173,8 +177,12 @@ class TestDenormalisedColumnRetyping:
 
     def _meta(self) -> TableMeta:
         return TableMeta(
-            name="indications", description="", kind="content", maturity="prod",
-            pk_columns=[], columns={},
+            name="indications",
+            description="",
+            kind="content",
+            maturity="prod",
+            pk_columns=[],
+            columns={},
         )
 
     def test_pipe_delimited_identifiers_become_numeric(self):
@@ -259,7 +267,12 @@ class TestNaturalKeyPolicy:
             pk_columns=["name", "value_cui"],
         )
         meta.finalise_from_data(
-            pd.DataFrame({"name": ["first", "first", "second"], "value_cui": [missing, missing, "2"]})
+            pd.DataFrame(
+                {
+                    "name": ["first", "first", "second"],
+                    "value_cui": [missing, missing, "2"],
+                }
+            )
         )
 
         assert meta.natural_key_has_duplicates is True
@@ -287,7 +300,9 @@ class TestNaturalKeyPolicy:
             kind="lookup",
             maturity="prod",
             pk_columns=["lookup_id"],
-            columns={"lookup_id": ColumnSpec(name="lookup_id", type="String", nullable=False)},
+            columns={
+                "lookup_id": ColumnSpec(name="lookup_id", type="String", nullable=False)
+            },
         )
 
         assert meta.natural_key_is_usable is True
@@ -301,8 +316,13 @@ class TestColumnSpecRoundTripTolerance:
         so dropping a field broke the diff gate rather than just the reload.
         """
         spec = ColumnSpec.from_dict(
-            {"name": "aff_no", "type": "String", "nullable": False,
-             "enum": None, "length": None}       # `length` was removed
+            {
+                "name": "aff_no",
+                "type": "String",
+                "nullable": False,
+                "enum": None,
+                "length": None,
+            }  # `length` was removed
         )
         assert spec.name == "aff_no" and spec.nullable is False
 
@@ -325,7 +345,10 @@ class TestSoftRelationshipsSkipDenormalisedColumns:
 
     def _registry(self) -> Registry:
         indications = TableMeta(
-            name="indications", description="", kind="content", maturity="prod",
+            name="indications",
+            description="",
+            kind="content",
+            maturity="prod",
             pk_columns=[],
             columns={
                 "condition": ColumnSpec(name="condition", type="String"),
@@ -337,8 +360,12 @@ class TestSoftRelationshipsSkipDenormalisedColumns:
             NormalisedTable(parent="indications", column="regimen_cui")
         ]
         regimens = TableMeta(
-            name="regimens", description="", kind="content", maturity="prod",
-            pk_columns=[], columns={"regimen_cui": ColumnSpec(name="regimen_cui", type="String")},
+            name="regimens",
+            description="",
+            kind="content",
+            maturity="prod",
+            pk_columns=[],
+            columns={"regimen_cui": ColumnSpec(name="regimen_cui", type="String")},
             source_defined_keys=["regimen_cui"],
         )
         return Registry(tables={"indications": indications, "regimens": regimens})
@@ -346,7 +373,9 @@ class TestSoftRelationshipsSkipDenormalisedColumns:
     def test_no_scalar_soft_fk_on_a_normalised_column(self):
         registry = self._registry()
         registry.infer_soft_relationships()
-        locals_ = [r.local_column for r in registry.tables["indications"].soft_relationships]
+        locals_ = [
+            r.local_column for r in registry.tables["indications"].soft_relationships
+        ]
         assert "regimen_cui" not in locals_
 
     def test_the_m2m_through_the_map_table_is_still_generated(self):
@@ -361,14 +390,20 @@ class TestSoftRelationshipsSkipDenormalisedColumns:
         """The skip must be scoped to denormalised columns only."""
         registry = self._registry()
         conditions = TableMeta(
-            name="conditions", description="", kind="content", maturity="prod",
-            pk_columns=[], columns={"condition": object()},
+            name="conditions",
+            description="",
+            kind="content",
+            maturity="prod",
+            pk_columns=[],
+            columns={"condition": object()},
             source_defined_keys=["condition"],
         )
         registry.tables["conditions"] = conditions
         registry.infer_soft_relationships()
         rels = registry.tables["indications"].soft_relationships
-        assert ("condition", "conditions") in [(r.local_column, r.target_table) for r in rels]
+        assert ("condition", "conditions") in [
+            (r.local_column, r.target_table) for r in rels
+        ]
 
 
 class TestSourceAliases:
@@ -387,12 +422,17 @@ class TestSourceAliases:
         }
 
     def test_blank_rows_are_skipped(self):
-        df = pd.DataFrame({"Table": ["context.table", None], "File": ["contexts.csv", None]})
+        df = pd.DataFrame(
+            {"Table": ["context.table", None], "File": ["contexts.csv", None]}
+        )
         assert parse_source_aliases(df) == {"contexttable": "contexts"}
 
     def test_conflicting_declarations_for_one_table_are_rejected(self):
         df = pd.DataFrame(
-            {"Table": ["context.table", "context.table"], "File": ["contexts.csv", "ctx.csv"]}
+            {
+                "Table": ["context.table", "context.table"],
+                "File": ["contexts.csv", "ctx.csv"],
+            }
         )
         with pytest.raises(ValueError, match="conflicting files"):
             parse_source_aliases(df)
@@ -419,11 +459,18 @@ class TestTableMetaRoundTrip:
             pk_columns=["sig_cui"],
             use_surrogate_pk=False,
         )
-        table.soft_relationships = [ForeignLikeRef(local_column="drug_cui", target_table="drugs", target_column="drug_cui")]
+        table.soft_relationships = [
+            ForeignLikeRef(
+                local_column="drug_cui", target_table="drugs", target_column="drug_cui"
+            )
+        ]
         table.soft_m2m_relationships = [
             SoftManyToManyRef(
-                local_table="sigs", map_table="sigs_route", map_column="route_cui",
-                target_table="routes", target_column="route_cui",
+                local_table="sigs",
+                map_table="sigs_route",
+                map_column="route_cui",
+                target_table="routes",
+                target_column="route_cui",
             )
         ]
         registry = Registry(tables={"sigs": table})
@@ -443,8 +490,12 @@ class TestTableMetaRoundTrip:
         # A registry.json written before these fields existed shouldn't fail
         # to load.
         raw = {
-            "name": "drugs", "description": "d", "kind": "content", "maturity": "prod",
-            "pk_columns": ["drug_cui"], "columns": {},
+            "name": "drugs",
+            "description": "d",
+            "kind": "content",
+            "maturity": "prod",
+            "pk_columns": ["drug_cui"],
+            "columns": {},
         }
         table = TableMeta.from_dict(raw)
         assert table.soft_relationships == []
@@ -462,11 +513,16 @@ class TestEnumCollisionWarnings:
 
     def test_warns_on_colliding_enum_values(self):
         table = TableMeta(
-            name="indications", description="", kind="content", maturity="prod", pk_columns=[],
+            name="indications",
+            description="",
+            kind="content",
+            maturity="prod",
+            pk_columns=[],
         )
         table.enums = {
             "biomarker4_finding": EnumSpec(
-                name="biomarker4_finding", tablename="indications",
+                name="biomarker4_finding",
+                tablename="indications",
                 values=["CPS at least 10%", "CPS at least 10"],
             )
         }
@@ -477,11 +533,16 @@ class TestEnumCollisionWarnings:
 
     def test_no_warning_without_collision(self):
         table = TableMeta(
-            name="indications", description="", kind="content", maturity="prod", pk_columns=[],
+            name="indications",
+            description="",
+            kind="content",
+            maturity="prod",
+            pk_columns=[],
         )
         table.enums = {
             "biomarker4_finding": EnumSpec(
-                name="biomarker4_finding", tablename="indications",
+                name="biomarker4_finding",
+                tablename="indications",
                 values=["Positive", "Negative"],
             )
         }
@@ -491,7 +552,11 @@ class TestEnumCollisionWarnings:
 
 def test_enum_rendering_escapes_multiline_values():
     table = TableMeta(
-        name="study_results", description="", kind="content", maturity="prod", pk_columns=[],
+        name="study_results",
+        description="",
+        kind="content",
+        maturity="prod",
+        pk_columns=[],
     )
     enum = EnumSpec(
         name="comparator_code",
@@ -508,16 +573,36 @@ if __name__ == "__main__":
     pytest.main([__file__])
 
 
-@pytest.mark.parametrize("column", [
-    "metric_num_this_arm", "metric_num_that_arm", "total_pubs",
-    "prop_valid_aff_country", "prop_valid_aff_region", "prop_valid_aff_city", "prop_valid_aff_site",
-])
+@pytest.mark.parametrize(
+    "column",
+    [
+        "metric_num_this_arm",
+        "metric_num_that_arm",
+        "total_pubs",
+        "prop_valid_aff_country",
+        "prop_valid_aff_region",
+        "prop_valid_aff_city",
+        "prop_valid_aff_site",
+    ],
+)
 def test_source_measurements_are_not_inferred_to_be_derived(column):
-    table = TableMeta(name="example", description="", kind="content", maturity="prod", pk_columns=["id"])
-    table.enrich_field_metadata(pd.DataFrame({
-        "Variable": [column], "Type": ["String"],
-        "Multiple values allowed": ["No"], "Allowed values/format": ["Any"],
-    }))
+    table = TableMeta(
+        name="example",
+        description="",
+        kind="content",
+        maturity="prod",
+        pk_columns=["id"],
+    )
+    table.enrich_field_metadata(
+        pd.DataFrame(
+            {
+                "Variable": [column],
+                "Type": ["String"],
+                "Multiple values allowed": ["No"],
+                "Allowed values/format": ["Any"],
+            }
+        )
+    )
     assert column in table.columns
     assert column not in table.derived_columns
     assert f"{column}: Mapped" in table.table_class(Registry(tables={"example": table}))

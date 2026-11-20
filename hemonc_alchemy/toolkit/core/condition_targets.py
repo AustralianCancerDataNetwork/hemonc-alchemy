@@ -36,10 +36,16 @@ def _value(field: Any) -> str | None:
 def _snomed_codes(field: Any) -> tuple[str, ...]:
     """Normalize a scalar or pipe-separated mapping into individual codes."""
     value = _value(field)
-    return tuple(code.strip() for code in value.split("|") if code.strip()) if value is not None else ()
+    return (
+        tuple(code.strip() for code in value.split("|") if code.strip())
+        if value is not None
+        else ()
+    )
 
 
-def accepted_codes(mappings: Mapping[int, ConditionMapping]) -> dict[int, tuple[str, ...]]:
+def accepted_codes(
+    mappings: Mapping[int, ConditionMapping],
+) -> dict[int, tuple[str, ...]]:
     """SNOMED codes per condition whose source map type is exact."""
     codes: dict[int, list[str]] = defaultdict(list)
     for cui, mapping in mappings.items():
@@ -48,9 +54,15 @@ def accepted_codes(mappings: Mapping[int, ConditionMapping]) -> dict[int, tuple[
     return {cui: tuple(found) for cui, found in codes.items() if found}
 
 
-def broader_codes(mappings: Mapping[int, ConditionMapping]) -> dict[int, tuple[str, ...]]:
+def broader_codes(
+    mappings: Mapping[int, ConditionMapping],
+) -> dict[int, tuple[str, ...]]:
     """SNOMED codes per condition that HemOnc marks `up` (the condition sits inside them)."""
-    return {cui: m.map_snomed for cui, m in mappings.items() if m.map_type_snomed == "up" and m.map_snomed}
+    return {
+        cui: m.map_snomed
+        for cui, m in mappings.items()
+        if m.map_type_snomed == "up" and m.map_snomed
+    }
 
 
 def is_conjunction(code: StandardisedCode) -> bool:
@@ -64,8 +76,12 @@ def raw_condition_mappings(session: Any) -> dict[int, ConditionMapping]:
     # Plain columns: loading `Conditions` entities would also select-in every child mapping table.
     rows = session.execute(
         sa.select(
-            Conditions.condition_cui, Conditions.condition, Conditions.map_snomed,
-            Conditions.map_type_snomed, Conditions.map_ncit, Conditions.map_type_ncit,
+            Conditions.condition_cui,
+            Conditions.condition,
+            Conditions.map_snomed,
+            Conditions.map_type_snomed,
+            Conditions.map_ncit,
+            Conditions.map_type_ncit,
         )
     ).all()
     return {
@@ -89,7 +105,9 @@ def condition_mappings(session: Any) -> dict[int, ConditionMapping]:
 
 def condition_names(session: Any) -> dict[int, str]:
     """Each condition's HemOnc name."""
-    return {cui: mapping.condition for cui, mapping in condition_mappings(session).items()}
+    return {
+        cui: mapping.condition for cui, mapping in condition_mappings(session).items()
+    }
 
 
 @cached_per_engine
@@ -104,25 +122,38 @@ def condition_parents(session: Any) -> dict[int, tuple[int, ...]]:
     rows = session.execute(
         sa.select(child.concept_code, parent.concept_code)
         .select_from(
-            sa.inspect(child).selectable.join(relation, relation.concept_id_1 == child.concept_id).join(
-                sa.inspect(parent).selectable, parent.concept_id == relation.concept_id_2
+            sa.inspect(child)
+            .selectable.join(relation, relation.concept_id_1 == child.concept_id)
+            .join(
+                sa.inspect(parent).selectable,
+                parent.concept_id == relation.concept_id_2,
             )
         )
         .where(
-            child.vocabulary_id == "HemOnc", child.domain_id == "Condition",
-            parent.vocabulary_id == "HemOnc", parent.domain_id == "Condition",
+            child.vocabulary_id == "HemOnc",
+            child.domain_id == "Condition",
+            parent.vocabulary_id == "HemOnc",
+            parent.domain_id == "Condition",
             relation.relationship_id == "Is a",
-            relation.is_valid_expr(), child.is_valid_expr(), parent.is_valid_expr(),
+            relation.is_valid_expr(),
+            child.is_valid_expr(),
+            parent.is_valid_expr(),
         )
     ).all()
     parents: dict[int, set[int]] = defaultdict(set)
     for child_code, parent_code in rows:
-        if str(child_code).isdigit() and str(parent_code).isdigit() and child_code != parent_code:
+        if (
+            str(child_code).isdigit()
+            and str(parent_code).isdigit()
+            and child_code != parent_code
+        ):
             parents[int(child_code)].add(int(parent_code))
     return {cui: tuple(sorted(found)) for cui, found in parents.items()}
 
 
-def accepted_snomed_codes(session: Any, condition_cuis: Iterable[int] | None = None) -> dict[int, tuple[str, ...]]:
+def accepted_snomed_codes(
+    session: Any, condition_cuis: Iterable[int] | None = None
+) -> dict[int, tuple[str, ...]]:
     """Exact SNOMED codes in source mappings, optionally restricted to condition CUIs."""
     codes = accepted_codes(condition_mappings(session))
     if condition_cuis is None:
@@ -135,10 +166,19 @@ def accepted_snomed_codes(session: Any, condition_cuis: Iterable[int] | None = N
 def resolve_condition_targets(session: Any) -> dict[int, frozenset[int]]:
     """Accepted single-concept targets as standard condition concept ids; conjunction codes are left out."""
     codes = accepted_snomed_codes(session)
-    standard = standardise_codes(session, {code for found in codes.values() for code in found})
-    usable = {code: found for code, found in standard.items() if not is_conjunction(found)}
+    standard = standardise_codes(
+        session, {code for found in codes.values() for code in found}
+    )
+    usable = {
+        code: found for code, found in standard.items() if not is_conjunction(found)
+    }
     return {
-        cui: frozenset(cid for code in found if code in usable for cid in usable[code].condition_leg)
+        cui: frozenset(
+            cid
+            for code in found
+            if code in usable
+            for cid in usable[code].condition_leg
+        )
         for cui, found in codes.items()
     }
 

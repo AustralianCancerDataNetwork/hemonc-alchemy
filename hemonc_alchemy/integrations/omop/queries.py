@@ -101,7 +101,9 @@ def rxnorm_ingredient_to_drug(
     return map_from_standard(session, concept_ids, include_invalid=include_invalid)
 
 
-def _drug_ingredient_rows(session: Any, ingredient_ids: Iterable[int] | None = None) -> list[Any]:
+def _drug_ingredient_rows(
+    session: Any, ingredient_ids: Iterable[int] | None = None
+) -> list[Any]:
     """Valid HemOnc drug -> RxNorm ingredient `Maps to` edges: (hemonc_cui, hemonc_name, ingredient_id, ingredient_name)."""
 
     if not require_omop_available(session, require_relationships=True):
@@ -113,10 +115,18 @@ def _drug_ingredient_rows(session: Any, ingredient_ids: Iterable[int] | None = N
     target = aliased(binding.concept, name="target")
     relation = binding.concept_relationship
     statement = (
-        sa.select(source.concept_code, source.concept_name, target.concept_id, target.concept_name)
+        sa.select(
+            source.concept_code,
+            source.concept_name,
+            target.concept_id,
+            target.concept_name,
+        )
         .select_from(
-            sa.inspect(source).selectable.join(relation, relation.concept_id_1 == source.concept_id).join(
-                sa.inspect(target).selectable, target.concept_id == relation.concept_id_2
+            sa.inspect(source)
+            .selectable.join(relation, relation.concept_id_1 == source.concept_id)
+            .join(
+                sa.inspect(target).selectable,
+                target.concept_id == relation.concept_id_2,
             )
         )
         .where(
@@ -131,7 +141,9 @@ def _drug_ingredient_rows(session: Any, ingredient_ids: Iterable[int] | None = N
         )
     )
     if ingredient_ids is not None:
-        statement = statement.where(target.concept_id.in_(tuple(int(i) for i in ingredient_ids)))
+        statement = statement.where(
+            target.concept_id.in_(tuple(int(i) for i in ingredient_ids))
+        )
     return list(session.execute(statement).all())
 
 
@@ -149,26 +161,33 @@ def _biosimilar_cuis(session: Any) -> set[str]:
     rows = session.execute(
         sa.select(source.concept_code)
         .select_from(
-            sa.inspect(source).selectable.join(relation, relation.concept_id_1 == source.concept_id).join(
-                sa.inspect(target).selectable, target.concept_id == relation.concept_id_2
+            sa.inspect(source)
+            .selectable.join(relation, relation.concept_id_1 == source.concept_id)
+            .join(
+                sa.inspect(target).selectable,
+                target.concept_id == relation.concept_id_2,
             )
         )
         .where(
-            source.vocabulary_id == "HemOnc", target.vocabulary_id == "HemOnc",
-            relation.relationship_id == "Biosimilar of", relation.is_valid_expr(),
+            source.vocabulary_id == "HemOnc",
+            target.vocabulary_id == "HemOnc",
+            relation.relationship_id == "Biosimilar of",
+            relation.is_valid_expr(),
         )
     ).scalars()
     return {str(code) for code in rows}
 
 
-def _canonical_by_ingredient(rows: Iterable[Any], biosimilar_cuis: set[str]) -> dict[int, str]:
-    """Per ingredient: its one originator HemOnc drug (not `Biosimilar of` anything, 
+def _canonical_by_ingredient(
+    rows: Iterable[Any], biosimilar_cuis: set[str]
+) -> dict[int, str]:
+    """Per ingredient: its one originator HemOnc drug (not `Biosimilar of` anything,
     single-ingredient), else its RxNorm name.
 
-    Identity is the RxNorm ingredient itself; this only picks a readable label for it. 
-    
-    Biosimilars and combination products (e.g. *Rituximab-abbs*, *Rituximab and 
-    hyaluronidase human*) share their ingredient's identity, since patient data 
+    Identity is the RxNorm ingredient itself; this only picks a readable label for it.
+
+    Biosimilars and combination products (e.g. *Rituximab-abbs*, *Rituximab and
+    hyaluronidase human*) share their ingredient's identity, since patient data
     can't tell them apart.
     """
     rows = list(rows)
@@ -184,14 +203,18 @@ def _canonical_by_ingredient(rows: Iterable[Any], biosimilar_cuis: set[str]) -> 
     result = {}
     for ingredient_id, own in ingredient_names.items():
         found = originators.get(ingredient_id, set())
-        result[ingredient_id] = next(iter(found)) if len(found) == 1 else own[:1].upper() + own[1:]
+        result[ingredient_id] = (
+            next(iter(found)) if len(found) == 1 else own[:1].upper() + own[1:]
+        )
     return result
 
 
 @cached_per_engine
 def _canonical_labels(session: Any) -> dict[int, str]:
     # Over every mapping: whether a drug is single-ingredient can't be judged from a subset of ingredients.
-    return _canonical_by_ingredient(_drug_ingredient_rows(session), _biosimilar_cuis(session))
+    return _canonical_by_ingredient(
+        _drug_ingredient_rows(session), _biosimilar_cuis(session)
+    )
 
 
 def canonical_drug_names(session: Any, ingredient_ids: Iterable[int]) -> dict[int, str]:
@@ -200,7 +223,11 @@ def canonical_drug_names(session: Any, ingredient_ids: Iterable[int]) -> dict[in
     if not require_omop_available(session, require_relationships=True):
         return {}
     labels = _canonical_labels(session)
-    return {i: labels[i] for i in dict.fromkeys(int(value) for value in ingredient_ids) if i in labels}
+    return {
+        i: labels[i]
+        for i in dict.fromkeys(int(value) for value in ingredient_ids)
+        if i in labels
+    }
 
 
 def hemonc_drug_canonical_names(session: Any) -> dict[str, tuple[str, ...]]:
@@ -219,7 +246,10 @@ def canonical_drug_ingredients(session: Any) -> dict[str, int]:
 
     if not require_omop_available(session, require_relationships=True):
         return {}
-    return {name: ingredient_id for ingredient_id, name in _canonical_labels(session).items()}
+    return {
+        name: ingredient_id
+        for ingredient_id, name in _canonical_labels(session).items()
+    }
 
 
 def regimen_to_hemonc(
@@ -248,7 +278,9 @@ def _hemonc_relationships(
     include_invalid: bool = False,
 ) -> list[HemOncRelationship]:
     relationships = tuple(relationship_ids)
-    if not relationships or not require_omop_available(session, require_relationships=True):
+    if not relationships or not require_omop_available(
+        session, require_relationships=True
+    ):
         return []
     binding = load_omop_binding()
     if binding is None:
@@ -278,9 +310,9 @@ def _hemonc_relationships(
             target.standard_concept.label("target_standard_concept"),
         )
         .select_from(
-            source_from.join(
-                relation, relation.concept_id_1 == source.concept_id
-            ).join(target_from, target.concept_id == relation.concept_id_2)
+            source_from.join(relation, relation.concept_id_1 == source.concept_id).join(
+                target_from, target.concept_id == relation.concept_id_2
+            )
         )
         .where(
             source.vocabulary_id == "HemOnc",

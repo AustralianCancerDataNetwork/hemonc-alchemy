@@ -25,7 +25,9 @@ from .schema import omop_availability
 @cached_per_engine
 def _ancestry_indexes(
     session: Any,
-) -> WeakKeyDictionary[Any, dict[tuple[tuple[str, str | None], ...], MainClassAncestry]]:
+) -> WeakKeyDictionary[
+    Any, dict[tuple[tuple[str, str | None], ...], MainClassAncestry]
+]:
     """One vocabulary-engine cache for each source engine."""
     return WeakKeyDictionary()
 
@@ -43,7 +45,8 @@ def main_class_ancestry(session: Any, *, omop_session: Any = None) -> MainClassA
     availability = omop_availability(vocabulary_session, require_relationships=True)
     if not availability.available:
         return MainClassAncestry(
-            MappingProxyType({}), availability.reason or "OMOP vocabulary is unavailable"
+            MappingProxyType({}),
+            availability.reason or "OMOP vocabulary is unavailable",
         )
     engine, schema_map = cache_context(vocabulary_session)
     indexes = _ancestry_indexes(session)
@@ -51,7 +54,9 @@ def main_class_ancestry(session: Any, *, omop_session: Any = None) -> MainClassA
     if schema_map in engine_indexes:
         return engine_indexes[schema_map]
 
-    roots = resolve_hemonc_concepts(vocabulary_session, (ENDOCRINE_ROOT_CUI, SUPPORTIVE_ROOT_CUI))
+    roots = resolve_hemonc_concepts(
+        vocabulary_session, (ENDOCRINE_ROOT_CUI, SUPPORTIVE_ROOT_CUI)
+    )
     relationships = _hemonc_relationships(vocabulary_session, ("Is a",))
     groups: dict[str, set[int]] = defaultdict(set)
     for main_class, cui in session.execute(sa.select(Drugs.main_class, Drugs.drug_cui)):
@@ -59,10 +64,19 @@ def main_class_ancestry(session: Any, *, omop_session: Any = None) -> MainClassA
             groups[str(main_class)].add(int(cui))
     index = compute_main_class_ancestry(
         groups,
-        ((edge.source.concept_code, edge.target.concept_code, edge.target.concept_class_id)
-         for edge in relationships),
-        available_roots=(root.hemonc_cui for root in roots
-                         if root.concept.concept_class_id == "Component Class"),
+        (
+            (
+                edge.source.concept_code,
+                edge.target.concept_code,
+                edge.target.concept_class_id,
+            )
+            for edge in relationships
+        ),
+        available_roots=(
+            root.hemonc_cui
+            for root in roots
+            if root.concept.concept_class_id == "Component Class"
+        ),
     )
     engine_indexes[schema_map] = index
     return index

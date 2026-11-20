@@ -31,14 +31,19 @@ def canonical(value: Any) -> Any:
     if isinstance(value, dict):
         return {str(key): canonical(item) for key, item in value.items()}
     if isinstance(value, (set, frozenset)):
-        return sorted((canonical(item) for item in value), key=lambda item: json.dumps(item, sort_keys=True))
+        return sorted(
+            (canonical(item) for item in value),
+            key=lambda item: json.dumps(item, sort_keys=True),
+        )
     if isinstance(value, (list, tuple)):
         return [canonical(item) for item in value]
     return value
 
 
 def digest(value: Any) -> bytes:
-    encoded = json.dumps(canonical(value), sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    encoded = json.dumps(
+        canonical(value), sort_keys=True, separators=(",", ":"), ensure_ascii=False
+    )
     return hashlib.sha256(encoded.encode()).digest()
 
 
@@ -51,13 +56,18 @@ def source_manifest(data_dir: Path, models: list[Any], *, full_extract: bool) ->
         with path.open("rb") as stream:
             checksum = hashlib.file_digest(stream, "sha256").hexdigest()
         files[model.__tablename__] = {
-            "filename": path.name, "bytes": path.stat().st_size,
+            "filename": path.name,
+            "bytes": path.stat().st_size,
             "sha256": checksum,
         }
     selected = {item["filename"] for item in files.values()}
     return {
-        "id": digest(files).hex(), "full_extract": full_extract, "files": files,
-        "unmodeled_files": sorted(path.name for path in data_dir.glob("*.csv") if path.name not in selected),
+        "id": digest(files).hex(),
+        "full_extract": full_extract,
+        "files": files,
+        "unmodeled_files": sorted(
+            path.name for path in data_dir.glob("*.csv") if path.name not in selected
+        ),
     }
 
 
@@ -77,7 +87,9 @@ def semantic_row(row: dict, table: sa.Table, parent_ids: dict) -> tuple[dict, bo
     return values, orphan
 
 
-def table_snapshot(connection: sa.Connection, table: sa.Table, parent_ids: dict) -> dict:
+def table_snapshot(
+    connection: sa.Connection, table: sa.Table, parent_ids: dict
+) -> dict:
     hashes = []
     nulls: Counter = Counter({column.name: 0 for column in table.c})
     orphans = 0
@@ -93,8 +105,10 @@ def table_snapshot(connection: sa.Connection, table: sa.Table, parent_ids: dict)
     if "id" in table.c and list(table.primary_key.columns.keys()) == ["id"]:
         parent_ids[table.name] = own_ids
     return {
-        "rows": len(hashes), "sha256": hashlib.sha256(b"".join(sorted(hashes))).hexdigest(),
-        "nulls": dict(nulls), "orphan_rows": orphans,
+        "rows": len(hashes),
+        "sha256": hashlib.sha256(b"".join(sorted(hashes))).hexdigest(),
+        "nulls": dict(nulls),
+        "orphan_rows": orphans,
     }
 
 
@@ -106,7 +120,11 @@ def differences(left: dict, right: dict) -> list[str]:
         if a == b:
             continue
         if isinstance(a, dict) and isinstance(b, dict):
-            failed.extend(f"{section}.{key}" for key in sorted(a.keys() | b.keys()) if a.get(key) != b.get(key))
+            failed.extend(
+                f"{section}.{key}"
+                for key in sorted(a.keys() | b.keys())
+                if a.get(key) != b.get(key)
+            )
         else:
             failed.append(section)
     for name, report in [("left", left), ("right", right)]:
