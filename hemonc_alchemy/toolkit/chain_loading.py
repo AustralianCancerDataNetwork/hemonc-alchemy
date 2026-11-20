@@ -13,6 +13,7 @@ from ..multivalue import align_values
 class ChainCounts:
     rows_paired: int = 0
     rows_broadcast: int = 0
+    rows_opaque_member: int = 0
     rows_unaligned: int = 0
     repeats_kept: int = 0
     conversion_failures: int = 0

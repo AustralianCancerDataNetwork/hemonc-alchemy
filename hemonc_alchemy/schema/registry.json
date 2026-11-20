@@ -125,6 +125,7 @@
         "sequence",
         "aff_no"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [
         {
@@ -333,6 +334,7 @@
         "sequence",
         "aff_no"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [
         {
@@ -467,6 +469,7 @@
         "relationship",
         "class_2"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [],
@@ -495,6 +498,7 @@
         "affected",
         "table"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [],
@@ -520,6 +524,7 @@
       "pk_columns": [
         "concept_code"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [],
@@ -548,6 +553,7 @@
         "concept_code_2",
         "vocabulary_id_2"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [],
@@ -573,6 +579,7 @@
       "pk_columns": [
         "concept_code"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [],
@@ -599,6 +606,7 @@
         "synonym_concept_code",
         "synonym_name"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [],
@@ -990,6 +998,7 @@
       "pk_columns": [
         "condition_cui"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [
@@ -1161,6 +1170,7 @@
       "pk_columns": [
         "context_raw"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [
@@ -1333,6 +1343,7 @@
       "pk_columns": [
         "drug_cui"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [
@@ -1435,6 +1446,7 @@
       "pk_columns": [
         "pmid"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [
         {
@@ -1468,6 +1480,7 @@
       "pk_columns": [
         "description"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [],
@@ -1642,6 +1655,7 @@
       "pk_columns": [
         "concept_class_id"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [],
@@ -1719,6 +1733,7 @@
       "pk_columns": [
         "relationship_id"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [
@@ -1799,6 +1814,7 @@
       "pk_columns": [
         "pmid"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [
         {
@@ -2523,6 +2539,9 @@
         "study",
         "substudy"
       ],
+      "raw_date_columns": [
+        "date"
+      ],
       "soft_m2m_relationships": [
         {
           "local_table": "indications",
@@ -2567,6 +2586,7 @@
       "pk_columns": [
         "index"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [],
@@ -2592,6 +2612,7 @@
       "pk_columns": [
         "nameoffile"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [],
@@ -2851,6 +2872,7 @@
         "name",
         "person_cui"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [],
@@ -2874,6 +2896,7 @@
       "normalised_tables": [],
       "opaque_columns": [],
       "pk_columns": [],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [],
@@ -2903,6 +2926,7 @@
         "comparator",
         "c_modifier"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [],
@@ -3134,6 +3158,7 @@
         "biomarker_finding",
         "pmid"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [
         {
@@ -3330,6 +3355,9 @@
       "pk_columns": [
         "regimen_cui"
       ],
+      "raw_date_columns": [
+        "all_sact_fda_as_of"
+      ],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [
@@ -3359,6 +3387,7 @@
         "parent",
         "child"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [],
@@ -3382,6 +3411,7 @@
       "normalised_tables": [],
       "opaque_columns": [],
       "pk_columns": [],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [],
@@ -3420,6 +3450,7 @@
       "pk_columns": [
         "value"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [
@@ -3971,6 +4002,7 @@
         "timing_sequence",
         "step_number"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [
         {
           "local_table": "sigs",
@@ -4010,6 +4042,7 @@
       "pk_columns": [
         "site"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [],
@@ -4341,6 +4374,10 @@
         "condition_cui",
         "biomarker_finding"
       ],
+      "raw_date_columns": [
+        "start",
+        "end"
+      ],
       "soft_m2m_relationships": [],
       "soft_relationships": [
         {
@@ -4379,6 +4416,7 @@
         "condition",
         "biomarker"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [],
@@ -4406,6 +4444,7 @@
         "condition",
         "biomarker"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [],
@@ -4795,6 +4834,7 @@
         "metric",
         "metric_version"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [
         {
@@ -4879,6 +4919,7 @@
       "pk_columns": [
         "unit"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [
@@ -5029,6 +5070,7 @@
         "variant_cui",
         "logic_count"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [
         {
           "local_table": "variant_eligibility",
@@ -5137,6 +5179,7 @@
         "version",
         "chunk"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [],
       "soft_relationships": [],
       "source_defined_keys": [],
@@ -5356,6 +5399,7 @@
         "variant_cui",
         "version"
       ],
+      "raw_date_columns": [],
       "soft_m2m_relationships": [
         {
           "local_table": "variants",

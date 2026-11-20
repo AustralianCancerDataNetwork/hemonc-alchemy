@@ -36,7 +36,7 @@ Alignment applies to the complete chain:
 1. Equal-length lists pair by source position, starting at 1.
 2. A nonblank single value is repeated across the longest list. Every other nonblank column must have that same length or length 1.
 3. A blank column contributes nulls. Internal empty positions, such as `A||B`, are null at their original positions.
-4. Different lengths greater than one, or a pipe inside parentheses, make the whole chain unaligned. The row then has one marker child (`position=0`, `aligned=False`, values null) and is readable only through its raw parent fields.
+4. Different lengths greater than one make the whole chain unaligned. A member containing a pipe inside parentheses is kept as one opaque expression: it contributes null at every aligned position, while the other members pair under these rules. If no other member is nonblank, the chain is unaligned and gets one marker child (`position=0`, `aligned=False`, values null).
 
 Chain rows keep repeated values. A CUI has a nullable integer field and a raw text field: for `TBA`, `regimen_cui_raw` is `"TBA"` and `regimen_cui` is null. A blank token is null in both.
 
@@ -89,13 +89,13 @@ Only `|` is automatically inferred and split as a collection delimiter. Semicolo
 
 The generated model determines how each field is stored. For example, `StudyResults.metric_num_this_arm` stores values such as `60%` as text, `Persons.total_pubs` is an integer, and the four `Refs.prop_valid_aff_*` fields are numeric proportions. Fields listed in the model metadata's `derived_columns` are excluded from source loading.
 
-Text fields retain their values apart from configured null markers, while dates and enums undergo conversion. Unsupported partial dates in nullable `DateTime` fields become NULL, and enum conversion normalizes source spelling. A database NULL can therefore represent either a missing source value or a failed conversion; use the source file and rejection report to distinguish them.
+Text fields retain their values apart from configured null markers, while dates and enums undergo conversion. DateTime fields store only day-precision dates; year-only, month-only, free-text and `Withdrawn on <date>` cells remain NULL. When a DateTime source column contains any such cell, its generated `<column>_raw` field preserves every nonblank source cell. A database NULL can therefore represent a missing source value or a failed conversion; use the raw field and rejection report to distinguish them.
 
 ## Conversion and rejection reports
 
 The default HemOnc policy preserves case-insensitive enum values and the compiler's normalized-member fallback. Malformed nullable fields are logged and become NULL. Malformed required values reject their rows rather than introducing a sentinel. Rejected parents cannot contribute child rows, including when an accepted parent has the same natural key.
 
-The policy treats `NULL`, `None`, `N/A`, `NaN`, `nan`, `null`, `NA`, and `n/a` as text null markers. Dates use the upstream declared formats (`yyyymmdd`, `dd-mon-yyyy`, and `yyyy-mm-dd`); unrecognized nullable date values become NULL. Source markers stored in string columns remain strings unless they are one of the configured null markers. Ambiguous date formats require an explicit handler.
+The policy treats `NULL`, `None`, `N/A`, `NaN`, `nan`, `null`, `NA`, and `n/a` as text null markers. Dates use the upstream declared formats (`yyyymmdd`, `dd-mon-yyyy`, and `yyyy-mm-dd`), with source precision retained by `parse_source_date`; a day may be one or two digits. Year-only, month-only and unrecognized nullable date values become NULL and stay available in the raw field when one was generated. Source markers stored in string columns remain strings unless they are one of the configured null markers. Ambiguous date formats require an explicit handler.
 
 ```python
 from orm_loader.loaders import LoadReport

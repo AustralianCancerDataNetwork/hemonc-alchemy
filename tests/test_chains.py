@@ -39,7 +39,9 @@ from hemonc_alchemy.toolkit.loading import load_all
     (("A|B", ""), "paired", (("A", None), ("B", None))),
     (("A||B", "x|y|z"), "paired", (("A", "x"), (None, "y"), ("B", "z"))),
     (("A|B", "x|y|z", "type"), "unaligned", ()),
-    (("A AND (B|C)", "one|two"), "unaligned", ()),
+    (("A AND (B|C)", "one|two"), "opaque_member", ((None, "one"), (None, "two"))),
+    (("A AND (B|C)", "one|two", "1|2"), "opaque_member", ((None, "one", "1"), (None, "two", "2"))),
+    (("A AND (B|C)", "", ""), "unaligned", ()),
     (("", None), "empty", ()),
 ])
 def test_alignment(values, status, rows):
@@ -113,8 +115,10 @@ def test_load_and_resolve_identical_chain_positions(chain_engine, tmp_path):
         assert [(link.position, link.regimen, link.regimen_cui_raw, link.regimen_cui, link.aligned) for link in links] == [
             (1, "one", None, None, True), (2, "two", None, None, True),
             (1, "same", "TBA", None, True), (2, "same", "42", 42, True),
-            (0, None, None, None, False), (0, None, None, None, False),
+            (1, "one", "1", 1, True), (2, "two", "2", 2, True),
+            (0, None, None, None, False),
         ]
+        assert session.scalar(sa.select(Indications.with_field_raw).where(Indications.id == 5)) == "P AND (Q|R)"
         slots = session.execute(sa.select(indications_BiomarkerSlots.__table__).order_by(
             indications_BiomarkerSlots.parent_id, indications_BiomarkerSlots.slot,
             indications_BiomarkerSlots.position)).mappings().all()
@@ -138,8 +142,9 @@ def test_load_and_resolve_identical_chain_positions(chain_engine, tmp_path):
                 if isinstance(item, BiomarkerCriterion)] == [("A", "x"), ("B", "z")]
         assert any(isinstance(item, RawCriterion) and item.raw == "y" for item in resolved_rows[6].criteria)
     counts = report.chains["indications_regimen_links"]
-    assert (counts.rows_paired, counts.rows_broadcast, counts.rows_unaligned, counts.repeats_kept) == (2, 0, 2, 2)
-    assert len(counts.unaligned_parent_ids) == 2
+    assert (counts.rows_paired, counts.rows_broadcast, counts.rows_opaque_member,
+            counts.rows_unaligned, counts.repeats_kept) == (2, 0, 1, 1, 2)
+    assert len(counts.unaligned_parent_ids) == 1
     assert counts.conversion_failures == 1
     assert report.chains["indications_biomarker_slots:1"].rows_broadcast == 1
 
@@ -205,7 +210,7 @@ def test_source_audit_reports_all_unaligned_and_suspicious_rows(tmp_path):
     (tmp_path / "drugs.csv").write_text("canmed_major_class,canmed_major_class_cui\nB|A,2|1\n")
     report = audit(tmp_path)
     assert "row 2: D (suspicious broadcast)" in report
-    assert "row 3: D (unaligned)" in report
+    assert "row 3: D (opaque member)" in report
     assert '"regimen_cui": "TBA|2"' in report
     assert "drugs.canmed_pairs | 1 |" in report
 

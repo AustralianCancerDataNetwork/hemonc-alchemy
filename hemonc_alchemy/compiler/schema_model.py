@@ -14,6 +14,7 @@ from typing import Literal, Protocol, runtime_checkable
 
 import pandas as pd
 
+from ..dates import complete_source_date
 from ..multivalue import align_values
 from .chains import (
     CHAIN_DECLARATIONS,
@@ -420,6 +421,7 @@ class TableMeta:
 
     chains: list[ChainSpec] = field(default_factory=list)
     opaque_columns: list[str] = field(default_factory=list)
+    raw_date_columns: list[str] = field(default_factory=list)
     normalised_tables: list[NormalisedTable] = field(default_factory=list)
     soft_relationships: list[ForeignLikeRef] = field(default_factory=list)
     soft_m2m_relationships: list[SoftManyToManyRef] = field(default_factory=list)
@@ -498,6 +500,7 @@ class TableMeta:
             ],
             chains=[ChainSpec.from_dict(chain) for chain in raw.get("chains", [])],
             opaque_columns=list(raw.get("opaque_columns", [])),
+            raw_date_columns=list(raw.get("raw_date_columns", [])),
             normalised_tables=[
                 NormalisedTable.from_dict(nt) for nt in raw.get("normalised_tables", [])
             ],
@@ -525,6 +528,15 @@ class TableMeta:
         if len(pk_conds) == 1:
             return pk_conds[0]
         return f"sa.and_({', '.join(pk_conds)})"
+
+    @staticmethod
+    def _map_secondary_join(rel: SoftManyToManyRef, target_cls: str, map_expression: str) -> str:
+        if rel.target_table == "studies" and rel.map_column == "study":
+            return (
+                f"sa.or_({target_cls}.study == {map_expression}.c.study, "
+                f"{target_cls}.study + '--' + {target_cls}.substudy == {map_expression}.c.study)"
+            )
+        return f"{target_cls}.{rel.target_column} == {map_expression}.c.{rel.map_column}"
 
     def enrich_field_metadata(self, df_dict: pd.DataFrame) -> set[str]:
         """Enrich this table and return the columns contributed by the sheet.
@@ -599,6 +611,7 @@ class TableMeta:
         """
         if df_data is None:
             return
+        self.raw_date_columns = []
         if df_data.empty:
             self._declare_chains(df_data, [])
             self._rebuild_normalised_tables()
@@ -651,6 +664,7 @@ class TableMeta:
             if s.is_unique and safe_col not in self.source_defined_keys:
                 self.source_defined_keys.append(safe_col)
 
+        self.raw_date_columns = self._find_incomplete_dates(df_data)
         self.denormalised_columns = sorted(set(self.denormalised_columns))
 
         self._retype_denormalised_columns(df_data)
@@ -668,6 +682,19 @@ class TableMeta:
 
         self._declare_chains(df_data, groups)
         self._rebuild_normalised_tables()
+
+    def _find_incomplete_dates(self, df_data: pd.DataFrame) -> list[str]:
+        """Return DateTime columns containing partial dates or free text."""
+        columns = []
+        for column in df_data.columns:
+            name = safe_identifier(column).lower()
+            spec = self.columns.get(name)
+            if spec is None or spec.type != "DateTime":
+                continue
+            values = (str(value).strip() for value in df_data[column].dropna())
+            if any(value and complete_source_date(value) is None for value in values):
+                columns.append(name)
+        return columns
 
     def _rebuild_normalised_tables(self) -> None:
         chained = {column for chain in self.chains for column in chain.columns}
@@ -883,6 +910,9 @@ class TableMeta:
                 continue
             lines.append(column_spec.sa_column_line(self))
 
+        for column in self.raw_date_columns:
+            lines.append(f"    {column}_raw: Mapped[Optional[str]] = mapped_column(Text, nullable=True)")
+
         lines.append("")
         lines.append("    normalisation_groups: list[list[str]] = [")
         for g in self.normalisation_groups:
@@ -923,7 +953,7 @@ class TableMeta:
 
             map_expression = f"Base.metadata.tables['primary.{map_table}']"
             primary_join = self._map_primary_join(map_expression)
-            secondary_join = f"{target_cls}.{m2m_rel.target_column} == {map_expression}.c.{map_column}"
+            secondary_join = self._map_secondary_join(m2m_rel, target_cls, map_expression)
 
             lines.append(f"    {rel_name}: Mapped[list['{target_cls}']] = sa_relationship(")
             lines.append(f"        '{target_cls}',")

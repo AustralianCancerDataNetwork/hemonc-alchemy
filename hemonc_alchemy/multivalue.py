@@ -30,17 +30,17 @@ class Alignment:
 
 
 def align_values(raw: tuple[str | None, ...]) -> Alignment:
-    """Pair equal lengths, broadcast singletons and fill blank sides with nulls.
+    """Align pipe lists while keeping nested-pipe expressions opaque.
 
-    Conflicting lengths greater than one, or pipes inside parentheses, are
-    unaligned. No partial interpretation escapes from an unaligned chain.
+    Opaque members contribute nulls at aligned positions; conflicting list
+    lengths remain unaligned.
     """
-    parts = tuple(split_positions(value) for value in raw)
+    opaque = tuple(_nested_pipe(value or "") for value in raw)
+    parts = tuple(() if is_opaque else split_positions(value)
+                  for value, is_opaque in zip(raw, opaque))
     width = max(map(len, parts), default=0)
     if not width:
-        return Alignment("empty")
-    if any(_nested_pipe(value or "") for value in raw):
-        return Alignment("unaligned")
+        return Alignment("unaligned" if any(opaque) else "empty")
     if any(len(values) not in (0, 1, width) for values in parts):
         return Alignment("unaligned")
     repeats = sum(len(values) - len(set(values)) for values in parts)
@@ -48,5 +48,7 @@ def align_values(raw: tuple[str | None, ...]) -> Alignment:
         tuple(values[0 if len(values) == 1 else index] if values else None for values in parts)
         for index in range(width)
     )
-    status = "broadcast" if width > 1 and any(len(values) == 1 for values in parts) else "paired"
+    status = "opaque_member" if any(opaque) else (
+        "broadcast" if width > 1 and any(len(values) == 1 for values in parts) else "paired"
+    )
     return Alignment(status, rows, repeats)

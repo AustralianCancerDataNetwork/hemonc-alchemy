@@ -25,6 +25,7 @@ from collections import Counter
 from collections.abc import Callable, Generator
 from contextlib import contextmanager
 from datetime import date, datetime
+from hashlib import file_digest
 from pathlib import Path
 from typing import Any, ClassVar, Protocol
 
@@ -34,6 +35,7 @@ import sqlalchemy.orm as so
 from orm_loader.conversion import ConversionPolicy
 from orm_loader.loaders import open_reader
 
+from ..dates import complete_source_date
 from ..model.ingestion import (
     SnapshotParentIds,
     conversion_policy,
@@ -149,8 +151,53 @@ def load_entity(
     passed through to the underlying loader.
     """
     load_csv_kwargs.setdefault("rejects_dir", data_dir / "rejects")
-    with _resolved_csv_path(data_dir, entity_cls.__tablename__) as path:
-        return entity_cls.load_file(session, path, **load_csv_kwargs)
+    with _resolved_csv_path(data_dir, entity_cls.__tablename__) as source:
+        with _date_source_csv(source, entity_cls) as path:
+            total = entity_cls.load_file(session, path, **load_csv_kwargs)
+        snapshot = session.info.get(("hemonc_snapshot_parent_ids", entity_cls))
+        if snapshot is not None:
+            with source.open("rb") as handle:
+                snapshot.source_digest = file_digest(handle, "sha256").hexdigest()
+        return total
+
+
+@contextmanager
+def _date_source_csv(path: Path, entity_cls: type[_GeneratedEntity]) -> Generator[Path, None, None]:
+    """Retain raw date cells and normalize complete dates for ingestion."""
+    date_columns = [column.name for column in entity_cls.__table__.c
+                    if isinstance(column.type, sa.DateTime)]
+    raw_date_columns = {
+        column.name[:-4]
+        for column in entity_cls.__table__.c
+        if column.name.endswith("_raw") and column.name[:-4] in date_columns
+    }
+    if not date_columns:
+        yield path
+        return
+
+    with tempfile.TemporaryDirectory(prefix="hemonc_alchemy_dates_") as tmp_dir:
+        staged = Path(tmp_dir) / path.name
+        with path.open(newline="", encoding="utf-8-sig") as source:
+            reader = csv.DictReader(source)
+            headers = list(reader.fieldnames or ())
+            source_columns = {safe_identifier(name).lower(): name for name in headers}
+            raw_headers = [f"{column}_raw" for column in date_columns if column in raw_date_columns]
+            writer_headers = [*headers, *(name for name in raw_headers if name not in headers)]
+            with staged.open("w", newline="", encoding="utf-8") as target:
+                writer = csv.DictWriter(target, fieldnames=writer_headers)
+                writer.writeheader()
+                for row in reader:
+                    for column in date_columns:
+                        source_column = source_columns.get(column)
+                        value = row.get(source_column, "") if source_column else ""
+                        raw = value.strip()
+                        if column in raw_date_columns:
+                            row[f"{column}_raw"] = raw
+                        complete = complete_source_date(raw)
+                        if source_column and complete is not None:
+                            row[source_column] = complete.isoformat()
+                    writer.writerow(row)
+        yield staged
 
 
 def load_all(

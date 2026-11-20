@@ -2,10 +2,10 @@
 
 import pytest
 import sqlalchemy as sa
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, load_only, raiseload, selectinload
 
 from hemonc_alchemy.config import create_default_hemonc_engine
-from hemonc_alchemy.model import Sigs, Studies, Variants
+from hemonc_alchemy.model import Sigs, Studies, VariantEligibility, Variants
 from hemonc_alchemy.model.relationships import study_context_predicate
 from hemonc_alchemy.toolkit.analytics.treatment.filters import (
     studies_with_standalone_radiation_sigs_statement,
@@ -44,9 +44,11 @@ def study_session(request):
     definitions = {
         "variants": "id INTEGER, variant_cui BIGINT, version INTEGER, regimen_cui BIGINT, regimen TEXT, variant TEXT",
         "sigs": "id INTEGER, variant_cui BIGINT, component_cui BIGINT, component TEXT, class_field TEXT, regimen TEXT",
+        "variant_eligibility": "id INTEGER, variant_cui BIGINT, logic_count INTEGER",
         "studies": "id INTEGER, study TEXT, substudy TEXT, study_cui BIGINT, substudy_cui BIGINT, condition_cui BIGINT, biomarker_finding TEXT",
         "variants_study": "parent_id INTEGER, study TEXT",
         "sigs_study": "parent_id INTEGER, study TEXT",
+        "variant_eligibility_study": "parent_id INTEGER, study TEXT",
         "study_results": "study TEXT, study_cui BIGINT, substudy_cui BIGINT, condition_cui BIGINT, context TEXT, biomarker_finding TEXT",
         "drugs": "id INTEGER, drug_cui BIGINT, drug TEXT, drug_inn TEXT, main_class TEXT",
         "drugs_canmed_major_class": "parent_id INTEGER, canmed_major_class TEXT",
@@ -89,6 +91,39 @@ def test_component_selection_matches_qualified_substudy(study_session):
         TreatmentSelectionSpec.for_conditions([1])
     ).with_only_columns(Variants.variant_cui)
     assert list(study_session.scalars(statement)) == [100]
+
+
+def test_generated_study_relationships_resolve_qualified_and_bare_tokens(study_session):
+    study_session.execute(sa.text(
+        "INSERT INTO variants VALUES (3,102,1,10,'Regimen','Variant Y')"
+    ))
+    study_session.execute(sa.text("INSERT INTO variants_study VALUES (3,'Trial')"))
+    study_session.execute(sa.text(
+        "INSERT INTO sigs VALUES (4,NULL,9,'Trial bare','RAD_SIG','Trial')"
+    ))
+    study_session.execute(sa.text("INSERT INTO sigs_study VALUES (4,'Trial')"))
+    study_session.execute(sa.text("INSERT INTO variant_eligibility VALUES (1,100,1),(2,101,1)"))
+    study_session.execute(sa.text(
+        "INSERT INTO variant_eligibility_study VALUES (1,'Trial--A'),(2,'Trial')"
+    ))
+    for model, qualified_id, bare_id in (
+        (Sigs, 1, 4),
+        (Variants, 1, 3),
+        (VariantEligibility, 1, 2),
+    ):
+        qualified = study_session.scalar(sa.select(model).options(
+            load_only(model.id), selectinload(model.study_objects).load_only(
+                Studies.id, Studies.study, Studies.substudy,
+            ), raiseload("*"),
+        ).where(model.id == qualified_id))
+        bare = study_session.scalar(sa.select(model).options(
+            load_only(model.id), selectinload(model.study_objects).load_only(
+                Studies.id, Studies.study, Studies.substudy,
+            ), raiseload("*"),
+        ).where(model.id == bare_id))
+        # Trial--A is studies 1-2 only; bare Trial is every Trial row, never Trial X.
+        assert {row.id for row in qualified.study_objects} == {1, 2}
+        assert {row.id for row in bare.study_objects} == {1, 2, 3}
 
 
 @pytest.mark.parametrize("path", ["variants", "associations", "sigs", "components"])
