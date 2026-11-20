@@ -1581,13 +1581,13 @@
 
 <span class="n">resolved</span> <span class="o">=</span> <span class="n">resolve_all_days</span><span class="p">(</span><span class="s2">&quot;1,8,15,(+n)&quot;</span><span class="p">)</span>
 <span class="p">[</span><span class="n">day</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="n">resolved</span><span class="o">.</span><span class="n">days</span><span class="p">]</span>  <span class="c1"># [1, 8, 15]</span>
-<span class="n">resolved</span><span class="o">.</span><span class="n">indefinite</span><span class="o">.</span><span class="n">kind</span>             <span class="c1"># &quot;+n&quot;</span>
+<span class="n">resolved</span><span class="o">.</span><span class="n">indefinite</span><span class="o">.</span><span class="n">kind</span>  <span class="c1"># &quot;+n&quot;</span>
 </code></pre></div>
 <p>The continuation marker means the written days are only part of the course. Optional days carry <code>Day.optional=True</code>. Unreadable tokens are logged and dropped; an empty day list can indicate an unresolved schedule.</p>
 <p>A pipe means a choice of days, with no selected alternative:</p>
 <div class="highlight"><pre><span></span><code><span class="n">resolved</span> <span class="o">=</span> <span class="n">resolve_all_days</span><span class="p">(</span><span class="s2">&quot;7|8|9|10|11|12|13|14|15&quot;</span><span class="p">)</span>
-<span class="n">resolved</span><span class="o">.</span><span class="n">days</span>                <span class="c1"># ()</span>
-<span class="n">resolved</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">options</span>   <span class="c1"># [7, 8, 9, 10, 11, 12, 13, 14, 15]</span>
+<span class="n">resolved</span><span class="o">.</span><span class="n">days</span>  <span class="c1"># ()</span>
+<span class="n">resolved</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">options</span>  <span class="c1"># [7, 8, 9, 10, 11, 12, 13, 14, 15]</span>
 </code></pre></div>
 <p>A numeric continuation such as <code>(+2)</code> records an interval of two days in <code>alldays</code>, or two cycles in <code>timing_sequence</code>. Continuation markers retain the interval without generating future events.</p>
 <h2 id="inspect-dosing-instructions">Inspect dosing instructions<a class="headerlink" href="#inspect-dosing-instructions" title="Permanent link">&para;</a></h2>
@@ -1655,7 +1655,17 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">hemonc_alchemy.toolkit.analytics.treatment.scheduling</span><span class="w"> </span><span class="kn">import</span> <span class="n">roll_out_variant</span>
 
 <span class="n">timeline</span> <span class="o">=</span> <span class="n">roll_out_variant</span><span class="p">(</span><span class="n">variant</span><span class="p">,</span> <span class="n">start_date</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">decay_days</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">timeline</span><span class="p">[[</span><span class="s2">&quot;sig_id&quot;</span><span class="p">,</span> <span class="s2">&quot;phase&quot;</span><span class="p">,</span> <span class="s2">&quot;cycle_number&quot;</span><span class="p">,</span> <span class="s2">&quot;day&quot;</span><span class="p">,</span> <span class="s2">&quot;elapsed_day&quot;</span><span class="p">,</span> <span class="s2">&quot;calendar_date&quot;</span><span class="p">,</span> <span class="s2">&quot;timing_status&quot;</span><span class="p">]]</span>
+<span class="n">timeline</span><span class="p">[</span>
+    <span class="p">[</span>
+        <span class="s2">&quot;sig_id&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;phase&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cycle_number&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;day&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;elapsed_day&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;calendar_date&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;timing_status&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+<span class="p">]</span>
 </code></pre></div>
 <h3 id="days-and-dates">Days and dates<a class="headerlink" href="#days-and-dates" title="Permanent link">&para;</a></h3>
 <table>
