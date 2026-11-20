@@ -885,6 +885,7 @@ class Indications(EntityBase, Base):
     time_contingency: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     with_field: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     withdrawn: Mapped[str] = mapped_column(String(255), nullable=False)
+    date_raw: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     normalisation_groups: list[list[str]] = [
         ['biomarker', 'biomarker_finding', 'biomarker_type'],
@@ -1378,6 +1379,7 @@ class Regimens(EntityBase, Base):
     temp: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     variantcount: Mapped[int] = mapped_column(BigInteger, nullable=False)
     variantcountdate: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    all_sact_fda_as_of_raw: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     normalisation_groups: list[list[str]] = [
     ]
@@ -1496,7 +1498,7 @@ class Sigs(EntityBase, Base):
         'Studies',
         secondary=lambda: Base.metadata.tables['primary.sigs_study'],
         primaryjoin=lambda: Sigs.id == Base.metadata.tables['primary.sigs_study'].c.parent_id,
-        secondaryjoin=lambda: Studies.study == Base.metadata.tables['primary.sigs_study'].c.study,
+        secondaryjoin=lambda: sa.or_(Studies.study == Base.metadata.tables['primary.sigs_study'].c.study, Studies.study + '--' + Studies.substudy == Base.metadata.tables['primary.sigs_study'].c.study),
         lazy='selectin',
         viewonly=True,
     )
@@ -1586,6 +1588,8 @@ class Studies(EntityBase, Base):
     temp: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     trial_id: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     unreg_study: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    start_raw: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    end_raw: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     normalisation_groups: list[list[str]] = [
     ]
@@ -1810,7 +1814,7 @@ class VariantEligibility(EntityBase, Base):
         'Studies',
         secondary=lambda: Base.metadata.tables['primary.variant_eligibility_study'],
         primaryjoin=lambda: VariantEligibility.id == Base.metadata.tables['primary.variant_eligibility_study'].c.parent_id,
-        secondaryjoin=lambda: Studies.study == Base.metadata.tables['primary.variant_eligibility_study'].c.study,
+        secondaryjoin=lambda: sa.or_(Studies.study == Base.metadata.tables['primary.variant_eligibility_study'].c.study, Studies.study + '--' + Studies.substudy == Base.metadata.tables['primary.variant_eligibility_study'].c.study),
         lazy='selectin',
         viewonly=True,
     )
@@ -1914,7 +1918,7 @@ class Variants(EntityBase, Base):
         'Studies',
         secondary=lambda: Base.metadata.tables['primary.variants_study'],
         primaryjoin=lambda: Variants.id == Base.metadata.tables['primary.variants_study'].c.parent_id,
-        secondaryjoin=lambda: Studies.study == Base.metadata.tables['primary.variants_study'].c.study,
+        secondaryjoin=lambda: sa.or_(Studies.study == Base.metadata.tables['primary.variants_study'].c.study, Studies.study + '--' + Studies.substudy == Base.metadata.tables['primary.variants_study'].c.study),
         lazy='selectin',
         viewonly=True,
     )

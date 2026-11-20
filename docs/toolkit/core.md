@@ -2,6 +2,8 @@
 
 Use `toolkit.core` to resolve condition names, search treatment components, select sigs by condition, and follow links between records.
 
+`parse_source_date()` reports the year, month, day and precision supplied by a source cell. It accepts partial ISO dates, full dates, `yyyymmdd`, `dd-mon-yyyy`, HTML `<time datetime>` cells and `Withdrawn on <date>` values. It returns `None` for free text and never fills missing month or day values.
+
 ## Resolve names to CUIs
 
 Look up a condition by name and use its HemOnc CUI in subsequent queries:

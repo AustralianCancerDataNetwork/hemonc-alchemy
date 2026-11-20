@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 from collections.abc import Iterator
 from dataclasses import dataclass, field, replace
+from datetime import datetime
 from enum import Enum
 from hashlib import file_digest
 from typing import Any
@@ -22,7 +23,9 @@ from orm_loader.conversion import (
     NullPolicy,
 )
 from orm_loader.loaders import FileReader
+from sqlalchemy import DateTime
 
+from ..dates import complete_source_date
 from ..naming import safe_enum_key
 
 logger = logging.getLogger(__name__)
@@ -103,6 +106,10 @@ def interpret_values(values: Any, column: sa.Column, policy: ConversionPolicy) -
 
 def convert_value(value: Any, column: sa.Column, policy: ConversionPolicy) -> Any:
     """Convert a child/identity scalar using the same handlers as file ingestion."""
+    if isinstance(column.type, DateTime):
+        complete = complete_source_date(value)
+        if complete is not None:
+            return datetime.fromisoformat(complete.isoformat())
     values, invalid = interpret_values([value], column, policy)
     if invalid[0].as_py():
         raise ValueError(f"{value!r} is invalid for {column}")

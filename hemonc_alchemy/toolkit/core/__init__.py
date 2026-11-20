@@ -6,6 +6,7 @@ treatment selection policy. HemOnc CUIs remain the identifiers used by these
 helpers; mapping them to OMOP concepts belongs to ``integrations``.
 """
 
+from ...dates import DateParts, parse_source_date
 from .coercion import coerce_enum_value
 from .components import (
     COMPONENT_SEARCH_COLUMNS,
@@ -36,6 +37,7 @@ __all__ = [
     "COMPONENT_SEARCH_COLUMNS",
     "COMPONENT_SEARCH_EXPRESSIONS",
     "ComponentHit",
+    "DateParts",
     "SigSelectionSpec",
     "VariantPolicy",
     "coerce_enum_value",
@@ -46,6 +48,7 @@ __all__ = [
     "condition_variant_objects",
     "conditions_by_names",
     "find_sigs",
+    "parse_source_date",
     "search_components",
     "sig_condition_objects",
     "sig_search_statement",

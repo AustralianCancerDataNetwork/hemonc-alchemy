@@ -145,6 +145,9 @@ def regenerate(
     registry.finalise_table_metadata_from_data(
         data_dir, source_aliases=load_source_aliases(dictionary_path)
     )
+    raw_dates = [f"{table}.{column}" for table, meta in registry.tables.items()
+                 for column in meta.raw_date_columns]
+    print("DateTime columns with raw fields: " + (", ".join(raw_dates) if raw_dates else "none"))
     registry.apply_multival_overrides(load_multival_overrides(dictionary_path))
 
     # Structural checks belong *before* rendering, which is what
